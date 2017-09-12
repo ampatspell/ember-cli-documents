@@ -9,20 +9,20 @@ export default {
     app.inject('route', 'db', 'service:db');
     app.inject('component', 'db', 'service:db');
 
-    db.push({
+    window.author = db.push({
       _id: 'author:ampatspell',
       type: 'author',
       name: 'ampatspell'
     });
 
-    db.push({
+    window.blog = db.push({
       _id: 'blog:ducks',
       type: 'blog',
       title: 'The Ducks',
       owner: 'author:ampatspell'
     });
 
-    db.push({
+    window.post = db.push({
       _id: 'blog-post:ducks:one',
       type: 'blog-post',
       title: 'Welcome',

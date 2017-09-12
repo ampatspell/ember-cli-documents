@@ -12,7 +12,11 @@ export default Ember.Object.extend({
   }).readOnly(),
 
   existing(id) {
-    return this.get('docs')[id];
+    let internal = this.get('docs')[id];
+    if(!internal) {
+      return null;
+    }
+    return internal.get('document');
   },
 
   _createInternalDocument(doc) {
@@ -21,15 +25,10 @@ export default Ember.Object.extend({
     return Internal.create({ database, doc });
   },
 
-  _createDocument(doc) {
-    let _internal = this._createInternalDocument(doc);
-    return getOwner(this).factoryFor('documents:document').create({ _internal });
-  },
-
   push(doc) {
-    let document = this._createDocument(doc);
-    this.get('docs')[doc._id] = document;
-    return document;
+    let internal = this._createInternalDocument(doc);
+    this.get('docs')[doc._id] = internal;
+    return internal.get('document');
   }
 
 })
