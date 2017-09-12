@@ -2,7 +2,8 @@ import Ember from 'ember';
 
 const {
   computed,
-  computed: { reads }
+  computed: { reads },
+  copy
 } = Ember;
 
 const id = () => {
@@ -19,6 +20,10 @@ const id = () => {
 const rev = () => reads('_rev').readOnly();
 const database = () => reads('_internal.database').readOnly();
 
+const serialized = () => computed(function() {
+  return copy(this._internal.doc);
+}).readOnly();
+
 export default Ember.Object.extend({
 
   _internal: null,
@@ -26,6 +31,8 @@ export default Ember.Object.extend({
   id: id(),
   rev: rev(),
   database: database(),
+
+  serialized: serialized(),
 
   setUnknownProperty(key, value) {
     return this._internal.setValue(key, value);

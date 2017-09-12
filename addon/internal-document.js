@@ -17,17 +17,17 @@ export default Ember.Object.extend({
     return getOwner(this).factoryFor('documents:document').create({ _internal });
   }),
 
-  withNotifyPropertyChange(key, fn, notify) {
+  withNotifyPropertyChanges(keys, fn, notify) {
     let document;
     if(notify) {
       document = this.cacheFor('document');
     }
     if(document && notify) {
-      document.propertyWillChange(key);
+      keys.forEach(key => document.propertyWillChange(key));
     }
     let result = fn();
     if(document && notify) {
-      document.propertyDidChange(key);
+      keys.forEach(key => document.propertyDidChange(key));
     }
     return result;
   },
@@ -46,7 +46,7 @@ export default Ember.Object.extend({
     if(current === value) {
       return;
     }
-    this.withNotifyPropertyChange(key, () => {
+    this.withNotifyPropertyChanges([ key, 'serialized' ], () => {
       doc[key] = value;
     }, notify);
     return value;
