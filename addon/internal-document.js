@@ -55,7 +55,7 @@ export default Ember.Object.extend({
 
     let result = cb(changed);
 
-    if(notify && changes.length > 0) {
+    if(notify && changes.length) {
       model.notifyPropertyChange('serialized');
     }
 
@@ -67,7 +67,7 @@ export default Ember.Object.extend({
   },
 
   setId(value) {
-    return this._setValue('_id', value, true);
+    return this.withPropertyChanges(changed => this._setValue('_id', value, changed));
   },
 
   getId() {
@@ -83,17 +83,16 @@ export default Ember.Object.extend({
     return values;
   },
 
-  _setValue(key, value, notify) {
+  _setValue(key, value, changed) {
     let values = this.values();
     let current = values[key];
+
     if(current === value) {
       return;
     }
 
-    this.withPropertyChanges(changed => {
-      values[key] = value;
-      changed(key);
-    }, notify);
+    values[key] = value;
+    changed(key);
 
     return value;
   },
@@ -107,7 +106,7 @@ export default Ember.Object.extend({
     if(isKeyUnderscored(key)) {
       return;
     }
-    return this._setValue(key, value, true);
+    return this.withPropertyChanges(changed => this._setValue(key, value, changed));
   },
 
   getValue(key) {
@@ -118,14 +117,10 @@ export default Ember.Object.extend({
   },
 
   deserialize(doc, opts) {
-    let values = this.values();
     this.withPropertyChanges(changed => {
       for(let key in doc) {
         let value = doc[key];
-        if(values[key] !== value) {
-          values[key] = value;
-          changed(key);
-        }
+        this._setValue(key, value, changed);
       }
     });
   },
