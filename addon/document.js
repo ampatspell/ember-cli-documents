@@ -30,8 +30,8 @@ export default Ember.Object.extend({
 
   id: id(),
   rev: rev(),
-  database: database(),
 
+  database: database(),
   serialized: serialized(),
 
   setUnknownProperty(key, value) {
