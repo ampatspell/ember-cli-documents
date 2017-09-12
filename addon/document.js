@@ -7,7 +7,7 @@ const {
 } = Ember;
 
 const id = () => {
-  return computed({
+  return computed('_id', {
     get() {
       return this._internal.getId();
     },
@@ -17,11 +17,14 @@ const id = () => {
   });
 }
 
-const rev = () => reads('_rev').readOnly();
+const rev = () => computed('_rev', function() {
+  return this._internal.getValue('_rev');
+}).readOnly();
+
 const database = () => reads('_internal.database').readOnly();
 
 const serialized = () => computed(function() {
-  return copy(this._internal.doc);
+  return this._internal.serialize({ type: 'preview' });
 }).readOnly();
 
 export default Ember.Object.extend({
