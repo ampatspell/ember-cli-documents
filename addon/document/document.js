@@ -17,7 +17,7 @@ const id = () => {
       return this._internal.setId(value);
     }
   });
-}
+};
 
 const rev = () => computed('_rev', function() {
   return this._internal.getValue('_rev');
