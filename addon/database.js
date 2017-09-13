@@ -42,4 +42,4 @@ export default Ember.Object.extend({
     return internal.model();
   }
 
-})
+});
