@@ -3,7 +3,7 @@ import ModelMixin from './mixins/model';
 import ValuesMixin from './mixins/values';
 import { markInternal } from './is-internal';
 
-export default markInternal(Ember.Object.extend(ModelMixin, ValuesMixin, {
+export default markInternal('object', Ember.Object.extend(ModelMixin, ValuesMixin, {
 
   _modelFactory(owner) {
     return owner.factoryFor('documents:object');

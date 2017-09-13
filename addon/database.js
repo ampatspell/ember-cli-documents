@@ -11,8 +11,12 @@ export default Ember.Object.extend({
     return Object.create(null);
   }).readOnly(),
 
+  _existingInternalDocument(id) {
+    return this.get('internalDocuments')[id];
+  },
+
   existing(id) {
-    let internal = this.get('internalDocuments')[id];
+    let internal = this._existingInternalDocument(id);
     if(!internal) {
       return null;
     }
@@ -27,9 +31,14 @@ export default Ember.Object.extend({
     return internal;
   },
 
-  push(doc) {
-    let internal = this._createInternalDocument(doc);
-    this.get('internalDocuments')[doc._id] = internal;
+  push(doc={}) {
+    let internal = this._existingInternalDocument(doc._id);
+    if(internal) {
+      internal.deserialize(doc);
+    } else {
+      internal = this._createInternalDocument(doc);
+      this.get('internalDocuments')[doc._id] = internal;
+    }
     return internal.model();
   }
 
