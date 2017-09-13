@@ -3,7 +3,8 @@ import InternalMixin from './internal';
 import isInternal from '../is-internal';
 
 const {
-  typeOf
+  typeOf,
+  merge
 } = Ember;
 
 const arrayRemoveFirst = (array, element) => {
@@ -181,7 +182,9 @@ export default Ember.Mixin.create(InternalMixin, {
     }, true);
   },
 
-  serialize(opts={}) {
+  serialize(opts) {
+    opts = merge({ type: 'document' }, opts);
+
     let object = {};
 
     if(opts.type === 'preview') {
