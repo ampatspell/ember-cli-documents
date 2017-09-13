@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import UnknownProperty from './mixins/unknown-property';
+import Serialized from './mixins/serialized';
 
 const {
   computed,
@@ -24,18 +25,13 @@ const rev = () => computed('_rev', function() {
 
 const database = () => reads('_internal.database').readOnly();
 
-const serialized = () => computed(function() {
-  return this._internal.serialize({ type: 'preview' });
-}).readOnly();
-
-export default Ember.Object.extend(UnknownProperty, {
+export default Ember.Object.extend(UnknownProperty, Serialized, {
 
   _internal: null,
 
   id: id(),
   rev: rev(),
 
-  database: database(),
-  serialized: serialized()
+  database: database()
 
 });

@@ -3,9 +3,6 @@ import InternalMixin from './internal';
 import isInternal from '../is-internal';
 
 const {
-  Logger: { info },
-  guidFor,
-  copy,
   typeOf
 } = Ember;
 
@@ -51,7 +48,6 @@ export default Ember.Mixin.create(InternalMixin, {
     let changes = [];
 
     let changed = key => {
-      info(guidFor(this), 'changed', key);
       if(model && notify) {
         model.notifyPropertyChange(key);
       }
@@ -74,10 +70,10 @@ export default Ember.Mixin.create(InternalMixin, {
   },
 
   values() {
-    let values = this.get('_values');
+    let values = this._values;
     if(!values) {
       values = {};
-      this.set('_values', values);
+      this._values = values;
     }
     return values;
   },
