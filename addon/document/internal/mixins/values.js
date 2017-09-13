@@ -9,6 +9,14 @@ const {
   typeOf
 } = Ember;
 
+const arrayRemoveFirst = (array, element) => {
+  let idx = array.indexOf(element);
+  if(idx === -1) {
+    return;
+  }
+  array.splice(idx, 1);
+};
+
 export default Ember.Mixin.create(InternalMixin, {
 
   _parent: null,
@@ -106,7 +114,11 @@ export default Ember.Mixin.create(InternalMixin, {
 
   __setPrimitiveValue(values, key, current, next, changed) {
     this.__detachInternal(current);
-    values[key] = next;
+    if(next === undefined) {
+      delete values[key];
+    } else {
+      values[key] = next;
+    }
     changed(key);
     return next;
   },
@@ -162,11 +174,14 @@ export default Ember.Mixin.create(InternalMixin, {
   },
 
   deserialize(doc, opts) {
+    let keys = Object.keys(this.values());
     this.withPropertyChanges(changed => {
       for(let key in doc) {
+        arrayRemoveFirst(keys, key);
         let value = doc[key];
         this._setValue(key, value, changed);
       }
+      keys.forEach(key => this._setValue(key, undefined, changed));
     }, true);
   },
 
