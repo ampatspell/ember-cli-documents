@@ -12,6 +12,11 @@ author.get('permissions') // DocumentArray
 author.get('permissions.firstObject') // DocumentObject
 ```
 
+## Computed property teardown
+
+* https://github.com/runspired/rate-limit-computed/blob/master/addon/throttled.js#L35
+* https://github.com/machty/ember-concurrency/blob/master/addon/utils.js#L45
+
 ## Older notes
 
 ```
