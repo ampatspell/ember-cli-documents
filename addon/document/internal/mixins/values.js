@@ -181,8 +181,13 @@ export default Ember.Mixin.create(InternalMixin, {
     }, true);
   },
 
-  serialize(opts) {
+  serialize(opts={}) {
     let object = {};
+
+    if(opts.type === 'preview') {
+      object._internal = `${Ember.meta(this).factory.fullName}:${Ember.guidFor(this)}`;
+    }
+
     let values = this.values();
     for(let key in values) {
       let value = values[key];
