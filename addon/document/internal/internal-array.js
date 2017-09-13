@@ -54,17 +54,17 @@ export default markInternal('array', Ember.Object.extend(ModelMixin, NestedMixin
   serialize(opts) {
     opts = merge({ type: 'document' }, opts);
 
-    let array = [];
-    let result = array;
+    let values = this.values();
+    let array = values.map(value => this._serialize(value, opts));
 
     if(opts.type === 'preview') {
       let object = {};
       object._internal = `${Ember.meta(this).factory.fullName}:${Ember.guidFor(this)}`;
       object.content = array;
-      result = object;
+      return object;
     }
 
-    return result;
+    return array;
   }
 
 }));

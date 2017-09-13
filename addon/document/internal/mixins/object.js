@@ -199,9 +199,7 @@ export default Ember.Mixin.create({
     let values = this.values();
     for(let key in values) {
       let value = values[key];
-      if(isInternal(value)) {
-        value = value.serialize(opts);
-      }
+      value = this._serialize(value, opts);
       object[key] = value;
     }
     return object;
