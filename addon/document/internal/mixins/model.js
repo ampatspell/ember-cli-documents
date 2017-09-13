@@ -1,7 +1,8 @@
 import Ember from 'ember';
 
 const {
-  getOwner
+  getOwner,
+  merge
 } = Ember;
 
 export default Ember.Mixin.create({
@@ -9,10 +10,14 @@ export default Ember.Mixin.create({
   _model: null,
 
   _createModel() {
-    let _internal = this;
     let owner = getOwner(this);
     let factory = this._modelFactory(owner);
-    return factory.create({ _internal });
+    let _internal = this;
+    let props = { _internal };
+    if(this._createModelProperties) {
+      props = merge(props, this._createModelProperties());
+    }
+    return factory.create(props);
   },
 
   model(create=true) {

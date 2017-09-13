@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import InternalMixin from './internal';
 import isInternal from '../is-internal';
 
 const {
@@ -15,9 +14,8 @@ const arrayRemoveFirst = (array, element) => {
   array.splice(idx, 1);
 };
 
-export default Ember.Mixin.create(InternalMixin, {
+export default Ember.Mixin.create({
 
-  _parent: null,
   _values: null,
 
   _notifyPropertiesChangedWithModel(model) {
@@ -79,15 +77,11 @@ export default Ember.Mixin.create(InternalMixin, {
     return values;
   },
 
-  __detach() {
-    this._parent = null;
-  },
-
   __detachInternal(current) {
     if(!isInternal(current)) {
       return;
     }
-    current.__detach();
+    current._detach();
   },
 
   __setObjectValue(values, key, current, next, changed) {
@@ -106,7 +100,18 @@ export default Ember.Mixin.create(InternalMixin, {
   },
 
   __setArrayValue(values, key, current, next, changed) {
-
+    let internal;
+    if(isInternal(current) === 'array') {
+      internal = current;
+      internal.deserialize(next);
+    } else {
+      this.__detachInternal(current);
+      internal = this._createInternalArray();
+      internal.deserialize(next);
+      values[key] = internal;
+      changed(key);
+    }
+    return internal;
   },
 
   __setPrimitiveValue(values, key, current, next, changed) {

@@ -1,10 +1,11 @@
 import Ember from 'ember';
 import ModelMixin from './mixins/model';
-import ValuesMixin from './mixins/values';
+import InternalMixin from './mixins/internal';
+import ObjectMixin from './mixins/object';
 
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
 
-export default Ember.Object.extend(ModelMixin, ValuesMixin, {
+export default Ember.Object.extend(ModelMixin, InternalMixin, ObjectMixin, {
 
   database: null,
 
