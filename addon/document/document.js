@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import UnknownProperty from './mixins/unknown-property';
 
 const {
   computed,
@@ -27,7 +28,7 @@ const serialized = () => computed(function() {
   return this._internal.serialize({ type: 'preview' });
 }).readOnly();
 
-export default Ember.Object.extend({
+export default Ember.Object.extend(UnknownProperty, {
 
   _internal: null,
 
@@ -35,14 +36,6 @@ export default Ember.Object.extend({
   rev: rev(),
 
   database: database(),
-  serialized: serialized(),
-
-  setUnknownProperty(key, value) {
-    return this._internal.setValue(key, value);
-  },
-
-  unknownProperty(key) {
-    return this._internal.getValue(key);
-  }
+  serialized: serialized()
 
 });
