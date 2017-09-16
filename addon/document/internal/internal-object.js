@@ -19,6 +19,12 @@ export default class InternalObject extends InternalBase {
   }
 
   _setValue(key, value, changed) {
+    // value can be internal already associated with another database-document
+    // that should be also set here
+
+    // `object` doesn't have database, only store for factories
+    // `document` has database for save, load, delete
+
     console.log('internalObject._setValue', key, value);
     return value;
   }
