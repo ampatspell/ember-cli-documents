@@ -19,14 +19,14 @@ export default Ember.Mixin.create({
     return new InternalDocument(this, state, values);
   },
 
-  _createInternalObject() {
+  _createInternalObject(parent, values) {
     let InternalObject = this._internalFactory('object');
-    return new InternalObject();
+    return new InternalObject(parent, values);
   },
 
-  _createInternalArray() {
+  _createInternalArray(parent, values) {
     let InternalArray = this._internalFactory('array');
-    return new InternalArray();
+    return new InternalArray(parent, values);
   }
 
 });

@@ -1,7 +1,20 @@
 export default class InternalBase {
 
-  constructor() {
+  constructor(parent) {
+    this._parent = parent;
     this._model = null;
+  }
+
+  get database() {
+    let database = this._database;
+    if(!database) {
+      let parent = this._parent;
+      if(parent) {
+        database = parent.database;
+        this._database = database;
+      }
+    }
+    return database;
   }
 
   _notifyPropertiesChangedWithModel(model) {

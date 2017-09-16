@@ -17,8 +17,8 @@ const arrayRemoveFirst = (array, element) => {
 
 export default class InternalObject extends InternalBase {
 
-  constructor(values) {
-    super();
+  constructor(parent, values) {
+    super(parent);
     this.values = new EmptyObject();
     this.deserialize(values);
   }
@@ -33,6 +33,13 @@ export default class InternalObject extends InternalBase {
     return next;
   }
 
+  __setObjectValue(values, key, current, next, changed) {
+    let internal = this.database._createInternalObject(this, next);
+    values[key] = internal;
+    changed(key);
+    return internal;
+  }
+
   _setValue(key, value, changed) {
     let values = this.values;
     let current = values[key];
@@ -44,7 +51,7 @@ export default class InternalObject extends InternalBase {
     let type = typeOf(value);
 
     if(type === 'object') {
-      console.log('_setValue object', key, value);
+      value = this.__setObjectValue(values, key, current, value, changed);
     } else if(type === 'array') {
       console.log('_setValue array', key, value);
     } else {
