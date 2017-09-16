@@ -3,10 +3,13 @@ import State from './state';
 
 export default class InternalDocument extends InternalObject {
 
-  constructor(database, state, values) {
-    super(null, values);
-    this._database = database;
-    this.state = new State(state);
+  constructor(database) {
+    super(database, null);
+    this.state = new State();
+  }
+
+  setState(values, changed) {
+    return this.state.set(values, changed);
   }
 
 }

@@ -23,7 +23,7 @@ test('create new complex', function(assert) {
     "isNew": true,
     "isSaving": false
   });
-  assert.deepEqual(doc.serialize(), {
+  assert.deepEqual(this.db._serializeInternal(doc), {
     _id: 'duck:yellow',
     name: 'Yellow',
     type: 'yellow',

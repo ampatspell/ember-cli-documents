@@ -1,6 +1,6 @@
 export default class State {
 
-  constructor(values) {
+  constructor() {
     this.values = {
       isNew: true,
       isLoading: false,
@@ -11,7 +11,6 @@ export default class State {
       isError: false,
       error: null
     };
-    this.set(values, () => {});
   }
 
   get(key) {

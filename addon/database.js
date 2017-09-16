@@ -1,12 +1,20 @@
 import Ember from 'ember';
 import InternalFactory from './database/internal-factory';
-import InternalDocumentIdentity from './database/internal-document-identity';
-import DocumentPush from './database/document-push';
-import DocumentExisting from './database/document-existing';
+import InternalSerialize from './database/internal-serialize';
+import InternalDeserialize from './database/internal-deserialize';
 
 export default Ember.Object.extend(
   InternalFactory,
-  InternalDocumentIdentity,
-  DocumentPush,
-  DocumentExisting
-);
+  InternalSerialize,
+  InternalDeserialize, {
+
+  document(values) {
+    let internal = this._createInternalDocument();
+    internal.withPropertyChanges(changed => {
+      this._deserializeInternal(internal, values, changed);
+      internal.setState({ isDirty: false }, changed);
+    }, false);
+    return internal;
+  }
+
+});

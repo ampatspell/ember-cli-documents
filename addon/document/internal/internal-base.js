@@ -1,6 +1,7 @@
 export default class InternalBase {
 
-  constructor(parent) {
+  constructor(database, parent) {
+    this._database = database;
     this._parent = parent;
     this._model = null;
   }
@@ -11,7 +12,6 @@ export default class InternalBase {
       let parent = this._parent;
       if(parent) {
         database = parent.database;
-        this._database = database;
       }
     }
     return database;
@@ -63,13 +63,6 @@ export default class InternalBase {
     }
 
     return result;
-  }
-
-  _serialize(value, type) {
-    if(value instanceof InternalBase) {
-      value = value.serialize(type);
-    }
-    return value;
   }
 
 }
