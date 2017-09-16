@@ -60,19 +60,6 @@ export default Ember.Mixin.create({
     return value;
   }
 
-  deserialize(values) {
-    assert(`values must be object not ${values}`, typeof values === 'object');
-    let keys = Object.keys(this.values);
-    this.withPropertyChanges(changed => {
-      for(let key in values) {
-        arrayRemoveFirst(keys, key);
-        let value = values[key];
-        this._setValue(key, value, changed);
-      }
-      keys.forEach(key => this._setValue(key, undefined, changed));
-    }, true);
-  }
-
   serialize(type) {
     let json = {};
     let values = this.values;
