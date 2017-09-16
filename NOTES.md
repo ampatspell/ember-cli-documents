@@ -96,7 +96,9 @@ Model.extend({
     }
   }
 
-  
+
 
 });
 ```
+
+## Changeset & document conflicts between changeset origin and current document rev
