@@ -1,12 +1,8 @@
 import Ember from 'ember';
 import InternalFactory from './database/internal-factory';
-import InternalSerialize from './database/internal-serialize';
-import InternalDeserialize from './database/internal-deserialize';
 
 export default Ember.Object.extend(
-  InternalFactory,
-  InternalSerialize,
-  InternalDeserialize, {
+  InternalFactory, {
 
   document(values) {
     let internal = this._createInternalDocument();
