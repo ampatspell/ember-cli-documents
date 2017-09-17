@@ -86,7 +86,6 @@ export default class InternalObject extends InternalBase {
   //
 
   _deserialize(values, changed) {
-    assert('values must be object', typeOf(values) === 'object');
     let keys = Object.keys(this.values);
     for(let key in values) {
       remove(keys, key);
