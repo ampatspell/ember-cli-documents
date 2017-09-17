@@ -29,10 +29,12 @@ export default class InternalArray extends InternalBase {
   }
 
   _didCreateModel() {
+    super._didCreateModel();
     this.values.addEnumerableObserver(this, this._valueObserverOptions);
   }
 
   _didDestroyModel() {
+    super._didDestroyModel();
     this.values.removeEnumerableObserver(this, this._valueObserverOptions);
   }
 
