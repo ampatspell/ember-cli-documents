@@ -1,17 +1,15 @@
 import Ember from 'ember';
 import BaseMixin from './base-mixin';
-import { markModel } from '../util/internal';
+import { markModel } from 'documents/util/internal';
+import createTransform from 'documents/util/create-array-transform-mixin';
 
-// import createTransform from './mixins/create-array-transform-mixin';
+const TransformMixin = createTransform({
+  internal(model) {
+    return this._internal._toInternal(model);
+  },
+  public(internal) {
+    return this._internal._toModel(internal);
+  }
+});
 
-// const Transform = createTransform({
-//   internal(model) {
-//     return this._internal.internalFromModel(model);
-//   },
-//   public(internal) {
-//     return this._internal.modelFromInternal(internal);
-//   }
-// });
-
-export default markModel(Ember.ArrayProxy.extend(BaseMixin, {
-}));
+export default markModel(Ember.ArrayProxy.extend(BaseMixin, TransformMixin));

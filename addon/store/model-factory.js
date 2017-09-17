@@ -12,6 +12,11 @@ export default Ember.Mixin.create({
 
   _createObjectModel(_internal) {
     return this._modelFactory('object').create({ _internal });
+  },
+
+  _createArrayModel(_internal) {
+    let content = _internal.values;
+    return this._modelFactory('array').create({ _internal, content });
   }
 
 });

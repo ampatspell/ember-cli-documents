@@ -18,8 +18,8 @@ export default class InternalObject extends InternalBase {
     return 'object';
   }
 
-  constructor(database, parent) {
-    super(database, parent);
+  constructor(store, parent) {
+    super(store, parent);
     this.values = new EmptyObject();
   }
 

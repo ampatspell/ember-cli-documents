@@ -10,6 +10,14 @@ export default Ember.Component.extend({
   layout,
 
   author: computed(function() {
+    let author = this.get('db').document({
+      _id: 'author:ampatspell',
+      type: 'author',
+      name: 'ampatspell',
+      posts: []
+    });
+    window.author = author;
+    return author;
     // return this.get('db').existing('author:ampatspell');
   })
 

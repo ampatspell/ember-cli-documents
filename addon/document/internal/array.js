@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import InternalBase from './base';
+import { toModel, toInternal, isInternal } from 'documents/util/internal';
 
 const {
   A
@@ -16,16 +17,57 @@ export default class InternalArray extends InternalBase {
     this.values = A();
   }
 
+  _createModel() {
+    return this.store._createArrayModel(this);
+  }
+
+  get _valueObserverOptions() {
+    return {
+      willChange: this._valueWillChange,
+      didChange: this._valueDidChange
+    };
+  }
+
+  _didCreateModel() {
+    this.values.addEnumerableObserver(this, this._valueObserverOptions);
+  }
+
+  _didDestroyModel() {
+    this.values.removeEnumerableObserver(this, this._valueObserverOptions);
+  }
+
+  _valueWillChange() {
+  }
+
+  _valueDidChange() {
+    this._didEndPropertyChanges();
+  }
+
+  _toInternal(value) {
+    value = toInternal(value);
+    if(isInternal(value)) {
+      value = value.serialize({ type: 'copy' });
+    }
+    let { internal } = this._deserializeValue(value);
+    return internal;
+  }
+
+  _toModel(internal) {
+    return toModel(internal);
+  }
+
   _deserialize(values) {
-    this.values.forEach(value => this._detachInternal(value));
-    this.values.clear();
+    let current = this.values;
+
+    current.forEach(internal => this._detachInternal(internal));
+    current.clear();
 
     let internals = A(values).map(value => {
-      let { internal } = this._deserializeValue(value, undefined);
+      let { internal } = this._deserializeValue(value);
       return internal;
     });
 
-    this.values.addObjects(internals);
+    current.addObjects(internals);
   }
 
   _serialize(opts) {

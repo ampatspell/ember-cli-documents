@@ -20,13 +20,26 @@ export default class InternalBase {
     this._model = null;
   }
 
+  _didCreateModel() {
+  }
+
+  _didDestroyModel() {
+  }
+
   model(create) {
     let model = this._model;
     if(!model && create) {
       model = this._createModel();
+      this._didCreateModel(model);
       this._model = model;
     }
     return model;
+  }
+
+  _modelWillDestroy() {
+    let model = this._model;
+    this._model = null;
+    this._didDestroyModel(model);
   }
 
   //

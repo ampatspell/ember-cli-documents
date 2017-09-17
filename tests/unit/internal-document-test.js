@@ -132,3 +132,45 @@ test('set array with objects', function(assert) {
     ]
   });
 });
+
+test('replace array', function(assert) {
+  let doc = this.db.document({
+    things: [
+      { id: 'a' },
+      { id: 'b' },
+    ]
+  });
+
+  assert.deepEqual(doc.serialize(), {
+    "things": [
+      { id: 'a' },
+      { id: 'b' },
+    ]
+  });
+
+  assert.deepEqual(doc.get('serialized'), {
+    "things": [
+      { id: 'a' },
+      { id: 'b' },
+    ]
+  });
+
+  doc.get('things')._internal._deserialize([
+    { id: 'c' },
+    { id: 'a' },
+  ]);
+
+  assert.deepEqual(doc.serialize(), {
+    "things": [
+      { id: 'c' },
+      { id: 'a' }
+    ]
+  });
+
+  assert.deepEqual(doc.get('serialized'), {
+    "things": [
+      { id: 'c' },
+      { id: 'a' }
+    ]
+  });
+});
