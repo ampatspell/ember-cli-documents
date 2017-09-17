@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import assertInternal from '../util/assert-internal';
+import { assertInternal } from '../util/internal';
 
 export default Ember.Mixin.create({
 

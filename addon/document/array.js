@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import BaseMixin from './base-mixin';
-import mark from '../util/mark-model';
+import { markModel } from '../util/internal';
 
 // import createTransform from './mixins/create-array-transform-mixin';
 
@@ -13,5 +13,5 @@ import mark from '../util/mark-model';
 //   }
 // });
 
-export default mark(Ember.ArrayProxy.extend(BaseMixin, {
+export default markModel(Ember.ArrayProxy.extend(BaseMixin, {
 }));

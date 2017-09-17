@@ -1,10 +1,13 @@
 import Ember from 'ember';
 import InternalBase from './base';
 import EmptyObject from 'documents/util/empty-object';
-import toInternal from 'documents/util/to-internal';
-import isInternal from 'documents/util/is-internal';
-import isInternalArray from 'documents/util/is-internal-array';
-import toModel from 'documents/util/to-model';
+
+import {
+  toInternal,
+  isInternal,
+  isInternalArray,
+  toModel
+} from 'documents/util/internal';
 
 const {
   assert,

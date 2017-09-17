@@ -1,8 +1,11 @@
 import Ember from 'ember';
-import toInternal from 'documents/util/to-internal';
-import isInternal from 'documents/util/is-internal';
-import isInternalObject from 'documents/util/is-internal-object';
-import isInternalArray from 'documents/util/is-internal-array';
+
+import {
+  toInternal,
+  isInternal,
+  isInternalObject,
+  isInternalArray
+} from 'documents/util/internal';
 
 const {
   assert,
