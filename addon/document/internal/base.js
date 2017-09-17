@@ -216,11 +216,9 @@ export default class InternalBase {
       return this._deserializeObjectValue(value, current);
     } else if(type === 'array') {
       return this._deserializeArrayValue(value, current);
-    } else {
-      return this._deserializePrimitiveValue(value, current);
     }
 
-    return result;
+    return this._deserializePrimitiveValue(value, current);
   }
 
   deserialize(values) {

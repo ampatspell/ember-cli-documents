@@ -217,7 +217,26 @@ test('create object and attach to array', function(assert) {
   let doc = this.db.doc();
   let array = this.db.array();
   let ok = this.db.object({ ok: true });
+
   array.pushObject(ok);
   assert.ok(array.objectAt(0)._internal === ok._internal);
   assert.ok(ok._internal.parent === array._internal);
+
+  doc.set('array', array);
+  assert.ok(array._internal.parent === doc._internal);
+
+  doc.set('ok', ok);
+  assert.ok(doc.get('ok') !== ok);
+  assert.ok(doc.get('ok')._internal !== ok._internal);
+
+  assert.deepEqual_(doc.get('serialized'), {
+    "array": [
+      {
+        "ok": true
+      }
+    ],
+    "ok": {
+      "ok": true
+    }
+  });
 });
