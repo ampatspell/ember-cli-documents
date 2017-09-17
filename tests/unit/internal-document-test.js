@@ -225,9 +225,9 @@ test('create object and attach to array', function(assert) {
   doc.set('array', array);
   assert.ok(array._internal.parent === doc._internal);
 
-  doc.set('ok', ok);
-  assert.ok(doc.get('ok') !== ok);
-  assert.ok(doc.get('ok')._internal !== ok._internal);
+  doc.set('object', ok);
+  assert.ok(doc.get('object') !== ok);
+  assert.ok(doc.get('object')._internal !== ok._internal);
 
   assert.deepEqual_(doc.get('serialized'), {
     "array": [
@@ -235,7 +235,7 @@ test('create object and attach to array', function(assert) {
         "ok": true
       }
     ],
-    "ok": {
+    "object": {
       "ok": true
     }
   });
