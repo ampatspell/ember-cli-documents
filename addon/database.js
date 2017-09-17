@@ -16,11 +16,6 @@ export default Ember.Object.extend({
     }, false);
 
     return internal.model(true);
-  },
-
-  willDestroy() {
-    console.log(this+' destroy');
-    this._super();
   }
 
 });

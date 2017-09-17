@@ -28,7 +28,6 @@ export default Ember.Service.extend({
   },
 
   willDestroy() {
-    console.log(this+' destroy');
     let stores = this.cacheFor('openStores');
     if(stores) {
       destroyObject(stores);

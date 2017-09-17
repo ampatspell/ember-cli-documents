@@ -10,11 +10,6 @@ export default Ember.Object.extend(
   ModelFactory,
   Databases, {
 
-  stores: null,
-
-  willDestroy() {
-    console.log(this+' destroy');
-    this._super();
-  }
+  stores: null
 
 });
