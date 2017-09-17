@@ -3,6 +3,7 @@ import InternalBase from './base';
 import EmptyObject from 'documents/util/empty-object';
 import toInternal from 'documents/util/to-internal';
 import isInternal from 'documents/util/is-internal';
+import isInternalArray from 'documents/util/is-internal-array';
 import toModel from 'documents/util/to-model';
 
 const {
@@ -22,30 +23,35 @@ const remove = (array, element) => {
 
 export default class InternalObject extends InternalBase {
 
+  static get type() {
+    return 'object';
+  }
+
   constructor(database, parent) {
     super(database, parent);
     this.values = new EmptyObject();
   }
 
+  _createModel() {
+    return this.store._createObjectModel(this);
+  }
+
   _setValue(key, value, changed) {
-
-    value = toInternal(value);
-
-    if(isInternal(value)) {
-      throw new Error('_setValue with internal is not supported yet');
-    }
-
     let values = this.values;
     let current = values[key];
 
-    if(current === value) {
-      return value;
+    let { update, internal } = this._deserializeValue(value, current);
+
+    if(update) {
+      if(internal === undefined) {
+        delete values[key];
+      } else {
+        values[key] = internal;
+      }
+      changed(key);
     }
 
-    values[key] = value;
-    changed(key);
-
-    return value;
+    return internal;
   }
 
   _getValue(key, changed) {
@@ -76,8 +82,8 @@ export default class InternalObject extends InternalBase {
 
   //
 
-  _deserialize(values, changed, opts) {
-    assert(`values must be object not ${values}`, typeOf(values) === 'object');
+  _deserialize(values, changed) {
+    assert('values must be object', typeOf(values) === 'object');
     let keys = Object.keys(this.values);
     for(let key in values) {
       remove(keys, key);
@@ -87,18 +93,15 @@ export default class InternalObject extends InternalBase {
     keys.forEach(key => this._setValue(key, undefined, changed));
   }
 
-  deserialize(values, opts) {
-    this.withPropertyChanges(changed => this._deserialize(values, changed, opts));
-  }
-
-  //
-
   _serialize(opts, changed) {
-
-  }
-
-  serialize(opts) {
-    return this.withPropertyChanges(changed => this._serialize(opts, changed));
+    let json = {};
+    let values = this.values;
+    for(let key in values) {
+      let value = values[key];
+      value = this._serializeValue(value, opts);
+      json[key] = value;
+    }
+    return json;
   }
 
 }

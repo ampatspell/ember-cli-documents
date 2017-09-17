@@ -8,6 +8,10 @@ export default Ember.Mixin.create({
 
   _createDocumentModel(_internal) {
     return this._modelFactory('document').create({ _internal });
+  },
+
+  _createObjectModel(_internal) {
+    return this._modelFactory('object').create({ _internal });
   }
 
 });

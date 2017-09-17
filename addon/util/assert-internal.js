@@ -5,4 +5,4 @@ const {
   assert
 } = Ember;
 
-export default (name, arg) => assert(`${name} must be internal object`, this._isInternal(arg));
+export default (name, arg) => assert(`${name} must be internal object`, isInternal(arg));

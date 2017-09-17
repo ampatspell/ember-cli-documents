@@ -1,7 +1,12 @@
 import Ember from 'ember';
+import toInternal from 'documents/util/to-internal';
+import isInternal from 'documents/util/is-internal';
+import isInternalObject from 'documents/util/is-internal-object';
+import isInternalArray from 'documents/util/is-internal-array';
 
 const {
-  assert
+  assert,
+  typeOf
 } = Ember;
 
 export default class InternalBase {
@@ -25,8 +30,20 @@ export default class InternalBase {
 
   //
 
-  _propertiesDidChange(changed) {
+  _willEndPropertyChanges(changed) {
     changed('serialized');
+  }
+
+  _didEndNestedPropertyChanges() {
+    this.withPropertyChanges(changed => changed('serialized'), true);
+  }
+
+  _didEndPropertyChanges() {
+    let parent = this.parent;
+    if(!parent) {
+      return;
+    }
+    parent._didEndNestedPropertyChanges(this);
   }
 
   withPropertyChanges(cb, notify) {
@@ -56,14 +73,125 @@ export default class InternalBase {
     let result = cb(changed);
 
     if(notify && changes.length) {
-      this._propertiesDidChange(changed);
+      this._willEndPropertyChanges(changed);
     }
 
     if(model && notify) {
       model.endPropertyChanges();
     }
 
+    if(notify && changes.length) {
+      this._didEndPropertyChanges();
+    }
+
     return result;
+  }
+
+  //
+
+  _detach() {
+    this.parent = null;
+  }
+
+  //
+
+  _detachInternal(value) {
+    if(isInternal(value)) {
+      value._detach();
+    }
+  }
+
+  _createInternalObject(parent) {
+    return this.store._createInternalObject(parent);
+  }
+
+  _createInternalArray(parent) {
+    return this.store._createInternalArray(parent);
+  }
+
+  //
+
+  _deserializeObjectValue(value, current) {
+    let internal;
+    let update;
+    if(isInternalObject(current)) {
+      internal = current;
+      internal.deserialize(value);
+      update = false;
+    } else {
+      this._detachInternal(current);
+      internal = this._createInternalObject(this);
+      internal.deserialize(value);
+      update = true;
+    }
+    return { update, internal };
+  }
+
+  _deserializeArrayValue(value, current) {
+    let internal;
+    let update;
+    if(isInternalArray(current)) {
+      internal = current;
+      internal.deserialize(value);
+      update = false;
+    } else {
+      this._detachInternal(current);
+      internal = this._createInternalArray(this);
+      internal.deserialize(value);
+      update = true;
+    }
+    return { update, internal };
+  }
+
+  _deserializePrimitiveValue(value, current) {
+    this._detachInternal(current);
+    return { update: true, internal: value };
+  }
+
+  _deserializeValue(value, current) {
+    value = toInternal(value);
+
+    if(current === value) {
+      return {
+        update: false,
+        internal: value
+      };
+    }
+
+    if(isInternal(value)) {
+      value = value.serialize({ type: 'copy' });
+    }
+
+    let type = typeOf(value);
+
+    let result;
+
+    if(type === 'object') {
+      result = this._deserializeObjectValue(value, current);
+    } else if(type === 'array') {
+      result = this._deserializeArrayValue(value, current);
+    } else {
+      result = this._deserializePrimitiveValue(value, current);
+    }
+
+    return result;
+  }
+
+  deserialize(values) {
+    this.withPropertyChanges(changed => this._deserialize(values, changed), true);
+  }
+
+  //
+
+  _serializeValue(value, opts) {
+    if(isInternal(value)) {
+      value = value.serialize(opts);
+    }
+    return value;
+  }
+
+  serialize(opts) {
+    return this.withPropertyChanges(changed => this._serialize(opts, changed), true);
   }
 
 }

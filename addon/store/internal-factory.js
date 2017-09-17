@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import assertInternal from '../util/assert-internal';
 
 export default Ember.Mixin.create({
 
@@ -12,13 +13,13 @@ export default Ember.Mixin.create({
   },
 
   _createInternalObject(parent) {
-    this._assertInternal('parent', parent);
+    assertInternal('parent', parent);
     let InternalObject = this._internalFactory('object');
     return new InternalObject(this, parent);
   },
 
   _createInternalArray(parent) {
-    this._assertInternal('parent', parent);
+    assertInternal('parent', parent);
     let InternalArray = this._internalFactory('array');
     return new InternalArray(this, parent);
   }

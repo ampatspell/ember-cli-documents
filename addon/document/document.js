@@ -1,11 +1,9 @@
 import Ember from 'ember';
 import DocumentObject from './object';
 
-// const {
-//   computed,
-//   computed: { reads },
-//   copy
-// } = Ember;
+const {
+  computed
+} = Ember;
 
 // const id = () => {
 //   return computed('_id', {
@@ -26,10 +24,17 @@ import DocumentObject from './object';
 
 export default DocumentObject.extend({
 
-
   // id: id(),
   // rev: rev(),
 
   // database: database()
+
+  serialized: computed(function() {
+    return this.serialize({ type: 'preview' });
+  }).readOnly(),
+
+  serialize(opts) {
+    return this._internal.serialize(opts);
+  }
 
 });
