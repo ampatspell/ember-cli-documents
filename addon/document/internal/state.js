@@ -1,7 +1,13 @@
+import Ember from 'ember';
+
+const {
+  assign
+} = Ember;
+
 export default class State {
 
   constructor() {
-    this.values = {
+    assign(this, {
       isNew: true,
       isLoading: false,
       isLoaded: false,
@@ -10,20 +16,15 @@ export default class State {
       isDeleted: false,
       isError: false,
       error: null
-    };
-  }
-
-  get(key) {
-    return this.values[key];
+    });
   }
 
   set(props, changed) {
-    let state = this.values;
     let any = false;
     for(let key in props) {
       let value = props[key];
-      if(state[key] !== value) {
-        state[key] = value;
+      if(this[key] !== value) {
+        this[key] = value;
         changed(key);
         any = true;
       }

@@ -9,6 +9,13 @@ export default Ember.Object.extend(
   store: null,
   identifier: null,
 
+  _didDestroyModelForInternalDocument(internal) {
+    if(!internal.isNew) {
+      return;
+    }
+    this._unstoreNewInternalDocument(internal);
+  },
+
   doc(values) {
     let internal = this._createNewInternalDocument(values);
     return internal.model(true);

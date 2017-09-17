@@ -22,6 +22,12 @@ export default Ember.Mixin.create({
     documents.all.addObject(internal);
   },
 
+  _unstoreNewInternalDocument(internal) {
+    let documents = this._documents;
+    documents.new.removeObject(internal);
+    documents.all.removeObject(internal);
+  },
+
   _storeSavedInternalDocument(internal) {
     let documents = this._documents;
     let id = internal.getId();

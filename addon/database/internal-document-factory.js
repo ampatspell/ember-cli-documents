@@ -10,7 +10,7 @@ export default Ember.Mixin.create({
 
   _createInternalDocument(values, state) {
     values = values || {};
-    let internal = this.get('store')._createInternalDocument();
+    let internal = this.get('store')._createInternalDocument(this);
     internal._deserialize(values, noop);
     internal.setState(state, noop);
     return internal;
