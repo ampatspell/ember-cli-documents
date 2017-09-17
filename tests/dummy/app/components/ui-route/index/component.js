@@ -10,7 +10,7 @@ export default Ember.Component.extend({
   layout,
 
   author: computed(function() {
-    return this.get('db').existing('author:ampatspell');
+    // return this.get('db').existing('author:ampatspell');
   })
 
 });

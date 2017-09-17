@@ -1,25 +1,18 @@
+import Ember from 'ember';
+
+const {
+  assert
+} = Ember;
+
 export default class InternalBase {
 
-  constructor(database, parent) {
-    this._database = database;
-    this._parent = parent;
+  constructor(store, parent) {
+    this.store = store;
+    this.parent = parent;
     this._model = null;
   }
 
-  get database() {
-    let database = this._database;
-    if(!database) {
-      let parent = this._parent;
-      if(parent) {
-        database = parent.database;
-      }
-    }
-    return database;
-  }
-
-  _notifyPropertiesChangedWithModel(model) {
-
-  }
+  //
 
   model(create) {
     let model = this._model;
@@ -30,7 +23,15 @@ export default class InternalBase {
     return model;
   }
 
-  withPropertyChanges(cb, notify=true) {
+  //
+
+  _propertiesDidChange(changed) {
+    changed('serialized');
+  }
+
+  withPropertyChanges(cb, notify) {
+    assert(`withPropertyChanges notify argument must be boolean`, typeof notify === 'boolean');
+
     let model;
 
     if(notify) {
@@ -55,7 +56,7 @@ export default class InternalBase {
     let result = cb(changed);
 
     if(notify && changes.length) {
-      this._notifyPropertiesChangedWithModel(model);
+      this._propertiesDidChange(changed);
     }
 
     if(model && notify) {

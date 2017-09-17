@@ -1,9 +1,9 @@
-import { skip } from 'ember-qunit';
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
+import module from '../../tests/helpers/module-for-acceptance';
+import { test } from '../helpers/qunit';
 
-moduleForAcceptance('Acceptance | index');
+module('Acceptance | index');
 
-skip('visiting /', function(assert) {
+test.skip('visiting /', function(assert) {
   visit('/');
   andThen(() => assert.equal(currentURL(), '/'));
 });

@@ -1,34 +1,22 @@
 import module from '../helpers/module-for-db';
-import { test } from 'ember-qunit';
+import { test } from '../helpers/qunit';
 
 module('internal-document');
 
-test('create new complex', function(assert) {
+test('new blank document', function(assert) {
+  let doc = this.db.document();
+  assert.deepEqual_(doc._internal.values, {});
+});
+
+test('new simple document', function(assert) {
   let doc = this.db.document({
     _id: 'duck:yellow',
     name: 'Yellow',
-    type: 'yellow',
-    address: {
-      street: 'Yellow str'
-    }
+    type: 'yellow'
   });
-  assert.ok(doc);
-  assert.deepEqual(doc.state.values, {
-    "error": null,
-    "isDeleted": false,
-    "isDirty": false,
-    "isError": false,
-    "isLoaded": false,
-    "isLoading": false,
-    "isNew": true,
-    "isSaving": false
-  });
-  assert.deepEqual(this.db._serializeInternal(doc), {
+  assert.deepEqual_(doc._internal.values, {
     _id: 'duck:yellow',
     name: 'Yellow',
-    type: 'yellow',
-    address: {
-      street: 'Yellow str'
-    }
+    type: 'yellow'
   });
 });

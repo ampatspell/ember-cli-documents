@@ -12,7 +12,9 @@ export default function(name, options = {}) {
     beforeEach() {
       this.application = startApp();
       this.instance = this.application.buildInstance();
-      this.db = this.instance.factoryFor('documents:database').create();
+      this.stores = this.instance.lookup('documents:stores');
+      this.store = this.stores.store({ url: 'http://127.0.0.1:5984' });
+      this.db = this.store.database('thing');
       if (options.beforeEach) {
         return options.beforeEach.apply(this, arguments);
       }
@@ -20,7 +22,6 @@ export default function(name, options = {}) {
     afterEach() {
       let afterEach = options.afterEach && options.afterEach.apply(this, arguments);
       return resolve(afterEach).then(() => {
-        Ember.run(() => this.db.destroy());
         Ember.run(() => this.instance.destroy());
         destroyApp(this.application);
       });

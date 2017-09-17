@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import InternalBase from './internal-base';
+import InternalBase from './base';
 
 const {
   A
@@ -7,8 +7,8 @@ const {
 
 export default class InternalArray extends InternalBase {
 
-  constructor(parent) {
-    super(parent);
+  constructor(store, parent) {
+    super(store, parent);
     this.vales = A();
   }
 

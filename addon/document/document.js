@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import DocumentObject from './object';
 
 // const {
 //   computed,
@@ -23,9 +24,8 @@ import Ember from 'ember';
 
 // const database = () => reads('_internal.database').readOnly();
 
-export default Ember.Object.extend({
+export default DocumentObject.extend({
 
-  _internal: null,
 
   // id: id(),
   // rev: rev(),

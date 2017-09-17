@@ -1,16 +1,26 @@
 import Ember from 'ember';
-import InternalFactory from './database/internal-factory';
 
-export default Ember.Object.extend(
-  InternalFactory, {
+export default Ember.Object.extend({
+
+  store: null,
+  identifier: null,
 
   document(values) {
-    let internal = this._createInternalDocument();
+    values = values || {};
+
+    let internal = this.get('store')._createInternalDocument();
+
     internal.withPropertyChanges(changed => {
-      this._deserializeInternal(internal, values, changed);
+      internal._deserialize(values, changed);
       internal.setState({ isDirty: false }, changed);
     }, false);
-    return internal;
+
+    return internal.model(true);
+  },
+
+  willDestroy() {
+    console.log(this+' destroy');
+    this._super();
   }
 
 });

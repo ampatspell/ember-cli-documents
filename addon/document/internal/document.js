@@ -1,11 +1,16 @@
-import InternalObject from './internal-object';
+import InternalObject from './object';
 import State from './state';
 
 export default class InternalDocument extends InternalObject {
 
-  constructor(database) {
-    super(database, null);
+  constructor(store, database, parent) {
+    super(store, null);
+    this.database = database;
     this.state = new State();
+  }
+
+  _createModel() {
+    return this.store._createDocumentModel(this);
   }
 
   setState(values, changed) {
