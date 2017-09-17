@@ -34,6 +34,7 @@ export default DocumentObject.extend({
   rev: rev(),
 
   database: database(),
+
   serialized: serialized(),
 
   serialize(opts) {
