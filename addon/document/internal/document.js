@@ -17,4 +17,16 @@ export default class InternalDocument extends InternalObject {
     return this.state.set(values, changed);
   }
 
+  getId() {
+    return this._getValueNotify('_id');
+  }
+
+  setId(id) {
+    return this._setValueNotify('_id', id);
+  }
+
+  getRev() {
+    return this._getValueNotify('_rev');
+  }
+
 }

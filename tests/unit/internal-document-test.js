@@ -174,3 +174,27 @@ test('replace array', function(assert) {
     ]
   });
 });
+
+test('document id', function(assert) {
+  let doc = this.db.document({ _id: 'hello' });
+  assert.equal(doc.get('id'), 'hello');
+  assert.equal(doc.get('_id'), undefined);
+
+  doc.set('id', 'another');
+  assert.equal(doc.get('id'), 'another');
+  assert.equal(doc.get('_id'), undefined);
+});
+
+test('document rev', function(assert) {
+  let doc = this.db.document({ _rev: '1-asd' });
+  assert.equal(doc.get('rev'), '1-asd');
+  assert.equal(doc.get('_rev'), undefined);
+
+  doc._internal.deserialize({ _rev: '2-asd' });
+  assert.equal(doc.get('rev'), '2-asd');
+  assert.equal(doc.get('_rev'), undefined);
+
+  doc._internal._setValueNotify('_rev', '3-asd');
+  assert.equal(doc.get('rev'), '3-asd');
+  assert.equal(doc.get('_rev'), undefined);
+});
