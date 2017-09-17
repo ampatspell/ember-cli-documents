@@ -46,8 +46,12 @@ export default class InternalArray extends InternalBase {
   _toInternal(value) {
     value = toInternal(value);
     if(isInternal(value)) {
-      value = value.serialize({ type: 'copy' });
+      if(value.isDetached()) {
+        value._attach(this);
+        return value;
+      }
     }
+    value = value.serialize({ type: 'copy' });
     let { internal } = this._deserializeValue(value);
     return internal;
   }

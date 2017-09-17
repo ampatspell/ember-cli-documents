@@ -20,6 +20,10 @@ export default class InternalBase {
     this._model = null;
   }
 
+  isDetached() {
+    return !this.parent;
+  }
+
   _didCreateModel() {
   }
 
@@ -107,12 +111,20 @@ export default class InternalBase {
     this.parent = null;
   }
 
+  _attach(parent) {
+    this.parent = parent;
+  }
+
   //
 
   _detachInternal(value) {
     if(isInternal(value)) {
       value._detach();
     }
+  }
+
+  _attachInternal(value) {
+    value._attach(this);
   }
 
   _createInternalObject(parent) {
@@ -157,6 +169,18 @@ export default class InternalBase {
     return { update, internal };
   }
 
+  _deserializeInternalArrayValue(value, current) {
+    this._detachInternal(current);
+    this._attachInternal(value);
+    return { update: true, internal: value };
+  }
+
+  _deserializeInternalObjectValue(value, current) {
+    this._detachInternal(current);
+    this._attachInternal(value);
+    return { update: true, internal: value };
+  }
+
   _deserializePrimitiveValue(value, current) {
     this._detachInternal(current);
     return { update: true, internal: value };
@@ -173,19 +197,27 @@ export default class InternalBase {
     }
 
     if(isInternal(value)) {
+      if(value.isDetached()) {
+        if(isInternalObject(value)) {
+          return this._deserializeInternalObjectValue(value, current);
+        } else if(isInternalArray(value)) {
+          return this._deserializeInternalArrayValue(value, current);
+        }
+      }
+    }
+
+    if(isInternal(value)) {
       value = value.serialize({ type: 'copy' });
     }
 
     let type = typeOf(value);
 
-    let result;
-
     if(type === 'object') {
-      result = this._deserializeObjectValue(value, current);
+      return this._deserializeObjectValue(value, current);
     } else if(type === 'array') {
-      result = this._deserializeArrayValue(value, current);
+      return this._deserializeArrayValue(value, current);
     } else {
-      result = this._deserializePrimitiveValue(value, current);
+      return this._deserializePrimitiveValue(value, current);
     }
 
     return result;

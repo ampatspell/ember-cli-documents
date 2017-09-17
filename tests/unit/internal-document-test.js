@@ -4,12 +4,12 @@ import { test } from '../helpers/qunit';
 module('internal-document');
 
 test('new blank document', function(assert) {
-  let doc = this.db.document();
+  let doc = this.db.doc();
   assert.deepEqual_(doc._internal.values, {});
 });
 
 test('new simple document', function(assert) {
-  let doc = this.db.document({
+  let doc = this.db.doc({
     _id: 'duck:yellow',
     name: 'Yellow',
     type: 'yellow'
@@ -24,7 +24,7 @@ test('new simple document', function(assert) {
 });
 
 test('new document with object', function(assert) {
-  let doc = this.db.document({
+  let doc = this.db.doc({
     address: { city: 'Yello', country: 'Duckland' }
   });
   assert.ok(doc.get('address._internal'));
@@ -33,7 +33,7 @@ test('new document with object', function(assert) {
 });
 
 test('replace object', function(assert) {
-  let doc = this.db.document({
+  let doc = this.db.doc({
     address: { city: 'Yello', country: 'Duckland' }
   });
 
@@ -57,7 +57,7 @@ test('replace object', function(assert) {
 });
 
 test('serialize doc with object', function(assert) {
-  let doc = this.db.document({
+  let doc = this.db.doc({
     _id: 'duck:yellow',
     address: { city: 'Yello', country: 'Duckland' }
   });
@@ -71,7 +71,7 @@ test('serialize doc with object', function(assert) {
 });
 
 test('update object notifies doc change', function(assert) {
-  let doc = this.db.document({
+  let doc = this.db.doc({
     _id: 'duck:yellow',
     shipping: {
       address: { city: 'Yello', country: 'Duckland' }
@@ -111,7 +111,7 @@ test('update object notifies doc change', function(assert) {
 });
 
 test('set array with objects', function(assert) {
-  let doc = this.db.document({
+  let doc = this.db.doc({
     _id: 'duck:yellow',
     stuff: [
       { city: 'Yello', country: 'Duckland' },
@@ -134,7 +134,7 @@ test('set array with objects', function(assert) {
 });
 
 test('replace array', function(assert) {
-  let doc = this.db.document({
+  let doc = this.db.doc({
     things: [
       { id: 'a' },
       { id: 'b' },
@@ -176,7 +176,7 @@ test('replace array', function(assert) {
 });
 
 test('document id', function(assert) {
-  let doc = this.db.document({ _id: 'hello' });
+  let doc = this.db.doc({ _id: 'hello' });
   assert.equal(doc.get('id'), 'hello');
   assert.equal(doc.get('_id'), undefined);
 
@@ -186,7 +186,7 @@ test('document id', function(assert) {
 });
 
 test('document rev', function(assert) {
-  let doc = this.db.document({ _rev: '1-asd' });
+  let doc = this.db.doc({ _rev: '1-asd' });
   assert.equal(doc.get('rev'), '1-asd');
   assert.equal(doc.get('_rev'), undefined);
 
@@ -197,4 +197,27 @@ test('document rev', function(assert) {
   doc._internal._setValueNotify('_rev', '3-asd');
   assert.equal(doc.get('rev'), '3-asd');
   assert.equal(doc.get('_rev'), undefined);
+});
+
+test('create array and attach to document', function(assert) {
+  let array = this.db.array([ { ok: true } ]);
+  assert.ok(array._internal);
+  assert.ok(!array._internal.parent);
+  assert.equal(array.get('length'), 1);
+  let ok = array.objectAt(0);
+
+  let doc = this.db.doc();
+  doc.set('array', array);
+  assert.ok(doc.get('array')._internal.parent === doc._internal);
+  assert.ok(doc.get('array') === array);
+  assert.ok(doc.get('array.lastObject') === ok);
+});
+
+test('create object and attach to array', function(assert) {
+  let doc = this.db.doc();
+  let array = this.db.array();
+  let ok = this.db.object({ ok: true });
+  array.pushObject(ok);
+  assert.ok(array.objectAt(0)._internal === ok._internal);
+  assert.ok(ok._internal.parent === array._internal);
 });

@@ -10,7 +10,7 @@ export default Ember.Component.extend({
   layout,
 
   author: computed(function() {
-    let author = this.get('db').document({
+    let author = this.get('db').doc({
       _id: 'author:ampatspell',
       type: 'author',
       name: 'ampatspell',
