@@ -2,7 +2,6 @@ import Ember from 'ember';
 import { object } from '../util/computed';
 
 const {
-  computed,
   String: { dasherize }
 } = Ember;
 

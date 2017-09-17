@@ -2,5 +2,8 @@
 'use strict';
 
 module.exports = {
-  name: 'documents'
+  name: 'documents',
+  isDevelopingAddon() {
+    return true;
+  }
 };

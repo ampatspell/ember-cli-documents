@@ -1,18 +1,6 @@
-import Ember from 'ember';
 import InternalBase from './base';
 import EmptyObject from 'documents/util/empty-object';
-
-import {
-  toInternal,
-  isInternal,
-  isInternalArray,
-  toModel
-} from 'documents/util/internal';
-
-const {
-  assert,
-  typeOf
-} = Ember;
+import { toModel } from 'documents/util/internal';
 
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
 
@@ -57,7 +45,7 @@ export default class InternalObject extends InternalBase {
     return internal;
   }
 
-  _getValue(key, changed) {
+  _getValue(key) {
     return this.values[key];
   }
 
@@ -95,7 +83,7 @@ export default class InternalObject extends InternalBase {
     keys.forEach(key => this._setValue(key, undefined, changed));
   }
 
-  _serialize(opts, changed) {
+  _serialize(opts) {
     let json = {};
     let values = this.values;
     for(let key in values) {

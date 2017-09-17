@@ -20,8 +20,6 @@ export default class InternalBase {
     this._model = null;
   }
 
-  //
-
   model(create) {
     let model = this._model;
     if(!model && create) {

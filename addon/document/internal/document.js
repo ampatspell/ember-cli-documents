@@ -3,7 +3,7 @@ import State from './state';
 
 export default class InternalDocument extends InternalObject {
 
-  constructor(store, database, parent) {
+  constructor(store, database) {
     super(store, null);
     this.database = database;
     this.state = new State();

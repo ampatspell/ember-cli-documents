@@ -16,7 +16,7 @@ export default class InternalArray extends InternalBase {
     this.values = A();
   }
 
-  _deserialize(values, changed) {
+  _deserialize(values) {
     this.values.forEach(value => this._detachInternal(value));
     this.values.clear();
 
@@ -28,7 +28,7 @@ export default class InternalArray extends InternalBase {
     this.values.addObjects(internals);
   }
 
-  _serialize(opts, changed) {
+  _serialize(opts) {
     return this.values.map(value => this._serializeValue(value, opts));
   }
 
