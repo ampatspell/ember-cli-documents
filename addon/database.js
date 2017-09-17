@@ -1,29 +1,34 @@
 import Ember from 'ember';
+import InternalDocumentIdentity from './database/internal-document-identity';
+import InternalDocumentFactory from './database/internal-document-factory';
 
-const noop = () => {};
-
-export default Ember.Object.extend({
+export default Ember.Object.extend(
+  InternalDocumentIdentity,
+  InternalDocumentFactory, {
 
   store: null,
   identifier: null,
 
   doc(values) {
-    values = values || {};
-    let internal = this.get('store')._createInternalDocument();
-    internal._deserialize(values, noop);
-    internal.setState({ isDirty: false }, noop);
+    let internal = this._createNewInternalDocument(values);
+    return internal.model(true);
+  },
+
+  existing(id, opts) {
+    let internal = this._existingInternalDocument(id, opts);
+    if(!internal) {
+      return;
+    }
     return internal.model(true);
   },
 
   array(values) {
-    let internal = this.get('store')._createInternalArray();
-    internal._deserialize(values);
+    let internal = this._createInternalArray(values);
     return internal.model(true);
   },
 
   object(values) {
-    let internal = this.get('store')._createInternalObject();
-    internal._deserialize(values, noop);
+    let internal = this._createInternalObject(values);
     return internal.model(true);
   }
 
