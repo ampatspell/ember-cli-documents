@@ -36,7 +36,7 @@ export default Ember.Mixin.create({
   },
 
   willDestroy() {
-    this._super(...arguments);
+    this._super();
     let open = this.cacheFor('openDatabases');
     for(let key in open) {
       let value = open[key];
