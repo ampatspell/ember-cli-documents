@@ -2,11 +2,11 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
 
-  stores: null,
-  url: null,
+  store: null,
+  identifier: null,
 
   willDestroy() {
-    this.get('stores')._storeWillDestroy(this);
+    this.get('store')._databaseWillDestroy(this);
     this._super();
   }
 

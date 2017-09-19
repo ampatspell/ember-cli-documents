@@ -1,13 +1,12 @@
 import Ember from 'ember';
+import Store from './database/store';
 import InternalDocumentIdentity from './database/internal-document-identity';
 import InternalDocumentFactory from './database/internal-document-factory';
 
 export default Ember.Object.extend(
+  Store,
   InternalDocumentIdentity,
   InternalDocumentFactory, {
-
-  store: null,
-  identifier: null,
 
   _didDestroyModelForInternalDocument(internal) {
     if(!internal.isNew) {

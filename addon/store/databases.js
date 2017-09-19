@@ -23,10 +23,16 @@ export default Ember.Mixin.create({
     let normalizedIdentifier = this.normalizeDatabaseIdentifier(identifier);
     let database = open[normalizedIdentifier];
     if(!database) {
-      database = this.createDatabase(identifier);
+      database = this.createDatabase(normalizedIdentifier);
       open[normalizedIdentifier] = database;
     }
     return database;
+  },
+
+  _databaseWillDestroy(db) {
+    let identifier = db.get('identifier');
+    let open = this.get('openDatabases');
+    delete open[identifier];
   },
 
   willDestroy() {
