@@ -8,7 +8,7 @@ const {
 
 export default Ember.Mixin.create({
 
-  _createModelIdentity: on('init', function() {
+  _createDocumentIdentity: on('init', function() {
     this._documents = new EmptyObject();
     this._documents.all = A([]);                 // all new and saved models
     this._documents.new = A([]);                 // new models
