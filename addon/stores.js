@@ -38,6 +38,12 @@ export default Ember.Service.extend({
     return store;
   },
 
+  _storeWillDestroy(store) {
+    let url = store.get('url');
+    let openStores = this.get('openStores');
+    delete openStores[url];
+  },
+
   willDestroy() {
     let stores = this.cacheFor('openStores');
     if(stores) {
