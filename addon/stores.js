@@ -11,9 +11,20 @@ export default Ember.Service.extend({
 
   openStores: object().readOnly(),
 
+  _storeFactory: null,
+
+  storeFactory() {
+    let Factory = this._storeFactory;
+    if(!Factory) {
+      Factory = getOwner(this).factoryFor('documents:store');
+      this._storeFactory = Factory;
+    }
+    return Factory;
+  },
+
   createStore(opts) {
     let stores = this;
-    return getOwner(this).factoryFor('documents:store').create(assign({ stores }, opts));
+    return this.storeFactory().create(assign({ stores }, opts));
   },
 
   store(opts) {
