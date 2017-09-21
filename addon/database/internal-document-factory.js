@@ -44,13 +44,13 @@ export default Ember.Mixin.create({
   },
 
   _createInternalArray(values) {
-    let internal = this.get('store')._createInternalArray();
+    let internal = this.get('store')._createInternalArray(null);
     internal._deserialize(values);
     return internal;
   },
 
   _createInternalObject(values) {
-    let internal = this.get('store')._createInternalObject();
+    let internal = this.get('store')._createInternalObject(null);
     internal._deserialize(values, noop);
     return internal;
   }

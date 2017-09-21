@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import DocumentObject from './object';
+import StateMixin from './state-mixin';
 
 const {
   computed
@@ -20,25 +21,15 @@ const rev = () => computed('_rev', function() {
   return this._internal.getRev();
 }).readOnly();
 
-const serialized = () => computed(function() {
-  return this.serialize({ type: 'preview' });
-}).readOnly();
-
 const database = () => computed(function() {
   return this._internal.database;
 }).readOnly();
 
-export default DocumentObject.extend({
+export default DocumentObject.extend(StateMixin, {
 
   id: id(),
   rev: rev(),
 
-  database: database(),
-
-  serialized: serialized(),
-
-  serialize(opts) {
-    return this._internal.serialize(opts);
-  }
+  database: database()
 
 });

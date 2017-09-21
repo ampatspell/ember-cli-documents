@@ -4,19 +4,23 @@ const {
   assign
 } = Ember;
 
+const defaults = {
+  isNew: true,
+  isLoading: false,
+  isLoaded: false,
+  isDirty: false,
+  isSaving: false,
+  isDeleted: false,
+  isError: false,
+  error: null
+};
+
+export const keys = Object.keys(defaults);
+
 export default class State {
 
   constructor() {
-    assign(this, {
-      isNew: true,
-      isLoading: false,
-      isLoaded: false,
-      isDirty: false,
-      isSaving: false,
-      isDeleted: false,
-      isError: false,
-      error: null
-    });
+    assign(this, defaults);
   }
 
   set(props, changed) {
@@ -32,6 +36,13 @@ export default class State {
     if(any) {
       changed('state');
     }
+  }
+
+  get() {
+    return keys.reduce((obj, key) => {
+      obj[key] = this[key];
+      return obj;
+    }, {});
   }
 
 }
