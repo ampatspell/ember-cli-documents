@@ -1,9 +1,10 @@
 # Document vs CouchDB doc
 
 * Document has `id`, `rev` which is mapped to `doc._id`, `doc._rev`
-* `const alias = key => computed(`_${key}`, ..)` `get, set` uses `this._internal.getValue, setValue`
+* internal has get/set id/rev
 * `rev` can't be mutated, `id` can while `state.isNew`
-* move `internal._deserialize` to public, have `internal.deserializeAndNotify` something something, that thing which is `deserialize` right now. keep it only for
+* move `internal._deserialize` to `internal.deserialize`, move current `deserialize` to `internal.deserializeNotify`.
+* same goes for `serialize` & `_serialize`
 
 ## Computed property teardown
 
