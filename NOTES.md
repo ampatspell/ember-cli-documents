@@ -1,16 +1,9 @@
-# Document and Object
+# Document vs CouchDB doc
 
-``` javascript
-author.set('address', { country: 'Latvia' });
-author.set('permissions', [
-  { id: 'blog:one', edit: true }
-]);
-
-author // Document
-author.get('country') // DocumentObject
-author.get('permissions') // DocumentArray
-author.get('permissions.firstObject') // DocumentObject
-```
+* Document has `id`, `rev` which is mapped to `doc._id`, `doc._rev`
+* `const alias = key => computed(`_${key}`, ..)` `get, set` uses `this._internal.getValue, setValue`
+* `rev` can't be mutated, `id` can while `state.isNew`
+* move `internal._deserialize` to public, have `internal.deserializeAndNotify` something something, that thing which is `deserialize` right now. keep it only for
 
 ## Computed property teardown
 
@@ -100,11 +93,3 @@ Model.extend({
 
 });
 ```
-
-## setValue
-
-// value can be internal already associated with another database-document
-// that should be also set here
-
-// `object` doesn't have database, only store for factories
-// `document` has database for save, load, delete
