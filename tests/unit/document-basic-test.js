@@ -83,7 +83,7 @@ test('get _id and _rev are ignored', function(assert) {
   assert.ok(!doc.get('_rev'));
 });
 
-test.only('init document with id', function(assert) {
+test.skip('init document with id', function(assert) {
   let doc = this.db.doc({ id: 'asd', rev: '1-skip', _rev: '1-skip' });
   assert.deepEqual(doc._internal.values, {
     _id: 'asd'
