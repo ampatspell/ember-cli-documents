@@ -17,9 +17,14 @@ const id = () => {
   });
 };
 
-const rev = () => computed('_rev', function() {
-  return this._internal.getRev();
-}).readOnly();
+const rev = () => computed('_rev', {
+  get() {
+    return this._internal.getRev();
+  },
+  set(_, value) {
+    return this._internal.setRev(value);
+  }
+});
 
 const database = () => computed(function() {
   return this._internal.database;

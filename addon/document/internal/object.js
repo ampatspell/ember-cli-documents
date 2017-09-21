@@ -73,7 +73,7 @@ export default class InternalObject extends InternalBase {
 
   //
 
-  _deserialize(values, changed) {
+  deserialize(values, changed) {
     let keys = Object.keys(this.values);
     for(let key in values) {
       remove(keys, key);
@@ -83,7 +83,7 @@ export default class InternalObject extends InternalBase {
     keys.forEach(key => this._setValue(key, undefined, changed));
   }
 
-  _serialize(opts) {
+  serialize(opts) {
     let json = {};
     let values = this.values;
     for(let key in values) {

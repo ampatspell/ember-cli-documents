@@ -4,7 +4,7 @@ import { test } from '../helpers/qunit';
 module('document-basic');
 
 test('document has an id', function(assert) {
-  let doc = this.db.doc({ _id: 'hello' });
+  let doc = this.db.doc({ id: 'hello' });
   assert.equal(doc.get('id'), 'hello');
 });
 
@@ -15,7 +15,7 @@ test('document allows setting id', function(assert) {
 });
 
 test('document has a rev', function(assert) {
-  let doc = this.db.doc({ _rev: '1-hello' });
+  let doc = this.db.doc({ rev: '1-hello' });
   assert.equal(doc.get('rev'), '1-hello');
 });
 
@@ -25,7 +25,7 @@ test('document has a reference to database', function(assert) {
 });
 
 test('document serialize', function(assert) {
-  let doc = this.db.doc({ _id: 'duck:yellow', _rev: '1-asd', type: 'duck', name: 'Yellow' });
+  let doc = this.db.doc({ id: 'duck:yellow', rev: '1-asd', type: 'duck', name: 'Yellow' });
   assert.deepEqual(doc.serialize({ type: 'document' }), {
     "_id": "duck:yellow",
     "_rev": "1-asd",
@@ -35,7 +35,7 @@ test('document serialize', function(assert) {
 });
 
 test('document serialized', function(assert) {
-  let doc = this.db.doc({ _id: 'duck:yellow', _rev: '1-asd', type: 'duck', name: 'Yellow' });
+  let doc = this.db.doc({ id: 'duck:yellow', rev: '1-asd', type: 'duck', name: 'Yellow' });
 
   assert.deepEqual(doc.get('serialized'), {
     "_id": "duck:yellow",
@@ -83,12 +83,18 @@ test('get _id and _rev are ignored', function(assert) {
   assert.ok(!doc.get('_rev'));
 });
 
-test.skip('init document with id', function(assert) {
-  let doc = this.db.doc({ id: 'asd', rev: '1-skip', _rev: '1-skip' });
-  assert.deepEqual(doc._internal.values, {
-    _id: 'asd'
+test('init document with id and rev', function(assert) {
+  let doc = this.db.doc({ id: 'asd', rev: '1-asd', _rev: '1-skip' });
+  assert.deepEqual_(doc._internal.values, {
+    _id: 'asd',
+    _rev: '1-asd'
   });
-  assert.deepEqual(doc.serialize({ type: 'preview' }), {
-    _id: 'asd'
+
+  assert.equal(doc.get('id'), 'asd');
+  assert.equal(doc.get('rev'), '1-asd');
+
+  assert.deepEqual(doc.serialize(), {
+    _id: 'asd',
+    _rev: '1-asd'
   });
 });

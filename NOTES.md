@@ -1,23 +1,6 @@
-# Document vs CouchDB doc
+# TODO
 
-* Document has `id`, `rev` which is mapped to `doc._id`, `doc._rev`
-* internal has get/set id/rev
 * `rev` can't be mutated, `id` can while `state.isNew`
-* move `internal._deserialize` to `internal.deserialize`, remove current `*notify` methods
-* same goes for `serialize` & `_serialize`
-* serialize json always has `_id` and `_rev`
-* deserialize is always called with `_id`, '_rev', have `normalize` helper which maps `id`, `rev` to underscores.
-
-``` javascript
-_createInternalDocument(values, state) {
-  let internal = this.get('store')._createInternalDocument(this);
-  return internal.withPropertyChanges(changes => {
-    internal.deserialize(values, changes);
-    internal.setState(state, changes);
-    return internal;
-  }, false);
-}
-```
 
 ## Computed property teardown
 
@@ -102,8 +85,6 @@ Model.extend({
       return db.load(`post:${id}`).then(doc => this.setProperties({ doc }));
     }
   }
-
-
 
 });
 ```

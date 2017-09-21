@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import normalize from 'documents/util/normalize';
 
 const {
   assign
@@ -9,11 +10,13 @@ const noop = () => {};
 export default Ember.Mixin.create({
 
   _createInternalDocument(values, state) {
-    values = values || {};
+    let doc = normalize(values);
     let internal = this.get('store')._createInternalDocument(this);
-    internal._deserialize(values, noop);
-    internal.setState(state, noop);
-    return internal;
+    return internal.withPropertyChanges(changed => {
+      internal.deserialize(doc, changed);
+      internal.setState(state, changed);
+      return internal;
+    }, false);
   },
 
   _createNewInternalDocument(values) {
@@ -45,13 +48,13 @@ export default Ember.Mixin.create({
 
   _createInternalArray(values) {
     let internal = this.get('store')._createInternalArray(null);
-    internal._deserialize(values);
+    internal.deserialize(values);
     return internal;
   },
 
   _createInternalObject(values) {
     let internal = this.get('store')._createInternalObject(null);
-    internal._deserialize(values, noop);
+    internal.deserialize(values, noop);
     return internal;
   }
 

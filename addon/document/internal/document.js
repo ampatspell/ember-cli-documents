@@ -38,4 +38,8 @@ export default class InternalDocument extends InternalObject {
     return this._getValueNotify('_rev');
   }
 
+  setRev(rev) {
+    return this._setValueNotify('_rev', rev);
+  }
+
 }

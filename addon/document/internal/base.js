@@ -142,12 +142,12 @@ export default class InternalBase {
     let update;
     if(isInternalObject(current)) {
       internal = current;
-      internal.deserialize(value);
+      internal.withPropertyChanges(changed => internal.deserialize(value, changed), true);
       update = false;
     } else {
       this._detachInternal(current);
       internal = this._createInternalObject(this);
-      internal.deserialize(value);
+      internal.withPropertyChanges(changed => internal.deserialize(value, changed), false);
       update = true;
     }
     return { update, internal };
@@ -158,12 +158,12 @@ export default class InternalBase {
     let update;
     if(isInternalArray(current)) {
       internal = current;
-      internal.deserialize(value);
+      internal.withPropertyChanges(changed => internal.deserialize(value, changed), true);
       update = false;
     } else {
       this._detachInternal(current);
       internal = this._createInternalArray(this);
-      internal.deserialize(value);
+      internal.withPropertyChanges(changed => internal.deserialize(value, changed), false);
       update = true;
     }
     return { update, internal };
@@ -221,21 +221,13 @@ export default class InternalBase {
     return this._deserializePrimitiveValue(value, current);
   }
 
-  deserialize(values) {
-    this.withPropertyChanges(changed => this._deserialize(values, changed), true);
-  }
-
   //
 
   _serializeValue(value, opts) {
     if(isInternal(value)) {
-      value = value.serialize(opts);
+      value = value.withPropertyChanges(changed => value.serialize(opts, changed), true);
     }
     return value;
-  }
-
-  serialize(opts) {
-    return this.withPropertyChanges(changed => this._serialize(opts, changed), true);
   }
 
 }

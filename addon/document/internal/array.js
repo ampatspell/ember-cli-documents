@@ -62,7 +62,7 @@ export default class InternalArray extends InternalBase {
     return toModel(internal);
   }
 
-  _deserialize(values) {
+  deserialize(values) {
     let current = this.values;
 
     current.forEach(internal => this._detachInternal(internal));
@@ -76,7 +76,7 @@ export default class InternalArray extends InternalBase {
     current.addObjects(internals);
   }
 
-  _serialize(opts) {
+  serialize(opts) {
     return this.values.map(value => this._serializeValue(value, opts));
   }
 
