@@ -11,7 +11,7 @@ export default Ember.Component.extend({
 
   author: computed(function() {
     let author = this.get('db').doc({
-      _id: 'author:ampatspell',
+      id: 'author:ampatspell',
       type: 'author',
       name: 'ampatspell',
       posts: []
