@@ -28,3 +28,28 @@ test('destroyed new document is removed from identity', function(assert) {
   assert.ok(!identity.all.includes(internal));
   assert.ok(!identity.new.includes(internal));
 });
+
+test('destroyed existing document is not removed from identity', function(assert) {
+  let doc = this.db.push({ _id: 'duck' });
+  let internal = doc._internal;
+
+  run(() => doc.destroy());
+
+  let identity = this.db._documents;
+  assert.ok(identity.all.includes(internal));
+  assert.ok(identity.saved.duck);
+
+  assert.ok(doc.isDestroyed);
+  assert.ok(!internal.model());
+
+  let model = this.db.existing('duck');
+  assert.ok(model);
+  assert.ok(model !== doc);
+});
+
+test('existing document by default returns undefined', function(assert) {
+  let doc = this.db.existing('foo');
+  let documents = this.db._documents;
+  assert.ok(!doc);
+  assert.ok(documents.all.length === 0);
+});

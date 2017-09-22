@@ -90,3 +90,27 @@ test('resurrect deleted', function(assert) {
   assert.ok(docs.saved.hello);
   assert.ok(!docs.deleted.hello);
 });
+
+test('existing create returns deleted doc', function(assert) {
+  let doc = this.db.push({ _id: 'hello', _deleted: true });
+  let ret = this.db.existing('hello', { create: true });
+  assert.ok(ret === doc);
+});
+
+test('instantiate false returns push info', function(assert) {
+  let push = this.db.push({ _id: 'hello' }, { instantiate: false });
+  assert.ok(push);
+  assert.equal(push.id, 'hello');
+  assert.equal(push.deleted, false);
+  let doc = push.get();
+  assert.ok(doc);
+});
+
+test('instantiate false returns push info for deleted doc', function(assert) {
+  let push = this.db.push({ _id: 'hello', _deleted: true }, { instantiate: false });
+  assert.ok(push);
+  assert.equal(push.id, 'hello');
+  assert.equal(push.deleted, true);
+  let doc = push.get({ deleted: true });
+  assert.ok(doc);
+});
