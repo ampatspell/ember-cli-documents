@@ -6,21 +6,33 @@ const {
 
 export default Ember.Mixin.create({
 
-  _deserializeDeleted() {
+  _deserializeDeleted(doc) {
     let id = doc._id;
 
-    throw new Ember.Error('not implemented');
+    let internal = this._existingInternalDocument(id, { deleted: true, create: true });
+
+    internal.withPropertyChanges(changed => {
+      internal.deserializeDeleted(doc, 'document', changed);
+      internal.onDeleted(changed);
+    }, true);
+
+    this._storeDeletedInternalDocument(internal);
+
+    return internal;
   },
 
   _deserializeSaved(doc) {
     let id = doc._id;
 
     let internal = this._existingInternalDocument(id, { deleted: true, create: true });
-    return internal.withPropertyChanges(changed => {
+    internal.withPropertyChanges(changed => {
       internal.deserialize(doc, 'document', changed);
       internal.onLoaded(changed);
-      return internal;
     }, true);
+
+    this._storeLoadedInternalDocument(internal);
+
+    return internal;
   },
 
   _deserialize(doc) {

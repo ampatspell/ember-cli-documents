@@ -282,4 +282,17 @@ export default class InternalBase {
     }, changed);
   }
 
+  onDeleted(changed) {
+    this.setState({
+      isNew: false,
+      isLoading: false,
+      isLoaded: true,
+      isDirty: false,
+      isSaving: false,
+      isDeleted: true,
+      isError: false,
+      error: null
+    }, changed);
+  }
+
 }

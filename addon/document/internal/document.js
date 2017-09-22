@@ -96,4 +96,11 @@ export default class InternalDocument extends InternalObject {
     return json;
   }
 
+  deserializeDeleted(json, type, changed) {
+    json = this.willDeserialize(json, type);
+    let { _id, _rev } = json;
+    this._setValue('_id', _id, type, changed);
+    this._setValue('_rev', _rev, type, changed);
+  }
+
 }
