@@ -6,6 +6,8 @@ const {
   copy
 } = Ember;
 
+const isKeyUnderscored = key => key && key.indexOf('_') === 0;
+
 const replace = (from, to, json) => {
   let value = json[from];
   delete json[from];
@@ -56,6 +58,20 @@ export default class InternalDocument extends InternalObject {
 
   setRev(rev) {
     return this._setValueNotify('_rev', rev);
+  }
+
+  setValue(key) {
+    if(isKeyUnderscored(key)) {
+      return;
+    }
+    return super.setValue(...arguments);
+  }
+
+  getValue(key) {
+    if(isKeyUnderscored(key)) {
+      return;
+    }
+    return super.getValue(...arguments);
   }
 
   willDeserialize(json, type) {

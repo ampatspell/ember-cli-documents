@@ -7,8 +7,6 @@ const {
   assert
 } = Ember;
 
-const isKeyUnderscored = key => key && key.indexOf('_') === 0;
-
 const remove = (array, element) => {
   let idx = array.indexOf(element);
   if(idx === -1) {
@@ -63,16 +61,10 @@ export default class InternalObject extends InternalBase {
   }
 
   setValue(key, value) {
-    if(isKeyUnderscored(key)) {
-      return;
-    }
     return toModel(this._setValueNotify(key, value, 'model'));
   }
 
   getValue(key) {
-    if(isKeyUnderscored(key)) {
-      return;
-    }
     return toModel(this._getValueNotify(key, 'model'));
   }
 
