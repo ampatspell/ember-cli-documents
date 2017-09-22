@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+const {
+  merge
+} = Ember;
+
 export default Ember.Mixin.create({
 
   doc(values) {
@@ -23,6 +27,24 @@ export default Ember.Mixin.create({
   object(values) {
     let internal = this._createInternalObject(values, 'model');
     return internal.model(true);
+  },
+
+  push(doc, opts) {
+    opts = merge({ instantiate: true }, opts);
+
+    let internal = this._deserialize(doc);
+
+    if(opts.instantiate) {
+      return internal.model(true);
+    } else {
+      let id = internal.getId();
+      let deleted = internal.isDeleted;
+      return {
+        id,
+        deleted,
+        get: opts => this.existing(id, opts)
+      };
+    }
   }
 
 });

@@ -31,6 +31,10 @@ export default class InternalDocument extends InternalObject {
     return this.state.isNew;
   }
 
+  get isDeleted() {
+    return this.state.isDeleted;
+  }
+
   _didDestroyModel() {
     super._didDestroyModel();
     this.database._didDestroyModelForInternalDocument(this);

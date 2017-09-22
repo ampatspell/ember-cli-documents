@@ -21,7 +21,7 @@ export default Ember.Mixin.create({
     return internal;
   },
 
-  _createExistingInternalModel(id) {
+  _createExistingInternalDocument(id) {
     let values = { _id: id };
     let internal = this._createInternalDocument(values, { isNew: false, isDirty: false }, 'document');
     this._storeSavedInternalDocument(internal);
@@ -36,7 +36,7 @@ export default Ember.Mixin.create({
         internal = this._internalDocumentWithId(id, true);
       }
       if(!internal) {
-        internal = this._createExistingInternalModel(id);
+        internal = this._createExistingInternalDocument(id);
       }
     }
     return internal;

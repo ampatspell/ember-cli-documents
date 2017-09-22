@@ -267,4 +267,19 @@ export default class InternalBase {
     return json;
   }
 
+  //
+
+  onLoaded(changed) {
+    this.setState({
+      isNew: false,
+      isLoading: false,
+      isLoaded: true,
+      isDirty: false,
+      isSaving: false,
+      isDeleted: false,
+      isError: false,
+      error: null
+    }, changed);
+  }
+
 }
