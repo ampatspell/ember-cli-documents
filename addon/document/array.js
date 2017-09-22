@@ -5,10 +5,10 @@ import createTransform from 'documents/util/create-array-transform-mixin';
 
 const TransformMixin = createTransform({
   internal(model) {
-    return this._internal._toInternal(model);
+    return this._internal.toInternal(model);
   },
   public(internal) {
-    return this._internal._toModel(internal);
+    return this._internal.toModel(internal);
   }
 });
 

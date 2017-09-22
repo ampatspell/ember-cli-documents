@@ -45,20 +45,23 @@ export default class InternalArray extends InternalBase {
     this._didEndPropertyChanges();
   }
 
-  _toInternal(value) {
+  toInternal(value, type='model') {
     value = toInternal(value);
+
     if(isInternal(value)) {
       if(value.isDetached()) {
         value._attach(this);
         return value;
+      } else {
+        value = value.serialize(type);
       }
     }
-    value = value.serialize('model');
-    let { internal } = this._deserializeValue(value, undefined, 'model');
+
+    let { internal } = this._deserializeValue(value, undefined, type);
     return internal;
   }
 
-  _toModel(internal) {
+  toModel(internal) {
     return toModel(internal);
   }
 
