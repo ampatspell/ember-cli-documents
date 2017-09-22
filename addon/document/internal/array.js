@@ -53,8 +53,8 @@ export default class InternalArray extends InternalBase {
         return value;
       }
     }
-    value = value.serialize({ type: 'copy' });
-    let { internal } = this._deserializeValue(value);
+    value = value.serialize('model');
+    let { internal } = this._deserializeValue(value, undefined, 'model');
     return internal;
   }
 
@@ -62,22 +62,22 @@ export default class InternalArray extends InternalBase {
     return toModel(internal);
   }
 
-  deserialize(values) {
+  _deserialize(values, type, changed) {
     let current = this.values;
 
     current.forEach(internal => this._detachInternal(internal));
     current.clear();
 
     let internals = A(values).map(value => {
-      let { internal } = this._deserializeValue(value);
+      let { internal } = this._deserializeValue(value, undefined, type);
       return internal;
     });
 
     current.addObjects(internals);
   }
 
-  serialize(opts) {
-    return this.values.map(value => this._serializeValue(value, opts));
+  _serialize(type) {
+    return this.values.map(value => this._serializeValue(value, type));
   }
 
 }

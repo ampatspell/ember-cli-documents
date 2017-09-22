@@ -1,6 +1,11 @@
+import Ember from 'ember';
 import InternalBase from './base';
 import EmptyObject from 'documents/util/empty-object';
 import { toModel } from 'documents/util/internal';
+
+const {
+  assert
+} = Ember;
 
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
 
@@ -27,11 +32,11 @@ export default class InternalObject extends InternalBase {
     return this.store._createObjectModel(this);
   }
 
-  _setValue(key, value, changed) {
+  _setValue(key, value, type, changed) {
     let values = this.values;
     let current = values[key];
 
-    let { update, internal } = this._deserializeValue(value, current);
+    let { update, internal } = this._deserializeValue(value, current, type);
 
     if(update) {
       if(internal === undefined) {
@@ -45,50 +50,50 @@ export default class InternalObject extends InternalBase {
     return internal;
   }
 
-  _getValue(key) {
+  _getValue(key, type) {
     return this.values[key];
   }
 
-  _setValueNotify(key, value) {
-    return this.withPropertyChanges(changed => this._setValue(key, value, changed), true);
+  _setValueNotify(key, value, type) {
+    return this.withPropertyChanges(changed => this._setValue(key, value, type, changed), true);
   }
 
-  _getValueNotify(key) {
-    return this.withPropertyChanges(changed => this._getValue(key, changed), true);
+  _getValueNotify(key, type) {
+    return this.withPropertyChanges(changed => this._getValue(key, type, changed), true);
   }
 
   setValue(key, value) {
     if(isKeyUnderscored(key)) {
       return;
     }
-    return toModel(this._setValueNotify(key, value));
+    return toModel(this._setValueNotify(key, value, 'model'));
   }
 
   getValue(key) {
     if(isKeyUnderscored(key)) {
       return;
     }
-    return toModel(this._getValueNotify(key));
+    return toModel(this._getValueNotify(key, 'model'));
   }
 
   //
 
-  deserialize(values, changed) {
+  _deserialize(values, type, changed) {
     let keys = Object.keys(this.values);
     for(let key in values) {
       remove(keys, key);
       let value = values[key];
-      this._setValue(key, value, changed);
+      this._setValue(key, value, type, changed);
     }
-    keys.forEach(key => this._setValue(key, undefined, changed));
+    keys.forEach(key => this._setValue(key, undefined, type, changed));
   }
 
-  serialize(opts) {
+  _serialize(type) {
     let json = {};
     let values = this.values;
     for(let key in values) {
       let value = values[key];
-      value = this._serializeValue(value, opts);
+      value = this._serializeValue(value, type);
       json[key] = value;
     }
     return json;

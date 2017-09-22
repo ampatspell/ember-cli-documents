@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
 
   doc(values) {
-    let internal = this._createNewInternalDocument(values);
+    let internal = this._createNewInternalDocument(values, 'model');
     return internal.model(true);
   },
 
@@ -16,12 +16,12 @@ export default Ember.Mixin.create({
   },
 
   array(values) {
-    let internal = this._createInternalArray(values);
+    let internal = this._createInternalArray(values, 'model');
     return internal.model(true);
   },
 
   object(values) {
-    let internal = this._createInternalObject(values);
+    let internal = this._createInternalObject(values, 'model');
     return internal.model(true);
   }
 

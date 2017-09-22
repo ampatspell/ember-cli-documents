@@ -9,11 +9,11 @@ export default Ember.Mixin.create({
   _internal: null,
 
   serialized: computed(function() {
-    return this.serialize({ type: 'preview' });
+    return this.serialize();
   }).readOnly(),
 
-  serialize(opts) {
-    return this._internal.serialize(opts);
+  serialize(type='model') {
+    return this._internal.serialize(type);
   },
 
   willDestroy() {

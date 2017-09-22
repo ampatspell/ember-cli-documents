@@ -1,5 +1,21 @@
+import Ember from 'ember';
 import InternalObject from './object';
 import State from './state';
+
+const {
+  copy
+} = Ember;
+
+const replace = (from, to, json) => {
+  let value = json[from];
+  delete json[from];
+  if(value === undefined) {
+    delete json[to];
+  } else {
+    json[to] = value;
+  }
+  return json;
+};
 
 export default class InternalDocument extends InternalObject {
 
@@ -40,6 +56,24 @@ export default class InternalDocument extends InternalObject {
 
   setRev(rev) {
     return this._setValueNotify('_rev', rev);
+  }
+
+  willDeserialize(json, type) {
+    json = json || {};
+    if(type === 'model') {
+      json = copy(json, false);
+      replace('id', '_id', json);
+      replace('rev', '_rev', json);
+    }
+    return json;
+  }
+
+  didSerialize(json, type) {
+    if(type === 'model') {
+      replace('_id', 'id', json);
+      replace('_rev', 'rev', json);
+    }
+    return json;
   }
 
 }

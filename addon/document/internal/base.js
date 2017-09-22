@@ -12,6 +12,8 @@ const {
   typeOf
 } = Ember;
 
+const types = [ 'document', 'model' ];
+
 export default class InternalBase {
 
   constructor(store, parent) {
@@ -127,43 +129,43 @@ export default class InternalBase {
     value._attach(this);
   }
 
-  _createInternalObject(parent) {
-    return this.store._createInternalObject(parent);
+  _createInternalObject(parent, type) {
+    return this.store._createInternalObject(parent, type);
   }
 
-  _createInternalArray(parent) {
-    return this.store._createInternalArray(parent);
+  _createInternalArray(parent, type) {
+    return this.store._createInternalArray(parent, type);
   }
 
   //
 
-  _deserializeObjectValue(value, current) {
+  _deserializeObjectValue(value, current, type) {
     let internal;
     let update;
     if(isInternalObject(current)) {
       internal = current;
-      internal.withPropertyChanges(changed => internal.deserialize(value, changed), true);
+      internal.withPropertyChanges(changed => internal.deserialize(value, type, changed), true);
       update = false;
     } else {
       this._detachInternal(current);
       internal = this._createInternalObject(this);
-      internal.withPropertyChanges(changed => internal.deserialize(value, changed), false);
+      internal.withPropertyChanges(changed => internal.deserialize(value, type, changed), false);
       update = true;
     }
     return { update, internal };
   }
 
-  _deserializeArrayValue(value, current) {
+  _deserializeArrayValue(value, current, type) {
     let internal;
     let update;
     if(isInternalArray(current)) {
       internal = current;
-      internal.withPropertyChanges(changed => internal.deserialize(value, changed), true);
+      internal.withPropertyChanges(changed => internal.deserialize(value, type, changed), true);
       update = false;
     } else {
       this._detachInternal(current);
       internal = this._createInternalArray(this);
-      internal.withPropertyChanges(changed => internal.deserialize(value, changed), false);
+      internal.withPropertyChanges(changed => internal.deserialize(value, type, changed), false);
       update = true;
     }
     return { update, internal };
@@ -186,7 +188,7 @@ export default class InternalBase {
     return { update: true, internal: value };
   }
 
-  _deserializeValue(value, current) {
+  _deserializeValue(value, current, type) {
     value = toInternal(value);
 
     if(current === value) {
@@ -207,27 +209,54 @@ export default class InternalBase {
     }
 
     if(isInternal(value)) {
-      value = value.serialize({ type: 'copy' });
+      value = value.serialize('model');
     }
 
-    let type = typeOf(value);
+    let valueType = typeOf(value);
 
-    if(type === 'object') {
-      return this._deserializeObjectValue(value, current);
-    } else if(type === 'array') {
-      return this._deserializeArrayValue(value, current);
+    if(valueType === 'object') {
+      return this._deserializeObjectValue(value, current, type);
+    } else if(valueType === 'array') {
+      return this._deserializeArrayValue(value, current, type);
     }
 
-    return this._deserializePrimitiveValue(value, current);
+    return this._deserializePrimitiveValue(value, current, type);
   }
 
   //
 
-  _serializeValue(value, opts) {
+  willDeserialize(values, type) {
+    return values;
+  }
+
+  deserialize(values, type, changed) {
+    assert(`type must be string not ${type}`, typeof type === 'string');
+    assert(`type myst be one of supported ones not ${type}`, types.includes(type));
+    assert(`changed must be function not ${changed}`, typeof changed === 'function');
+    values = this.willDeserialize(values, type);
+    this._deserialize(values, type, changed);
+    return this;
+  }
+
+  //
+
+  _serializeValue(value, type) {
     if(isInternal(value)) {
-      value = value.withPropertyChanges(changed => value.serialize(opts, changed), true);
+      value = value.withPropertyChanges(changed => value.serialize(type, changed), true);
     }
     return value;
+  }
+
+  didSerialize(json, type) {
+    return json;
+  }
+
+  serialize(type) {
+    assert(`type must be string not ${type}`, typeof type === 'string');
+    assert(`type myst be one of supported ones not ${type}`, types.includes(type));
+    let json = this._serialize(type);
+    json = this.didSerialize(json, type);
+    return json;
   }
 
 }

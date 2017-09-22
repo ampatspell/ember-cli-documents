@@ -24,9 +24,9 @@ test('document has a reference to database', function(assert) {
   assert.ok(doc.get('database') === this.db);
 });
 
-test('document serialize', function(assert) {
+test('document serialize as document', function(assert) {
   let doc = this.db.doc({ id: 'duck:yellow', rev: '1-asd', type: 'duck', name: 'Yellow' });
-  assert.deepEqual(doc.serialize({ type: 'document' }), {
+  assert.deepEqual(doc.serialize('document'), {
     "_id": "duck:yellow",
     "_rev": "1-asd",
     "name": "Yellow",
@@ -34,12 +34,12 @@ test('document serialize', function(assert) {
   });
 });
 
-test('document serialized', function(assert) {
+test('document serialized serializes as model', function(assert) {
   let doc = this.db.doc({ id: 'duck:yellow', rev: '1-asd', type: 'duck', name: 'Yellow' });
 
   assert.deepEqual(doc.get('serialized'), {
-    "_id": "duck:yellow",
-    "_rev": "1-asd",
+    "id": "duck:yellow",
+    "rev": "1-asd",
     "name": "Yellow",
     "type": "duck"
   });
@@ -85,6 +85,7 @@ test('get _id and _rev are ignored', function(assert) {
 
 test('init document with id and rev', function(assert) {
   let doc = this.db.doc({ id: 'asd', rev: '1-asd', _rev: '1-skip' });
+
   assert.deepEqual_(doc._internal.values, {
     _id: 'asd',
     _rev: '1-asd'
@@ -93,8 +94,13 @@ test('init document with id and rev', function(assert) {
   assert.equal(doc.get('id'), 'asd');
   assert.equal(doc.get('rev'), '1-asd');
 
-  assert.deepEqual(doc.serialize(), {
+  assert.deepEqual(doc.serialize('document'), {
     _id: 'asd',
     _rev: '1-asd'
+  });
+
+  assert.deepEqual(doc.serialize('model'), {
+    id: 'asd',
+    rev: '1-asd'
   });
 });
