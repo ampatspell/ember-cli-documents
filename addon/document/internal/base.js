@@ -225,7 +225,7 @@ export default class InternalBase {
 
   //
 
-  willDeserialize(values, type) {
+  willDeserialize(values) {
     return values;
   }
 
@@ -247,7 +247,7 @@ export default class InternalBase {
     return value;
   }
 
-  didSerialize(json, type) {
+  didSerialize(json) {
     return json;
   }
 

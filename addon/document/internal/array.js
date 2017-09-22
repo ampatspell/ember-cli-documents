@@ -65,7 +65,7 @@ export default class InternalArray extends InternalBase {
     return toModel(internal);
   }
 
-  _deserialize(values, type, changed) {
+  _deserialize(values, type) {
     let current = this.values;
 
     current.forEach(internal => this._detachInternal(internal));

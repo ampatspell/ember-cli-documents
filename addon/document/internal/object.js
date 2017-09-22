@@ -1,11 +1,6 @@
-import Ember from 'ember';
 import InternalBase from './base';
 import EmptyObject from 'documents/util/empty-object';
 import { toModel } from 'documents/util/internal';
-
-const {
-  assert
-} = Ember;
 
 const remove = (array, element) => {
   let idx = array.indexOf(element);
@@ -48,7 +43,7 @@ export default class InternalObject extends InternalBase {
     return internal;
   }
 
-  _getValue(key, type) {
+  _getValue(key) {
     return this.values[key];
   }
 

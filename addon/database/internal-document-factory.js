@@ -4,8 +4,6 @@ const {
   assign
 } = Ember;
 
-const noop = () => {};
-
 export default Ember.Mixin.create({
 
   _createInternalDocument(values, state, type) {
