@@ -45,19 +45,19 @@ export default class InternalDocument extends InternalObject {
   }
 
   getId() {
-    return this._getValueNotify('_id');
+    return this._getValueNotify('_id', 'model');
   }
 
   setId(id) {
-    return this._setValueNotify('_id', id);
+    return this._setValueNotify('_id', id, 'model');
   }
 
   getRev() {
-    return this._getValueNotify('_rev');
+    return this._getValueNotify('_rev', 'model');
   }
 
   setRev(rev) {
-    return this._setValueNotify('_rev', rev);
+    return this._setValueNotify('_rev', rev, 'model');
   }
 
   setValue(key) {

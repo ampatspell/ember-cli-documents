@@ -43,7 +43,7 @@ export default class InternalObject extends InternalBase {
     return internal;
   }
 
-  _getValue(key) {
+  _getValue(key, type) {
     return this.values[key];
   }
 

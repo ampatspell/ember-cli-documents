@@ -22,6 +22,14 @@ export default class InternalBase {
     this._model = null;
   }
 
+  _assertType(type) {
+    assert(`type must be one of the following [${types.join(', ')}] not '${type}'`, types.includes(type));
+  }
+
+  _assertChanged(changed) {
+    assert(`changed must be function not ${changed}`, typeof changed === 'function');
+  }
+
   isDetached() {
     return !this.parent;
   }
@@ -230,9 +238,9 @@ export default class InternalBase {
   }
 
   deserialize(values, type, changed) {
-    assert(`type must be string not ${type}`, typeof type === 'string');
-    assert(`type myst be one of supported ones not ${type}`, types.includes(type));
-    assert(`changed must be function not ${changed}`, typeof changed === 'function');
+    this._assertType(type);
+    this._assertChanged(changed);
+
     values = this.willDeserialize(values, type);
     this._deserialize(values, type, changed);
     return this;
@@ -252,8 +260,8 @@ export default class InternalBase {
   }
 
   serialize(type) {
-    assert(`type must be string not ${type}`, typeof type === 'string');
-    assert(`type myst be one of supported ones not ${type}`, types.includes(type));
+    this._assertType(type);
+
     let json = this._serialize(type);
     json = this.didSerialize(json, type);
     return json;
