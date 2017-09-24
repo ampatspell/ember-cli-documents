@@ -45,9 +45,7 @@ export default class InternalArray extends InternalBase {
   _valueDidChange(array, removeCount, adding) {
     A(adding).forEach(internal => this._attachInternal(internal));
     this._didEndPropertyChanges();
-    if(removeCount > 0 || adding.length > 0) {
-      this._dirty();
-    }
+    this._dirty();
   }
 
   toInternal(value, type='model') {

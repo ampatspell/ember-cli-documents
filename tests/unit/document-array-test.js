@@ -1,5 +1,10 @@
+import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+
+const {
+  run
+} = Ember;
 
 module('document-array');
 
@@ -134,4 +139,46 @@ test('added object has parent', function(assert) {
   doc.get('things').pushObject(obj);
   assert.ok(doc.get('things.lastObject._internal') === obj._internal);
   assert.ok(obj._internal.parent === doc.get('things._internal'));
+});
+
+test('array model can be destroyed', function(assert) {
+  let doc = this.db.doc({ things: [] });
+  let arr = doc.get('things');
+  let internal = arr._internal;
+
+  run(() => arr.destroy());
+
+  assert.ok(!internal._model);
+
+  arr = doc.get('things');
+
+  assert.ok(arr);
+  assert.ok(internal._model === arr);
+  assert.ok(arr._internal === internal);
+});
+
+test('array add attached', function(assert) {
+  let doc = this.db.doc({ name: { first: 'Duck' }, names: [] });
+  let name = doc.get('name');
+  doc.get('names').pushObject(name);
+  let second = doc.get('names.firstObject');
+  assert.ok(name._internal !== second._internal);
+  assert.deepEqual(doc.get('serialized'), {
+    "name": {
+      "first": "Duck"
+    },
+    "names": [
+      {
+        "first": "Duck"
+      }
+    ]
+  });
+});
+
+test('replace array contents removes all content (needs fixing)', function(assert) {
+  let doc = this.db.push({ _id: 'doc', names: [ { name: 'Duck' } ] });
+  let first = doc.get('names.lastObject');
+  this.db.push({ _id: 'doc', names: [ { name: 'Another' } ] });
+  let second = doc.get('names.lastObject');
+  assert.ok(first._internal !== second._internal);
 });
