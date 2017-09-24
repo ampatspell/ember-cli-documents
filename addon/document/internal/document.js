@@ -3,7 +3,8 @@ import InternalObject from './object';
 import State from './state';
 
 const {
-  copy
+  copy,
+  Logger: { error }
 } = Ember;
 
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
@@ -53,6 +54,11 @@ export default class InternalDocument extends InternalObject {
   }
 
   setId(id) {
+    if(!this.isNew && id !== this.getId()) {
+      error('Document id cannot be changed after it is saved');
+      this.withPropertyChanges(changed => changed('_id'), true);
+      return this.getId();
+    }
     return this._setValueNotify('_id', id, 'model');
   }
 
