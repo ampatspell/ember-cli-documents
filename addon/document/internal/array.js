@@ -42,7 +42,8 @@ export default class InternalArray extends InternalBase {
     A(removing).forEach(internal => this._detachInternal(internal));
   }
 
-  _valueDidChange() {
+  _valueDidChange(array, removeCount, adding) {
+    A(adding).forEach(internal => this._attachInternal(internal));
     this._didEndPropertyChanges();
   }
 
@@ -51,7 +52,6 @@ export default class InternalArray extends InternalBase {
 
     if(isInternal(value)) {
       if(value.isDetached()) {
-        value._attach(this);
         return value;
       } else {
         value = value.serialize(type);

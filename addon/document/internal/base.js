@@ -122,6 +122,10 @@ export default class InternalBase {
   }
 
   _attach(parent) {
+    if(this.parent === parent) {
+      return;
+    }
+    assert(`internal is already attached`, !this.parent);
     this.parent = parent;
   }
 
@@ -134,7 +138,9 @@ export default class InternalBase {
   }
 
   _attachInternal(value) {
-    value._attach(this);
+    if(isInternal(value)) {
+      value._attach(this);
+    }
   }
 
   _createInternalObject(parent, type) {
