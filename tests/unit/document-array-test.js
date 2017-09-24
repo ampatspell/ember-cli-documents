@@ -87,8 +87,51 @@ test('crate detached array and attach', function(assert) {
   assert.ok(doc._internal.values.arr === arr._internal);
 });
 
-// test('attach array', function(assert) {
-// });
+test('array is copied when set attached', function(assert) {
+  let one = this.db.doc({ things: [ { ok: true } ] });
+  let two = this.db.doc({ });
 
-// test('copy arary', function(assert) {
-// });
+  two.set('things', one.get('things'));
+
+  assert.deepEqual(one.serialize(), {
+    "things": [
+      {
+        "ok": true
+      }
+    ]
+  });
+  assert.deepEqual(two.serialize(), {
+    "things": [
+      {
+        "ok": true
+      }
+    ]
+  });
+
+  assert.ok(two.get('things._internal'));
+  assert.ok(two.get('things._internal') !== one.get('things._internal'));
+  assert.ok(two.get('things.lastObject._internal') !== one.get('things.lastObject._internal'));
+});
+
+test('removed object is detached', function(assert) {
+  let doc = this.db.doc({ things: [ { ok: true } ] });
+  let ok = doc.get('things.lastObject');
+  assert.ok(ok._internal.parent === doc.get('things._internal'));
+
+  doc.get('things').removeObject(ok);
+
+  assert.deepEqual(doc.get('serialized'), {
+    "things": []
+  });
+
+  assert.ok(!ok._internal.parent, 'ok should not have a parent anymore');
+});
+
+test('added object has parent', function(assert) {
+  let doc = this.db.doc({ things: [] });
+  let obj = this.db.object({ ok: true });
+  assert.ok(!obj._internal.parent);
+  doc.get('things').pushObject(obj);
+  assert.ok(doc.get('things.lastObject._internal') === obj._internal);
+  assert.ok(obj._internal.parent === doc.get('things._internal'));
+});

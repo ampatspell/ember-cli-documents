@@ -38,7 +38,8 @@ export default class InternalArray extends InternalBase {
     this.values.removeEnumerableObserver(this, this._valueObserverOptions);
   }
 
-  _valueWillChange() {
+  _valueWillChange(array, removing) {
+    A(removing).forEach(internal => this._detachInternal(internal));
   }
 
   _valueDidChange() {
