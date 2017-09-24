@@ -55,7 +55,7 @@ export default class InternalDocument extends InternalObject {
 
   setId(id) {
     if(!this.isNew && id !== this.getId()) {
-      error('Document id cannot be changed after it is saved');
+      error(`Document id cannot be changed after document is saved. Attempted to set id '${id}' for document '${this.getId()}'`);
       this.withPropertyChanges(changed => changed('_id'), true);
       return this.getId();
     }
