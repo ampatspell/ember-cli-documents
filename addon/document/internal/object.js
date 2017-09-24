@@ -38,6 +38,7 @@ export default class InternalObject extends InternalBase {
         values[key] = internal;
       }
       changed(key);
+      this._dirty(changed);
     }
 
     return internal;

@@ -5,7 +5,7 @@ const {
 } = Ember;
 
 const defaults = {
-  isNew: true,
+  isNew: false,
   isLoading: false,
   isLoaded: false,
   isDirty: false,
@@ -43,6 +43,36 @@ export default class State {
       obj[key] = this[key];
       return obj;
     }, {});
+  }
+
+  onDirty(changed) {
+    this.set({ isDirty: true }, changed);
+  }
+
+  onLoaded(changed) {
+    this.set({
+      isNew: false,
+      isLoading: false,
+      isLoaded: true,
+      isDirty: false,
+      isSaving: false,
+      isDeleted: false,
+      isError: false,
+      error: null
+    }, changed);
+  }
+
+  onDeleted(changed) {
+    this.set({
+      isNew: false,
+      isLoading: false,
+      isLoaded: true,
+      isDirty: false,
+      isSaving: false,
+      isDeleted: true,
+      isError: false,
+      error: null
+    }, changed);
   }
 
 }

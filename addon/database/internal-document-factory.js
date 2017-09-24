@@ -10,13 +10,13 @@ export default Ember.Mixin.create({
     let internal = this.get('store')._createInternalDocument(this);
     return internal.withPropertyChanges(changed => {
       internal.deserialize(values, type, changed);
-      internal.setState(state, changed);
+      internal.state.set(state, changed);
       return internal;
     }, false);
   },
 
   _createNewInternalDocument(values, type) {
-    let internal = this._createInternalDocument(values, { isDirty: false }, type);
+    let internal = this._createInternalDocument(values, { isNew: true, isDirty: false }, type);
     this._storeNewInternalDocument(internal);
     return internal;
   },

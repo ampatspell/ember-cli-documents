@@ -22,6 +22,20 @@ export default class InternalBase {
     this._model = null;
   }
 
+  get isDocument() {
+    return false;
+  }
+
+  _document() {
+    let target = this;
+    while(target) {
+      if(target.isDocument) {
+        return target;
+      }
+      target = target.parent;
+    }
+  }
+
   _assertType(type) {
     assert(`type must be one of the following [${types.join(', ')}] not '${type}'`, types.includes(type));
   }
@@ -58,20 +72,22 @@ export default class InternalBase {
 
   //
 
+  _invokeOnParents(cb) {
+    let target = this.parent;
+    while(target) {
+      cb(target);
+      target = target.parent;
+    }
+  }
+
+  //
+
   _willEndPropertyChanges(changed) {
     changed('serialized');
   }
 
-  _didEndNestedPropertyChanges() {
-    this.withPropertyChanges(changed => changed('serialized'), true);
-  }
-
   _didEndPropertyChanges() {
-    let parent = this.parent;
-    if(!parent) {
-      return;
-    }
-    parent._didEndNestedPropertyChanges(this);
+    this._invokeOnParents(parent => parent.withPropertyChanges(changed => changed('serialized'), true));
   }
 
   withPropertyChanges(cb, notify) {
@@ -272,30 +288,15 @@ export default class InternalBase {
 
   //
 
-  onLoaded(changed) {
-    this.setState({
-      isNew: false,
-      isLoading: false,
-      isLoaded: true,
-      isDirty: false,
-      isSaving: false,
-      isDeleted: false,
-      isError: false,
-      error: null
-    }, changed);
-  }
-
-  onDeleted(changed) {
-    this.setState({
-      isNew: false,
-      isLoading: false,
-      isLoaded: true,
-      isDirty: false,
-      isSaving: false,
-      isDeleted: true,
-      isError: false,
-      error: null
-    }, changed);
+  _dirty(changed) {
+    if(this.isDocument) {
+      this.state.onDirty(changed);
+    } else {
+      let document = this._document();
+      if(document) {
+        document.withPropertyChanges(changed => document.state.onDirty(changed), true);
+      }
+    }
   }
 
 }

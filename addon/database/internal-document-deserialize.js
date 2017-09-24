@@ -13,7 +13,7 @@ export default Ember.Mixin.create({
 
     internal.withPropertyChanges(changed => {
       internal.deserializeDeleted(doc, 'document', changed);
-      internal.onDeleted(changed);
+      internal.state.onDeleted(changed);
     }, true);
 
     this._storeDeletedInternalDocument(internal);
@@ -27,7 +27,7 @@ export default Ember.Mixin.create({
     let internal = this._existingInternalDocument(id, { deleted: true, create: true });
     internal.withPropertyChanges(changed => {
       internal.deserialize(doc, 'document', changed);
-      internal.onLoaded(changed);
+      internal.state.onLoaded(changed);
     }, true);
 
     this._storeLoadedInternalDocument(internal);

@@ -27,6 +27,10 @@ export default class InternalDocument extends InternalObject {
     this.state = new State();
   }
 
+  get isDocument() {
+    return true;
+  }
+
   get isNew() {
     return this.state.isNew;
   }
@@ -42,10 +46,6 @@ export default class InternalDocument extends InternalObject {
 
   _createModel() {
     return this.store._createDocumentModel(this);
-  }
-
-  setState(values, changed) {
-    return this.state.set(values, changed);
   }
 
   getId() {

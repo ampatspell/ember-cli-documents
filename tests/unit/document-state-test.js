@@ -3,7 +3,7 @@ import { test } from '../helpers/qunit';
 
 module('document-state');
 
-test('document has state', function(assert) {
+test('new document has state', function(assert) {
   let doc = this.db.doc();
   assert.deepEqual(doc.get('state'), {
     "error": null,

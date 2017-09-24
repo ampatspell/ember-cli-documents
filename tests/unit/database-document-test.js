@@ -53,3 +53,17 @@ test('existing document by default returns undefined', function(assert) {
   assert.ok(!doc);
   assert.ok(documents.all.length === 0);
 });
+
+test('created existing document has state', function(assert) {
+  let doc = this.db.existing('foo', { create: true });
+  assert.deepEqual(doc.get('state'), {
+    "error": null,
+    "isDeleted": false,
+    "isDirty": false,
+    "isError": false,
+    "isLoaded": false,
+    "isLoading": false,
+    "isNew": false,
+    "isSaving": false
+  });
+});
