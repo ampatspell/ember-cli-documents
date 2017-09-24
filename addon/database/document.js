@@ -4,6 +4,27 @@ const {
   merge
 } = Ember;
 
+class Push {
+
+  constructor(database, internal) {
+    this._database = database;
+    this._internal = internal;
+  }
+
+  get id() {
+    return this._internal.getId();
+  }
+
+  get isDeleted() {
+    return this._internal.isDeleted;
+  }
+
+  get(opts) {
+    return this._database.existing(this.id, opts);
+  }
+
+}
+
 export default Ember.Mixin.create({
 
   doc(values) {
@@ -37,13 +58,7 @@ export default Ember.Mixin.create({
     if(opts.instantiate) {
       return internal.model(true);
     } else {
-      let id = internal.getId();
-      let deleted = internal.isDeleted;
-      return {
-        id,
-        deleted,
-        get: opts => this.existing(id, opts)
-      };
+      return new Push(this, internal);
     }
   }
 

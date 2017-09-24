@@ -1,7 +1,7 @@
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
-module('document-basic');
+module('document-push');
 
 test('push fresh', function(assert) {
   let docs = this.db._documents;
@@ -101,7 +101,7 @@ test('instantiate false returns push info', function(assert) {
   let push = this.db.push({ _id: 'hello' }, { instantiate: false });
   assert.ok(push);
   assert.equal(push.id, 'hello');
-  assert.equal(push.deleted, false);
+  assert.equal(push.isDeleted, false);
   let doc = push.get();
   assert.ok(doc);
 });
@@ -110,7 +110,7 @@ test('instantiate false returns push info for deleted doc', function(assert) {
   let push = this.db.push({ _id: 'hello', _deleted: true }, { instantiate: false });
   assert.ok(push);
   assert.equal(push.id, 'hello');
-  assert.equal(push.deleted, true);
+  assert.equal(push.isDeleted, true);
   let doc = push.get({ deleted: true });
   assert.ok(doc);
 });
