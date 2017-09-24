@@ -1,6 +1,5 @@
 # TODO
 
-* `rev` can't be mutated, `id` can while `state.isNew`
 * array deserialize should diff existing content not just clear existing content
 
 ## Computed property teardown
