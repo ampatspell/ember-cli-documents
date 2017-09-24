@@ -214,9 +214,6 @@ export default class InternalBase {
           return this._deserializeInternalArrayValue(value, current);
         }
       }
-    }
-
-    if(isInternal(value)) {
       value = value.serialize('model');
     }
 
