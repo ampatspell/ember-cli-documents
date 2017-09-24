@@ -50,3 +50,43 @@ test('set detached internal object', function(assert) {
   assert.ok(doc.get('thing') === thing);
   assert.ok(doc.get('thing')._internal === thing._internal);
 });
+
+test('update document notifies parent on change', function(assert) {
+  let doc = this.db.doc({
+    id: 'duck:yellow',
+    shipping: {
+      address: { city: 'Yello', country: 'Duckland' }
+    }
+  });
+
+  assert.deepEqual(doc.get('serialized'), {
+    "id": "duck:yellow",
+    "shipping": {
+      "address": {
+        "city": "Yello",
+        "country": "Duckland"
+      }
+    }
+  });
+
+  doc.set('shipping.address.city', 'Yellow');
+
+  assert.deepEqual(doc.get('serialized'), {
+    "id": "duck:yellow",
+    "shipping": {
+      "address": {
+        "city": "Yellow",
+        "country": "Duckland"
+      }
+    }
+  });
+
+  doc.set('shipping', { ok: true });
+
+  assert.deepEqual(doc.get('serialized'), {
+    "id": "duck:yellow",
+    "shipping": {
+      "ok": true
+    }
+  });
+});
