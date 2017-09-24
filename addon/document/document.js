@@ -20,9 +20,6 @@ const id = () => {
 const rev = () => computed('_rev', {
   get() {
     return this._internal.getRev();
-  },
-  set(_, value) {
-    return this._internal.setRev(value);
   }
 });
 
