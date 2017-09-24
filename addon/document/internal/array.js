@@ -45,6 +45,9 @@ export default class InternalArray extends InternalBase {
   _valueDidChange(array, removeCount, adding) {
     A(adding).forEach(internal => this._attachInternal(internal));
     this._didEndPropertyChanges();
+    if(removeCount > 0 || adding.length > 0) {
+      this._dirty();
+    }
   }
 
   toInternal(value, type='model') {
@@ -82,6 +85,10 @@ export default class InternalArray extends InternalBase {
 
   _serialize(type) {
     return this.values.map(value => this._serializeValue(value, type));
+  }
+
+  _dirty() {
+    this.withPropertyChanges(changed => super._dirty(changed), true);
   }
 
 }
