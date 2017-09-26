@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import Operation from './operation';
-import { later } from 'documents/util/run';
 
 const {
   RSVP: { resolve },

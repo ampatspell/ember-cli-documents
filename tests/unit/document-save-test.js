@@ -2,10 +2,14 @@ import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { next } from 'documents/util/run';
 
-module('document-save');
+module('document-save', {
+  beforeEach() {
+    return this.recreate();
+  }
+});
 
 test('save succeeds', async function(assert) {
-  let doc = this.db.doc({ id: 'duck' });
+  let doc = this.db.doc({ id: 'duck:yellow', type: 'duck', name: 'Yellow' });
 
   let promise = doc.save().then(arg => assert.ok(arg === doc));
 
@@ -36,4 +40,13 @@ test('save succeeds', async function(assert) {
   });
 
   assert.ok(doc.get('rev'));
+
+  let json = await this.docs.load('duck:yellow');
+
+  assert.deepEqual_(json, {
+    "_id": "duck:yellow",
+    "_rev": "ignored",
+    "name": "Yellow",
+    "type": "duck"
+  });
 });
