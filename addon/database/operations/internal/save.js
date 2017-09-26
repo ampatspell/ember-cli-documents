@@ -35,13 +35,10 @@ export default class InternalDocumentSaveOperation extends Operation {
   }
 
   invoke() {
-    let doc;
-    let json;
-
     return resolve()
-      .then(() => this.willSave()).then(arg => doc = arg)
-      .then(() => this.save(doc)).then(arg => json = arg)
-      .then(() => this.didSave(json), err => this.saveDidFail(err));
+      .then(() => this.willSave())
+      .then(doc => this.save(doc))
+      .then(json => this.didSave(json), err => this.saveDidFail(err));
   }
 
 }
