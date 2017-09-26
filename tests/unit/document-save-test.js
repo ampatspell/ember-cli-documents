@@ -1,5 +1,6 @@
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+import { next } from 'documents/util/run';
 
 module('document-save');
 
@@ -8,7 +9,7 @@ test('save succeeds', async function(assert) {
 
   let promise = doc.save().then(arg => assert.ok(arg === doc));
 
-  assert.ok(promise);
+  await next();
 
   assert.deepEqual(doc.get('state'), {
     "error": null,

@@ -4,13 +4,15 @@ import DatabaseInternalDocumentIdentity from './database/internal-document-ident
 import DatabaseInternalDocumentFactory from './database/internal-document-factory';
 import DatabaseInternalDocumentDeserialize from './database/internal-document-deserialize';
 import DatabaseDocument from './database/document';
+import DatabaseOperations from './database/operations';
 
 export default Ember.Object.extend(
   DatabaseStore,
   DatabaseInternalDocumentIdentity,
   DatabaseInternalDocumentFactory,
   DatabaseInternalDocumentDeserialize,
-  DatabaseDocument, {
+  DatabaseDocument,
+  DatabaseOperations, {
 
   _didDestroyModelForInternalDocument(internal) {
     if(!internal.isNew) {

@@ -105,16 +105,29 @@ export default class InternalDocument extends InternalObject {
     this._setValue('_rev', _rev, type, changed);
   }
 
+  deserializeSaved(json, changed) {
+    let type = 'document';
+    let { id, rev } = json;
+    this._setValue('_id', id, type, changed);
+    this._setValue('_rev', rev, type, changed);
+  }
+
   //
 
-  enqueueSave(/* opts */) {
-    this.withPropertyChanges(changed => this.state.onSaving(changed), true);
-    return Ember.RSVP.resolve().then(() => {
-      this.withPropertyChanges(changed => {
-        this._setValue('_rev', '1-asd', 'document', changed);
-        this.state.onSaved(changed);
-      }, true);
-    });
+  enqueueSave() {
+    return this.database._enqueueInternalSave(this, ...arguments);
+  }
+
+  enqueueLoad() {
+    return this.database._enqueueInternalLoad(this, ...arguments);
+  }
+
+  enqueueReload() {
+    return this.database._enqueueInternalReload(this, ...arguments);
+  }
+
+  enqueueDelete() {
+    return this.database._enqueueInternalDelete(this, ...arguments);
   }
 
 }
