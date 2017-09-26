@@ -7,6 +7,6 @@ module.exports = app => {
     console.error(err, req.url);
   });
   app.use('/api/1.6', (req, res, next) => {
-    proxy.web(req, res, { target: `http://${req.hostname || 'localhost'}:6016` });
+    proxy.web(req, res, { target: `http://${req.hostname}:6016` });
   });
 };
