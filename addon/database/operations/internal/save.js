@@ -14,7 +14,7 @@ export default class InternalDocumentSaveOperation extends Operation {
   }
 
   save(doc) {
-    return later(50).then(() => ({ id: doc._id, rev: '1-asd' }));
+    return this.docs.save(doc);
   }
 
   didSave(json) {
