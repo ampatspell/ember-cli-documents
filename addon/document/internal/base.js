@@ -14,6 +14,8 @@ const {
 
 const types = [ 'document', 'model' ];
 
+export const empty = {};
+
 export default class InternalBase {
 
   constructor(store, parent) {
@@ -226,6 +228,10 @@ export default class InternalBase {
         update: false,
         internal: value
       };
+    }
+
+    if(current === empty) {
+      current = undefined;
     }
 
     if(isInternal(value)) {

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import InternalBase from './base';
+import InternalBase, { empty } from './base';
 import { toModel, toInternal, isInternal } from 'documents/util/internal';
 
 const {
@@ -59,7 +59,7 @@ export default class InternalArray extends InternalBase {
       }
     }
 
-    let { internal } = this._deserializeValue(value, undefined, type);
+    let { internal } = this._deserializeValue(value, empty, type);
     return internal;
   }
 
@@ -74,7 +74,7 @@ export default class InternalArray extends InternalBase {
     current.clear();
 
     let internals = A(values).map(value => {
-      let { internal } = this._deserializeValue(value, undefined, type);
+      let { internal } = this._deserializeValue(value, empty, type);
       return internal;
     });
 
