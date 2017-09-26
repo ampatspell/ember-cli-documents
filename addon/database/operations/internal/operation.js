@@ -2,9 +2,10 @@ import Operation from '../operation';
 
 export default class InternalDocumentOperation extends Operation {
 
-  constructor(internal) {
+  constructor(internal, opts) {
     super();
     this.internal = internal;
+    this.opts = opts || {};
   }
 
   get db() {

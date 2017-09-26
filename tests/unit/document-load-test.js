@@ -58,3 +58,21 @@ test('load succeeds', async function(assert) {
     "name": "hello"
   });
 });
+
+test('load isNew resolves', async function(assert) {
+  let doc = this.db.doc();
+
+  let res = await doc.load();
+  assert.ok(res === doc);
+
+  assert.deepEqual(doc.get('state'), {
+    "error": null,
+    "isDeleted": false,
+    "isDirty": false,
+    "isError": false,
+    "isLoaded": false,
+    "isLoading": false,
+    "isNew": true,
+    "isSaving": false
+  });
+});

@@ -10,13 +10,13 @@ export default Ember.Mixin.create({
     return op.promise;
   },
 
-  _enqueueInternalSave(internal) {
-    let op = new InternalDocumentSaveOperation(internal);
+  _enqueueInternalSave(internal, opts) {
+    let op = new InternalDocumentSaveOperation(internal, opts);
     return this._enqueueInternalOperation(op);
   },
 
-  _enqueueInternalLoad(internal) {
-    let op = new InternalDocumentLoadOperation(internal);
+  _enqueueInternalLoad(internal, opts) {
+    let op = new InternalDocumentLoadOperation(internal, opts);
     return this._enqueueInternalOperation(op);
   },
 

@@ -3,6 +3,7 @@ import Operation from './operation';
 
 const {
   RSVP: { resolve },
+  merge
 } = Ember;
 
 export default class InternalDocumentSaveOperation extends Operation {
@@ -34,6 +35,16 @@ export default class InternalDocumentSaveOperation extends Operation {
   }
 
   invoke() {
+    let opts = merge({ force: false }, this.opts);
+
+    if(this.state.isLoaded && !opts.force) {
+      return this.resolve();
+    }
+
+    if(this.state.isNew) {
+      return this.resolve();
+    }
+
     return resolve()
       .then(() => this.willLoad())
       .then(() => this.load())
