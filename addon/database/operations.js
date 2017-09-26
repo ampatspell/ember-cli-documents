@@ -2,6 +2,7 @@ import Ember from 'ember';
 import InternalDocumentSaveOperation from './operations/internal/save';
 import InternalDocumentLoadOperation from './operations/internal/load';
 import InternalDocumentReloadOperation from './operations/internal/reload';
+import InternalDocumentDeleteOperation from './operations/internal/delete';
 
 export default Ember.Mixin.create({
 
@@ -27,7 +28,8 @@ export default Ember.Mixin.create({
   },
 
   _enqueueInternalDelete() {
-
+    let op = new InternalDocumentDeleteOperation(internal);
+    return this._enqueueInternalOperation(op);
   },
 
 });

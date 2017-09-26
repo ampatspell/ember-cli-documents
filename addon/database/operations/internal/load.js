@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import BaseLoad from './base-load';
+import BaseLoad from './-load';
 
 const {
   merge

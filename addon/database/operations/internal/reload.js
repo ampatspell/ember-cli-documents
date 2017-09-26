@@ -1,4 +1,4 @@
-import BaseLoad from './base-load';
+import BaseLoad from './-load';
 
 export default class InternalDocumentReloadOperation extends BaseLoad {
 
