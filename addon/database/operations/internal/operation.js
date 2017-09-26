@@ -7,6 +7,14 @@ export default class InternalDocumentOperation extends Operation {
     this.internal = internal;
   }
 
+  get db() {
+    return this.internal.database;
+  }
+
+  get docs() {
+    return this.db.get('documents');
+  }
+
   withPropertyChanges(cb) {
     return this.internal.withPropertyChanges(cb, true);
   }
