@@ -16,7 +16,16 @@ export default Adapter.extend({
 
   couch: couch(),
 
-  url: null
+  url: null,
+
+  storeDocuments() {
+    return this.get('couch');
+  },
+
+  databaseDocuments(database) {
+    let identifier = database.get('identifier');
+    return this.get('couch').database(identifier);
+  }
 
 }).reopenClass({
 
