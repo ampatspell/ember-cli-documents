@@ -28,6 +28,8 @@ test('save succeeds', async function(assert) {
 
   await promise;
 
+  assert.ok(this.db._documents.saved['duck:yellow']);
+
   assert.deepEqual(doc.get('state'), {
     "error": null,
     "isDeleted": false,

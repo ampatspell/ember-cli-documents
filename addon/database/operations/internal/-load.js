@@ -21,7 +21,6 @@ export default class InternalDocumentBaseLoadOperation extends Operation {
       this.internal.deserialize(json, 'document', changed);
       this.state.onLoaded(changed);
     });
-
     this.resolve();
   }
 
@@ -29,7 +28,6 @@ export default class InternalDocumentBaseLoadOperation extends Operation {
     this.withPropertyChanges(changed => {
       this.state.onError(err, changed);
     });
-
     this.reject(err);
   }
 

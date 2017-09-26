@@ -8,7 +8,7 @@ export default Ember.Mixin.create({
 
   _deserializeDeletedInternal(internal, doc) {
     internal.withPropertyChanges(changed => {
-      internal.deserializeDeleted(doc, 'document', changed);
+      internal.deserializeDeleted({ id: doc._id, rev: doc._rev }, changed);
       internal.state.onDeleted(changed);
     }, true);
     this._storeDeletedInternalDocument(internal);

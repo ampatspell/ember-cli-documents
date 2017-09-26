@@ -35,7 +35,7 @@ export default class InternalDocumentSaveOperation extends Operation {
       this.internal.deserializeSaved(json, changed);
       this.state.onSaved(changed);
     });
-
+    this.db._storeSavedInternalDocument(this.internal);
     this.resolve();
   }
 
@@ -43,7 +43,6 @@ export default class InternalDocumentSaveOperation extends Operation {
     this.withPropertyChanges(changed => {
       this.state.onError(err, changed);
     });
-
     this.reject(err);
   }
 
