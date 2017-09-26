@@ -1,11 +1,25 @@
 import Ember from 'ember';
 import Operation from './operation';
+import DocumentsError from 'documents/util/error';
 
 const {
-  RSVP: { resolve },
+  RSVP: { resolve, reject },
 } = Ember;
 
 export default class InternalDocumentSaveOperation extends Operation {
+
+  validateUniqueness() {
+    let internal = this.internal;
+    let id = internal.getId();
+    let existing = this.db._internalDocumentWithId(id);
+    if(!existing || existing === internal) {
+      return;
+    }
+    return reject(new DocumentsError({
+      error: 'conflict',
+      reason: 'Document update conflict'
+    }));
+  }
 
   willSave() {
     this.withPropertyChanges(changed => this.state.onSaving(changed));
@@ -35,6 +49,7 @@ export default class InternalDocumentSaveOperation extends Operation {
 
   invoke() {
     return resolve()
+      .then(() => this.validateUniqueness())
       .then(() => this.willSave())
       .then(doc => this.save(doc))
       .then(json => this.didSave(json), err => this.saveDidFail(err));

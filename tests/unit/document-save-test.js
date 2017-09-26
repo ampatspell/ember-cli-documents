@@ -50,3 +50,17 @@ test('save succeeds', async function(assert) {
     "type": "duck"
   });
 });
+
+test('save fails with local conflict', async function(assert) {
+  this.db.push({ _id: 'thing' });
+  let doc = this.db.doc({ id: 'thing' });
+  try {
+    await doc.save();
+    assert.ok(false, 'should throw');
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "conflict",
+      "reason": "Document update conflict"
+    });
+  }
+});
