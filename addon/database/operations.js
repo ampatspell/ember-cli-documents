@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import InternalDocumentSaveOperation from './operations/internal/save';
+import InternalDocumentLoadOperation from './operations/internal/load';
 
 export default Ember.Mixin.create({
 
@@ -14,8 +15,9 @@ export default Ember.Mixin.create({
     return this._enqueueInternalOperation(op);
   },
 
-  _enqueueInternalLoad() {
-
+  _enqueueInternalLoad(internal) {
+    let op = new InternalDocumentLoadOperation(internal);
+    return this._enqueueInternalOperation(op);
   },
 
   _enqueueInternalReload() {
