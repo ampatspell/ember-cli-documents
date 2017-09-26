@@ -12,6 +12,7 @@ export default Ember.Service.extend({
   openStores: object().readOnly(),
 
   _storeFactory: null,
+  _adapterFactories: object(),
 
   storeFactory() {
     let Factory = this._storeFactory;
@@ -22,19 +23,37 @@ export default Ember.Service.extend({
     return Factory;
   },
 
+  adapterFactory(name) {
+    let factories = this.get('_adapterFactories');
+    let factory = factories[name];
+    if(!factory) {
+      factory = getOwner(this).factoryFor(`documents:adapter/${name}`);
+      factories[name] = factory;
+    }
+    return factory;
+  },
+
   createStore(opts) {
     let stores = this;
     return this.storeFactory().create(assign({ stores }, opts));
   },
 
   store(opts) {
-    let { url } = opts;
+    opts = assign({ adapter: 'couch' }, opts);
+
+    let Adapter = this.adapterFactory(opts.adapter);
+    let identifier = Adapter.class.identifierFor(opts);
+
     let open = this.get('openStores');
-    let store = open[url];
+    let store = open[identifier];
+
     if(!store) {
+      let adapter = Adapter.create(opts);
+      opts = assign(opts, { adapter });
       store = this.createStore(opts);
-      open[url] = store;
+      open[identifier] = store;
     }
+
     return store;
   },
 
