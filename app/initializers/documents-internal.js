@@ -7,6 +7,7 @@ import DocumentArray from 'documents/document/array';
 import InternalDocument from 'documents/document/internal/document';
 import InternalObject from 'documents/document/internal/object';
 import InternalArray from 'documents/document/internal/array';
+import AdapterCouch from 'documents/adapter/couch';
 
 export default {
   name: 'documents:internal',
@@ -23,5 +24,7 @@ export default {
     container.register('documents:internal-document', InternalDocument);
     container.register('documents:internal-object', InternalObject);
     container.register('documents:internal-array', InternalArray);
+
+    container.register('documents:adapter/couch', AdapterCouch);
   }
 };
