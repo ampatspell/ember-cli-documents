@@ -48,7 +48,7 @@ export default Ember.Service.extend({
     let store = open[identifier];
 
     if(!store) {
-      let adapter = Adapter.create(opts);
+      let adapter = Adapter.create(assign({ identifier }, opts));
       opts = assign(opts, { adapter });
       store = this.createStore(opts);
       open[identifier] = store;
@@ -58,9 +58,9 @@ export default Ember.Service.extend({
   },
 
   _storeWillDestroy(store) {
-    let url = store.get('url');
+    let identifier = store.get('adapter.identifier');
     let openStores = this.get('openStores');
-    delete openStores[url];
+    delete openStores[identifier];
   },
 
   willDestroy() {

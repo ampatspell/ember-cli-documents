@@ -12,11 +12,4 @@ export default Ember.Object.extend(
   DatabaseInternalDocumentDeserialize,
   DatabaseDocument, {
 
-  _didDestroyModelForInternalDocument(internal) {
-    if(!internal.isNew) {
-      return;
-    }
-    this._unstoreNewInternalDocument(internal);
-  }
-
 });
