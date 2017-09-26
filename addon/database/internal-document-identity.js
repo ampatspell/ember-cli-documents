@@ -59,6 +59,15 @@ export default Ember.Mixin.create({
       internal = documents.deleted[id];
     }
     return internal;
+  },
+
+  //
+
+  _didDestroyModelForInternalDocument(internal) {
+    if(!internal.isNew) {
+      return;
+    }
+    this._unstoreNewInternalDocument(internal);
   }
 
 });
