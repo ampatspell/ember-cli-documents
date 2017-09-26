@@ -11,15 +11,27 @@ const getter = (object, name, fn) => Object.defineProperty(object, name, { get: 
 
 export default function(name, options = {}) {
   module(name, {
+    admin(db) {
+      db = db || this.db;
+      return db.get('documents.couch.session').save('ampatspell', 'hello');
+    },
+    logout(db) {
+      db = db || this.db;
+      return db.get('documents.couch.session').delete();
+    },
+    recreate(db) {
+      db = db || this.db;
+      return this.admin(db).then(() => db.get('documents.database').recreate({ documents: true, design: true }));
+    },
     beforeEach() {
       this.application = startApp();
       this.instance = this.application.buildInstance();
       getter(this, 'stores', () => this.instance.lookup('documents:stores'));
       getter(this, 'store', () => this.stores.store({ url: 'http://127.0.0.1:5984' }));
-      getter(this, 'db', () => this.store.database('thing'));
-      if (options.beforeEach) {
-        return options.beforeEach.apply(this, arguments);
-      }
+      getter(this, 'db', () => this.store.database('ember-cli-documents'));
+      getter(this, 'docs', () => this.db.get('documents'));
+      let beforeEach = options.beforeEach && options.beforeEach.apply(this, arguments);
+      return resolve(beforeEach);
     },
     afterEach() {
       let afterEach = options.afterEach && options.afterEach.apply(this, arguments);
