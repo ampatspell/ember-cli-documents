@@ -13,7 +13,7 @@ export default function(name, options = {}) {
   module(name, {
     admin(db) {
       db = db || this.db;
-      return db.get('documents.couch.session').save('ampatspell', 'hello');
+      return db.get('documents.couch.session').save('admin', 'hello');
     },
     logout(db) {
       db = db || this.db;
@@ -27,7 +27,7 @@ export default function(name, options = {}) {
       this.application = startApp();
       this.instance = this.application.buildInstance();
       getter(this, 'stores', () => this.instance.lookup('documents:stores'));
-      getter(this, 'store', () => this.stores.store({ url: 'http://127.0.0.1:5984' }));
+      getter(this, 'store', () => this.stores.store({ url: '/api/1.6' }));
       getter(this, 'db', () => this.store.database('ember-cli-documents'));
       getter(this, 'docs', () => this.db.get('documents'));
       let beforeEach = options.beforeEach && options.beforeEach.apply(this, arguments);

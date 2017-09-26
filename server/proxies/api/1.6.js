@@ -1,20 +1,12 @@
 /* eslint-env node */
 'use strict';
 
-const proxyPath = '/api/1.6';
-
-module.exports = function(app) {
-  // For options, see:
-  // https://github.com/nodejitsu/node-http-proxy
+module.exports = app => {
   let proxy = require('http-proxy').createProxyServer({});
-
-  proxy.on('error', function(err, req) {
+  proxy.on('error', (err, req) => {
     console.error(err, req.url);
   });
-
-  app.use(proxyPath, function(req, res, next){
-    // include root path in proxied request
-    req.url = proxyPath + '/' + req.url;
-    proxy.web(req, res, { target: 'http://127.0.0.1:5984' });
+  app.use('/api/1.6', (req, res, next) => {
+    proxy.web(req, res, { target: `http://${req.hostname || 'localhost'}:6016` });
   });
 };

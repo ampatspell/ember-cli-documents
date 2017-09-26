@@ -2,7 +2,7 @@ import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { next } from 'documents/util/run';
 
-module('document-save', {
+module('document-delete', {
   beforeEach() {
     return this.recreate();
   }
