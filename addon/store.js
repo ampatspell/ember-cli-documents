@@ -1,14 +1,14 @@
 import Ember from 'ember';
-import Stores from './store/stores';
-import FactoryCache from './store/factory-cache';
-import InternalFactory from './store/internal-factory';
-import ModelFactory from './store/model-factory';
-import Databases from './store/databases';
+import StoreStores from './store/stores';
+import StoreFactoryCache from './store/factory-cache';
+import StoreInternalFactory from './store/internal-factory';
+import StoreModelFactory from './store/model-factory';
+import StoreDatabases from './store/databases';
 
 export default Ember.Object.extend(
-  Stores,
-  FactoryCache,
-  InternalFactory,
-  ModelFactory,
-  Databases
+  StoreStores,
+  StoreFactoryCache,
+  StoreInternalFactory,
+  StoreModelFactory,
+  StoreDatabases
 );

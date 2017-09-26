@@ -107,7 +107,7 @@ export default class InternalDocument extends InternalObject {
 
   //
 
-  enqueueSave(opts) {
+  enqueueSave(/* opts */) {
     this.withPropertyChanges(changed => this.state.onSaving(changed), true);
     return Ember.RSVP.resolve().then(() => {
       this.withPropertyChanges(changed => {

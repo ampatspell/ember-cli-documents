@@ -1,16 +1,16 @@
 import Ember from 'ember';
-import Store from './database/store';
-import InternalDocumentIdentity from './database/internal-document-identity';
-import InternalDocumentFactory from './database/internal-document-factory';
-import InternalDocumentDeserialize from './database/internal-document-deserialize';
-import Document from './database/document';
+import DatabaseStore from './database/store';
+import DatabaseInternalDocumentIdentity from './database/internal-document-identity';
+import DatabaseInternalDocumentFactory from './database/internal-document-factory';
+import DatabaseInternalDocumentDeserialize from './database/internal-document-deserialize';
+import DatabaseDocument from './database/document';
 
 export default Ember.Object.extend(
-  Store,
-  InternalDocumentIdentity,
-  InternalDocumentFactory,
-  InternalDocumentDeserialize,
-  Document, {
+  DatabaseStore,
+  DatabaseInternalDocumentIdentity,
+  DatabaseInternalDocumentFactory,
+  DatabaseInternalDocumentDeserialize,
+  DatabaseDocument, {
 
   _didDestroyModelForInternalDocument(internal) {
     if(!internal.isNew) {

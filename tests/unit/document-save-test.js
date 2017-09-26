@@ -7,6 +7,7 @@ test('save succeeds', async function(assert) {
   let doc = this.db.doc({ id: 'duck' });
 
   let promise = doc.save().then(arg => assert.ok(arg === doc));
+
   assert.ok(promise);
 
   assert.deepEqual(doc.get('state'), {
