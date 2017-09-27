@@ -1,12 +1,16 @@
 import Ember from 'ember';
 
 const {
-  RSVP: { defer }
+  RSVP: { defer, resolve },
+  assign
 } = Ember;
 
 export default class Operation {
 
-  constructor() {
+  constructor(label, props, fn) {
+    this.label = label;
+    this.fn = fn;
+    assign(this, props);
     this.deferred = defer();
   }
 
@@ -20,6 +24,12 @@ export default class Operation {
 
   get promise() {
     return this.deferred.promise;
+  }
+
+  invoke() {
+    resolve()
+      .then(() => this.fn(this))
+      .then(arg => this.resolve(arg), err => this.reject(err));
   }
 
 }

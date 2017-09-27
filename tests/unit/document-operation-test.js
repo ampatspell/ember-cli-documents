@@ -6,7 +6,7 @@ const {
   RSVP: { all }
 } = Ember;
 
-module('document-save', {
+module('document-operation', {
   beforeEach() {
     return this.recreate();
   }

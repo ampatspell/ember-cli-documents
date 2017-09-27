@@ -72,6 +72,13 @@ export default class InternalDocument extends InternalObject {
     return this._getValueNotify('_rev', 'model');
   }
 
+  getIdRev() {
+    return {
+      id: this.getId(),
+      rev: this.getRev()
+    };
+  }
+
   setValue(key) {
     if(isKeyUnderscored(key)) {
       return;
