@@ -22,24 +22,21 @@ export default {
     app.inject('route', 'db', 'service:db');
     app.inject('component', 'db', 'service:db');
 
-    window.author = db.push({
-      _id: 'author:ampatspell',
-      _rev: '1-qwe',
+    window.author = db.doc({
+      id: 'author:ampatspell',
       type: 'author',
       name: 'ampatspell'
     });
 
-    window.blog = db.push({
-      _id: 'blog:ducks',
-      _rev: '1-asd',
+    window.blog = db.doc({
+      id: 'blog:ducks',
       type: 'blog',
       title: 'The Ducks',
       owner: 'author:ampatspell'
     });
 
-    window.post = db.push({
-      _id: 'blog-post:ducks:one',
-      _rev: '1-sdf',
+    window.post = db.doc({
+      id: 'blog-post:ducks:one',
       type: 'blog-post',
       title: 'Welcome',
       owner: 'author:ampatspell',
