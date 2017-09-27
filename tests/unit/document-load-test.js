@@ -96,3 +96,27 @@ test('reload resolves for isNew', async function(assert) {
   let r = await doc.reload();
   assert.ok(r === doc);
 });
+
+test('load loaded resolves', async function(assert) {
+  await this.docs.save({ _id: 'thing' });
+  let doc = this.db.existing('thing', { create: true });
+
+  await doc.load();
+  assert.ok(doc.get('rev'));
+  doc._internal.values._rev = null;
+
+  await doc.load();
+  assert.equal(doc._internal.values._rev, null);
+});
+
+test('load loaded with force loads', async function(assert) {
+  await this.docs.save({ _id: 'thing' });
+  let doc = this.db.existing('thing', { create: true });
+
+  await doc.load();
+  let rev = doc.get('rev');
+  doc._internal.values._rev = null;
+
+  await doc.load({ force: true });
+  assert.equal(doc._internal.values._rev, rev);
+});
