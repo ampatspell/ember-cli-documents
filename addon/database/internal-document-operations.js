@@ -156,10 +156,7 @@ export default Ember.Mixin.create({
   },
 
   _internalDidLoad(internal, json) {
-    internal.withPropertyChanges(changed => {
-      internal.deserialize(json, 'document', changed);
-      internal.state.onLoaded(changed);
-    }, true);
+    return this._deserializeDocumentForInternal(internal, json);
   },
 
   _internalLoadDidFail(internal, err) {
