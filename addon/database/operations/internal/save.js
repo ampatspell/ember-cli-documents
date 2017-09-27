@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Operation from './operation';
+import Operation from './-operation';
 import DocumentsError from 'documents/util/error';
 
 const {
