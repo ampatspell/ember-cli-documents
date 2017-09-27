@@ -75,3 +75,27 @@ test('do not save if not dirty', async function(assert) {
   await doc.save();
   assert.equal(doc.get('rev'), rev);
 });
+
+test('save fails with conflict', async function(assert) {
+  await this.docs.save({ _id: 'thing' });
+  let doc = this.db.doc({ id: 'thing' });
+  try {
+    await doc.save();
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "conflict",
+      "reason": "Document update conflict.",
+      "status": 409
+    });
+    assert.deepEqual(doc.get('state'), {
+      "isDeleted": false,
+      "isDirty": false,
+      "isError": true,
+      "isLoaded": false,
+      "isLoading": false,
+      "isNew": true,
+      "isSaving": false,
+      error: e
+    });
+  }
+});
