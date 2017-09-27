@@ -8,7 +8,7 @@ export default {
   name: 'dummy:dev',
   initialize(app) {
     let stores = app.lookup('documents:stores');
-    let store = stores.store({ url: 'http://dev.amateurinmotion.com:6016' });
+    let store = stores.store({ url: 'http://dev:6016' });
 
     let db = store.database('thing');
 
