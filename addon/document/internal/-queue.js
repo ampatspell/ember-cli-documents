@@ -13,13 +13,13 @@ export default class Queue {
 
   add(operation) {
     this.array.push(operation);
-    this._enqueueNext();
+    this._scheduleNext();
     return operation.promise;
   }
 
-  _enqueueNext() {
-    cancel(this.__enqueueNext);
-    this.__enqueueNext = next(() => this._next());
+  _scheduleNext() {
+    cancel(this.__scheduleNext);
+    this.__scheduleNext = next(() => this._next());
   }
 
   _next() {
@@ -37,7 +37,7 @@ export default class Queue {
 
     op.promise.catch(() => {}).finally(() => {
       this.operation = null;
-      this._enqueueNext();
+      this._scheduleNext();
     });
 
     op.invoke();

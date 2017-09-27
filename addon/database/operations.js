@@ -6,18 +6,18 @@ import InternalDocumentDeleteOperation from './operations/internal/delete';
 
 const internalOperation = (Class) => function(internal, ...args) {
   let op = new Class(internal, ...args);
-  return this._enqueueInternalOperation(internal, op);
+  return this._scheduleInternalOperation(internal, op);
 };
 
 export default Ember.Mixin.create({
 
-  _enqueueInternalOperation(internal, op) {
+  _scheduleInternalOperation(internal, op) {
     return internal.addOperation(op);
   },
 
-  _enqueueInternalSave:   internalOperation(InternalDocumentSaveOperation),
-  _enqueueInternalLoad:   internalOperation(InternalDocumentLoadOperation),
-  _enqueueInternalReload: internalOperation(InternalDocumentReloadOperation),
-  _enqueueInternalDelete: internalOperation(InternalDocumentDeleteOperation)
+  _scheduleInternalSave:   internalOperation(InternalDocumentSaveOperation),
+  _scheduleInternalLoad:   internalOperation(InternalDocumentLoadOperation),
+  _scheduleInternalReload: internalOperation(InternalDocumentReloadOperation),
+  _scheduleInternalDelete: internalOperation(InternalDocumentDeleteOperation)
 
 });

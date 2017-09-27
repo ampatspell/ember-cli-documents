@@ -121,20 +121,20 @@ export default class InternalDocument extends InternalObject {
 
   //
 
-  enqueueSave() {
-    return this.database._enqueueInternalSave(this, ...arguments);
+  scheduleSave() {
+    return this.database._scheduleInternalSave(this, ...arguments);
   }
 
-  enqueueLoad() {
-    return this.database._enqueueInternalLoad(this, ...arguments);
+  scheduleLoad() {
+    return this.database._scheduleInternalLoad(this, ...arguments);
   }
 
-  enqueueReload() {
-    return this.database._enqueueInternalReload(this, ...arguments);
+  scheduleReload() {
+    return this.database._scheduleInternalReload(this, ...arguments);
   }
 
-  enqueueDelete() {
-    return this.database._enqueueInternalDelete(this, ...arguments);
+  scheduleDelete() {
+    return this.database._scheduleInternalDelete(this, ...arguments);
   }
 
 }

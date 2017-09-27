@@ -39,9 +39,9 @@ export default DocumentObject.extend(StateMixin, {
 
   database: database(),
 
-  save:   promise('enqueueSave'),
-  load:   promise('enqueueLoad'),
-  reload: promise('enqueueReload'),
-  delete: promise('enqueueDelete')
+  save:   promise('scheduleSave'),
+  load:   promise('scheduleLoad'),
+  reload: promise('scheduleReload'),
+  delete: promise('scheduleDelete')
 
 });
