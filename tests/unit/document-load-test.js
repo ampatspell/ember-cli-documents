@@ -90,3 +90,9 @@ test('load missing is marked as deleted', async function(assert) {
     assert.ok(this.db._documents.deleted.thing);
   }
 });
+
+test('reload resolves for isNew', async function(assert) {
+  let doc = this.db.doc();
+  let r = await doc.reload();
+  assert.ok(r === doc);
+});
