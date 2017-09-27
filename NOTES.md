@@ -4,6 +4,8 @@
 
 ## Collect and flush pending fetches
 
+Same goes for separate load by id. Those can be unified by using `_all_docs?keys=...`.
+
 ``` javascript
 _addDatabaseOperation(op) {
   this.operations.push(op);
