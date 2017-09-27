@@ -25,9 +25,11 @@ export default class InternalDocumentBaseLoadOperation extends Operation {
   }
 
   loadDidFail(err) {
-    this.withPropertyChanges(changed => {
-      this.state.onError(err, changed);
-    });
+    if(!this._deserializeAndStoreDeletedIfNecessary(err)) {
+      this.withPropertyChanges(changed => {
+        this.state.onError(err, changed);
+      });
+    }
     this.reject(err);
   }
 

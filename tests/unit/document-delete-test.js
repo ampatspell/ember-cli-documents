@@ -94,3 +94,21 @@ test('reject isNew', async function(assert) {
     });
   }
 });
+
+test('delete missing is marked as deleted', async function(assert) {
+  let doc = this.db.doc({ id: 'thing' });
+  await doc.save();
+  await this.docs.delete('thing', doc.get('rev'));
+  try {
+    await doc.delete();
+    assert.ok(false, 'should throw');
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "not_found",
+      "reason": "deleted",
+      "status": 404
+    });
+    assert.ok(doc.get('isDeleted'));
+    assert.ok(this.db._documents.deleted.thing);
+  }
+});

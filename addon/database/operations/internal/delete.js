@@ -8,20 +8,6 @@ const {
 
 /*
 
-error might be not-found deleted.
-
-  _isNotFoundDeleted(err) {
-    return err.error === 'not_found' && err.reason === 'deleted';
-  },
-
-  _isNotFoundMissing(err) {
-    return err.error === 'not_found' && err.reason === 'missing';
-  },
-
-  _isNotFoundMissingOrDeleted(err) {
-    return this._isNotFoundMissing(err) || this._isNotFoundDeleted(err);
-  },
-
 
 if(this._isNotFoundDeleted(err)) {
   internal.withPropertyChanges(changed => {
@@ -52,18 +38,16 @@ export default class InternalDocumentBaseLoadOperation extends Operation {
   }
 
   didDelete(json) {
-    this.withPropertyChanges(changed => {
-      this.internal.deserializeDeleted(json, changed);
-      this.state.onDeleted(changed);
-    });
-    this.db._storeDeletedInternalDocument(this.internal);
+    this._deserializeAndStoreDeleted(json);
     this.resolve();
   }
 
   deleteDidFail(err) {
-    this.withPropertyChanges(changed => {
-      this.state.onError(err, changed);
-    });
+    if(!this._deserializeAndStoreDeletedIfNecessary(err)) {
+      this.withPropertyChanges(changed => {
+        this.state.onError(err, changed);
+      });
+    }
     this.reject(err);
   }
 

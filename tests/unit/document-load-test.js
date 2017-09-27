@@ -76,3 +76,17 @@ test('load isNew resolves', async function(assert) {
     "isSaving": false
   });
 });
+
+test('load missing is marked as deleted', async function(assert) {
+  let doc = this.db.existing('thing', { create: true });
+  try {
+    await doc.load();
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "not_found",
+      "reason": e.reason,
+      "status": 404
+    });
+    assert.ok(this.db._documents.deleted.thing);
+  }
+});

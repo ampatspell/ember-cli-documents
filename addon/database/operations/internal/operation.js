@@ -24,4 +24,34 @@ export default class InternalDocumentOperation extends Operation {
     return this.internal.state;
   }
 
+  _isNotFoundDeleted(err) {
+    return err.error === 'not_found' && err.reason === 'deleted';
+  }
+
+  _isNotFoundMissing(err) {
+    return err.error === 'not_found' && err.reason === 'missing';
+  }
+
+  _isNotFoundMissingOrDeleted(err) {
+    return this._isNotFoundMissing(err) || this._isNotFoundDeleted(err);
+  }
+
+  _deserializeAndStoreDeleted(json) {
+    this.withPropertyChanges(changed => {
+      if(json) {
+        this.internal.deserializeDeleted(json, changed);
+      }
+      this.state.onDeleted(changed);
+    });
+    this.db._storeDeletedInternalDocument(this.internal);
+  }
+
+  _deserializeAndStoreDeletedIfNecessary(err) {
+    if(!this._isNotFoundMissingOrDeleted(err)) {
+      return false;
+    }
+    this._deserializeAndStoreDeleted(null);
+    return true;
+  }
+
 }
