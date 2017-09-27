@@ -2,6 +2,20 @@
 
 * array deserialize should diff existing content not just clear existing content
 
+## Collect and flush pending fetches
+
+``` javascript
+_addDatabaseOperation(op) {
+  this.operations.push(op);
+  cancel(__invokeOpeations);
+  this.__invokeOperations = run.schedule('afterRender', this, this._invokeOpeations);
+}
+
+_invokeOperations() {
+  this.operations.forEach(op => op.invoke());
+}
+```
+
 ## Computed property teardown
 
 * https://github.com/runspired/rate-limit-computed/blob/master/addon/throttled.js#L35
