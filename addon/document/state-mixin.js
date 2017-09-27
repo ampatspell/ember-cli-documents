@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { keys } from './internal/state';
+import { keys } from './internal/-state';
 
 const {
   computed,

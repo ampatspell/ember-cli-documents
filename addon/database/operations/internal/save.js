@@ -47,6 +47,9 @@ export default class InternalDocumentSaveOperation extends Operation {
   }
 
   invoke() {
+    if(!this.state.isNew && !this.state.isDirty) {
+      return this.resolve();
+    }
     return resolve()
       .then(() => this.validateUniqueness())
       .then(() => this.willSave())

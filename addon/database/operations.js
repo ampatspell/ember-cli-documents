@@ -4,17 +4,15 @@ import InternalDocumentLoadOperation from './operations/internal/load';
 import InternalDocumentReloadOperation from './operations/internal/reload';
 import InternalDocumentDeleteOperation from './operations/internal/delete';
 
-const internalOperation = (Class) => function() {
-  let op = new Class(...arguments);
-  return this._enqueueInternalOperation(op);
+const internalOperation = (Class) => function(internal, ...args) {
+  let op = new Class(internal, ...args);
+  return this._enqueueInternalOperation(internal, op);
 };
 
 export default Ember.Mixin.create({
 
-  _enqueueInternalOperation(op) {
-    // internal.addOperation(op);
-    op.invoke();
-    return op.promise;
+  _enqueueInternalOperation(internal, op) {
+    return internal.addOperation(op);
   },
 
   _enqueueInternalSave:   internalOperation(InternalDocumentSaveOperation),

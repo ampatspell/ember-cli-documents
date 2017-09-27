@@ -66,3 +66,12 @@ test('save fails with local conflict', async function(assert) {
     });
   }
 });
+
+test('do not save if not dirty', async function(assert) {
+  let doc = this.db.doc({ id: 'thing' });
+  await doc.save();
+  let rev = doc.get('rev');
+  assert.equal(doc.get('isDirty'), false);
+  await doc.save();
+  assert.equal(doc.get('rev'), rev);
+});
