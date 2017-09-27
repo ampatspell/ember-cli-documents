@@ -6,7 +6,7 @@ const {
 
 export default Ember.Mixin.create({
 
-  _deserializeDeletedInternal(internal, doc) {
+  __deserializeDeletedDocument(internal, doc) {
     internal.withPropertyChanges(changed => {
       internal.deserializeDeleted({ id: doc._id, rev: doc._rev }, changed);
       internal.state.onDeleted(changed);
@@ -15,13 +15,13 @@ export default Ember.Mixin.create({
     return internal;
   },
 
-  _deserializeDeleted(doc) {
+  _deserializeDeletedDocument(doc) {
     let id = doc._id;
     let internal = this._existingInternalDocument(id, { deleted: true, create: true });
-    return this._deserializeDeletedInternal(internal, doc);
+    return this.__deserializeDeletedDocument(internal, doc);
   },
 
-  _deserializeSavedInternal(internal, doc) {
+  __deserializeSavedDocument(internal, doc) {
     internal.withPropertyChanges(changed => {
       internal.deserialize(doc, 'document', changed);
       internal.state.onLoaded(changed);
@@ -30,20 +30,20 @@ export default Ember.Mixin.create({
     return internal;
   },
 
-  _deserializeSaved(doc) {
+  _deserializeSavedDocument(doc) {
     let id = doc._id;
     let internal = this._existingInternalDocument(id, { deleted: true, create: true });
-    return this._deserializeSavedInternal(internal, doc);
+    return this.__deserializeSavedDocument(internal, doc);
   },
 
-  _deserialize(doc) {
+  _deserializeDocument(doc) {
     assert(`doc must be object`, typeof doc === 'object');
     assert(`doc._id must be string`, typeof doc._id === 'string');
 
     if(doc._deleted) {
-      return this._deserializeDeleted(doc);
+      return this._deserializeDeletedDocument(doc);
     } else {
-      return this._deserializeSaved(doc);
+      return this._deserializeSavedDocument(doc);
     }
   }
 

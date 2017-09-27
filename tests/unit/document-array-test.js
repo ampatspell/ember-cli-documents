@@ -231,7 +231,7 @@ test('replace array', function(assert) {
     ]
   });
 
-  this.db._deserializeSavedInternal(doc._internal, {
+  this.db.__deserializeSavedDocument(doc._internal, {
     _id: 'thing',
     things: [
       { id: 'c' },
