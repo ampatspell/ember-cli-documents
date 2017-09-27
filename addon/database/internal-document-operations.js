@@ -27,21 +27,17 @@ export default Ember.Mixin.create({
     });
   },
 
-  _internalWillSave(internal) {
-    this._validateInternalDocumentUniqueness(internal);
-    internal.withPropertyChanges(changed => {
-      internal.state.onSaving(changed);
-    }, true);
-    return internal.serialize('document');
-  },
-
   _performInternalSave(internal) {
     let state = internal.state;
     if(!state.isNew && !state.isDirty) {
       return;
     }
 
-    let doc = this._internalWillSave(internal);
+    this._validateInternalDocumentUniqueness(internal);
+
+    internal.setState('onSaving');
+
+    let doc = internal.serialize('document');
 
     return this.get('documents').save(doc).then(json => {
       return this._deserializeInternalSave(internal, json);
@@ -51,13 +47,6 @@ export default Ember.Mixin.create({
   },
 
   //
-
-  _internalWillDelete(internal) {
-    internal.withPropertyChanges(changed => {
-      internal.state.onDeleting(changed);
-    }, true);
-    return internal.getIdRev();
-  },
 
   _performInternalDelete(internal) {
     let state = internal.state;
@@ -70,7 +59,9 @@ export default Ember.Mixin.create({
       throw new DocumentsError({ error: 'deleted', reason: 'Document is already deleted' });
     }
 
-    let { id, rev } = this._internalWillDelete(internal);
+    internal.setState('onDeleting');
+
+    let { id, rev } = internal.getIdRev();
 
     return this.get('documents').delete(id, rev).then(json => {
       return this._deserializeInternalDelete(internal, json);
@@ -80,13 +71,6 @@ export default Ember.Mixin.create({
   },
 
   //
-
-  _internalWillLoad(internal) {
-    internal.withPropertyChanges(changed => {
-      internal.state.onLoading(changed);
-    }, true);
-    return internal.getId();
-  },
 
   _performInternalLoad(internal, opts) {
     let state = internal.state;
@@ -99,7 +83,9 @@ export default Ember.Mixin.create({
       return;
     }
 
-    let id = this._internalWillLoad(internal);
+    internal.setState('onLoading');
+
+    let id = internal.getId();
 
     return this.get('documents').load(id).then(json => {
       return this._deserializeInternalLoad(internal, json);

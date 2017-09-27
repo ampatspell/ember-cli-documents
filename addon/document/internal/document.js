@@ -128,6 +128,16 @@ export default class InternalDocument extends InternalObject {
 
   //
 
+  setState(name, notify=true) {
+    this.withPropertyChanges(changed => {
+      let state = this.state;
+      let fn = state[name];
+      fn.call(state, changed);
+    }, notify);
+  }
+
+  //
+
   scheduleSave() {
     return this.database._scheduleInternalSave(this, ...arguments);
   }
