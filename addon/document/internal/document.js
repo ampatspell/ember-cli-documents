@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import InternalObject from './object';
-import State from './state';
+import State from './-state';
+import Queue from './-queue';
 
 const {
   copy,
@@ -26,6 +27,11 @@ export default class InternalDocument extends InternalObject {
     super(store, null);
     this.database = database;
     this.state = new State();
+    this.queue = new Queue();
+  }
+
+  addOperation(op) {
+    return this.queue.add(op);
   }
 
   get isDocument() {
@@ -98,23 +104,37 @@ export default class InternalDocument extends InternalObject {
     return json;
   }
 
-  deserializeDeleted(json, type, changed) {
+  deserializeDeleted(json, changed) {
+    let type = 'document';
     json = this.willDeserialize(json, type);
-    let { _id, _rev } = json;
-    this._setValue('_id', _id, type, changed);
-    this._setValue('_rev', _rev, type, changed);
+    let { id, rev } = json;
+    this._setValue('_id', id, type, changed);
+    this._setValue('_rev', rev, type, changed);
+  }
+
+  deserializeSaved(json, changed) {
+    let type = 'document';
+    let { id, rev } = json;
+    this._setValue('_id', id, type, changed);
+    this._setValue('_rev', rev, type, changed);
   }
 
   //
 
-  enqueueSave(/* opts */) {
-    this.withPropertyChanges(changed => this.state.onSaving(changed), true);
-    return Ember.RSVP.resolve().then(() => {
-      this.withPropertyChanges(changed => {
-        this._setValue('_rev', '1-asd', 'document', changed);
-        this.state.onSaved(changed);
-      }, true);
-    });
+  enqueueSave() {
+    return this.database._enqueueInternalSave(this, ...arguments);
+  }
+
+  enqueueLoad() {
+    return this.database._enqueueInternalLoad(this, ...arguments);
+  }
+
+  enqueueReload() {
+    return this.database._enqueueInternalReload(this, ...arguments);
+  }
+
+  enqueueDelete() {
+    return this.database._enqueueInternalDelete(this, ...arguments);
   }
 
 }

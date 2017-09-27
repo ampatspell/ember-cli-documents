@@ -3,8 +3,7 @@ import DocumentObject from './object';
 import StateMixin from './state-mixin';
 
 const {
-  computed,
-  RSVP: { resolve }
+  computed
 } = Ember;
 
 const id = () => {
@@ -30,7 +29,7 @@ const database = () => computed(function() {
 
 const promise = name => function() {
   let internal = this._internal;
-  return resolve(internal[name].call(internal, ...arguments)).then(() => this);
+  return internal[name].call(internal, ...arguments).then(() => this);
 };
 
 export default DocumentObject.extend(StateMixin, {

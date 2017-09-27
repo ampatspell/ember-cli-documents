@@ -1,14 +1,19 @@
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+import { next } from 'documents/util/run';
 
-module('document-save');
+module('document-save', {
+  beforeEach() {
+    return this.recreate();
+  }
+});
 
 test('save succeeds', async function(assert) {
-  let doc = this.db.doc({ id: 'duck' });
+  let doc = this.db.doc({ id: 'duck:yellow', type: 'duck', name: 'Yellow' });
 
   let promise = doc.save().then(arg => assert.ok(arg === doc));
 
-  assert.ok(promise);
+  await next();
 
   assert.deepEqual(doc.get('state'), {
     "error": null,
@@ -23,6 +28,8 @@ test('save succeeds', async function(assert) {
 
   await promise;
 
+  assert.ok(this.db._documents.saved['duck:yellow']);
+
   assert.deepEqual(doc.get('state'), {
     "error": null,
     "isDeleted": false,
@@ -35,4 +42,36 @@ test('save succeeds', async function(assert) {
   });
 
   assert.ok(doc.get('rev'));
+
+  let json = await this.docs.load('duck:yellow');
+
+  assert.deepEqual_(json, {
+    "_id": "duck:yellow",
+    "_rev": "ignored",
+    "name": "Yellow",
+    "type": "duck"
+  });
+});
+
+test('save fails with local conflict', async function(assert) {
+  this.db.push({ _id: 'thing' });
+  let doc = this.db.doc({ id: 'thing' });
+  try {
+    await doc.save();
+    assert.ok(false, 'should throw');
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "conflict",
+      "reason": "Document update conflict"
+    });
+  }
+});
+
+test('do not save if not dirty', async function(assert) {
+  let doc = this.db.doc({ id: 'thing' });
+  await doc.save();
+  let rev = doc.get('rev');
+  assert.equal(doc.get('isDirty'), false);
+  await doc.save();
+  assert.equal(doc.get('rev'), rev);
 });

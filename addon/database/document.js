@@ -33,7 +33,7 @@ export default Ember.Mixin.create({
   push(doc, opts) {
     opts = merge({ instantiate: true }, opts);
 
-    let internal = this._deserialize(doc);
+    let internal = this._deserializeDocument(doc);
 
     if(opts.instantiate) {
       return internal.model(true);
