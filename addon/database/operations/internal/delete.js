@@ -6,23 +6,6 @@ const {
   RSVP: { resolve }
 } = Ember;
 
-/*
-
-
-if(this._isNotFoundDeleted(err)) {
-  internal.withPropertyChanges(changed => {
-    this._deserializeInternalModelDelete(internal, null, changed);
-    internal.onError(err, changed);
-  });
-  return resolve(internal);
-}
-internal.withPropertyChanges(changed => {
-  internal.onError(err, changed);
-});
-return reject(err);
-
-*/
-
 export default class InternalDocumentBaseLoadOperation extends Operation {
 
   willDelete() {
