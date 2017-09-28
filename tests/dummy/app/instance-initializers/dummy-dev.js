@@ -12,6 +12,7 @@ export default {
 
     let db = store.database('thing');
 
+    app.register('service:store', store, { instantiate: false });
     app.register('service:db', db, { instantiate: false });
 
     window.log = info;
@@ -19,7 +20,9 @@ export default {
     window.store = store;
     window.db = db;
 
+    app.inject('route', 'store', 'service:store');
     app.inject('route', 'db', 'service:db');
+    app.inject('component', 'store', 'service:store');
     app.inject('component', 'db', 'service:db');
 
     window.author = db.doc({
