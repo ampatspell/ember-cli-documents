@@ -9,23 +9,43 @@ const {
 
 const result = type => result => ({ type, result });
 
+const view = fn => function(...args) {
+  let opts = args.pop();
+  opts = merge({ include_docs: true }, opts);
+  args.push(opts);
+  args.unshift(this.get('documents'));
+  return fn.call(this, ...args).then(json => {
+    let docs = A(json.rows).map(row => row.doc);
+    return this._deserializeDocuments(docs);
+  });
+};
+
+const doc = fn => function(...args) {
+  args.unshift(this.get('documents'));
+  return fn.call(this, ...args).then(doc => this._deserializeDocument(doc));
+};
+
 export default Ember.Mixin.create({
+
+  __loadInternalDocumentById: doc(function(documents, id, opts) {
+    return documents.load(id, opts);
+  }),
 
   _loadInternalDocumentById(id, opts) {
     let internal = this._existingInternalDocument(id, { deleted: true });
     if(internal) {
       return internal.scheduleLoad();
     }
-    return this.get('documents').load(id, opts).then(doc => this._deserializeDocument(doc));
+    return this.__loadInternalDocumentById(id, opts);
   },
 
-  _loadInternalDocumentsAll(opts) {
-    opts = merge({ include_docs: true }, opts);
-    return this.get('documents').all(opts).then(json => {
-      let docs = A(json.rows).map(row => row.doc);
-      return this._deserializeDocuments(docs);
-    });
-  },
+  _loadInternalDocumentsAll: view(function(documents, opts) {
+    return documents.all(opts);
+  }),
+
+  _loadInternalDocumentsView: view(function(documents, ddoc, view, opts) {
+    return documents.view(ddoc, view, opts);
+  }),
 
   _internalDocumentFind(opts) {
     if(typeof opts === 'string') {
@@ -36,12 +56,18 @@ export default Ember.Mixin.create({
 
     let id = opts.id;
     let all = opts.all;
+    let ddoc = opts.ddoc;
+    let view = opts.view;
 
     if(id) {
       return this._loadInternalDocumentById(id, opts).then(result('single'));
     } else if(all) {
       delete opts.all;
       return this._loadInternalDocumentsAll(opts).then(result('array'));
+    } else if(ddoc && view) {
+      delete opts.ddoc;
+      delete opts.view;
+      return this._loadInternalDocumentsView(ddoc, view, opts).then(result('array'));
     }
 
     return reject(new DocumentsError({
