@@ -54,6 +54,10 @@ export default Ember.Mixin.create({
     return documents.view(ddoc, view, opts);
   }),
 
+  _loadInternalDocumentsMango(opts) {
+    return this.get('documents.mango').find(opts).then(json => this._deserializeDocuments(json.docs));
+  },
+
   _internalDocumentFind(opts) {
     opts = normalizeOpts(opts, {});
 
@@ -61,6 +65,7 @@ export default Ember.Mixin.create({
     let all = opts.all;
     let ddoc = opts.ddoc;
     let view = opts.view;
+    let selector = opts.selector;
 
     if(id) {
       return this._loadInternalDocumentById(id, opts).then(result('single'));
@@ -71,6 +76,8 @@ export default Ember.Mixin.create({
       delete opts.ddoc;
       delete opts.view;
       return this._loadInternalDocumentsView(ddoc, view, opts).then(result('array'));
+    } else if(selector) {
+      return this._loadInternalDocumentsMango(opts).then(result('array'));
     }
 
     return reject(new DocumentsError({
