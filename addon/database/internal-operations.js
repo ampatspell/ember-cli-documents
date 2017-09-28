@@ -3,6 +3,7 @@ import Operation from './-operation';
 import DocumentsError from '../util/error';
 
 const {
+  merge,
   assign,
 } = Ember;
 
@@ -27,10 +28,14 @@ export default Ember.Mixin.create({
     });
   },
 
-  __performInternalSave(internal) {
+  __performInternalSave(internal, opts) {
+    opts = merge({ force: false }, opts);
+
+    console.log(...arguments);
+
     let state = internal.state;
 
-    if(!(state.isNew || state.isDeleted) && !state.isDirty) {
+    if(!(state.isNew || state.isDeleted) && !state.isDirty && !opts.force) {
       return;
     }
 
