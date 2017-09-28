@@ -2,6 +2,8 @@ import Stores from 'documents/stores';
 import Store from 'documents/store';
 import Session from 'documents/session';
 import Database from 'documents/database';
+import DatabaseSecurity from 'documents/security';
+import DatabaseSecurityPair from 'documents/security-pair';
 import Document from 'documents/document/document';
 import DocumentObject from 'documents/document/object';
 import DocumentArray from 'documents/document/array';
@@ -18,6 +20,9 @@ export default {
     container.register('documents:store', Store);
     container.register('documents:session', Session);
     container.register('documents:database', Database);
+
+    container.register('documents:database-security', DatabaseSecurity);
+    container.register('documents:database-security-pair', DatabaseSecurityPair);
 
     container.register('documents:document', Document);
     container.register('documents:object', DocumentObject);

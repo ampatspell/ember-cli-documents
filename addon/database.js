@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import DatabaseStore from './database/store';
+import DatabaseSecurity from './database/security';
 import DatabaseInternalIdentity from './database/internal-identity';
 import DatabaseInternalFactory from './database/internal-factory';
 import DatabaseInternalDeserialize from './database/internal-deserialize';
@@ -11,6 +12,7 @@ import DatabaseDocumentFind from './database/document-find';
 
 export default Ember.Object.extend(
   DatabaseStore,
+  DatabaseSecurity,
   DatabaseInternalIdentity,
   DatabaseInternalFactory,
   DatabaseInternalDeserialize,
