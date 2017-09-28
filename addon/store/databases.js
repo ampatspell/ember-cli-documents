@@ -1,16 +1,12 @@
 import Ember from 'ember';
 import { object } from '../util/computed';
 
-const {
-  String: { dasherize }
-} = Ember;
-
 export default Ember.Mixin.create({
 
   openDatabases: object().readOnly(),
 
   normalizeDatabaseIdentifier(identifier) {
-    return dasherize(identifier);
+    return identifier.trim();
   },
 
   createDatabase(identifier) {
