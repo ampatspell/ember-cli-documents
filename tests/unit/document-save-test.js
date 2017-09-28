@@ -1,6 +1,6 @@
 import configurations from '../helpers/configurations';
 import { test } from '../helpers/qunit';
-import { next } from 'documents/util/run';
+import { next } from '../helpers/run';
 
 configurations(module => {
 
