@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import DocumentsError from '../util/error';
 import Operation from './-operation';
-import { array } from '../util/computed';
 
 const {
+  on,
   A,
   merge,
   RSVP: { reject }
@@ -36,10 +36,12 @@ const doc = fn => function(...args) {
 
 export default Ember.Mixin.create({
 
-  _operations: array(),
+  __createOperations: on('init', function() {
+    this._operations = new A();
+  }),
 
   __registerDatabaseOperation(operation) {
-    let operations = this.get('_operations');
+    let operations = this._operations;
     operations.pushObject(operation);
     operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
   },
