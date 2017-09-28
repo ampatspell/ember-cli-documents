@@ -82,7 +82,7 @@ export default Ember.Mixin.create({
 
     return reject(new DocumentsError({
       error: 'invalid_query',
-      reason: 'opts must include id'
+      reason: 'opts must include { all: true }, { id }, { ddoc, view } or { selector }'
     }));
   },
 
