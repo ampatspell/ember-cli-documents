@@ -29,7 +29,8 @@ export default Ember.Mixin.create({
 
   _performInternalSave(internal) {
     let state = internal.state;
-    if(!state.isNew && !state.isDirty) {
+
+    if(!(state.isNew || state.isDeleted) && !state.isDirty) {
       return;
     }
 
