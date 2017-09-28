@@ -1,5 +1,6 @@
 import Stores from 'documents/stores';
 import Store from 'documents/store';
+import Session from 'documents/session';
 import Database from 'documents/database';
 import Document from 'documents/document/document';
 import DocumentObject from 'documents/document/object';
@@ -15,6 +16,7 @@ export default {
     container.register('documents:stores', Stores);
 
     container.register('documents:store', Store);
+    container.register('documents:session', Session);
     container.register('documents:database', Database);
 
     container.register('documents:document', Document);
