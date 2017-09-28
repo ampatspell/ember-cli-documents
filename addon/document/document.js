@@ -45,7 +45,9 @@ export default DocumentObject.extend(StateMixin, {
   delete: promise('scheduleDelete'),
 
   toStringExtension() {
-    return this.get('id') || '';
+    let database = this.get('database.identifier');
+    let id = this.get('id') || '';
+    return `${database}/${id}`;
   }
 
 });
