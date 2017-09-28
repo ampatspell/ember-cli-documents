@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import DocumentsError from '../util/error';
 import Operation from './-operation';
+import { array } from '../util/computed';
 
 const {
   A,
@@ -15,31 +16,39 @@ const normalizeOpts = (opts, defaults) => {
   return merge(defaults, opts);
 };
 
-const result = type => result => ({ type, result });
+const result = (type, result) => ({ type, result });
 
-const view = fn => function(name, ...args) {
+const view = fn => function(...args) {
   let opts = args.pop();
   opts = merge({ include_docs: true }, opts);
   args.push(opts);
   args.unshift(this.get('documents'));
   return fn.call(this, ...args).then(json => {
     let docs = A(json.rows).map(row => row.doc);
-    return this._deserializeDocuments(docs);
-  }).then(result('array'));
+    return result('array', this._deserializeDocuments(docs));
+  });
 };
 
 const doc = fn => function(...args) {
   args.unshift(this.get('documents'));
-  return fn.call(this, ...args).then(doc => this._deserializeDocument(doc)).then(result('single'));
+  return fn.call(this, ...args).then(json => result('single', this._deserializeDocument(json)));
 };
 
 export default Ember.Mixin.create({
 
+  _operations: array(),
+
+  _registerDatabaseOperation(operation) {
+    let operations = this.get('_operations');
+    operations.pushObject(operation);
+    operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
+  },
+
   _scheduleDatabaseOperation(label, opts, fn) {
     opts = merge({}, opts);
     let op = new Operation(label, { opts }, fn);
+    this._registerDatabaseOperation(op);
     op.invoke();
-    console.log('schedule', label, opts, op);
     return op.promise;
   },
 
@@ -57,8 +66,7 @@ export default Ember.Mixin.create({
 
   _loadInternalDocumentsMango(opts) {
     return this.get('documents.mango').find(opts)
-      .then(json => this._deserializeDocuments(json.docs))
-      .then(result('array'));
+      .then(json => result('array', this._deserializeDocuments(json.docs)));
   },
 
   _internalDocumentFind(opts) {
@@ -75,9 +83,10 @@ export default Ember.Mixin.create({
     if(id) {
       let internal = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
-        return internal.scheduleLoad().then(result('single'));
+        return internal.scheduleLoad().then(() => result('single', internal));
       }
       return schedule('id', () => {
+        delete opts.id;
         return this._loadInternalDocumentById(id, opts);
       });
     } else if(all) {
