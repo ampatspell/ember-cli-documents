@@ -31,7 +31,7 @@ export default Ember.Mixin.create({
       return this._loadInternalDocumentById(id, opts).then(result('single'));
     }
 
-    return reject(new Error({
+    return reject(new DocumentsError({
       error: 'invalid_query',
       reason: 'opts must include id'
     }));
