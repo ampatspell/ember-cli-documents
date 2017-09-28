@@ -1,7 +1,7 @@
 <div class="row">
   {{#if session.isAuthenticated}}
-    <p>Hey, {{session.name}}</p>
-    <p><button {{action 'delete' target=session}}>Sign-out</button></p>
+    <p>Hey, {{session.name}} ({{join session.roles delimiter=', '}})</p>
+    <p><button {{action 'loadUser'}}>_user</button> <button {{action 'delete' target=session}}>Sign-out</button></p>
   {{else}}
     <form>
       <p>{{input placeholder='name' value=session.name}}</p>
