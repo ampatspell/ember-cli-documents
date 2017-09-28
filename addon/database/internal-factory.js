@@ -6,7 +6,7 @@ const {
 
 export default Ember.Mixin.create({
 
-  _createInternalDocument(values, state, type) {
+  __createInternalDocument(values, state, type) {
     let internal = this.get('store')._createInternalDocument(this);
     return internal.withPropertyChanges(changed => {
       internal.deserialize(values, type, changed);
@@ -16,14 +16,14 @@ export default Ember.Mixin.create({
   },
 
   _createNewInternalDocument(values, type) {
-    let internal = this._createInternalDocument(values, { isNew: true, isDirty: false }, type);
+    let internal = this.__createInternalDocument(values, { isNew: true, isDirty: false }, type);
     this._storeNewInternalDocument(internal);
     return internal;
   },
 
-  _createExistingInternalDocument(id) {
+  __createExistingInternalDocument(id) {
     let values = { _id: id };
-    let internal = this._createInternalDocument(values, { isNew: false, isDirty: false }, 'document');
+    let internal = this.__createInternalDocument(values, { isNew: false, isDirty: false }, 'document');
     this._storeSavedInternalDocument(internal);
     return internal;
   },
@@ -36,7 +36,7 @@ export default Ember.Mixin.create({
         internal = this._internalDocumentWithId(id, true);
       }
       if(!internal) {
-        internal = this._createExistingInternalDocument(id);
+        internal = this.__createExistingInternalDocument(id);
       }
     }
     return internal;

@@ -8,7 +8,7 @@ const {
 
 export default Ember.Mixin.create({
 
-  _createDocumentIdentity: on('init', function() {
+  __createDocumentIdentity: on('init', function() {
     this._documents = new EmptyObject();
     this._documents.all = A([]);                 // all new and saved models
     this._documents.new = A([]);                 // new models
@@ -22,7 +22,7 @@ export default Ember.Mixin.create({
     documents.all.addObject(internal);
   },
 
-  _unstoreNewInternalDocument(internal) {
+  __unstoreNewInternalDocument(internal) {
     let documents = this._documents;
     documents.new.removeObject(internal);
     documents.all.removeObject(internal);
@@ -67,7 +67,7 @@ export default Ember.Mixin.create({
     if(!internal.isNew) {
       return;
     }
-    this._unstoreNewInternalDocument(internal);
+    this.__unstoreNewInternalDocument(internal);
   }
 
 });

@@ -8,7 +8,7 @@ const {
 
 export default Ember.Mixin.create({
 
-  _deserializeInternalOnError(internal, err) {
+  __deserializeInternalOnError(internal, err) {
     internal.withPropertyChanges(changed => {
       internal.state.onError(err, changed);
     }, true);
@@ -25,21 +25,21 @@ export default Ember.Mixin.create({
   },
 
   _deserializeInternalSaveDidFail(internal, err) {
-    return this._deserializeInternalOnError(internal, err);
+    return this.__deserializeInternalOnError(internal, err);
   },
 
   //
 
-  _isNotFoundDeleted(err) {
+  __isNotFoundDeleted(err) {
     return err.error === 'not_found' && err.reason === 'deleted';
   },
 
-  _isNotFoundMissing(err) {
+  __isNotFoundMissing(err) {
     return err.error === 'not_found' && err.reason === 'missing';
   },
 
-  _isNotFoundMissingOrDeleted(err) {
-    return this._isNotFoundMissing(err) || this._isNotFoundDeleted(err);
+  __isNotFoundMissingOrDeleted(err) {
+    return this.__isNotFoundMissing(err) || this.__isNotFoundDeleted(err);
   },
 
   _deserializeInternalDelete(internal, json) {
@@ -53,8 +53,8 @@ export default Ember.Mixin.create({
     return internal;
   },
 
-  _deserializeInternalOnErrorOrDelete(internal, err) {
-    if(!this._isNotFoundMissingOrDeleted(err)) {
+  __deserializeInternalOnErrorOrDelete(internal, err) {
+    if(!this.__isNotFoundMissingOrDeleted(err)) {
       return this._deserializeInternalOnError(internal, err);
     }
     this._deserializeInternalDelete(internal, null);
@@ -63,8 +63,8 @@ export default Ember.Mixin.create({
 
   //
 
-  _deserializeInternalDeleteDidFail(internal, err) {
-    return this._deserializeInternalOnErrorOrDelete(internal, err);
+  __deserializeInternalDeleteDidFail(internal, err) {
+    return this.__deserializeInternalOnErrorOrDelete(internal, err);
   },
 
   //
@@ -92,7 +92,7 @@ export default Ember.Mixin.create({
   },
 
   _deserializeInternalLoadDidFail(internal, err) {
-    return this._deserializeInternalOnErrorOrDelete(internal, err);
+    return this.__deserializeInternalOnErrorOrDelete(internal, err);
   },
 
   //

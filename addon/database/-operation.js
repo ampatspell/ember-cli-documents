@@ -14,11 +14,11 @@ export default class Operation {
     this.deferred = defer();
   }
 
-  resolve(arg) {
+  _resolve(arg) {
     return this.deferred.resolve(arg);
   }
 
-  reject(err) {
+  _reject(err) {
     return this.deferred.reject(err);
   }
 
@@ -29,7 +29,7 @@ export default class Operation {
   invoke() {
     resolve()
       .then(() => this.fn(this))
-      .then(arg => this.resolve(arg), err => this.reject(err));
+      .then(arg => this._resolve(arg), err => this._reject(err));
   }
 
 }

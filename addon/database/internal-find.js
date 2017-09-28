@@ -38,33 +38,33 @@ export default Ember.Mixin.create({
 
   _operations: array(),
 
-  _registerDatabaseOperation(operation) {
+  __registerDatabaseOperation(operation) {
     let operations = this.get('_operations');
     operations.pushObject(operation);
     operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
   },
 
-  _scheduleDatabaseOperation(label, opts, fn) {
+  __scheduleDatabaseOperation(label, opts, fn) {
     opts = merge({}, opts);
     let op = new Operation(label, { opts }, fn);
-    this._registerDatabaseOperation(op);
+    this.__registerDatabaseOperation(op);
     op.invoke();
     return op.promise;
   },
 
-  _loadInternalDocumentById: doc(function(documents, id, opts) {
+  __loadInternalDocumentById: doc(function(documents, id, opts) {
     return documents.load(id, opts);
   }),
 
-  _loadInternalDocumentsAll: view(function(documents, opts) {
+  __loadInternalDocumentsAll: view(function(documents, opts) {
     return documents.all(opts);
   }),
 
-  _loadInternalDocumentsView: view(function(documents, ddoc, view, opts) {
+  __loadInternalDocumentsView: view(function(documents, ddoc, view, opts) {
     return documents.view(ddoc, view, opts);
   }),
 
-  _loadInternalDocumentsMango(opts) {
+  __loadInternalDocumentsMango(opts) {
     return this.get('documents.mango').find(opts)
       .then(json => result('array', this._deserializeDocuments(json.docs)));
   },
@@ -78,7 +78,7 @@ export default Ember.Mixin.create({
     let view = opts.view;
     let selector = opts.selector;
 
-    let schedule = (label, fn) => this._scheduleDatabaseOperation(label, opts, fn);
+    let schedule = (label, fn) => this.__scheduleDatabaseOperation(label, opts, fn);
 
     if(id) {
       let internal = this._existingInternalDocument(id, { deleted: true });
@@ -87,22 +87,22 @@ export default Ember.Mixin.create({
       }
       return schedule('id', () => {
         delete opts.id;
-        return this._loadInternalDocumentById(id, opts);
+        return this.__loadInternalDocumentById(id, opts);
       });
     } else if(all) {
       return schedule('all', () => {
         delete opts.all;
-        return this._loadInternalDocumentsAll(opts);
+        return this.__loadInternalDocumentsAll(opts);
       });
     } else if(ddoc && view) {
       return schedule('view', () => {
         delete opts.ddoc;
         delete opts.view;
-        return this._loadInternalDocumentsView(ddoc, view, opts);
+        return this.__loadInternalDocumentsView(ddoc, view, opts);
       });
     } else if(selector) {
       return schedule('mango', () => {
-        return this._loadInternalDocumentsMango(opts);
+        return this.__loadInternalDocumentsMango(opts);
       });
     }
 

@@ -8,14 +8,14 @@ const {
 
 export default Ember.Mixin.create({
 
-  _scheduleInternalOperation(label, internal, props, fn) {
+  __scheduleInternalOperation(label, internal, props, fn) {
     let op = new Operation(label, assign({ internal }, props), fn);
     return internal.addOperation(op);
   },
 
   //
 
-  _validateInternalDocumentUniqueness(internal) {
+  __validateInternalDocumentUniqueness(internal) {
     let id = internal.getId();
     let existing = this._internalDocumentWithId(id);
     if(!existing || existing === internal) {
@@ -27,14 +27,14 @@ export default Ember.Mixin.create({
     });
   },
 
-  _performInternalSave(internal) {
+  __performInternalSave(internal) {
     let state = internal.state;
 
     if(!(state.isNew || state.isDeleted) && !state.isDirty) {
       return;
     }
 
-    this._validateInternalDocumentUniqueness(internal);
+    this.__validateInternalDocumentUniqueness(internal);
 
     internal.setState('onSaving');
 
@@ -49,7 +49,7 @@ export default Ember.Mixin.create({
 
   //
 
-  _performInternalDelete(internal) {
+  __performInternalDelete(internal) {
     let state = internal.state;
 
     if(state.isNew) {
@@ -67,13 +67,13 @@ export default Ember.Mixin.create({
     return this.get('documents').delete(id, rev).then(json => {
       return this._deserializeInternalDelete(internal, json);
     }, err => {
-      return this._deserializeInternalDeleteDidFail(internal, err);
+      return this.__deserializeInternalDeleteDidFail(internal, err);
     });
   },
 
   //
 
-  _performInternalLoad(internal, opts) {
+  __performInternalLoad(internal, opts) {
     let state = internal.state;
 
     if(state.isLoaded && opts.force !== true) {
@@ -98,26 +98,26 @@ export default Ember.Mixin.create({
   //
 
   _scheduleInternalSave(internal, opts={}) {
-    return this._scheduleInternalOperation('document-save', internal, { opts }, () => {
-      return this._performInternalSave(internal, opts);
+    return this.__scheduleInternalOperation('document-save', internal, { opts }, () => {
+      return this.__performInternalSave(internal, opts);
     });
   },
 
   _scheduleInternalDelete(internal, opts={}) {
-    return this._scheduleInternalOperation('document-delete', internal, { opts }, () => {
-      return this._performInternalDelete(internal, opts);
+    return this.__scheduleInternalOperation('document-delete', internal, { opts }, () => {
+      return this.__performInternalDelete(internal, opts);
     });
   },
 
   _scheduleInternalLoad(internal, opts={}) {
-    return this._scheduleInternalOperation('document-load', internal, { opts }, () => {
-      return this._performInternalLoad(internal, opts);
+    return this.__scheduleInternalOperation('document-load', internal, { opts }, () => {
+      return this.__performInternalLoad(internal, opts);
     });
   },
 
   _scheduleInternalReload(internal, opts={}) {
-    return this._scheduleInternalOperation('document-reload', internal, { opts }, () => {
-      return this._performInternalLoad(internal, assign({}, opts, { force: true }));
+    return this.__scheduleInternalOperation('document-reload', internal, { opts }, () => {
+      return this.__performInternalLoad(internal, assign({}, opts, { force: true }));
     });
   }
 
