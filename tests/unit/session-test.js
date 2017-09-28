@@ -69,6 +69,11 @@ configurations(module => {
     assert.ok(session.get('isAuthenticated') === true);
   });
 
+  test('session save with args succeeds', async function(assert) {
+    await session.save(admin.name, admin.password);
+    assert.ok(session.get('isAuthenticated') === true);
+  });
+
   test('session delete succeeds', async function(assert) {
     session.set('name', admin.name);
     session.set('password', admin.password);
