@@ -7,6 +7,13 @@ const {
   RSVP: { reject }
 } = Ember;
 
+const normalizeOpts = (opts, defaults) => {
+  if(typeof opts === 'string') {
+    opts = { id: opts };
+  }
+  return merge(defaults, opts);
+};
+
 const result = type => result => ({ type, result });
 
 const view = fn => function(...args) {
@@ -48,11 +55,7 @@ export default Ember.Mixin.create({
   }),
 
   _internalDocumentFind(opts) {
-    if(typeof opts === 'string') {
-      opts = { id: opts };
-    }
-
-    opts = merge({}, opts);
+    opts = normalizeOpts(opts, {});
 
     let id = opts.id;
     let all = opts.all;
@@ -77,7 +80,7 @@ export default Ember.Mixin.create({
   },
 
   _internalDocumentFirst(opts) {
-    opts = merge({ limit: 1 }, opts);
+    opts = normalizeOpts(opts, { limit: 1 });
     return this._internalDocumentFind(opts).then(({ result, type }) => {
       if(type === 'single') {
         return result;

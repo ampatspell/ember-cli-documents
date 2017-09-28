@@ -38,3 +38,36 @@ test('load by id existing', async function(assert) {
   let { result } = await this.db._internalDocumentFind('duck:yellow');
   assert.ok(doc._internal === result);
 });
+
+test('load missing', async function(assert) {
+  try {
+    await this.db._internalDocumentFind('duck:yellow');
+    assert.ok(false);
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "not_found",
+      "reason": e.reason,
+      "status": 404
+    });
+  }
+});
+
+test('load first', async function(assert) {
+  await this.docs.save({ _id: 'duck:yellow' });
+  let doc = this.db.existing('duck:yellow', { create: true });
+  let internal = await this.db._internalDocumentFirst('duck:yellow');
+  assert.ok(doc._internal === internal);
+});
+
+test('load first missing', async function(assert) {
+  try {
+    await this.db._internalDocumentFirst('duck:yellow');
+    assert.ok(false);
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "not_found",
+      "reason": e.reason,
+      "status": 404
+    });
+  }
+});
