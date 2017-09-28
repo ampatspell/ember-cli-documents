@@ -9,13 +9,14 @@ const {
 configurations({ identifiers: [ 'couchdb-2.1' ] }, module => {
 
   module('database-internal-mango', {
-    beforeEach() {
-      return this.recreate();
+    async beforeEach() {
+      await this.recreate();
+      await this.docs.get('mango').save('main', 'type', { fields: [ 'type' ] });
     }
   });
 
   test('find mango returns empty array', async function(assert) {
-    let { type, result } = await this.db._internalDocumentFind({ selector: {} });
+    let { type, result } = await this.db._internalDocumentFind({ selector: { type: 'foo' } });
     assert.equal(type, 'array');
     assert.equal(result.length, 0);
   });
