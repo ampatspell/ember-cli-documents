@@ -8,7 +8,7 @@ export default Ember.Mixin.create({
 
   security: computed(function() {
     let database = this;
-    return this.get('store')._factoryFor('documents:database-security').create({ database });
+    return this.get('store')._factoryFor('documents:database/security').create({ database });
   }).readOnly(),
 
   willDestroy() {

@@ -42,6 +42,10 @@ export default DocumentObject.extend(StateMixin, {
   save:   promise('scheduleSave'),
   load:   promise('scheduleLoad'),
   reload: promise('scheduleReload'),
-  delete: promise('scheduleDelete')
+  delete: promise('scheduleDelete'),
+
+  toStringExtension() {
+    return this.get('id') || '';
+  }
 
 });

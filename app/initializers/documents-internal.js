@@ -21,17 +21,17 @@ export default {
     container.register('documents:session', Session);
     container.register('documents:database', Database);
 
-    container.register('documents:database-security', DatabaseSecurity);
-    container.register('documents:database-security-pair', DatabaseSecurityPair);
+    container.register('documents:database/security', DatabaseSecurity);
+    container.register('documents:database/security/pair', DatabaseSecurityPair);
 
     container.register('documents:document', Document);
     container.register('documents:object', DocumentObject);
     container.register('documents:array', DocumentArray);
 
-    container.register('documents:internal-document', InternalDocument);
-    container.register('documents:internal-object', InternalObject);
-    container.register('documents:internal-array', InternalArray);
+    container.register('documents:internal/document', InternalDocument);
+    container.register('documents:internal/object', InternalObject);
+    container.register('documents:internal/array', InternalArray);
 
-    container.register('documents:adapter/couch', AdapterCouch);
+    container.register('documents:store/adapter/couch', AdapterCouch);
   }
 };

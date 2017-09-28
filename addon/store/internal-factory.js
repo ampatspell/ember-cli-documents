@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Mixin.create({
 
   _internalFactory(factoryName) {
-    return this._factoryFor(`documents:internal-${factoryName}`).class;
+    return this._factoryFor(`documents:internal/${factoryName}`).class;
   },
 
   _createInternalDocument(database) {

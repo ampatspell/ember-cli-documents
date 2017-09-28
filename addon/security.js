@@ -12,7 +12,7 @@ const State = createStateMixin();
 
 const pair = key => computed(function() {
   let security = this;
-  return getOwner(this).factoryFor('documents:database-security-pair').create({ key, security });
+  return getOwner(this).factoryFor('documents:database/security/pair').create({ key, security });
 }).readOnly();
 
 export default Ember.Object.extend(State, {

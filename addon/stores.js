@@ -27,7 +27,7 @@ export default Ember.Service.extend({
     let factories = this.get('_adapterFactories');
     let factory = factories[name];
     if(!factory) {
-      factory = getOwner(this).factoryFor(`documents:adapter/${name}`);
+      factory = getOwner(this).factoryFor(`documents:store/adapter/${name}`);
       factories[name] = factory;
     }
     return factory;
