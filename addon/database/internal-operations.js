@@ -31,10 +31,7 @@ export default Ember.Mixin.create({
   __performInternalSave(internal, opts) {
     opts = merge({ force: false }, opts);
 
-    console.log(...arguments);
-
     let state = internal.state;
-
     if(!(state.isNew || state.isDeleted) && !state.isDirty && !opts.force) {
       return;
     }
