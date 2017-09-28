@@ -62,7 +62,8 @@ configurations(module => {
     } catch(e) {
       assert.deepEqual(e.toJSON(), {
         "error": "not_found",
-        "reason": "missing"
+        "reason": "missing",
+        "status": 404
       });
     }
   });

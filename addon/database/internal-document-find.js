@@ -95,7 +95,7 @@ export default Ember.Mixin.create({
       return result[0];
     }).then(internal => {
       if(!internal) {
-        return reject(new DocumentsError({ error: 'not_found', reason: 'missing' }));
+        return reject(new DocumentsError({ error: 'not_found', reason: 'missing', status: 404 }));
       }
       return internal;
     });
