@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import DocumentsError from '../util/error';
+import Operation from './-operation';
 
 const {
   A,
@@ -16,7 +17,7 @@ const normalizeOpts = (opts, defaults) => {
 
 const result = type => result => ({ type, result });
 
-const view = fn => function(...args) {
+const view = fn => function(name, ...args) {
   let opts = args.pop();
   opts = merge({ include_docs: true }, opts);
   args.push(opts);
@@ -24,27 +25,27 @@ const view = fn => function(...args) {
   return fn.call(this, ...args).then(json => {
     let docs = A(json.rows).map(row => row.doc);
     return this._deserializeDocuments(docs);
-  });
+  }).then(result('array'));
 };
 
 const doc = fn => function(...args) {
   args.unshift(this.get('documents'));
-  return fn.call(this, ...args).then(doc => this._deserializeDocument(doc));
+  return fn.call(this, ...args).then(doc => this._deserializeDocument(doc)).then(result('single'));
 };
 
 export default Ember.Mixin.create({
 
-  __loadInternalDocumentById: doc(function(documents, id, opts) {
+  _scheduleDatabaseOperation(label, opts, fn) {
+    opts = merge({}, opts);
+    let op = new Operation(label, { opts }, fn);
+    op.invoke();
+    console.log('schedule', label, opts, op);
+    return op.promise;
+  },
+
+  _loadInternalDocumentById: doc(function(documents, id, opts) {
     return documents.load(id, opts);
   }),
-
-  _loadInternalDocumentById(id, opts) {
-    let internal = this._existingInternalDocument(id, { deleted: true });
-    if(internal) {
-      return internal.scheduleLoad();
-    }
-    return this.__loadInternalDocumentById(id, opts);
-  },
 
   _loadInternalDocumentsAll: view(function(documents, opts) {
     return documents.all(opts);
@@ -55,7 +56,9 @@ export default Ember.Mixin.create({
   }),
 
   _loadInternalDocumentsMango(opts) {
-    return this.get('documents.mango').find(opts).then(json => this._deserializeDocuments(json.docs));
+    return this.get('documents.mango').find(opts)
+      .then(json => this._deserializeDocuments(json.docs))
+      .then(result('array'));
   },
 
   _internalDocumentFind(opts) {
@@ -67,17 +70,31 @@ export default Ember.Mixin.create({
     let view = opts.view;
     let selector = opts.selector;
 
+    let schedule = (label, fn) => this._scheduleDatabaseOperation(label, opts, fn);
+
     if(id) {
-      return this._loadInternalDocumentById(id, opts).then(result('single'));
+      let internal = this._existingInternalDocument(id, { deleted: true });
+      if(internal) {
+        return internal.scheduleLoad().then(result('single'));
+      }
+      return schedule('id', () => {
+        return this._loadInternalDocumentById(id, opts);
+      });
     } else if(all) {
-      delete opts.all;
-      return this._loadInternalDocumentsAll(opts).then(result('array'));
+      return schedule('all', () => {
+        delete opts.all;
+        return this._loadInternalDocumentsAll(opts);
+      });
     } else if(ddoc && view) {
-      delete opts.ddoc;
-      delete opts.view;
-      return this._loadInternalDocumentsView(ddoc, view, opts).then(result('array'));
+      return schedule('view', () => {
+        delete opts.ddoc;
+        delete opts.view;
+        return this._loadInternalDocumentsView(ddoc, view, opts);
+      });
     } else if(selector) {
-      return this._loadInternalDocumentsMango(opts).then(result('array'));
+      return schedule('mango', () => {
+        return this._loadInternalDocumentsMango(opts);
+      });
     }
 
     return reject(new DocumentsError({
