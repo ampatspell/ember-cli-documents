@@ -1,6 +1,11 @@
+import Ember from 'ember';
 import InternalBase from './base';
 import EmptyObject from 'documents/util/empty-object';
 import { toModel } from 'documents/util/internal';
+
+const {
+  String: { underscore, camelize }
+} = Ember;
 
 const remove = (array, element) => {
   let idx = array.indexOf(element);
@@ -66,14 +71,29 @@ export default class InternalObject extends InternalBase {
 
   //
 
+  _deserializeKey(key, type) {
+    if(type === 'document' && !key.startsWith('_')) {
+      return camelize(key);
+    }
+    return key;
+  }
+
   _deserialize(values, type, changed) {
     let keys = Object.keys(this.values);
     for(let key in values) {
-      remove(keys, key);
+      let deserializedKey = this._deserializeKey(key, type);
+      remove(keys, deserializedKey);
       let value = values[key];
-      this._setValue(key, value, type, changed);
+      this._setValue(deserializedKey, value, type, changed);
     }
     keys.forEach(key => this._setValue(key, undefined, type, changed));
+  }
+
+  _serializeKey(key, type) {
+    if(type === 'document' && !key.startsWith('_')) {
+      return underscore(key);
+    }
+    return key;
   }
 
   _serialize(type) {
@@ -82,7 +102,7 @@ export default class InternalObject extends InternalBase {
     for(let key in values) {
       let value = values[key];
       value = this._serializeValue(value, type);
-      json[key] = value;
+      json[this._serializeKey(key, type)] = value;
     }
     return json;
   }
