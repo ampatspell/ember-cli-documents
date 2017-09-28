@@ -17,7 +17,7 @@ test('create database', function(assert) {
 test('create database always returns the same db for identifier', function(assert) {
   let one = this.store.database('foofBar');
   let two = this.store.database('foofBar');
-  let three = this.store.database('foof-bar');
+  let three = this.store.database(' foofBar ');
   assert.ok(one === two);
   assert.ok(two === three);
 });
