@@ -2,6 +2,7 @@ import Ember from 'ember';
 import createStateMixin from './util/basic-state-mixin';
 
 const {
+  RSVP: { resolve, reject },
   getOwner,
   computed,
   computed: { reads }
@@ -29,13 +30,13 @@ export default Ember.Object.extend(State, {
       return this;
     }, (err) => {
       this.onError(err);
-      return Ember.RSVP.reject(err);
-    }, 'sofa:security load');
+      return reject(err);
+    });
   },
 
   save() {
     if(!this.get('isDirty') && this.get('isLoaded')) {
-      return Ember.RSVP.resolve(this, 'sofa:security save - not dirty');
+      return resolve(this);
     }
 
     this.onSaving();
@@ -46,8 +47,8 @@ export default Ember.Object.extend(State, {
       return this;
     }, (err) => {
       this.onError(err);
-      return Ember.RSVP.reject(err);
-    }, 'sofa:security save');
+      return reject(err);
+    });
   },
 
   onLoaded(data) {
