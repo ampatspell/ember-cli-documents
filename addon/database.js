@@ -7,6 +7,7 @@ import DatabaseInternalDocumentOperations from './database/internal-document-ope
 import DatabaseInternalDocumentFind from './database/internal-document-find';
 import DatabaseDocument from './database/document';
 import DatabaseDocuments from './database/documents';
+import DatabaseDocumentFind from './database/document-find';
 
 export default Ember.Object.extend(
   DatabaseStore,
@@ -16,5 +17,6 @@ export default Ember.Object.extend(
   DatabaseInternalDocumentOperations,
   DatabaseInternalDocumentFind,
   DatabaseDocument,
-  DatabaseDocuments
+  DatabaseDocuments,
+  DatabaseDocumentFind
 );
