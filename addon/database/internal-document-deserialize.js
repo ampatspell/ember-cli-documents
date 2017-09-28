@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 const {
+  A,
   assert,
   RSVP: { reject }
 } = Ember;
@@ -104,6 +105,17 @@ export default Ember.Mixin.create({
     let internal = this._existingInternalDocument(id, { deleted: true, create: true });
 
     return this._deserializeInternalLoad(internal, doc);
+  },
+
+  _deserializeDocuments(array) {
+    return A(array).reduce((result, doc) => {
+      // on high load it is possible that view returns row with already deleted document's key, value but w/o doc
+      // see: https://issues.apache.org/jira/browse/COUCHDB-1797
+      if(doc) {
+        result.push(this._deserializeDocument(doc));
+      }
+      return result;
+    }, A());
   }
 
 });

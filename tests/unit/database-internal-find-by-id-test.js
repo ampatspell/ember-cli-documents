@@ -1,7 +1,7 @@
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
-module('database-internal-find', {
+module('database-internal-find-by-id', {
   beforeEach() {
     return this.recreate();
   }

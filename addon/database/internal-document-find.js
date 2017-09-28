@@ -2,6 +2,7 @@ import Ember from 'ember';
 import DocumentsError from '../util/error';
 
 const {
+  A,
   merge,
   RSVP: { reject }
 } = Ember;
@@ -18,6 +19,14 @@ export default Ember.Mixin.create({
     return this.get('documents').load(id, opts).then(doc => this._deserializeDocument(doc));
   },
 
+  _loadInternalDocumentsAll(opts) {
+    opts = merge({ include_docs: true }, opts);
+    return this.get('documents').all(opts).then(json => {
+      let docs = A(json.rows).map(row => row.doc);
+      return this._deserializeDocuments(docs);
+    });
+  },
+
   _internalDocumentFind(opts) {
     if(typeof opts === 'string') {
       opts = { id: opts };
@@ -26,9 +35,13 @@ export default Ember.Mixin.create({
     opts = merge({}, opts);
 
     let id = opts.id;
+    let all = opts.all;
 
     if(id) {
       return this._loadInternalDocumentById(id, opts).then(result('single'));
+    } else if(all) {
+      delete opts.all;
+      return this._loadInternalDocumentsAll(opts).then(result('array'));
     }
 
     return reject(new DocumentsError({
