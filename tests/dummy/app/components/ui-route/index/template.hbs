@@ -1,12 +1,17 @@
 <div class="row">
   {{#if session.isAuthenticated}}
-    <p>Hey, {{session.name}} ({{join session.roles delimiter=', '}})</p>
-    <p><button {{action 'loadUser'}}>_user</button> <button {{action 'delete' target=session}}>Sign-out</button></p>
+    <div class="form">
+      <div class="row">Hey, {{session.name}} ({{join session.roles delimiter=', '}})</div>
+      <div class="row">
+        <button {{action 'loadUser'}}>_user</button>
+        <button {{action 'delete' target=session}}>Sign-out</button>
+      </div>
+    </div>
   {{else}}
     <form>
-      <p>{{input placeholder='name' value=session.name}}</p>
-      <p>{{input type='password' placeholder='password' value=session.password}}</p>
-      <p><button {{action 'save' target=session}}>Sign-in</button></p>
+      <div class="row">{{input placeholder='name' value=session.name}}</div>
+      <div class="row">{{input type='password' placeholder='password' value=session.password}}</div>
+      <div class="row"><button {{action 'save' target=session}}>Sign-in</button></div>
     </form>
   {{/if}}
 </div>

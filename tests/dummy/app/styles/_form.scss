@@ -1,0 +1,22 @@
+@mixin input-font() {
+  font-family: $font-family;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+input[type='text'],
+input[type='password'] {
+  -webkit-appearance: none;
+  border: none;
+  outline: none;
+  @include input-font;
+  display: inline-block;
+  padding: 5px 5px;
+  width: 100%;
+}
+
+form, .form {
+  .row {
+    padding: 5px 0;
+  }
+}
