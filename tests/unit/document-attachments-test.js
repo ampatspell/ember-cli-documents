@@ -19,7 +19,7 @@ test('attachments has _internal', function(assert) {
   assert.ok(doc.get('attachments')._internal);
 });
 
-test('_model is unset on attachments destroy', async function(assert) {
+test('_model is unset on attachments destroy', function(assert) {
   let doc = this.db.doc();
   let attachments = doc.get('attachments');
   let internal = attachments._internal;
