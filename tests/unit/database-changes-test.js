@@ -15,14 +15,6 @@ configurations(module => {
     }
   });
 
-  /*
-  let changes = this.docs.createChanges({ feed: 'event-source' });
-  changes.on('data', arg => {
-    console.log(arg);
-  });
-  changes.start();
-  */
-
   test('changes are registered', function(assert) {
     let changes = this.db.changes({ feed: this.config.feed });
     assert.ok(this.db.get('_changes').includes(changes._internal));
@@ -98,6 +90,8 @@ configurations(module => {
       "isStarted": false,
       "isSuspended": true
     });
+
+    await this.docs.save({ _id: 'foof' });
   });
 
   test('changes are pushed to db', async function(assert) {
@@ -118,13 +112,15 @@ configurations(module => {
 
     changes.start();
 
+    await later(300);
+
     let json = await this.docs.save({ _id: 'one', type: 'duck' });
 
-    await later(500);
+    await later(300);
 
     await this.docs.delete('one', json.rev);
 
-    await later(500);
+    await later(300);
 
     assert.deepEqual(events, [
       {
@@ -139,12 +135,16 @@ configurations(module => {
       }
     ]);
 
+    changes.stop();
+
     let doc = this.db.existing('one', { deleted: true });
     assert.deepEqual_(doc.serialize('document'), {
       "_id": "one",
       "_rev": "ignored",
       "type": "duck"
     });
+
+    await this.docs.save({ _id: 'foof' });
   });
 
 });
