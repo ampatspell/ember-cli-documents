@@ -6,6 +6,10 @@ export default ModelMixin(class Changes {
     this.store = store;
     this.opts = opts;
     this._adapter = null;
+    this.state = {
+      isError: false,
+      error: null
+    };
   }
 
   adapter(create, notify) {

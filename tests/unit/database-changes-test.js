@@ -58,4 +58,14 @@ configurations(module => {
     assert.ok(!changes._internal._adapter);
   });
 
+  test('changes has state', function(assert) {
+    let changes = this.db.changes({ feed: this.config.feed });
+    assert.deepEqual(changes.get('state'), {
+      "error": null,
+      "isError": false,
+      "isStarted": false,
+      "isSuspended": false
+    });
+  });
+
 });
