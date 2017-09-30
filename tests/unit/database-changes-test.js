@@ -48,4 +48,14 @@ configurations(module => {
     assert.ok(changes._internal._adapter);
   });
 
+  test('adapter is destroyed with changes', function(assert) {
+    let changes = this.db.changes({ feed: this.config.feed });
+    let adapter = changes.get('_adapter');
+
+    run(() => this.db.destroy());
+
+    assert.ok(adapter.isDestroyed);
+    assert.ok(!changes._internal._adapter);
+  });
+
 });
