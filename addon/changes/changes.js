@@ -3,35 +3,39 @@ import ModelMixin from 'documents/document/-model-mixin';
 
 const {
   computed,
-  computed: { reads },
-  assign
+  computed: { reads }
 } = Ember;
 
-const adapter = () => computed(function() {
+const adapterKeys = [ 'isStarted', 'isSuspended' ];
+const internalStateKeys = [ 'isError', 'error' ];
+const stateKeys = [ ...adapterKeys, ...internalStateKeys ];
+const internalMethods = [ 'start', 'stop', 'restart', 'suspend' ];
+
+const props = {};
+
+props._adapter = computed(function() {
   return this._internal.adapter(true, false);
 }).readOnly();
 
-const adapterPropertyKeys = [ 'isStarted', 'isSuspended' ];
-const internalPropertyKeys = [ 'isError', 'error' ];
-const stateKeys = [ ...adapterPropertyKeys, ...internalPropertyKeys ];
-
-const adapterProperties = {};
-adapterPropertyKeys.forEach(key => {
-  adapterProperties[key] = reads(`_adapter.${key}`).readOnly();
+adapterKeys.forEach(key => {
+  props[key] = reads(`_adapter.${key}`).readOnly();
 });
 
-const internalProperties = {};
-internalPropertyKeys.forEach(key => {
-  internalProperties[key] = computed(function() {
+internalStateKeys.forEach(key => {
+  props[key] = computed(function() {
     return this._internal.state[key];
   }).readOnly();
 });
 
-const state = () => computed(...stateKeys, function() {
+props.state = computed(...stateKeys, function() {
   return this.getProperties(stateKeys);
 }).readOnly();
 
-export default Ember.Object.extend(ModelMixin, assign({
-  _adapter: adapter(),
-  state: state()
-},adapterProperties, internalProperties));
+internalMethods.forEach(key => {
+  props[key] = function() {
+    let internal = this._internal;
+    return internal[key].call(internal, ...arguments);
+  }
+});
+
+export default Ember.Object.extend(ModelMixin, props);

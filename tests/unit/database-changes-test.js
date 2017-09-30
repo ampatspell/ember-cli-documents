@@ -68,4 +68,35 @@ configurations(module => {
     });
   });
 
+  test('start, suspend, stop changes', async function(assert) {
+    let changes = this.db.changes({ feed: this.config.feed });
+
+    changes.start();
+
+    assert.deepEqual(changes.get('state'), {
+      "error": null,
+      "isError": false,
+      "isStarted": true,
+      "isSuspended": false
+    });
+
+    changes.suspend();
+
+    assert.deepEqual(changes.get('state'), {
+      "error": null,
+      "isError": false,
+      "isStarted": true,
+      "isSuspended": true
+    });
+
+    changes.stop();
+
+    assert.deepEqual(changes.get('state'), {
+      "error": null,
+      "isError": false,
+      "isStarted": false,
+      "isSuspended": true
+    });
+  });
+
 });
