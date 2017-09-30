@@ -1,4 +1,4 @@
-export default Class => class extends Class {
+export default Class => class ModelMixin extends Class {
 
   constructor() {
     super(...arguments);

@@ -1,12 +1,5 @@
 import Ember from 'ember';
+import ModelMixin from '../-model-mixin';
+import UnknownPropertiesMixin from '../-unknown-properties-mixin';
 
-export default Ember.Object.extend({
-
-  _internal: null,
-
-  willDestroy() {
-    this._internal._modelWillDestroy();
-    this._super();
-  }
-
-});
+export default Ember.Object.extend(ModelMixin, UnknownPropertiesMixin);

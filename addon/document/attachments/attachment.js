@@ -1,12 +1,6 @@
 import Ember from 'ember';
+import ModelMixin from '../-model-mixin';
+import { markModel } from '../../util/internal';
 
-export default Ember.ObjectProxy.extend({
-
-  _internal: null,
-
-  willDestroy() {
-    this._internal._modelWillDestroy();
-    this._super();
-  }
-
-});
+export default markModel(Ember.ObjectProxy.extend(ModelMixin, {
+}));

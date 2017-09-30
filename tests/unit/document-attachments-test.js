@@ -29,3 +29,17 @@ test('_model is unset on attachments destroy', async function(assert) {
   assert.ok(attachments.isDestroyed);
   assert.ok(!internal._model);
 });
+
+// test('detached attachment can be attached', function(assert) {
+//   let doc = this.db.doc();
+//   let msg = this.db.attachment({ data: 'hey there' });
+//   doc.get('attachments').set('message', msg);
+//   assert.ok(doc.get('attachments.message') === msg);
+//   assert.ok(msg._internal.parent === doc._internal);
+// });
+
+// test('attachment can be created from object', function(assert) {
+//   let doc = this.db.doc();
+//   doc.get('attachments').set('message', { data: 'hey there' });
+//   assert.equal(doc.get('attachments.message._internal.content.value') === 'hey there');
+// });

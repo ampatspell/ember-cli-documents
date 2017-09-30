@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import BaseMixin from './base-mixin';
+import ModelMixin from './-model-mixin';
 import { markModel } from 'documents/util/internal';
 import createTransform from 'documents/util/create-array-transform-mixin';
 
@@ -12,4 +12,4 @@ const TransformMixin = createTransform({
   }
 });
 
-export default markModel(Ember.ArrayProxy.extend(BaseMixin, TransformMixin));
+export default markModel(Ember.ArrayProxy.extend(ModelMixin, TransformMixin));

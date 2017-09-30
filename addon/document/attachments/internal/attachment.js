@@ -2,6 +2,10 @@ import Base from '../../internal/base';
 
 export default class Attachment extends Base {
 
+  static get type() {
+    return 'attachment';
+  }
+
   constructor(store, attachments, content) {
     super(store, attachments);
     content.attachment = this;
