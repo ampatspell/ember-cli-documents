@@ -10,6 +10,7 @@ import {
 } from 'documents/util/internal';
 
 const {
+  A,
   typeOf,
   Logger: { error }
 } = Ember;
@@ -20,6 +21,19 @@ export default class Attachments extends MutateMixin(Base) {
     super(store, document);
     this.values = new EmptyObject();
   }
+
+  getNames() {
+    return A(Object.keys(this.values)).map(key => this._deserializeKey(key));
+  }
+
+  //
+
+  _willEndPropertyChanges(changed) {
+    super._willEndPropertyChanges(changed);
+    changed('names');
+  }
+
+  //
 
   _createModel() {
     return this.store._createAttachmentsModel(this);
