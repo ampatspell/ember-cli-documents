@@ -23,12 +23,13 @@ export default Ember.Service.extend({
     return Factory;
   },
 
-  adapterFactory(name) {
+  adapterFactory(name, type) {
     let factories = this.get('_adapterFactories');
-    let factory = factories[name];
+    let fullName = `${name}/${type}`;
+    let factory = factories[fullName];
     if(!factory) {
-      factory = getOwner(this).factoryFor(`documents:store/adapter/${name}`);
-      factories[name] = factory;
+      factory = getOwner(this).factoryFor(`documents:adapter/${fullName}`);
+      factories[fullName] = factory;
     }
     return factory;
   },
@@ -41,15 +42,16 @@ export default Ember.Service.extend({
   store(opts) {
     opts = assign({ adapter: 'couch' }, opts);
 
-    let Adapter = this.adapterFactory(opts.adapter);
+    let Adapter = this.adapterFactory(opts.adapter, 'store');
     let identifier = Adapter.class.identifierFor(opts);
 
     let open = this.get('openStores');
     let store = open[identifier];
 
     if(!store) {
-      let adapter = Adapter.create(assign({ identifier }, opts));
-      opts = assign(opts, { adapter });
+      let stores = this;
+      let _adapter = Adapter.create(assign({ _adapter: opts.adapter, identifier, stores }, opts));
+      opts = assign(opts, { _adapter });
       store = this.createStore(opts);
       open[identifier] = store;
     }

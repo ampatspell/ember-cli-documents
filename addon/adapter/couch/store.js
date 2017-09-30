@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Adapter from './adapter';
+import Adapter from '../store';
 
 const {
   getOwner,
@@ -20,11 +20,6 @@ export default Adapter.extend({
 
   storeDocuments() {
     return this.get('couch');
-  },
-
-  databaseDocuments(database) {
-    let identifier = database.get('identifier');
-    return this.get('couch').database(identifier);
   }
 
 }).reopenClass({

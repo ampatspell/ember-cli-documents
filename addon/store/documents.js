@@ -7,7 +7,7 @@ const {
 export default Ember.Mixin.create({
 
   documents: computed(function() {
-    let adapter = this.get('adapter');
+    let adapter = this.get('_adapter');
     return adapter.storeDocuments(this);
   }).readOnly()
 

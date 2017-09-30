@@ -5,21 +5,22 @@ export default Ember.Mixin.create({
 
   openDatabases: object().readOnly(),
 
-  normalizeDatabaseIdentifier(identifier) {
+  _normalizeDatabaseIdentifier(identifier) {
     return identifier.trim();
   },
 
-  createDatabase(identifier) {
+  _createDatabase(identifier) {
     let store = this;
-    return this._factoryFor(`documents:database`).create({ store, identifier });
+    let _adapter = this.get('_adapter').createDatabaseAdapter();
+    return this._factoryFor(`documents:database`).create({ store, _adapter, identifier });
   },
 
   database(identifier) {
     let open = this.get('openDatabases');
-    let normalizedIdentifier = this.normalizeDatabaseIdentifier(identifier);
+    let normalizedIdentifier = this._normalizeDatabaseIdentifier(identifier);
     let database = open[normalizedIdentifier];
     if(!database) {
-      database = this.createDatabase(normalizedIdentifier);
+      database = this._createDatabase(normalizedIdentifier);
       open[normalizedIdentifier] = database;
     }
     return database;
