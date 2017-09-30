@@ -11,8 +11,21 @@ export default ModelMixin(class AttachmentContent {
     return this.store._createAttachmentContentModel(this.type, this);
   }
 
-  _detach() {
+  detach() {
     this.attachment = null;
+  }
+
+  destroyModel() {
+    let model = this.model(false);
+    if(!model) {
+      return;
+    }
+    model.destroy();
+  }
+
+  destroy() {
+    this.detach();
+    this.destroyModel();
   }
 
 });

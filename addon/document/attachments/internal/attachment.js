@@ -1,24 +1,5 @@
 import Base from '../../internal/base';
 
-const destroyContentModel = content => {
-  if(!content) {
-    return;
-  }
-  let model = content.model(false);
-  if(!model) {
-    return;
-  }
-  model.destroy();
-}
-
-const replaceModelContent = (internal, content) => {
-  let model = internal.model(false);
-  if(!model) {
-    return;
-  }
-  model.set('content', content.model(true));
-}
-
 export default class Attachment extends Base {
 
   static get type() {
@@ -28,7 +9,7 @@ export default class Attachment extends Base {
   constructor(store, attachments, content) {
     super(store, attachments);
     content.attachment = this;
-    this._content = content;
+    this.content = content;
   }
 
   _createModel() {
@@ -39,23 +20,28 @@ export default class Attachment extends Base {
     return this.store._createInternalAttachmentContent(value);
   }
 
-  get content() {
-    return this._content;
-  }
-
-  set content(next) {
-    let current = this._content;
-    if(current === next) {
+  _replaceModelContent() {
+    let model = this.model(false);
+    if(!model) {
       return;
     }
-    this._content = next;
-    replaceModelContent(this, next);
-    destroyContentModel(current);
+    let content = this.content;
+    model.set('content', content.model(true));
+  }
+
+  _setContent(content) {
+    let current = this.content;
+    if(current === content) {
+      return;
+    }
+    current.destroy();
+    this.content = content;
+    this._replaceModelContent();
   }
 
   _deserialize(value) {
-    this.content._detach();
-    this.content = this._createContent(value);
+    let content = this._createContent(value);
+    this._setContent(content);
   }
 
   _serialize(type) {
