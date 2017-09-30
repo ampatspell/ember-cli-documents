@@ -4,7 +4,6 @@
 * store.settle promise
 * fastboot support
 * ember inspector integration
-* attachments
 * array deserialize should diff existing content not just clear existing content
 
 ## Collect and flush pending fetches
