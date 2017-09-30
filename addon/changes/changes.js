@@ -3,7 +3,8 @@ import ModelMixin from 'documents/document/-model-mixin';
 
 const {
   computed,
-  computed: { reads }
+  computed: { reads },
+  Evented
 } = Ember;
 
 const adapterKeys = [ 'isStarted', 'isSuspended' ];
@@ -38,4 +39,4 @@ internalMethods.forEach(key => {
   }
 });
 
-export default Ember.Object.extend(ModelMixin, props);
+export default Ember.Object.extend(Evented, ModelMixin, props);
