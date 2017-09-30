@@ -4,7 +4,8 @@ export default class Attachment extends Base {
 
   constructor(store, attachments, content) {
     super(store, attachments);
-    this.content = content.attach(this);
+    content.attachment = this;
+    this.content = content;
   }
 
   _createModel() {

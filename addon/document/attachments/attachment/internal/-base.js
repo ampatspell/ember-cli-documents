@@ -4,11 +4,7 @@ export default ModelMixin(class AttachmentContent {
 
   constructor(store) {
     this.store = store;
-  }
-
-  attach(attachment) {
-    this.attachment = attachment;
-    return this;
+    this.attachment = null;
   }
 
   _createModel() {

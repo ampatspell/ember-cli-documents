@@ -64,3 +64,10 @@ test('attachment has string content internal', function(assert) {
   let internal = content._internal;
   assert.equal(internal.type, 'string');
 });
+
+test('attachment string content internal has values', function(assert) {
+  let attachment = this.db.attachment({ data: 'foobar' });
+  let internal = attachment.get('content')._internal;
+  assert.equal(internal.value, 'foobar');
+  assert.equal(internal.contentType, 'text/plain');
+});
