@@ -7,25 +7,6 @@
 * ember inspector integration
 * array deserialize should diff existing content not just clear existing content
 
-## Changes
-
-``` javascript
-// base
-location: 'local' / 'remote'
-isLocal:
-isRemote:
-
-// file
-loader: // wrapped Couch file loader with state and promise. PromiseObject?
-
-// string
-contentType:
-value:
-
-// stub
-url:
-```
-
 ## Collect and flush pending fetches
 
 Same goes for separate load by id. Those can be unified by using `_all_docs?keys=...`.
