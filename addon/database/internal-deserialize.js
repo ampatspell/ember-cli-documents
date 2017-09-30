@@ -15,8 +15,10 @@ export default Ember.Mixin.create({
     return reject(err);
   },
 
-  _deserializeInternalAttachments() {
-    throw new Error('_deserializeInternalAttachments not implemented');
+  _deserializeInternalAttachments(internal, doc) {
+    internal.withPropertyChanges(changed => {
+      internal.deserializeAttachments(doc, changed);
+    }, true);
   },
 
   _deserializeInternalSave(internal, json) {

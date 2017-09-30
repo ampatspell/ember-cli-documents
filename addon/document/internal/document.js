@@ -79,6 +79,48 @@ export default class InternalDocument extends InternalObject {
     };
   }
 
+  //
+
+  _createAttachments() {
+    return this.store._createInternalAttachments(this);
+  }
+
+  attachments(create) {
+    let attachments = this._getValue('_attachments');
+    if(!attachments && create) {
+      attachments = this._createAttachments();
+      this.values._attachments = attachments;
+    }
+    return attachments;
+  }
+
+  getAttachments() {
+    return this.attachments(true).model(true);
+  }
+
+  deserializeAttachments(doc, changed) {
+    let _attachments = doc._attachments;
+    let attachments = this.attachments(false);
+
+    if(!_attachments && !attachments) {
+      return;
+    }
+
+    _attachments = _attachments || {};
+    attachments = attachments || this.attachments(true);
+
+    attachments._deserialize(_attachments, 'document', changed);
+  }
+
+  //
+
+  _setValue(key, ...rest) {
+    if(key === '_attachments') {
+      return this.attachments(true)._deserialize(...rest);
+    }
+    return super._setValue(...arguments);
+  }
+
   setValue(key) {
     if(isKeyUnderscored(key)) {
       return;
@@ -99,6 +141,7 @@ export default class InternalDocument extends InternalObject {
       json = copy(json, false);
       replace('id', '_id', json);
       replace('rev', '_rev', json);
+      replace('attachments', '_attachments', json);
     }
     return json;
   }
@@ -107,6 +150,7 @@ export default class InternalDocument extends InternalObject {
     if(type === 'model') {
       replace('_id', 'id', json);
       replace('_rev', 'rev', json);
+      replace('_attachments', 'attachments', json);
     }
     return json;
   }
