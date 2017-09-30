@@ -1,16 +1,19 @@
 import Stores from 'documents/stores';
+
 import Store from 'documents/store';
-import AdapterCouch from 'documents/adapter/couch';
 import Session from 'documents/session';
+
 import Database from 'documents/database';
 import DatabaseSecurity from 'documents/security';
 import DatabaseSecurityPair from 'documents/security-pair';
+
 import Document from 'documents/document/document';
 import InternalDocument from 'documents/document/internal/document';
 import DocumentObject from 'documents/document/object';
 import InternalObject from 'documents/document/internal/object';
 import DocumentArray from 'documents/document/array';
 import InternalArray from 'documents/document/internal/array';
+
 import DocumentAttachments from 'documents/document/attachments/attachments';
 import InternalDocumentAttachments from 'documents/document/attachments/internal/attachments';
 import DocumentAttachment from 'documents/document/attachments/attachment';
@@ -21,6 +24,9 @@ import AttachmentStub from 'documents/document/attachments/attachment/stub';
 import InternalAttachmentStub from 'documents/document/attachments/attachment/internal/stub';
 import AttachmentFile from 'documents/document/attachments/attachment/file';
 import InternalAttachmentFile from 'documents/document/attachments/attachment/internal/file';
+
+import AdapterCouchStore from 'documents/adapter/couch/store';
+import AdapterCouchDatabase from 'documents/adapter/couch/database';
 
 export default {
   name: 'documents:internal',
@@ -54,6 +60,7 @@ export default {
     container.register('documents:internal/attachment/file', InternalAttachmentFile);
     container.register('documents:internal/attachment/stub', InternalAttachmentStub);
 
-    container.register('documents:store/adapter/couch', AdapterCouch);
+    container.register('documents:adapter/couch/store', AdapterCouchStore);
+    container.register('documents:adapter/couch/database', AdapterCouchDatabase);
   }
 };
