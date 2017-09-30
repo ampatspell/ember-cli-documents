@@ -79,6 +79,27 @@ export default class InternalDocument extends InternalObject {
     };
   }
 
+  //
+
+  _createAttachments() {
+    return this.store._createInternalAttachments(this);
+  }
+
+  attachments(create) {
+    let attachments = this._getValue('_attachments');
+    if(!attachments && create) {
+      attachments = this._createAttachments();
+      this.values._attachments = attachments;
+    }
+    return attachments;
+  }
+
+  getAttachments() {
+    return this.attachments(true).model(true);
+  }
+
+  //
+
   setValue(key) {
     if(isKeyUnderscored(key)) {
       return;

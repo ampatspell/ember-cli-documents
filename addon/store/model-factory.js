@@ -10,6 +10,10 @@ export default Ember.Mixin.create({
     return this._modelFactory('document').create({ _internal });
   },
 
+  _createAttachmentsModel(_internal) {
+    return this._modelFactory('attachments').create({ _internal });
+  },
+
   _createObjectModel(_internal) {
     return this._modelFactory('object').create({ _internal });
   },
