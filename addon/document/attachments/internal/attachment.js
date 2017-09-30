@@ -40,12 +40,15 @@ export default class Attachment extends Base {
   }
 
   _deserialize(value) {
-    let content = this._createContent(value);
-    this._setContent(content);
+    let content = this.content;
+    if(!content.deserialize(value)) {
+      content = this._createContent(value);
+      this._setContent(content);
+    }
   }
 
   _serialize(type) {
-    return this.content._serialize(type);
+    return this.content.serialize(type);
   }
 
 }

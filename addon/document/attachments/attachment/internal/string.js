@@ -12,7 +12,7 @@ export default class StringContent extends Content {
     return 'string';
   }
 
-  _serialize() {
+  serialize() {
     let { contentType, data } = this;
     return {
       content_type: contentType,

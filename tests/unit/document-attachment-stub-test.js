@@ -37,3 +37,26 @@ test('stub is not replaced by different stub', async function(assert) {
   assert.ok(firstAttachment === secondAttachment);
   assert.ok(firstContent === secondContent);
 });
+
+test('stub model basic properties', async function(assert) {
+  await this.recreate();
+
+  let doc = this.db.doc({
+    id: 'thing',
+    attachments: {
+      message: {
+        contentType: 'text/plain', data: 'hey there'
+      }
+    }
+  });
+
+  await doc.save();
+
+  let att = doc.get('attachments.message');
+  let content = att._internal.content;
+
+  assert.equal(att.get('contentType'), 'text/plain');
+  assert.equal(att.get('digest'), content.props.digest);
+  assert.equal(att.get('revpos'), content.props.revpos);
+  assert.equal(att.get('length'), 9);
+});

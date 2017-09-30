@@ -28,4 +28,8 @@ export default ModelMixin(class AttachmentContent {
     this.destroyModel();
   }
 
+  deserialize() {
+    return false;
+  }
+
 });

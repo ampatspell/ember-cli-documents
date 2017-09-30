@@ -17,7 +17,7 @@ export default class StringContent extends Content {
     return this.loader.contentType;
   }
 
-  _serialize(type) {
+  serialize(type) {
     let { loader, file } = this;
     if(type === 'document') {
       return {
