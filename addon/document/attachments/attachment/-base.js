@@ -1,8 +1,13 @@
 import Ember from 'ember';
+import { property } from '../../-properties';
 
-export default Ember.ObjectProxy.extend({
+const type = property('type');
+
+export default Ember.Object.extend({
 
   _internal: null,
+
+  type: type(),
 
   willDestroy() {
     this._internal._modelWillDestroy();

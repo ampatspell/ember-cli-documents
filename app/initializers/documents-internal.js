@@ -1,20 +1,24 @@
 import Stores from 'documents/stores';
 import Store from 'documents/store';
+import AdapterCouch from 'documents/adapter/couch';
 import Session from 'documents/session';
 import Database from 'documents/database';
 import DatabaseSecurity from 'documents/security';
 import DatabaseSecurityPair from 'documents/security-pair';
 import Document from 'documents/document/document';
-import DocumentAttachments from 'documents/document/attachments/attachments';
-import DocumentAttachment from 'documents/document/attachments/attachment';
-import DocumentObject from 'documents/document/object';
-import DocumentArray from 'documents/document/array';
 import InternalDocument from 'documents/document/internal/document';
-import InternalDocumentAttachments from 'documents/document/attachments/internal/attachments';
-import InternalDocumentAttachment from 'documents/document/attachments/internal/attachment';
+import DocumentObject from 'documents/document/object';
 import InternalObject from 'documents/document/internal/object';
+import DocumentArray from 'documents/document/array';
 import InternalArray from 'documents/document/internal/array';
-import AdapterCouch from 'documents/adapter/couch';
+import DocumentAttachments from 'documents/document/attachments/attachments';
+import InternalDocumentAttachments from 'documents/document/attachments/internal/attachments';
+import DocumentAttachment from 'documents/document/attachments/attachment';
+import InternalDocumentAttachment from 'documents/document/attachments/internal/attachment';
+import AttachmentPlaceholder from 'documents/document/attachments/attachment/placeholder';
+import InternalAttachmentPlaceholder from 'documents/document/attachments/attachment/internal/placeholder';
+import AttachmentString from 'documents/document/attachments/attachment/string';
+import InternalAttachmentString from 'documents/document/attachments/attachment/internal/string';
 
 export default {
   name: 'documents:internal',
@@ -29,16 +33,22 @@ export default {
     container.register('documents:database/security/pair', DatabaseSecurityPair);
 
     container.register('documents:document', Document);
-    container.register('documents:attachments', DocumentAttachments);
-    container.register('documents:attachment', DocumentAttachment);
     container.register('documents:object', DocumentObject);
     container.register('documents:array', DocumentArray);
 
+    container.register('documents:attachments', DocumentAttachments);
+    container.register('documents:attachment', DocumentAttachment);
+    container.register('documents:attachment/placeholder', AttachmentPlaceholder);
+    container.register('documents:attachment/string', AttachmentString);
+
     container.register('documents:internal/document', InternalDocument);
-    container.register('documents:internal/attachments', InternalDocumentAttachments);
-    container.register('documents:internal/attachment', InternalDocumentAttachment);
     container.register('documents:internal/object', InternalObject);
     container.register('documents:internal/array', InternalArray);
+
+    container.register('documents:internal/attachments', InternalDocumentAttachments);
+    container.register('documents:internal/attachment', InternalDocumentAttachment);
+    container.register('documents:internal/attachment/placeholder', InternalAttachmentPlaceholder);
+    container.register('documents:internal/attachment/string', InternalAttachmentString);
 
     container.register('documents:store/adapter/couch', AdapterCouch);
   }

@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import ModelMixin from './-model-mixin';
 
 import {
   toInternal,
@@ -16,12 +17,11 @@ const types = [ 'document', 'model' ];
 
 export const empty = {};
 
-export default class InternalBase {
+export default ModelMixin(class InternalBase {
 
   constructor(store, parent) {
     this.store = store;
     this.parent = parent;
-    this._model = null;
   }
 
   get isDocument() {
@@ -54,22 +54,6 @@ export default class InternalBase {
   }
 
   _didDestroyModel() {
-  }
-
-  model(create) {
-    let model = this._model;
-    if(!model && create) {
-      model = this._createModel();
-      this._didCreateModel(model);
-      this._model = model;
-    }
-    return model;
-  }
-
-  _modelWillDestroy() {
-    let model = this._model;
-    this._model = null;
-    this._didDestroyModel(model);
   }
 
   //
@@ -305,4 +289,4 @@ export default class InternalBase {
     }
   }
 
-}
+});

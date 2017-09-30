@@ -39,3 +39,17 @@ test('attachment has internal', function(assert) {
   let attachment = this.db.attachment();
   assert.ok(attachment._internal);
 });
+
+test('attachment has string content', function(assert) {
+  let attachment = this.db.attachment();
+  let content = attachment.get('content');
+  assert.ok(content);
+  assert.equal(content.get('type'), 'placeholder');
+});
+
+test('attachment has string content internal', function(assert) {
+  let attachment = this.db.attachment();
+  let content = attachment.get('content');
+  let internal = content._internal;
+  assert.equal(internal.type, 'placeholder');
+});
