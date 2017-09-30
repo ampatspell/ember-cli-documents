@@ -7,6 +7,10 @@ export default ModelMixin(class AttachmentContent {
     this.attachment = null;
   }
 
+  get location() {
+    return 'local';
+  }
+
   _createModel() {
     return this.store._createAttachmentContentModel(this.type, this);
   }

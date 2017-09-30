@@ -22,6 +22,10 @@ export default class StubContent extends Content {
     this.props = props;
   }
 
+  get location() {
+    return 'remote';
+  }
+
   get type() {
     return 'stub';
   }

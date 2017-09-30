@@ -23,3 +23,21 @@ test('attachment requires supported content', function(assert) {
     });
   }
 });
+
+test('attachment is local', function(assert) {
+  let att = this.db.attachment({ data: 'hey' });
+  assert.equal(att.get('location'), 'local');
+  assert.equal(att.get('isLocal'), true);
+  assert.equal(att.get('isRemote'), false);
+});
+
+test('attachment is remove', async function(assert) {
+  let att = this.db.attachment({ data: 'hey' });
+  let doc = this.db.doc({ attachments: { thing: att } });
+
+  await doc.save();
+
+  assert.equal(att.get('location'), 'remote');
+  assert.equal(att.get('isLocal'), false);
+  assert.equal(att.get('isRemote'), true);
+});
