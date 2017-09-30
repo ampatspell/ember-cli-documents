@@ -7,11 +7,11 @@ const {
   computed
 } = Ember;
 
-let props = {};
-
 const prop = key => computed(function() {
   return this._internal.props[key];
 }).readOnly();
+
+let props = {};
 
 for(let key in mapping) {
   let value = mapping[key];
