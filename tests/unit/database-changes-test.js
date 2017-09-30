@@ -42,4 +42,10 @@ configurations(module => {
     assert.ok(changes.get('database') === this.db);
   });
 
+  test('changes has adapter', function(assert) {
+    let changes = this.db.changes();
+    assert.ok(changes.get('_adapter'));
+    assert.ok(changes._internal._adapter);
+  });
+
 });

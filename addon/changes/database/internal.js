@@ -7,6 +7,10 @@ export default class DatabaseChanges extends Changes {
     this.database = database;
   }
 
+  _createAdapter(opts) {
+    return this.database.get('_adapter').changesListener(opts);
+  }
+
   _createModel() {
     return this.store._createDatabaseChangesModel(this);
   }

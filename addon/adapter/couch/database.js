@@ -6,7 +6,13 @@ export default Adapter.extend({
 
   databaseDocuments(database) {
     let identifier = database.get('identifier');
-    return this.get('adapter.couch').database(identifier);
+    let couch = this.get('adapter.couch');
+    return couch.database(identifier);
+  },
+
+  changesListener(opts) {
+    let docs = this.get('database.documents');
+    return docs.createChanges(opts);
   }
 
 });
