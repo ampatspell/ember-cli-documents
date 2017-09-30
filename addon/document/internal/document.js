@@ -141,6 +141,7 @@ export default class InternalDocument extends InternalObject {
       json = copy(json, false);
       replace('id', '_id', json);
       replace('rev', '_rev', json);
+      replace('attachments', '_attachments', json);
     }
     return json;
   }
@@ -149,6 +150,7 @@ export default class InternalDocument extends InternalObject {
     if(type === 'model') {
       replace('_id', 'id', json);
       replace('_rev', 'rev', json);
+      replace('_attachments', 'attachments', json);
     }
     return json;
   }

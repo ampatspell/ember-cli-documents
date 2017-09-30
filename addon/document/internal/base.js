@@ -178,10 +178,8 @@ export default ModelMixin(class InternalBase {
 
   serialize(type) {
     this._assertType(type);
-
     let json = this._serialize(type);
-    json = this.didSerialize(json, type);
-    return json;
+    return this.didSerialize(json, type);
   }
 
   //
