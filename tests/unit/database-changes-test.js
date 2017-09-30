@@ -24,16 +24,17 @@ configurations(module => {
 
   test('changes are registered', function(assert) {
     let changes = this.db.changes({ feed: this.config.feed });
-    assert.ok(this.db.get('openChanges').includes(changes));
+    assert.ok(this.db.get('openChanges').includes(changes._internal));
   });
 
   test('changes are destroyed with db', function(assert) {
     let changes = this.db.changes({ feed: this.config.feed });
-    assert.ok(this.db.get('openChanges').includes(changes));
+    assert.ok(this.db.get('openChanges').includes(changes._internal));
 
     run(() => this.db.destroy());
 
-    assert.ok(!this.db.get('openChanges').includes(changes));
+    assert.ok(!this.db.get('openChanges').includes(changes._internal));
+    assert.ok(!changes._internal._model);
   });
 
 });

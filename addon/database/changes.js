@@ -6,12 +6,19 @@ export default Ember.Mixin.create({
 
   openChanges: array(),
 
+  _createInternalChanges(opts) {
+    return this.get('store')._createInternalDatabaseChanges(this, opts);
+  },
+
+  _registerInternalChanges(internal) {
+    this.get('openChanges').pushObject(internal);
+    return internal;
+  },
+
   changes(opts) {
-    let changes = {
-      destroy() {}
-    };
-    this.get('openChanges').pushObject(changes);
-    return changes;
+    let internal = this._createInternalChanges(opts);
+    this._registerInternalChanges(internal);
+    return internal.model(true);
   },
 
   willDestroy() {
