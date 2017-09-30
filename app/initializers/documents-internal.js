@@ -17,6 +17,8 @@ import DocumentAttachment from 'documents/document/attachments/attachment';
 import InternalDocumentAttachment from 'documents/document/attachments/internal/attachment';
 import AttachmentString from 'documents/document/attachments/attachment/string';
 import InternalAttachmentString from 'documents/document/attachments/attachment/internal/string';
+import AttachmentStub from 'documents/document/attachments/attachment/stub';
+import InternalAttachmentStub from 'documents/document/attachments/attachment/internal/stub';
 
 export default {
   name: 'documents:internal',
@@ -37,6 +39,7 @@ export default {
     container.register('documents:attachments', DocumentAttachments);
     container.register('documents:attachment', DocumentAttachment);
     container.register('documents:attachment/string', AttachmentString);
+    container.register('documents:attachment/stub', AttachmentStub);
 
     container.register('documents:internal/document', InternalDocument);
     container.register('documents:internal/object', InternalObject);
@@ -45,6 +48,7 @@ export default {
     container.register('documents:internal/attachments', InternalDocumentAttachments);
     container.register('documents:internal/attachment', InternalDocumentAttachment);
     container.register('documents:internal/attachment/string', InternalAttachmentString);
+    container.register('documents:internal/attachment/stub', InternalAttachmentStub);
 
     container.register('documents:store/adapter/couch', AdapterCouch);
   }

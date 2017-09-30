@@ -100,6 +100,13 @@ export default class InternalDocument extends InternalObject {
 
   //
 
+  _setValue(key, ...rest) {
+    if(key === '_attachments') {
+      return this.attachments(true)._deserialize(...rest);
+    }
+    return super._setValue(...arguments);
+  }
+
   setValue(key) {
     if(isKeyUnderscored(key)) {
       return;

@@ -14,10 +14,6 @@ const {
   Logger: { error }
 } = Ember;
 
-const {
-  keys
-} = Object;
-
 export default class Attachments extends MutateMixin(Base) {
 
   constructor(store, document) {
@@ -107,20 +103,18 @@ export default class Attachments extends MutateMixin(Base) {
     }
   }
 
-  _deserialize() {
-  }
-
   //
 
+  _serializeValue(value, type) {
+    return value._serialize(type);
+  }
+
   _serialize(type) {
-    let json = {};
-    let values = this.values;
-    for(let key in values) {
-      let internal = values[key];
-      let value = internal._serialize(type);
-      json[this._serializeKey(key)] = value;
+    let json = super._serialize(type);
+    if(Object.keys(json).length === 0) {
+      return;
     }
-    return keys(json).length === 0 ? undefined : json;
+    return json;
   }
 
 }
