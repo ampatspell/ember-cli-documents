@@ -29,3 +29,13 @@ test('_model is unset on attachments destroy', async function(assert) {
   assert.ok(attachments.isDestroyed);
   assert.ok(!internal._model);
 });
+
+test('create detached attachment', function(assert) {
+  let attachment = this.db.attachment();
+  assert.ok(attachment);
+});
+
+test('attachment has internal', function(assert) {
+  let attachment = this.db.attachment();
+  assert.ok(attachment._internal);
+});

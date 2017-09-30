@@ -30,6 +30,11 @@ export default Ember.Mixin.create({
     return internal.model(true);
   },
 
+  attachment(values) {
+    let internal = this._createInternalAttachment(values, 'model');
+    return internal.model(true);
+  },
+
   push(doc, opts) {
     opts = merge({ instantiate: true }, opts);
 

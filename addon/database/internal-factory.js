@@ -52,6 +52,12 @@ export default Ember.Mixin.create({
     let internal = this.get('store')._createInternalObject(null);
     internal.withPropertyChanges(changed => internal.deserialize(values, type, changed), false);
     return internal;
+  },
+
+  _createInternalAttachment(values, type) {
+    let internal = this.get('store')._createInternalAttachment(null);
+    internal.withPropertyChanges(changed => internal.deserialize(values, type, changed), false);
+    return internal;
   }
 
 });

@@ -6,10 +6,12 @@ import DatabaseSecurity from 'documents/security';
 import DatabaseSecurityPair from 'documents/security-pair';
 import Document from 'documents/document/document';
 import DocumentAttachments from 'documents/document/attachments/attachments';
+import DocumentAttachment from 'documents/document/attachments/attachment';
 import DocumentObject from 'documents/document/object';
 import DocumentArray from 'documents/document/array';
 import InternalDocument from 'documents/document/internal/document';
 import InternalDocumentAttachments from 'documents/document/attachments/internal/attachments';
+import InternalDocumentAttachment from 'documents/document/attachments/internal/attachment';
 import InternalObject from 'documents/document/internal/object';
 import InternalArray from 'documents/document/internal/array';
 import AdapterCouch from 'documents/adapter/couch';
@@ -28,11 +30,13 @@ export default {
 
     container.register('documents:document', Document);
     container.register('documents:attachments', DocumentAttachments);
+    container.register('documents:attachment', DocumentAttachment);
     container.register('documents:object', DocumentObject);
     container.register('documents:array', DocumentArray);
 
     container.register('documents:internal/document', InternalDocument);
     container.register('documents:internal/attachments', InternalDocumentAttachments);
+    container.register('documents:internal/attachment', InternalDocumentAttachment);
     container.register('documents:internal/object', InternalObject);
     container.register('documents:internal/array', InternalArray);
 
