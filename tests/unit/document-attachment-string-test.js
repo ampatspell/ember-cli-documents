@@ -20,7 +20,7 @@ test('attachment has string content internal', function(assert) {
 test('attachment string content internal has data', function(assert) {
   let attachment = this.db.attachment({ data: 'foobar' });
   let internal = attachment.get('content')._internal;
-  assert.equal(internal.data, 'foobar');
+  assert.equal(internal.value, 'foobar');
   assert.equal(internal.contentType, 'text/plain');
 });
 

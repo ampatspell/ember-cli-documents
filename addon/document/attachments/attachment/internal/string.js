@@ -2,9 +2,9 @@ import Content from './-base';
 
 export default class StringContent extends Content {
 
-  constructor(store, data, contentType) {
+  constructor(store, value, contentType) {
     super(store);
-    this.data = data;
+    this.value = value;
     this.contentType = contentType;
   }
 
@@ -13,10 +13,10 @@ export default class StringContent extends Content {
   }
 
   serialize() {
-    let { contentType, data } = this;
+    let { contentType, value } = this;
     return {
       content_type: contentType,
-      data
+      data: value
     };
   }
 

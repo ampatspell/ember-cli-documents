@@ -42,7 +42,7 @@ test('detached attachment can be attached', function(assert) {
 test('attachment can be created from object', function(assert) {
   let doc = this.db.doc();
   doc.get('attachments').set('message', { data: 'hey there' });
-  assert.equal(doc.get('attachments.message')._internal.content.data, 'hey there');
+  assert.equal(doc.get('attachments.message')._internal.content.value, 'hey there');
 });
 
 test('add attachment marks document dirty', function(assert) {
