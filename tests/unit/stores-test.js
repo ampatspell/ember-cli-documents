@@ -35,7 +35,7 @@ test('stores destory destroys stores', function(assert) {
 test('store destroy removes store from stores', function(assert) {
   let url = 'http://server:5984';
   let store = this.stores.store({ url });
-  let identifier = store.get('adapter.identifier');
+  let identifier = store.get('_adapter.identifier');
   assert.ok(this.stores.get('openStores')[identifier]);
   run(() => store.destroy());
   assert.ok(!this.stores.get('openStores')[identifier]);
