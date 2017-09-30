@@ -39,6 +39,14 @@ test('detached attachment can be attached', function(assert) {
   assert.ok(msg._internal.parent === doc.get('attachments')._internal);
 });
 
+test('detached attachment can be used in db.doc', function(assert) {
+  let msg = this.db.attachment({ data: 'hey there' });
+  let doc = this.db.doc({ attachments: { message: msg }});
+  assert.ok(doc.get('attachments.message') === msg);
+  assert.ok(msg._internal.parent === doc.get('attachments')._internal);
+  assert.ok(msg._internal === doc.get('attachments.message')._internal);
+});
+
 test('attachment can be created from object', function(assert) {
   let doc = this.db.doc();
   doc.get('attachments').set('message', { data: 'hey there' });
