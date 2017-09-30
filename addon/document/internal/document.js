@@ -106,7 +106,9 @@ export default class InternalDocument extends InternalObject {
       return;
     }
 
+    _attachments = _attachments || {};
     attachments = attachments || this.attachments(true);
+
     attachments._deserialize(_attachments, 'document', changed);
   }
 
