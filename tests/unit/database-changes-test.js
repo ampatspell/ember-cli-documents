@@ -37,4 +37,9 @@ configurations(module => {
     assert.ok(!changes._internal._model);
   });
 
+  test('database changes model has ref to database', function(assert) {
+    let changes = this.db.changes();
+    assert.ok(changes.get('database') === this.db);
+  });
+
 });
