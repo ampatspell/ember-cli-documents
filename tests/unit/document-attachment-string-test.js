@@ -17,9 +17,21 @@ test('attachment has string content internal', function(assert) {
   assert.equal(internal.type, 'string');
 });
 
-test('attachment string content internal has values', function(assert) {
+test('attachment string content internal has data', function(assert) {
   let attachment = this.db.attachment({ data: 'foobar' });
   let internal = attachment.get('content')._internal;
-  assert.equal(internal.value, 'foobar');
+  assert.equal(internal.data, 'foobar');
   assert.equal(internal.contentType, 'text/plain');
+});
+
+test.only('save', async function(assert) {
+  await this.recreate();
+
+  let doc = this.db.doc({ id: 'foo' });
+  doc.get('attachments').set('message', { data: 'hey there' });
+  await doc.save();
+  let json = await this.docs.load('foo');
+  assert.deepEqual_(json, {
+
+  });
 });

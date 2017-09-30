@@ -3,7 +3,8 @@ import ModelMixin from './-model-mixin';
 import { isInternal } from 'documents/util/internal';
 
 const {
-  assert
+  assert,
+  String: { underscore, camelize }
 } = Ember;
 
 const types = [ 'document', 'model' ];
@@ -136,6 +137,22 @@ export default ModelMixin(class InternalBase {
     if(isInternal(value)) {
       value._attach(this);
     }
+  }
+
+  //
+
+  _deserializeKey(key, type) {
+    if(type === 'document' && !key.startsWith('_')) {
+      return camelize(key);
+    }
+    return key;
+  }
+
+  _serializeKey(key, type) {
+    if(type === 'document' && !key.startsWith('_')) {
+      return underscore(key);
+    }
+    return key;
   }
 
   //

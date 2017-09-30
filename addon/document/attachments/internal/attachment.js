@@ -19,4 +19,8 @@ export default class Attachment extends Base {
   _deserialize() {
   }
 
+  _serialize(type) {
+    return this.content._serialize(type);
+  }
+
 }
