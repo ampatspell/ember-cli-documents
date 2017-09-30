@@ -52,7 +52,7 @@ export default class Attachments extends MutateMixin(Base) {
     return { update: true, internal };
   }
 
-  __deserializePrimitive(value, value_, current, type) {
+  __deserializePrimitive(value, value_, current) {
     let valueType = typeOf(value);
     if(valueType === 'object') {
       return this.__deserializeObject(value, current);
@@ -61,7 +61,7 @@ export default class Attachments extends MutateMixin(Base) {
     }
   }
 
-  __deserializeValue(value, value_, current, type) {
+  __deserializeValue(value, value_, current) {
     if(isInternal(value)) {
       if(value.isDetached()) {
         if(isInternalAttachment(value)) {
@@ -73,7 +73,7 @@ export default class Attachments extends MutateMixin(Base) {
         return this.__deserializeInvalid(current, `attachment ${value_} is already associated with a document`);
       }
     } else {
-      return this.__deserializePrimitive(value, value_, current, type);
+      return this.__deserializePrimitive(value, value_, current);
     }
   }
 
@@ -82,7 +82,7 @@ export default class Attachments extends MutateMixin(Base) {
     return { update: true, internal: undefined };
   }
 
-  _deserializeValue(value_, current, type) {
+  _deserializeValue(value_, current) {
     let value = toInternal(value_);
 
     if(current === value) {
@@ -97,7 +97,7 @@ export default class Attachments extends MutateMixin(Base) {
     }
 
     if(value) {
-      return this.__deserializeValue(value, value_, current, type);
+      return this.__deserializeValue(value, value_, current);
     } else {
       return this.__deserializeUndefinedValue(current);
     }
