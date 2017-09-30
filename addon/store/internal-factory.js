@@ -16,14 +16,14 @@ export default Ember.Mixin.create({
     return new InternalAttachments(this, internal);
   },
 
-  _createInternalAttachmentContent(type, parent) {
+  _createInternalAttachmentContent(type, ...args) {
     let InternalAttachmentContent = this._internalFactory(`attachment/${type}`);
-    return new InternalAttachmentContent(this, parent);
+    return new InternalAttachmentContent(this, ...args);
   },
 
-  _createInternalAttachment(parent) {
+  _createInternalAttachment(parent, content) {
     let InternalAttachment = this._internalFactory('attachment');
-    return new InternalAttachment(this, parent);
+    return new InternalAttachment(this, parent, content);
   },
 
   _createInternalObject(parent) {

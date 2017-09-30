@@ -19,7 +19,7 @@ export default Ember.Mixin.create({
   },
 
   _createAttachmentModel(_internal) {
-    let content = _internal.content(true).model(true);
+    let content = _internal.content.model(true);
     return this._modelFactory('attachment').create({ _internal, content });
   },
 

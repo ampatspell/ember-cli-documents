@@ -31,25 +31,36 @@ test('_model is unset on attachments destroy', async function(assert) {
 });
 
 test('create detached attachment', function(assert) {
-  let attachment = this.db.attachment();
+  let attachment = this.db.attachment({ data: 'hello' });
   assert.ok(attachment);
 });
 
 test('attachment has internal', function(assert) {
-  let attachment = this.db.attachment();
+  let attachment = this.db.attachment({ data: 'hey' });
   assert.ok(attachment._internal);
 });
 
+test('attachment requires supported content', function(assert) {
+  try {
+    this.db.attachment({ });
+  } catch(e) {
+    assert.deepEqual(e.toJSON(), {
+      "error": "invalid_attachment",
+      "reason": "unsupported attachment object.data 'undefined'. data may be String, File or Blob"
+    });
+  }
+});
+
 test('attachment has string content', function(assert) {
-  let attachment = this.db.attachment();
+  let attachment = this.db.attachment({ type: 'text/plain', data: 'hey there' });
   let content = attachment.get('content');
   assert.ok(content);
-  assert.equal(content.get('type'), 'placeholder');
+  assert.equal(content.get('type'), 'string');
 });
 
 test('attachment has string content internal', function(assert) {
-  let attachment = this.db.attachment();
+  let attachment = this.db.attachment({ data: 'foobar' });
   let content = attachment.get('content');
   let internal = content._internal;
-  assert.equal(internal.type, 'placeholder');
+  assert.equal(internal.type, 'string');
 });

@@ -2,9 +2,13 @@ import ModelMixin from '../../../internal/-model-mixin';
 
 export default ModelMixin(class AttachmentContent {
 
-  constructor(store, attachment) {
+  constructor(store) {
     this.store = store;
+  }
+
+  attach(attachment) {
     this.attachment = attachment;
+    return this;
   }
 
   _createModel() {

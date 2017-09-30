@@ -1,4 +1,6 @@
 import Ember from 'ember';
+import DocumentsError from '../util/error';
+import { isObject_ } from '../util/assert';
 
 const {
   assign
@@ -54,10 +56,35 @@ export default Ember.Mixin.create({
     return internal;
   },
 
-  _createInternalAttachment(values, type) {
-    let internal = this.get('store')._createInternalAttachment(null);
-    internal.withPropertyChanges(changed => internal.deserialize(values, type, changed), false);
-    return internal;
+  __createInternalAttachmentContent(props) {
+    let create = (...args) => this.get('store')._createInternalAttachmentContent(...args);
+
+    if(props.stub === true) {
+      return create('stub', props);
+    }
+
+    let contentType = props.type || props.contentType || props['content-type'];
+    let data = props.data;
+
+    if(typeof data === 'string') {
+      contentType = contentType || 'text/plain';
+      return create('string', data, contentType);
+    }
+
+    if(data instanceof Blob) {
+      return create('file', data);
+    }
+
+    throw new DocumentsError({
+      error: 'invalid_attachment',
+      reason: `unsupported attachment object.data '${data}'. data may be String, File or Blob`
+    });
+  },
+
+  _createInternalAttachment(value) {
+    isObject_(`attachment properties must be object { name, type, data } not ${value}`, value);
+    let content = this.__createInternalAttachmentContent(value);
+    return this.get('store')._createInternalAttachment(null, content);
   }
 
 });
