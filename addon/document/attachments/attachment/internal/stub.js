@@ -2,7 +2,8 @@ import Ember from 'ember';
 import Content from './-base';
 
 const {
-  A
+  A,
+  merge
 } = Ember;
 
 export const mapping = {
@@ -40,8 +41,13 @@ export default class StubContent extends Content {
     this._notifyPropertiesChanged();
   }
 
-  serialize() {
-    return this.props;
+  serialize(type) {
+    let props = this.props;
+    if(type === 'document') {
+      return props;
+    } else {
+      return merge({ type: this.type }, props);
+    }
   }
 
   deserialize(props) {

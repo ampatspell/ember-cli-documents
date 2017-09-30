@@ -35,6 +35,7 @@ test('serialize model', function(assert) {
   assert.deepEqual(doc.serialize(), {
     "attachments": {
       "blob": {
+        "type": "file",
         "content_type": "text/plain",
         "filename": undefined,
         "size": 9

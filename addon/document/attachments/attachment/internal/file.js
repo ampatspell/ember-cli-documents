@@ -25,6 +25,7 @@ export default class StringContent extends Content {
       };
     } else {
       return {
+        type: this.type,
         content_type: loader.contentType,
         filename: file.name,
         size: loader.size

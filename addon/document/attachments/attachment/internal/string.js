@@ -12,12 +12,20 @@ export default class StringContent extends Content {
     return 'string';
   }
 
-  serialize() {
+  serialize(type) {
     let { contentType, value } = this;
-    return {
-      content_type: contentType,
-      data: value
-    };
+    if(type === 'document') {
+      return {
+        content_type: contentType,
+        data: value
+      };
+    } else {
+      return {
+        type: this.type,
+        content_type: contentType,
+        value
+      };
+    }
   }
 
 }

@@ -101,8 +101,9 @@ test('attachment object keys are serialized', function(assert) {
   assert.deepEqual(doc.serialize('model'), {
     "attachments": {
       "fooBar": {
+        "type": "string",
         "content_type": "text/plain",
-        "data": "hey there"
+        "value": "hey there"
       }
     }
   });
@@ -131,8 +132,9 @@ test('attachment object keys are deserialized', function(assert) {
   assert.deepEqual(doc.get('serialized'), {
     "attachments": {
       "fooBar": {
+        "type": "string",
         "content_type": "text/plain",
-        "data": "hey there"
+        "value": "hey there"
       }
     },
     "id": "foo"
