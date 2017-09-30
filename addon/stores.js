@@ -60,7 +60,7 @@ export default Ember.Service.extend({
   },
 
   _storeWillDestroy(store) {
-    let identifier = store.get('adapter.identifier');
+    let identifier = store.get('_adapter.identifier');
     let openStores = this.get('openStores');
     delete openStores[identifier];
   },
