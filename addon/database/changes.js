@@ -4,14 +4,14 @@ import { destroyArray } from '../util/destroy';
 
 export default Ember.Mixin.create({
 
-  openChanges: array(),
+  _changes: array(),
 
   _createInternalChanges(opts) {
     return this.get('store')._createInternalDatabaseChanges(this, opts);
   },
 
   _registerInternalChanges(internal) {
-    this.get('openChanges').pushObject(internal);
+    this.get('_changes').pushObject(internal);
     return internal;
   },
 
@@ -22,7 +22,7 @@ export default Ember.Mixin.create({
   },
 
   willDestroy() {
-    destroyArray(this.get('openChanges'));
+    destroyArray(this.get('_changes'));
     this._super();
   }
 
