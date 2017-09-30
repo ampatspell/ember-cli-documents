@@ -38,6 +38,10 @@ export default Ember.Mixin.create({
 
   _createDatabaseChangesModel(_internal) {
     return this._changesModelFactory('database').create({ _internal });
+  },
+
+  _createStoreChangesModel(_internal) {
+    return this._changesModelFactory('store').create({ _internal });
   }
 
 });

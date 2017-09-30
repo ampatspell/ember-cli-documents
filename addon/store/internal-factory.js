@@ -68,6 +68,11 @@ export default Ember.Mixin.create({
   _createInternalDatabaseChanges(database, opts) {
     let InternalDatabaseChanges = this._internalChangesFactory('database');
     return new InternalDatabaseChanges(this, database, opts);
+  },
+
+  _createInternalStoreChanges(opts) {
+    let InternalStoreChanges = this._internalChangesFactory('store');
+    return new InternalStoreChanges(this, opts);
   }
 
 });

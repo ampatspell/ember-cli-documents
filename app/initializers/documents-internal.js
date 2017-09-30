@@ -27,6 +27,8 @@ import InternalAttachmentFile from 'documents/document/attachments/attachment/in
 
 import InternalDatabaseChanges from 'documents/changes/database/internal';
 import DatabaseChanges from 'documents/changes/database/changes';
+import InternalStoreChanges from 'documents/changes/store/internal';
+import StoreChanges from 'documents/changes/store/changes';
 
 import AdapterCouchStore from 'documents/adapter/couch/store';
 import AdapterCouchDatabase from 'documents/adapter/couch/database';
@@ -67,6 +69,9 @@ export default {
     container.register('documents:adapter/couch/database', AdapterCouchDatabase);
 
     container.register('documents:changes/database', DatabaseChanges);
+    container.register('documents:changes/store', StoreChanges);
+
     container.register('documents:internal/changes/database', InternalDatabaseChanges);
+    container.register('documents:internal/changes/store', InternalStoreChanges);
   }
 };

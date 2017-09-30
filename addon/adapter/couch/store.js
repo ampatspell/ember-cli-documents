@@ -20,6 +20,11 @@ export default Adapter.extend({
 
   storeDocuments() {
     return this.get('couch');
+  },
+
+  changesListener(opts) {
+    let couch = this.get('couch');
+    return couch.createChanges(opts);
   }
 
 }).reopenClass({

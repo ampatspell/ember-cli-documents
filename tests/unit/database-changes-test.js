@@ -6,11 +6,7 @@ const {
   run
 } = Ember;
 
-module('database-changes', {
-  beforeEach() {
-    return this.recreate();
-  }
-});
+module('database-changes');
 
 test('changes are registered', function(assert) {
   let changes = this.db.changes({ feed: this.config.feed });
