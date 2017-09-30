@@ -118,7 +118,7 @@ configurations(module => {
 
     changes.start();
 
-    let json = await this.docs.save({ _id: 'one' });
+    let json = await this.docs.save({ _id: 'one', type: 'duck' });
 
     await later(500);
 
@@ -138,6 +138,13 @@ configurations(module => {
         "id": "one"
       }
     ]);
+
+    let doc = this.db.existing('one', { deleted: true });
+    assert.deepEqual_(doc.serialize('document'), {
+      "_id": "one",
+      "_rev": "ignored",
+      "type": "duck"
+    });
   });
 
 });
