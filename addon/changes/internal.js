@@ -10,6 +10,17 @@ export default ModelMixin(class Changes {
       isError: false,
       error: null
     };
+    this._adapterBindings = {
+      data: this._onData.bind(this),
+      error: this._onError.bind(this)
+    };
+  }
+
+  _withAdapterBindings(cb) {
+    let bindings = this._adapterBindings;
+    for(let key in bindings) {
+      cb(key, bindings[key]);
+    }
   }
 
   adapter(create=true, notify=true) {
@@ -17,6 +28,7 @@ export default ModelMixin(class Changes {
     if(!adapter && create) {
       adapter = this._createAdapter(this.opts);
       this._adapter = adapter;
+      this._withAdapterBindings((key, value) => adapter.on(key, value));
       if(notify) {
         let model = this.model(false);
         if(model) {
@@ -27,21 +39,23 @@ export default ModelMixin(class Changes {
     return adapter;
   }
 
-  destroy() {
+  _destroyAdapter() {
     let adapter = this.adapter(false, false);
     if(adapter) {
+      this._withAdapterBindings((key, value) => adapter.off(key, value));
       adapter.destroy();
       this._adapter = null;
     }
-    let model = this.model(false);
-    if(model) {
-      model.destroy();
-    }
+  }
+
+  destroy() {
+    this._destroyAdapter();
+    this._destroyModel();
   }
 
   //
 
-  setState(props) {
+  _setState(props) {
     let model = this.model(false);
     if(model) {
       model.beginPropertyChanges();
@@ -69,7 +83,7 @@ export default ModelMixin(class Changes {
 
   stop() {
     this.adapter().stop();
-    this.setState({ isError: false, error: null });
+    this._setState({ isError: false, error: null });
   }
 
   restart() {
@@ -78,6 +92,30 @@ export default ModelMixin(class Changes {
 
   suspend() {
     return this.adapter().suspend();
+  }
+
+  //
+
+  _trigger(name, arg) {
+    let model = this.model(false);
+    if(!model) {
+      return;
+    }
+    model.trigger(name, arg);
+  }
+
+  _onData(json) {
+    let result = this._processData(json);
+    if(!result) {
+      return;
+    }
+    this._setState({ isError: false, error: null });
+    this._trigger('change', result);
+  }
+
+  _onError(error) {
+    this._setState({ isError: true, error });
+    this._trigger('error', error);
   }
 
 });

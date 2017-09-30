@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import configurations from '../helpers/configurations';
+import { later } from '../helpers/run';
 import { test } from '../helpers/qunit';
 
 const {
@@ -97,6 +98,46 @@ configurations(module => {
       "isStarted": false,
       "isSuspended": true
     });
+  });
+
+  test('changes are pushed to db', async function(assert) {
+    let events = [];
+    let changes = this.db.changes({ feed: this.config.feed });
+
+    changes.on('error', err => {
+      throw err;
+    });
+
+    changes.on('change', push => {
+      events.push({
+        id: push.id,
+        deleted: push.isDeleted,
+        exists: !!push.get({ deleted: true })
+      });
+    });
+
+    changes.start();
+
+    let json = await this.docs.save({ _id: 'one' });
+
+    await later(500);
+
+    await this.docs.delete('one', json.rev);
+
+    await later(500);
+
+    assert.deepEqual(events, [
+      {
+        "deleted": false,
+        "exists": true,
+        "id": "one"
+      },
+      {
+        "deleted": true,
+        "exists": true,
+        "id": "one"
+      }
+    ]);
   });
 
 });

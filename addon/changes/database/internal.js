@@ -15,4 +15,12 @@ export default class DatabaseChanges extends Changes {
     return this.store._createDatabaseChangesModel(this);
   }
 
+  _processData(json) {
+    let doc = json.doc;
+    if(!doc) {
+      return;
+    }
+    return this.database.push(doc, { instantiate: false });
+  }
+
 }
