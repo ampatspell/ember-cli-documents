@@ -10,7 +10,7 @@ configurations(module => {
     }
   });
 
-  test('thing', async function(assert) {
+  test('listen for changes', async function(assert) {
     await this.admin();
 
     let events = [];
@@ -20,11 +20,12 @@ configurations(module => {
       throw err;
     });
 
-    changes.on('change', json => {
-      if(json.name === '_dbs') {
+    changes.on('change', change => {
+      if(change.name === '_dbs') {
         return;
       }
-      events.push(json);
+      assert.ok(change.get());
+      events.push({ name: change.name, type: change.type });
     });
 
     changes.start();
