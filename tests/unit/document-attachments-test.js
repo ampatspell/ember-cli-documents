@@ -140,3 +140,21 @@ test('attachment object keys are deserialized', function(assert) {
     "id": "foo"
   });
 });
+
+test('attachment remove', function(assert) {
+  let doc = this.db.doc({
+    attachments: {
+      thing: { contentType: 'text/plain', data: 'hey there' }
+    }
+  });
+
+  assert.deepEqual(doc.get('attachments.names'), [ 'thing' ]);
+
+  let thing = doc.get('attachments.thing');
+  thing.remove();
+
+  assert.ok(!doc.get('attachments.thing'));
+  assert.ok(!thing._internal.parent);
+
+  assert.deepEqual(doc.get('attachments.names'), []);
+});

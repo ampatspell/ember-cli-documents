@@ -136,4 +136,20 @@ export default class Attachments extends MutateMixin(Base) {
     return json;
   }
 
+  //
+
+  _keyForAttachment(internal) {
+    let values = this.values;
+    for(let key in values) {
+      if(values[key] === internal) {
+        return key;
+      }
+    }
+  }
+
+  removeAttachment(internal) {
+    let key = this._keyForAttachment(internal);
+    this.withPropertyChanges(changed => this._setValue(key, undefined, 'model', changed), true);
+  }
+
 }

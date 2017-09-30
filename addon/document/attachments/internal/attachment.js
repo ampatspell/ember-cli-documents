@@ -51,4 +51,13 @@ export default class Attachment extends Base {
     return this.content.serialize(type);
   }
 
+  //
+
+  remove() {
+    if(this.isDetached()) {
+      return;
+    }
+    this.parent.removeAttachment(this);
+  }
+
 }
