@@ -1,5 +1,6 @@
 # TODO
 
+* changes listener for `/_db_updates` and `db/_changes`
 * loadable collection and document computed properties
 * store.settle promise
 * fastboot support
