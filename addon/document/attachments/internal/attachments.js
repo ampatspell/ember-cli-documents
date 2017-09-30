@@ -47,9 +47,14 @@ export default class Attachments extends MutateMixin(Base) {
   }
 
   __deserializeObject(value, current) {
-    this._detachInternal(current);
-    let internal = this._createInternalAttachment(value);
-    return { update: true, internal };
+    if(current) {
+      current._deserialize(value);
+      return { update: false, internal: current }
+    } else {
+      this._detachInternal(current);
+      let internal = this._createInternalAttachment(value);
+      return { update: true, internal };
+    }
   }
 
   __deserializePrimitive(value, value_, current) {

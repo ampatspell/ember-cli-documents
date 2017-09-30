@@ -11,4 +11,8 @@ export default ModelMixin(class AttachmentContent {
     return this.store._createAttachmentContentModel(this.type, this);
   }
 
+  _detach() {
+    this.attachment = null;
+  }
+
 });

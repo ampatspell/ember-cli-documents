@@ -63,11 +63,17 @@ test('load', async function(assert) {
   });
 });
 
-test.skip('document is reloaded after save and string content is replaced by stub', async function(assert) {
+test('document is reloaded after save and string content is replaced by stub', async function(assert) {
   await this.recreate();
   let doc = this.db.doc({ id: 'foo' });
   doc.get('attachments').set('message', { data: 'hey there' });
 
+  let internal = doc.get('attachments.message')._internal;
+  let content = internal.content;
+
   await doc.save();
+
   assert.equal(doc.get('attachments.message.type'), 'stub');
+  assert.ok(internal === doc.get('attachments.message')._internal);
+  assert.ok(content !== doc.get('attachments.message')._internal.content);
 });

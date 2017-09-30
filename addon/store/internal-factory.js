@@ -17,7 +17,7 @@ export default Ember.Mixin.create({
     return new InternalAttachments(this, internal);
   },
 
-  __createInternalAttachmentContent(props) {
+  _createInternalAttachmentContent(props) {
     const create = (type, ...args) => {
       let InternalAttachmentContent = this._internalFactory(`attachment/${type}`);
       return new InternalAttachmentContent(this, ...args);
@@ -47,7 +47,7 @@ export default Ember.Mixin.create({
 
   _createInternalAttachment(parent, props) {
     let InternalAttachment = this._internalFactory('attachment');
-    let content = this.__createInternalAttachmentContent(props);
+    let content = this._createInternalAttachmentContent(props);
     return new InternalAttachment(this, parent, content);
   },
 

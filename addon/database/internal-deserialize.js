@@ -16,7 +16,9 @@ export default Ember.Mixin.create({
   },
 
   _deserializeInternalAttachments(internal, doc) {
-    Ember.Logger.info(this+'', '_deserializeInternalAttachments', 'not implemented');
+    internal.withPropertyChanges(changed => {
+      internal.deserializeAttachments(doc, changed);
+    }, true);
   },
 
   _deserializeInternalSave(internal, json) {
