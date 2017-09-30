@@ -77,3 +77,9 @@ test('document is reloaded after save and string content is replaced by stub', a
   assert.ok(internal === doc.get('attachments.message')._internal);
   assert.ok(content !== doc.get('attachments.message')._internal.content);
 });
+
+test('model has contentType and value', function(assert) {
+  let att = this.db.attachment({ contentType: 'text/plain', data: 'hey there' });
+  assert.equal(att.get('contentType'), 'text/plain');
+  assert.equal(att.get('value'), 'hey there');
+});

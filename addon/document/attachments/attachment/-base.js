@@ -1,6 +1,10 @@
 import Ember from 'ember';
 import { property } from '../../-properties';
 
+export {
+  property
+};
+
 const type = property('type');
 
 export default Ember.Object.extend({
