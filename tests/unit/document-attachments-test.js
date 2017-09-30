@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+import createBlob from 'couch/util/create-blob';
 
 const {
   run
@@ -50,4 +51,20 @@ test('add attachment marks document dirty', function(assert) {
   assert.equal(doc.get('isDirty'), false);
   attachments.set('message', { data: 'hey there' });
   assert.equal(doc.get('isDirty'), true);
+});
+
+test('attachments can be created in db.doc', function(assert) {
+  let doc = this.db.doc({
+    attachments: {
+      one: {
+        contentType: 'text/plain',
+        data: 'hey there'
+      },
+      two:  {
+        data: createBlob('hey there', 'text/plain')
+      }
+    }
+  });
+  assert.equal(doc.get('attachments')._internal.values.one.content.type, 'string');
+  assert.equal(doc.get('attachments')._internal.values.two.content.type, 'file');
 });
