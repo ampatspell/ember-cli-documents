@@ -19,6 +19,7 @@ export default {
     window.stores = stores;
     window.store = store;
     window.db = db;
+    window.recreate = () => db.get('documents.database').recreate({ documents: true, design: true });
 
     app.inject('route', 'store', 'service:store');
     app.inject('route', 'db', 'service:db');

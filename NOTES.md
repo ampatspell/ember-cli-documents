@@ -1,5 +1,7 @@
 # TODO
 
+* doc.set('attachments', ...)
+* attachment content change should notify document.serialized change
 * store.settle promise
 * fastboot support
 * ember inspector integration
