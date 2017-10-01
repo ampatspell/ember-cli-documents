@@ -11,7 +11,6 @@ const arrayRemoveObject = (array, element) => {
 export default Class => class MutateMixin extends Class {
 
   _setValue(key, value, type, changed) {
-    console.log('_setValue', key, value);
     let values = this.values;
     let current = values[key];
 
@@ -31,7 +30,6 @@ export default Class => class MutateMixin extends Class {
   }
 
   _getValue(key) {
-    console.log('_getValue', key, this.values[key]);
     return this.values[key];
   }
 

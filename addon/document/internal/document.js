@@ -4,22 +4,10 @@ import State from './-state';
 import Queue from './-queue';
 
 const {
-  copy,
   Logger: { error }
 } = Ember;
 
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
-
-const replace = (from, to, json) => {
-  let value = json[from];
-  delete json[from];
-  if(value === undefined) {
-    delete json[to];
-  } else {
-    json[to] = value;
-  }
-  return json;
-};
 
 export default class InternalDocument extends InternalObject {
 
@@ -89,7 +77,7 @@ export default class InternalDocument extends InternalObject {
     let attachments = this._getValue('attachments');
     if(!attachments && create) {
       attachments = this._createAttachments();
-      this.values._attachments = attachments;
+      this.values.attachments = attachments;
     }
     return attachments;
   }
@@ -121,37 +109,24 @@ export default class InternalDocument extends InternalObject {
   //
 
   _setValue(key, ...rest) {
+    if(isKeyUnderscored(key)) {
+      return;
+    }
     if(key === 'attachments') {
       return this.attachments(true)._deserialize(...rest);
     }
     return super._setValue(...arguments);
   }
 
-  setValue(key) {
+  _getValue(key) {
     if(isKeyUnderscored(key)) {
       return;
     }
-    return super.setValue(...arguments);
-  }
-
-  getValue(key) {
-    if(isKeyUnderscored(key)) {
-      return;
-    }
-    return super.getValue(...arguments);
-  }
-
-  willDeserialize(json, type) {
-    return json || {};
-  }
-
-  didSerialize(json, type) {
-    return json;
+    return super._getValue(...arguments);
   }
 
   deserializeDeleted(json, changed) {
     let type = 'document';
-    json = this.willDeserialize(json, type);
     let { id, rev } = json;
     this._setValue('id', id, type, changed);
     this._setValue('rev', rev, type, changed);

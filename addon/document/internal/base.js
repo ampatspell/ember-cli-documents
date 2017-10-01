@@ -167,29 +167,18 @@ export default ModelMixin(class InternalBase {
 
   //
 
-  willDeserialize(values) {
-    return values;
-  }
-
   deserialize(values, type, changed) {
     this._assertType(type);
     this._assertChanged(changed);
-
-    values = this.willDeserialize(values, type);
     this._deserialize(values, type, changed);
     return this;
   }
 
   //
 
-  didSerialize(json) {
-    return json;
-  }
-
   serialize(type) {
     this._assertType(type);
-    let json = this._serialize(type);
-    return this.didSerialize(json, type);
+    return this._serialize(type);
   }
 
   //

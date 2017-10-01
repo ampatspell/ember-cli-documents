@@ -87,8 +87,8 @@ test('init document with id and rev', function(assert) {
   let doc = this.db.doc({ id: 'asd', rev: '1-asd', _rev: '1-skip' });
 
   assert.deepEqual_(doc._internal.values, {
-    _id: 'asd',
-    _rev: '1-asd'
+    id: 'asd',
+    rev: '1-asd'
   });
 
   assert.equal(doc.get('id'), 'asd');

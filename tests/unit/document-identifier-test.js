@@ -15,5 +15,5 @@ test('id cannot be changed on not new', function(assert) {
   assert.equal(doc.get('id'), 'first');
   doc.set('id', 'second');
   assert.equal(doc.get('id'), 'first');
-  assert.equal(doc._internal.values._id, 'first');
+  assert.equal(doc._internal.values.id, 'first');
 });

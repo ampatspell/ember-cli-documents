@@ -4,7 +4,7 @@ const {
   computed
 } = Ember;
 
-export const forward = (key, getter, setter) => () => {
+export const forward = (getter, setter) => () => {
   let props = {};
   props.get = function() {
     let internal = this._internal;
@@ -17,9 +17,6 @@ export const forward = (key, getter, setter) => () => {
     };
   }
   let args = [];
-  if(key) {
-    args.push(key);
-  }
   args.push(props);
   let prop = computed(...args);
   if(!setter) {
