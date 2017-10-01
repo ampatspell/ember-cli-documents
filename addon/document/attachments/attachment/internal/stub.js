@@ -46,12 +46,7 @@ export default class StubContent extends Content {
   }
 
   serialize(type) {
-    let props = this.props;
-    if(type === 'document') {
-      return props;
-    } else {
-      return merge({ type: this.type }, props);
-    }
+    return this.props;
   }
 
   deserialize(props) {

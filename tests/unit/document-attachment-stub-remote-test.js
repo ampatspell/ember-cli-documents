@@ -63,4 +63,42 @@ configurations(module => {
     assert.equal(att.get('length'), 9);
   });
 
+  test.only('content change notifies serialized prop change', async function(assert) {
+    let doc = this.db.doc({
+      id: 'thing',
+      attachments: {
+        message: {
+          contentType: 'text/plain', data: 'hey there'
+        }
+      }
+    });
+
+    assert.deepEqual(doc.get('serialized'), {
+      "attachments": {
+        "message": {
+          "content_type": "text/plain",
+          "type": "string",
+          "value": "hey there"
+        }
+      },
+      "id": "thing"
+    });
+
+    await doc.save();
+
+    assert.deepEqual_(doc.get('serialized'), {
+      "attachments": {
+        "message": {
+          "content_type": "text/plain",
+          "digest": "ignored",
+          "length": 9,
+          "revpos": "ignored",
+          "stub": true
+        }
+      },
+      "id": "thing",
+      "rev": "ignored"
+    });
+  });
+
 });

@@ -27,6 +27,7 @@ export default class Attachment extends Base {
     }
     let content = this.content;
     model.set('content', content.model(true));
+    this.parent.contentDidChange(this);
   }
 
   _setContent(content) {
