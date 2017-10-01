@@ -5,7 +5,7 @@ import { forward, property, promise } from './-properties';
 
 const id          = forward('_id', 'getId', 'setId');
 const rev         = forward('_rev', 'getRev');
-const attachments = forward('_attachments', 'getAttachments');
+const attachments = forward('_attachments', 'getAttachments', 'setAttachments');
 const database    = property('database');
 
 export default DocumentObject.extend(StateMixin, SerializedMixin, {
