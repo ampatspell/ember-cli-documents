@@ -2,6 +2,8 @@ import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import createBlob from 'couch/util/create-blob';
+import Attachments from 'documents/document/attachments/internal/attachments';
+import Attachment from 'documents/document/attachments/internal/attachment';
 
 const {
   run
@@ -165,4 +167,11 @@ test('attachment remove', function(assert) {
   assert.ok(!thing._internal.parent);
 
   assert.deepEqual(doc.get('attachments.names'), []);
+});
+
+test.only('set doc.attachments', function(assert) {
+  let doc = this.db.doc();
+  doc.set('attachments', { foo: { data: 'hey' } });
+  assert.ok(doc.get('attachments')._internal instanceof Attachments);
+  assert.ok(doc.get('attachments.foo')._internal instanceof Attachment);
 });
