@@ -9,11 +9,6 @@ const {
 
 export default Ember.Mixin.create({
 
-  // ember-cli-sofa/addon/changes/mixins/internal-changes-identity.js
-  __suspendChanges() {
-    return () => {};
-  },
-
   __scheduleInternalOperation(label, internal, props, fn) {
     let op = new Operation(label, assign({ internal }, props), fn);
     return internal.addOperation(op);
@@ -52,7 +47,7 @@ export default Ember.Mixin.create({
     internal.setState('onSaving');
 
     let doc = internal.serialize('document');
-    let resume = this.__suspendChanges();
+    let resume = this._suspendChanges();
 
     return this.get('documents').save(doc).then(json => {
       this._deserializeInternalSave(internal, json);

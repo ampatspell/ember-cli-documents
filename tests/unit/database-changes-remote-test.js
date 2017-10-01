@@ -96,4 +96,39 @@ configurations(module => {
     await this.docs.save({ _id: 'foof' });
   });
 
+  test.only('save suspends changes', async function(assert) {
+    let doc = this.db.doc({ _id: 'hey' });
+
+    let events = [];
+    let changes = this.db.changes({ feed: this.config.feed });
+
+    changes.on('error', err => {
+      throw err;
+    });
+
+    changes.on('change', push => {
+      events.push({
+        id: push.id,
+        deleted: push.isDeleted,
+        exists: !!push.get({ deleted: true })
+      });
+    });
+
+    changes.start();
+
+    await later(300);
+
+    let promise = doc.save();
+
+    await later();
+
+    assert.ok(changes.get('isSuspended'));
+
+    await promise;
+
+    assert.ok(!changes.get('isSuspended'));
+
+    await this.docs.save({ _id: 'foof' });
+  });
+
 });
