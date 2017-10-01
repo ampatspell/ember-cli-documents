@@ -98,7 +98,9 @@ export default class Attachments extends MutateMixin(Base) {
 
   __deserializeUndefinedValue(current) {
     this._detachInternal(current);
-    return { update: true, internal: undefined };
+    let update = !!current;
+    let internal = undefined;
+    return { update, internal };
   }
 
   _deserializeValue(value_, current) {

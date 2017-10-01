@@ -51,3 +51,24 @@ test('remove object marks dirty', function(assert) {
   doc.get('info').removeObject('ok');
   assert.ok(doc.get('isDirty'));
 });
+
+test('touch attachments does not mark dirty', function(assert) {
+  let doc = this.db.doc({});
+  assert.ok(!doc.get('isDirty'));
+  doc.get('attachments');
+  assert.ok(!doc.get('isDirty'));
+});
+
+test('remove nonexistant attachment does not mark dirty', function(assert) {
+  let doc = this.db.doc({});
+  assert.ok(!doc.get('isDirty'));
+  doc.get('attachments').set('foo', null);
+  assert.ok(!doc.get('isDirty'));
+});
+
+test('remove unexistant prop does not mark dirty', function(assert) {
+  let doc = this.db.doc({});
+  assert.ok(!doc.get('isDirty'));
+  doc.set('foo', undefined);
+  assert.ok(!doc.get('isDirty'));
+});
