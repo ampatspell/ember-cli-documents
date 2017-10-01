@@ -3,6 +3,8 @@ import Ember from 'ember';
 export default Ember.Object.extend({
 
   stores: null,
+  store: null,
+
   _adapter: null,
 
   _databaseAdapterFactory() {

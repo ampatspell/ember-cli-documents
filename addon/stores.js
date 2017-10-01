@@ -53,6 +53,7 @@ export default Ember.Service.extend({
       let _adapter = Adapter.create(assign({ _adapter: opts.adapter, identifier, stores }, opts));
       opts = assign(opts, { _adapter });
       store = this.createStore(opts);
+      _adapter.setProperties({ store });
       open[identifier] = store;
     }
 

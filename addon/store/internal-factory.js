@@ -59,6 +59,20 @@ export default Ember.Mixin.create({
   _createInternalArray(parent) {
     let InternalArray = this._internalFactory('array');
     return new InternalArray(this, parent);
+  },
+
+  _internalChangesFactory(type) {
+    return this._internalFactory(`changes/${type}`);
+  },
+
+  _createInternalDatabaseChanges(database, opts) {
+    let InternalDatabaseChanges = this._internalChangesFactory('database');
+    return new InternalDatabaseChanges(this, database, opts);
+  },
+
+  _createInternalStoreChanges(opts) {
+    let InternalStoreChanges = this._internalChangesFactory('store');
+    return new InternalStoreChanges(this, opts);
   }
 
 });

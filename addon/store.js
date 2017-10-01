@@ -6,6 +6,7 @@ import StoreInternalFactory from './store/internal-factory';
 import StoreModelFactory from './store/model-factory';
 import StoreDatabases from './store/databases';
 import StoreDocuments from './store/documents';
+import StoreChanges from './store/changes';
 
 export default Ember.Object.extend(
   StoreStores,
@@ -14,5 +15,6 @@ export default Ember.Object.extend(
   StoreInternalFactory,
   StoreModelFactory,
   StoreDatabases,
-  StoreDocuments
+  StoreDocuments,
+  StoreChanges
 );

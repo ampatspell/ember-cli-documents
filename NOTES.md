@@ -1,10 +1,9 @@
 # TODO
 
-* changes listener for `/_db_updates` and `db/_changes`
-* loadable collection and document computed properties
 * store.settle promise
 * fastboot support
 * ember inspector integration
+* loadable collection and document computed properties
 * array deserialize should diff existing content not just clear existing content
 
 ## Collect and flush pending fetches

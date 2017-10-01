@@ -12,7 +12,9 @@ export default Ember.Mixin.create({
   _createDatabase(identifier) {
     let store = this;
     let _adapter = this.get('_adapter').createDatabaseAdapter();
-    return this._factoryFor(`documents:database`).create({ store, _adapter, identifier });
+    let database = this._factoryFor(`documents:database`).create({ store, _adapter, identifier });
+    _adapter.setProperties({ database });
+    return database;
   },
 
   database(identifier) {

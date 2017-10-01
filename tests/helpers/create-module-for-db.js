@@ -14,12 +14,14 @@ const configs = {
   'couchdb-1.6': {
     store: {
       url: 'http://dev:6016'
-    }
+    },
+    feed: 'event-source'
   },
   'couchdb-2.1': {
     store: {
       url: 'http://dev:6020'
-    }
+    },
+    feed: 'long-polling'
   }
 };
 
@@ -59,6 +61,7 @@ export default identifier => {
         getter(this, 'store', () => this.stores.store(config.store));
         getter(this, 'db', () => this.store.database('ember-cli-documents'));
         getter(this, 'docs', () => this.db.get('documents'));
+        getter(this,  'config', () => config);
         let beforeEach = options.beforeEach && options.beforeEach.apply(this, arguments);
         return resolve(beforeEach);
       },

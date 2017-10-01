@@ -30,6 +30,18 @@ export default Ember.Mixin.create({
   _createArrayModel(_internal) {
     let content = _internal.values;
     return this._modelFactory('array').create({ _internal, content });
+  },
+
+  _changesModelFactory(name) {
+    return this._modelFactory(`changes/${name}`);
+  },
+
+  _createDatabaseChangesModel(_internal) {
+    return this._changesModelFactory('database').create({ _internal });
+  },
+
+  _createStoreChangesModel(_internal) {
+    return this._changesModelFactory('store').create({ _internal });
   }
 
 });

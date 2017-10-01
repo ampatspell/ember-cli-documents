@@ -1,5 +1,6 @@
-import { destroyObject } from 'couch/util/destroy';
+import { destroyObject, destroyArray } from 'couch/util/destroy';
 
 export {
-  destroyObject
+  destroyObject,
+  destroyArray
 };
