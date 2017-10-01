@@ -55,17 +55,6 @@ export default Class => class MutateMixin extends Class {
 
   //
 
-  _diffObjects(values, type, fn) {
-    let keys = Object.keys(this.values);
-    for(let key in values) {
-      let deserializedKey = this._deserializeKey(key, type);
-      arrayRemoveObject(keys, deserializedKey);
-      let value = values[key];
-      fn(deserializedKey, value, type);
-    }
-    keys.forEach(key => fn(key, undefined, type));
-  }
-
   _deserialize(values, type, changed) {
     let setter = (key, value) => this._setValue(key, value, type, changed);
     let keys = Object.keys(this.values);
