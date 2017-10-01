@@ -152,7 +152,7 @@ export default class Attachments extends MutateMixin(Base) {
     this.withPropertyChanges(changed => this._setValue(key, undefined, 'model', changed), true);
   }
 
-  contentDidChange(internal) {
+  contentDidChange() {
     this.withPropertyChanges(changed => changed('serialized'), true);
   }
 
