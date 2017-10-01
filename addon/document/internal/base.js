@@ -8,6 +8,7 @@ const {
 } = Ember;
 
 const types = [ 'document', 'model' ];
+const prefixed = [ 'id', 'rev', 'attachments' ];
 
 export const empty = {};
 
@@ -142,14 +143,23 @@ export default ModelMixin(class InternalBase {
   //
 
   _deserializeKey(key, type) {
-    if(type === 'document' && !key.startsWith('_')) {
+    if(type === 'document') {
+      if(key.startsWith('_')) {
+        let sliced = key.slice(1);
+        if(prefixed.includes(sliced)) {
+          return sliced;
+        }
+      }
       return camelize(key);
     }
     return key;
   }
 
   _serializeKey(key, type) {
-    if(type === 'document' && !key.startsWith('_')) {
+    if(type === 'document') {
+      if(prefixed.includes(key)) {
+        return `_${key}`;
+      }
       return underscore(key);
     }
     return key;

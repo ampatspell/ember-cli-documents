@@ -56,7 +56,7 @@ export default class InternalDocument extends InternalObject {
   }
 
   getId() {
-    return this._getValueNotify('_id', 'model');
+    return this._getValue('id');
   }
 
   setId(id) {
@@ -65,11 +65,11 @@ export default class InternalDocument extends InternalObject {
       error(`Document id cannot be changed after document is saved. Attempted to set id '${id}' for document '${current}'`);
       return current;
     }
-    return this._setValueNotify('_id', id, 'model');
+    return this._setValueNotify('id', id, 'model');
   }
 
   getRev() {
-    return this._getValueNotify('_rev', 'model');
+    return this._getValue('rev');
   }
 
   getIdRev() {
@@ -86,7 +86,7 @@ export default class InternalDocument extends InternalObject {
   }
 
   attachments(create) {
-    let attachments = this._getValue('_attachments');
+    let attachments = this._getValue('attachments');
     if(!attachments && create) {
       attachments = this._createAttachments();
       this.values._attachments = attachments;
@@ -121,7 +121,7 @@ export default class InternalDocument extends InternalObject {
   //
 
   _setValue(key, ...rest) {
-    if(key === '_attachments') {
+    if(key === 'attachments') {
       return this.attachments(true)._deserialize(...rest);
     }
     return super._setValue(...arguments);
@@ -142,22 +142,10 @@ export default class InternalDocument extends InternalObject {
   }
 
   willDeserialize(json, type) {
-    json = json || {};
-    if(type === 'model') {
-      json = copy(json, false);
-      replace('id', '_id', json);
-      replace('rev', '_rev', json);
-      replace('attachments', '_attachments', json);
-    }
-    return json;
+    return json || {};
   }
 
   didSerialize(json, type) {
-    if(type === 'model') {
-      replace('_id', 'id', json);
-      replace('_rev', 'rev', json);
-      replace('_attachments', 'attachments', json);
-    }
     return json;
   }
 
@@ -165,15 +153,15 @@ export default class InternalDocument extends InternalObject {
     let type = 'document';
     json = this.willDeserialize(json, type);
     let { id, rev } = json;
-    this._setValue('_id', id, type, changed);
-    this._setValue('_rev', rev, type, changed);
+    this._setValue('id', id, type, changed);
+    this._setValue('rev', rev, type, changed);
   }
 
   deserializeSaved(json, changed) {
     let type = 'document';
     let { id, rev } = json;
-    this._setValue('_id', id, type, changed);
-    this._setValue('_rev', rev, type, changed);
+    this._setValue('id', id, type, changed);
+    this._setValue('rev', rev, type, changed);
   }
 
   //

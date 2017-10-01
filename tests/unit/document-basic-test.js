@@ -104,3 +104,25 @@ test('init document with id and rev', function(assert) {
     rev: '1-asd'
   });
 });
+
+test('id, name and fooBar set, get, serialize, deserialize', function(assert) {
+  let doc = this.db.doc();
+
+  doc.set('id', 'hello');
+  assert.equal(doc.get('id'), 'hello', 'doc id must be hello');
+  assert.equal(doc._internal.values.id, 'hello', 'doc _id must be hello');
+  assert.equal(doc.serialize('model').id, 'hello', 'doc.serialized id must be hello');
+  assert.equal(doc.serialize('document')._id, 'hello', 'doc.serialized _id must be hello');
+
+  doc.set('name', 'hello');
+  assert.equal(doc.get('name'), 'hello', 'doc name must be hello');
+  assert.equal(doc._internal.values.name, 'hello', 'doc name must be hello');
+  assert.equal(doc.serialize('model').name, 'hello', 'doc.serialized name must be hello');
+  assert.equal(doc.serialize('document').name, 'hello', 'doc.serialized name must be hello');
+
+  doc.set('fooBar', 'hello');
+  assert.equal(doc.get('fooBar'), 'hello', 'doc fooBar must be hello');
+  assert.equal(doc._internal.values.fooBar, 'hello', 'doc foo_bar must be hello');
+  assert.equal(doc.serialize('model').fooBar, 'hello', 'doc.serialized fooBar must be hello');
+  assert.equal(doc.serialize('document').foo_bar, 'hello', 'doc.serialized foo_bar must be hello');
+});

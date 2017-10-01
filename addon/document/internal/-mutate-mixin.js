@@ -11,6 +11,7 @@ const arrayRemoveObject = (array, element) => {
 export default Class => class MutateMixin extends Class {
 
   _setValue(key, value, type, changed) {
+    console.log('_setValue', key, value);
     let values = this.values;
     let current = values[key];
 
@@ -30,6 +31,7 @@ export default Class => class MutateMixin extends Class {
   }
 
   _getValue(key) {
+    console.log('_getValue', key, this.values[key]);
     return this.values[key];
   }
 
@@ -39,10 +41,6 @@ export default Class => class MutateMixin extends Class {
     return this.withPropertyChanges(changed => this._setValue(key, value, type, changed), true);
   }
 
-  _getValueNotify(key, type) {
-    return this.withPropertyChanges(changed => this._getValue(key, type, changed), true);
-  }
-
   //
 
   setValue(key, value) {
@@ -50,7 +48,7 @@ export default Class => class MutateMixin extends Class {
   }
 
   getValue(key) {
-    return toModel(this._getValueNotify(key, 'model'));
+    return toModel(this._getValue(key));
   }
 
   //
@@ -58,11 +56,11 @@ export default Class => class MutateMixin extends Class {
   _deserialize(values, type, changed) {
     let setter = (key, value) => this._setValue(key, value, type, changed);
     let keys = Object.keys(this.values);
-    for(let key in values) {
-      let deserializedKey = this._deserializeKey(key, type);
-      arrayRemoveObject(keys, deserializedKey);
-      let value = values[key];
-      setter(deserializedKey, value, type);
+    for(let _key in values) {
+      let value = values[_key];
+      let key = this._deserializeKey(_key, type);
+      arrayRemoveObject(keys, key);
+      setter(key, value, type);
     }
     keys.forEach(key => setter(key, undefined, type));
   }
@@ -70,10 +68,11 @@ export default Class => class MutateMixin extends Class {
   _serialize(type) {
     let json = {};
     let values = this.values;
-    for(let key in values) {
-      let value = values[key];
+    for(let _key in values) {
+      let value = values[_key];
+      let key = this._serializeKey(_key, type);
       value = this._serializeValue(value, type);
-      json[this._serializeKey(key, type)] = value;
+      json[key] = value;
     }
     return json;
   }
