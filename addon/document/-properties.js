@@ -21,7 +21,11 @@ export const forward = (key, getter, setter) => () => {
     args.push(key);
   }
   args.push(props);
-  return computed(...args);
+  let prop = computed(...args);
+  if(!setter) {
+    prop = prop.readOnly();
+  }
+  return prop;
 };
 
 export const property = name => () => {

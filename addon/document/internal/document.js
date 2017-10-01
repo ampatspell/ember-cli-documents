@@ -98,6 +98,12 @@ export default class InternalDocument extends InternalObject {
     return this.attachments(true).model(true);
   }
 
+  setAttachments(values) {
+    let attachments = this.attachments(true);
+    attachments.withPropertyChanges(changed => attachments._deserialize(values, 'model', changed), true);
+    return attachments.model(true);
+  }
+
   deserializeAttachments(doc, changed) {
     let _attachments = doc._attachments;
     let attachments = this.attachments(false);
