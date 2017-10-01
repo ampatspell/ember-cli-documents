@@ -63,7 +63,7 @@ configurations(module => {
     assert.equal(att.get('length'), 9);
   });
 
-  test.only('content change notifies serialized prop change', async function(assert) {
+  test('content change notifies serialized prop change', async function(assert) {
     let doc = this.db.doc({
       id: 'thing',
       attachments: {
