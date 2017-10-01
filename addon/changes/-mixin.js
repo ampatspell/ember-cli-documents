@@ -11,6 +11,12 @@ export default Ember.Mixin.create({
     return internal;
   },
 
+  _suspendChanges() {
+    let changes = this.get('_changes');
+    let resumes = changes.map(change => change.suspend());
+    return () => resumes.map(resume => resume());
+  },
+
   changes(opts) {
     let internal = this.__createInternalChanges(opts);
     this._registerInternalChanges(internal);
