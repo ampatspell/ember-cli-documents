@@ -1,5 +1,8 @@
 # TODO
 
+* prefixed keys should be used only for document properties
+* check if it is possible to serialize keys in `_setValue` instead of somewhere in parent. `_setValue` type is for key and value, `_getValue` type is for key. both are transform `from` given type to internal representation.
+* move attachment handling into `_deserializeValue` or smth. document `_setValue` override is not ok.
 * store.settle promise
 * fastboot support
 * ember inspector integration
