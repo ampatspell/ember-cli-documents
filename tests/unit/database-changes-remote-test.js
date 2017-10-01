@@ -96,7 +96,7 @@ configurations(module => {
     await this.docs.save({ _id: 'foof' });
   });
 
-  test.only('save suspends changes', async function(assert) {
+  test('save suspends changes', async function(assert) {
     let doc = this.db.doc({ _id: 'hey' });
 
     let events = [];
