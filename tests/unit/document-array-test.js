@@ -237,7 +237,7 @@ test('replace array', function(assert) {
       { id: 'c' },
       { id: 'a' }
     ]
-  });
+  }, 'document');
 
   assert.deepEqual(doc.serialize(), {
     "id": "thing",
