@@ -38,3 +38,33 @@ test('unsaved attachments should not be serialized', async function(assert) {
     "_rev": "ignored"
   });
 });
+
+test('push from shoebox', function(assert) {
+  let internal = this.db._pushShoeboxDocument({
+    _id: 'duck:yellow',
+    _rev: '1-asd',
+    _attachments: {
+      saved: {
+        "content_type": "text/plain",
+        "digest": "ignored",
+        "length": 3,
+        "revpos": "ignored",
+        "stub": true
+      }
+    },
+    name: 'yellow'
+  });
+  assert.equal(internal.getId(), 'duck:yellow');
+  assert.ok(internal.values.attachments.values.saved);
+  assert.deepEqual_(internal.state, {
+    "error": null,
+    "isDeleted": false,
+    "isDirty": false,
+    "isError": false,
+    "isLoaded": true,
+    "isLoading": false,
+    "isNew": false,
+    "isSaving": false
+  });
+  assert.ok(this.db._documents.saved['duck:yellow']);
+});

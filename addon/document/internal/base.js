@@ -145,7 +145,7 @@ export default ModelMixin(class InternalBase {
 
   //
 
-  shouldSerialize(type) {
+  shouldSerialize() {
     return true;
   }
 

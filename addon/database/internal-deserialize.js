@@ -80,20 +80,20 @@ export default Ember.Mixin.create({
     return this._deserializeInternalDelete(internal, { id, rev });
   },
 
-  __deserializeInternalLoadDocument(internal, doc) {
+  __deserializeInternalLoadDocument(internal, doc, type) {
     internal.withPropertyChanges(changed => {
-      internal.deserialize(doc, 'document', changed);
+      internal.deserialize(doc, type, changed);
       internal.state.onLoaded(changed);
     }, true);
     this._storeLoadedInternalDocument(internal);
     return internal;
   },
 
-  _deserializeInternalLoad(internal, doc) {
+  _deserializeInternalLoad(internal, doc, type) {
     if(doc._deleted) {
       return this.__deserializeInternalLoadDeleted(internal, doc);
     } else {
-      return this.__deserializeInternalLoadDocument(internal, doc);
+      return this.__deserializeInternalLoadDocument(internal, doc, type);
     }
   },
 
@@ -103,22 +103,22 @@ export default Ember.Mixin.create({
 
   //
 
-  _deserializeDocument(doc) {
+  _deserializeDocument(doc, type) {
     assert(`doc must be object`, typeof doc === 'object');
     assert(`doc._id must be string`, typeof doc._id === 'string');
 
     let id = doc._id;
     let internal = this._existingInternalDocument(id, { deleted: true, create: true });
 
-    return this._deserializeInternalLoad(internal, doc);
+    return this._deserializeInternalLoad(internal, doc, type);
   },
 
-  _deserializeDocuments(array) {
+  _deserializeDocuments(array, type) {
     return A(array).reduce((result, doc) => {
       // on high load it is possible that view returns row with already deleted document's key, value but w/o doc
       // see: https://issues.apache.org/jira/browse/COUCHDB-1797
       if(doc) {
-        result.push(this._deserializeDocument(doc));
+        result.push(this._deserializeDocument(doc, type));
       }
       return result;
     }, A());
