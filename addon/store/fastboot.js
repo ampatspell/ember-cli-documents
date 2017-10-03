@@ -1,10 +1,15 @@
 import Ember from 'ember';
 
 const {
-  getOwner
+  getOwner,
+  RSVP: { resolve }
 } = Ember;
 
 export default Ember.Mixin.create({
+
+  __fastbootDefer() {
+    return resolve();
+  },
 
   enableFastBootWithIdentifier(identifier) {
     let fastboot = getOwner(this).lookup('service:fastboot');
@@ -19,6 +24,7 @@ export default Ember.Mixin.create({
 
     let store = this;
     if(fastboot.get('isFastBoot')) {
+      fastboot.deferRendering(store.__fastbootDefer());
       shoebox.put(identifier, {
         get payload() {
           return store._serializeShoebox();
