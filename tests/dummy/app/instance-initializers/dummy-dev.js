@@ -14,6 +14,9 @@ export default {
 
     let db = store.database('thing');
 
+    let changes = db.changes({ feed: 'event-source' });
+    changes.start();
+
     app.register('service:store', store, { instantiate: false });
     app.register('service:db', db, { instantiate: false });
 

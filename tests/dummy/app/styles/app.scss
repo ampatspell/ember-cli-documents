@@ -21,7 +21,12 @@ $font-family: 'Raleway', sans-serif;
 .ui-block.json {
   font-family: 'Monaco';
   font-size: 12px;
+  line-height: 14px;
   white-space: pre;
+  &.tiny {
+    font-size: 10px;
+    line-height: 13px;
+  }
 }
 
 .row {
@@ -31,5 +36,21 @@ $font-family: 'Raleway', sans-serif;
   }
   &:last-child {
     padding-bottom: 0;
+  }
+}
+
+.ui-route.message-index {
+  > .row.input {
+    margin-bottom: 20px;
+    > input {
+      padding-left: 0;
+      padding-right: 0;
+      font-size: 32px;
+      border-bottom: 1px solid #eee;
+    }
+    > .hint {
+      margin-top: 3px;
+      font-size: 10px;
+    }
   }
 }
