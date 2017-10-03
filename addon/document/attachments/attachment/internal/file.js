@@ -1,7 +1,7 @@
-import Content from './-base';
+import LocalContent from './-local';
 import createLoader from 'couch/util/file-loader/create';
 
-export default class StringContent extends Content {
+export default class StringContent extends LocalContent {
 
   constructor(store, file) {
     super(store);
@@ -17,7 +17,7 @@ export default class StringContent extends Content {
     return this.loader.contentType;
   }
 
-  serialize(type) {
+  _serialize(type) {
     let { loader, file } = this;
     if(type === 'document') {
       return {

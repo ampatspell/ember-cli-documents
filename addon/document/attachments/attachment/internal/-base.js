@@ -24,6 +24,17 @@ export default ModelMixin(class AttachmentContent {
     this._destroyModel();
   }
 
+  shouldSerialize() {
+    return true;
+  }
+
+  serialize(type) {
+    if(!this.shouldSerialize(type)) {
+      return;
+    }
+    return this._serialize(type);
+  }
+
   deserialize() {
     return false;
   }

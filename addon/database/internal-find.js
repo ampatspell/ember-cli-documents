@@ -25,13 +25,13 @@ const view = fn => function(...args) {
   args.unshift(this.get('documents'));
   return fn.call(this, ...args).then(json => {
     let docs = A(json.rows).map(row => row.doc);
-    return result('array', this._deserializeDocuments(docs));
+    return result('array', this._deserializeDocuments(docs, 'document'));
   });
 };
 
 const doc = fn => function(...args) {
   args.unshift(this.get('documents'));
-  return fn.call(this, ...args).then(json => result('single', this._deserializeDocument(json)));
+  return fn.call(this, ...args).then(json => result('single', this._deserializeDocument(json, 'document')));
 };
 
 export default Ember.Mixin.create({
@@ -68,7 +68,7 @@ export default Ember.Mixin.create({
 
   __loadInternalDocumentsMango(opts) {
     return this.get('documents.mango').find(opts)
-      .then(json => result('array', this._deserializeDocuments(json.docs)));
+      .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
   _internalDocumentFind(opts) {

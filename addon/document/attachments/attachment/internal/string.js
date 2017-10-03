@@ -1,6 +1,6 @@
-import Content from './-base';
+import LocalContent from './-local';
 
-export default class StringContent extends Content {
+export default class StringContent extends LocalContent {
 
   constructor(store, value, contentType) {
     super(store);
@@ -12,7 +12,7 @@ export default class StringContent extends Content {
     return 'string';
   }
 
-  serialize(type) {
+  _serialize(type) {
     let { contentType, value } = this;
     if(type === 'document') {
       return {
