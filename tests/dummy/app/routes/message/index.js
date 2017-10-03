@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+const {
+  RSVP: { reject}
+} = Ember;
+
 export default Ember.Route.extend({
   model() {
     let db = this.get('db');

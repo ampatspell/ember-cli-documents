@@ -1,6 +1,11 @@
 /* eslint-env node */
 'use strict';
 
+const assert = require('assert');
+
+const COUCHDB_HOST = process.env.COUCHDB_HOST;
+assert(COUCHDB_HOST, 'COUCHDB_HOST environment variable is required to run dummy and unittests');
+
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'dummy',
@@ -9,18 +14,13 @@ module.exports = function(environment) {
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
-        // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
       },
       EXTEND_PROTOTYPES: {
-        // Prevent Ember Data from overriding Date.parse.
         Date: false
       }
     },
-
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
+      COUCHDB_HOST
     }
   };
 

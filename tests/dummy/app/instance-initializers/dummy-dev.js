@@ -1,4 +1,7 @@
 import Ember from 'ember';
+import environment from '../config/environment';
+
+const host = environment.APP.COUCHDB_HOST;
 
 const {
   Logger: { info }
@@ -8,7 +11,7 @@ export default {
   name: 'dummy:dev',
   initialize(app) {
     let stores = app.lookup('documents:stores');
-    let store = stores.store({ url: 'http://dev:6016' });
+    let store = stores.store({ url: `${host}:6016` });
 
     store.enableFastBootWithIdentifier('dummy-documents');
 

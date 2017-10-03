@@ -2,6 +2,9 @@ import { module } from 'qunit';
 import Ember from 'ember';
 import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
+import environment from '../../config/environment';
+
+const host = environment.APP.COUCHDB_HOST;
 
 const {
   RSVP: { resolve },
@@ -13,13 +16,13 @@ const getter = (object, name, fn) => Object.defineProperty(object, name, { get: 
 const configs = {
   'couchdb-1.6': {
     store: {
-      url: 'http://dev:6016'
+      url: `${host}:6016`
     },
     feed: 'event-source'
   },
   'couchdb-2.1': {
     store: {
-      url: 'http://dev:6020'
+      url: `${host}:6020`
     },
     feed: 'long-polling'
   }
