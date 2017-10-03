@@ -1,6 +1,5 @@
 # TODO
 
-* fastboot support
 * ember inspector integration
 * store.settle promise
 * loadable collection and document computed properties

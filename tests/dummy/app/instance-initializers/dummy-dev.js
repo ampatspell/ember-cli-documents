@@ -10,6 +10,8 @@ export default {
     let stores = app.lookup('documents:stores');
     let store = stores.store({ url: 'http://dev:6016' });
 
+    store.enableFastBootWithIdentifier('dummy-documents');
+
     let db = store.database('thing');
 
     app.register('service:store', store, { instantiate: false });
