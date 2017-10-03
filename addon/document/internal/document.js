@@ -74,7 +74,7 @@ export default class InternalDocument extends InternalObject {
     return this.store._createInternalAttachments(this);
   }
 
-  attachments(create) {
+  _attachments(create) {
     let attachments = this._getValue('attachments');
     if(!attachments && create) {
       attachments = this._createAttachments();
@@ -84,25 +84,25 @@ export default class InternalDocument extends InternalObject {
   }
 
   getAttachments() {
-    return this.attachments(true).model(true);
+    return this._attachments(true).model(true);
   }
 
   setAttachments(values) {
-    let attachments = this.attachments(true);
+    let attachments = this._attachments(true);
     attachments.withPropertyChanges(changed => attachments._deserialize(values, 'model', changed), true);
     return attachments.model(true);
   }
 
   deserializeAttachments(doc, changed) {
     let _attachments = doc._attachments;
-    let attachments = this.attachments(false);
+    let attachments = this._attachments(false);
 
     if(!_attachments && !attachments) {
       return;
     }
 
     _attachments = _attachments || {};
-    attachments = attachments || this.attachments(true);
+    attachments = attachments || this._attachments(true);
 
     attachments._deserialize(_attachments, 'document', changed);
   }
@@ -133,7 +133,7 @@ export default class InternalDocument extends InternalObject {
       return;
     }
     if(key === 'attachments') {
-      return this.attachments(true)._deserialize(...rest);
+      return this._attachments(true)._deserialize(...rest);
     }
     return super._setValue(...arguments);
   }

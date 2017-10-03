@@ -1,6 +1,5 @@
 # TODO
 
-* move attachment handling into `_deserializeValue` or smth. document `_setValue` override is not ok.
 * store.settle promise
 * fastboot support
 * ember inspector integration
