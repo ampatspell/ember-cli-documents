@@ -40,7 +40,7 @@ test('unsaved attachments should not be serialized', async function(assert) {
 });
 
 test('push from shoebox', function(assert) {
-  let internal = this.db._pushShoeboxDocument({
+  let internal = this.db.__deserialzieShoeboxDocument({
     _id: 'duck:yellow',
     _rev: '1-asd',
     _attachments: {
