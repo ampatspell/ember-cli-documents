@@ -114,3 +114,30 @@ test('instantiate false returns push info for deleted doc', function(assert) {
   let doc = push.get({ deleted: true });
   assert.ok(doc);
 });
+
+test('push with underscored nested keys', function(assert) {
+  let doc = this.db.push({ _id: 'foof', thing: { _name: 'thing', _nested: { _id: 'ok', _foo_bar: 'naiss' } } });
+  assert.equal(doc._internal.values.thing.values._name, 'thing');
+  assert.equal(doc._internal.values.thing.values._nested.values._id, 'ok');
+  assert.equal(doc._internal.values.thing.values._nested.values._fooBar, 'naiss');
+  assert.deepEqual(doc.serialize('model'), {
+    "id": "foof",
+    "thing": {
+      "_name": "thing",
+      "_nested": {
+        "_fooBar": "naiss",
+        "_id": "ok"
+      }
+    }
+  });
+  assert.deepEqual(doc.serialize('document'), {
+    "_id": "foof",
+    "thing": {
+      "_name": "thing",
+      "_nested": {
+        "_foo_bar": "naiss",
+        "_id": "ok"
+      }
+    }
+  });
+});

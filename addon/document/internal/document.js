@@ -7,6 +7,7 @@ const {
   Logger: { error }
 } = Ember;
 
+const prefixedKeys = [ 'id', 'rev', 'attachments' ];
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
 
 export default class InternalDocument extends InternalObject {
@@ -108,6 +109,25 @@ export default class InternalDocument extends InternalObject {
 
   //
 
+  _deserializeDocumentKey(key) {
+    if(key.startsWith('_')) {
+      let sliced = key.slice(1);
+      if(prefixedKeys.includes(sliced)) {
+        return sliced;
+      }
+    }
+    return super._deserializeDocumentKey(key);
+  }
+
+  _serializeDocumentKey(key) {
+    if(prefixedKeys.includes(key)) {
+      return `_${key}`;
+    }
+    return super._serializeDocumentKey(key);
+  }
+
+  //
+
   _setValue(key, ...rest) {
     if(isKeyUnderscored(key)) {
       return;
@@ -124,6 +144,8 @@ export default class InternalDocument extends InternalObject {
     }
     return super._getValue(...arguments);
   }
+
+  //
 
   deserializeDeleted(json, changed) {
     let type = 'document';

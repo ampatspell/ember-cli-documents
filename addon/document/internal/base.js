@@ -3,12 +3,10 @@ import ModelMixin from './-model-mixin';
 import { isInternal } from 'documents/util/internal';
 
 const {
-  assert,
-  String: { underscore, camelize }
+  assert
 } = Ember;
 
 const types = [ 'document', 'model' ];
-const prefixed = [ 'id', 'rev', 'attachments' ];
 
 export const empty = {};
 
@@ -33,22 +31,14 @@ export default ModelMixin(class InternalBase {
     }
   }
 
+  //
+
   _assertType(type) {
     assert(`type must be one of the following [${types.join(', ')}] not '${type}'`, types.includes(type));
   }
 
   _assertChanged(changed) {
     assert(`changed must be function not ${changed}`, typeof changed === 'function');
-  }
-
-  isDetached() {
-    return !this.parent;
-  }
-
-  _didCreateModel() {
-  }
-
-  _didDestroyModel() {
   }
 
   //
@@ -60,8 +50,6 @@ export default ModelMixin(class InternalBase {
       target = target.parent;
     }
   }
-
-  //
 
   _willEndPropertyChanges(changed) {
     changed('serialized');
@@ -114,6 +102,10 @@ export default ModelMixin(class InternalBase {
 
   //
 
+  isDetached() {
+    return !this.parent;
+  }
+
   _detach() {
     this.parent = null;
   }
@@ -125,8 +117,6 @@ export default ModelMixin(class InternalBase {
     assert(`internal is already attached`, !this.parent);
     this.parent = parent;
   }
-
-  //
 
   _detachInternal(value) {
     if(isInternal(value)) {
@@ -142,47 +132,6 @@ export default ModelMixin(class InternalBase {
 
   //
 
-  _deserializeKey(key, type) {
-    if(type === 'document') {
-      if(key.startsWith('_')) {
-        let sliced = key.slice(1);
-        if(prefixed.includes(sliced)) {
-          return sliced;
-        }
-      }
-      return camelize(key);
-    }
-    return key;
-  }
-
-  _serializeKey(key, type) {
-    if(type === 'document') {
-      if(prefixed.includes(key)) {
-        return `_${key}`;
-      }
-      return underscore(key);
-    }
-    return key;
-  }
-
-  //
-
-  deserialize(values, type, changed) {
-    this._assertType(type);
-    this._assertChanged(changed);
-    this._deserialize(values, type, changed);
-    return this;
-  }
-
-  //
-
-  serialize(type) {
-    this._assertType(type);
-    return this._serialize(type);
-  }
-
-  //
-
   _dirty(changed) {
     if(this.isDocument) {
       this.state.onDirty(changed);
@@ -192,6 +141,20 @@ export default ModelMixin(class InternalBase {
         document.withPropertyChanges(changed => document.state.onDirty(changed), true);
       }
     }
+  }
+
+  //
+
+  serialize(type) {
+    this._assertType(type);
+    return this._serialize(type);
+  }
+
+  deserialize(values, type, changed) {
+    this._assertType(type);
+    this._assertChanged(changed);
+    this._deserialize(values, type, changed);
+    return this;
   }
 
 });
