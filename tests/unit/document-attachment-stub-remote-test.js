@@ -3,7 +3,7 @@ import { test } from '../helpers/qunit';
 
 configurations(module => {
 
-  module('document-attachment-stub', {
+  module('document-attachment-stub-remote', {
     beforeEach() {
       return this.recreate();
     }

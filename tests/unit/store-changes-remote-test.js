@@ -29,13 +29,13 @@ configurations(module => {
     });
 
     changes.start();
-    await later(300);
+    await later(500);
 
     await this.docs.get('couch.db.ember-cli-documents-changes.database').create();
-    await later(300);
+    await later(500);
 
     await this.docs.get('couch.db.ember-cli-documents-changes.database').delete();
-    await later(300);
+    await later(500);
 
     assert.deepEqual(events, [
       {

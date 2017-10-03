@@ -5,11 +5,17 @@ export default Class => class ModelMixin extends Class {
     this._model = null;
   }
 
+  _didCreateModel() {
+  }
+
+  _didDestroyModel() {
+  }
+
   model(create) {
     let model = this._model;
     if(!model && create) {
       model = this._createModel();
-      this._didCreateModel && this._didCreateModel(model);
+      this._didCreateModel(model);
       this._model = model;
     }
     return model;
@@ -26,7 +32,7 @@ export default Class => class ModelMixin extends Class {
   _modelWillDestroy() {
     let model = this._model;
     this._model = null;
-    this._didDestroyModel && this._didDestroyModel(model);
+    this._didDestroyModel(model);
   }
 
 }

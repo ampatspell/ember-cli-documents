@@ -1,4 +1,9 @@
+import Ember from 'ember';
 import { toModel } from 'documents/util/internal';
+
+const {
+  String: { underscore, camelize }
+} = Ember;
 
 const arrayRemoveObject = (array, element) => {
   let idx = array.indexOf(element);
@@ -39,10 +44,6 @@ export default Class => class MutateMixin extends Class {
     return this.withPropertyChanges(changed => this._setValue(key, value, type, changed), true);
   }
 
-  _getValueNotify(key, type) {
-    return this.withPropertyChanges(changed => this._getValue(key, type, changed), true);
-  }
-
   //
 
   setValue(key, value) {
@@ -50,30 +51,47 @@ export default Class => class MutateMixin extends Class {
   }
 
   getValue(key) {
-    return toModel(this._getValueNotify(key, 'model'));
+    return toModel(this._getValue(key));
   }
 
   //
 
-  _diffObjects(values, type, fn) {
-    let keys = Object.keys(this.values);
-    for(let key in values) {
-      let deserializedKey = this._deserializeKey(key, type);
-      arrayRemoveObject(keys, deserializedKey);
-      let value = values[key];
-      fn(deserializedKey, value, type);
+  _deserializeDocumentKey(key) {
+    let value = camelize(key);
+    if(key.startsWith('_')) {
+      return `_${value}`;
     }
-    keys.forEach(key => fn(key, undefined, type));
+    return value;
   }
+
+  _deserializeKey(key, type) {
+    if(type === 'document') {
+      return this._deserializeDocumentKey(key);
+    }
+    return key;
+  }
+
+  _serializeDocumentKey(key) {
+    return underscore(key);
+  }
+
+  _serializeKey(key, type) {
+    if(type === 'document') {
+      return this._serializeDocumentKey(key);
+    }
+    return key;
+  }
+
+  //
 
   _deserialize(values, type, changed) {
     let setter = (key, value) => this._setValue(key, value, type, changed);
     let keys = Object.keys(this.values);
-    for(let key in values) {
-      let deserializedKey = this._deserializeKey(key, type);
-      arrayRemoveObject(keys, deserializedKey);
-      let value = values[key];
-      setter(deserializedKey, value, type);
+    for(let _key in values) {
+      let value = values[_key];
+      let key = this._deserializeKey(_key, type);
+      arrayRemoveObject(keys, key);
+      setter(key, value, type);
     }
     keys.forEach(key => setter(key, undefined, type));
   }
@@ -81,10 +99,11 @@ export default Class => class MutateMixin extends Class {
   _serialize(type) {
     let json = {};
     let values = this.values;
-    for(let key in values) {
-      let value = values[key];
+    for(let _key in values) {
+      let value = values[_key];
+      let key = this._serializeKey(_key, type);
       value = this._serializeValue(value, type);
-      json[this._serializeKey(key, type)] = value;
+      json[key] = value;
     }
     return json;
   }

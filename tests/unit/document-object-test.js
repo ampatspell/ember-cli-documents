@@ -90,3 +90,25 @@ test('update document notifies parent on change', function(assert) {
     }
   });
 });
+
+test('underscore properties are allowed in nested objects', function(assert) {
+  let doc = this.db.doc({ thing: { _name: 'thing', _nested: { _id: 'ok' } } });
+  assert.equal(doc._internal.values.thing.values._name, 'thing');
+  assert.equal(doc._internal.values.thing.values._nested.values._id, 'ok');
+  assert.deepEqual(doc.serialize('model'), {
+    "thing": {
+      "_name": "thing",
+      "_nested": {
+        "_id": "ok"
+      }
+    }
+  });
+  assert.deepEqual(doc.serialize('document'), {
+    "thing": {
+      "_name": "thing",
+      "_nested": {
+        "_id": "ok"
+      }
+    }
+  });
+});

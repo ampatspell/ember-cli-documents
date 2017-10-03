@@ -4,22 +4,11 @@ import State from './-state';
 import Queue from './-queue';
 
 const {
-  copy,
   Logger: { error }
 } = Ember;
 
+const prefixedKeys = [ 'id', 'rev', 'attachments' ];
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
-
-const replace = (from, to, json) => {
-  let value = json[from];
-  delete json[from];
-  if(value === undefined) {
-    delete json[to];
-  } else {
-    json[to] = value;
-  }
-  return json;
-};
 
 export default class InternalDocument extends InternalObject {
 
@@ -56,7 +45,7 @@ export default class InternalDocument extends InternalObject {
   }
 
   getId() {
-    return this._getValueNotify('_id', 'model');
+    return this._getValue('id');
   }
 
   setId(id) {
@@ -65,11 +54,11 @@ export default class InternalDocument extends InternalObject {
       error(`Document id cannot be changed after document is saved. Attempted to set id '${id}' for document '${current}'`);
       return current;
     }
-    return this._setValueNotify('_id', id, 'model');
+    return this._setValueNotify('id', id, 'model');
   }
 
   getRev() {
-    return this._getValueNotify('_rev', 'model');
+    return this._getValue('rev');
   }
 
   getIdRev() {
@@ -85,95 +74,91 @@ export default class InternalDocument extends InternalObject {
     return this.store._createInternalAttachments(this);
   }
 
-  attachments(create) {
-    let attachments = this._getValue('_attachments');
+  _attachments(create) {
+    let attachments = this._getValue('attachments');
     if(!attachments && create) {
       attachments = this._createAttachments();
-      this.values._attachments = attachments;
+      this.values.attachments = attachments;
     }
     return attachments;
   }
 
   getAttachments() {
-    return this.attachments(true).model(true);
+    return this._attachments(true).model(true);
   }
 
   setAttachments(values) {
-    let attachments = this.attachments(true);
+    let attachments = this._attachments(true);
     attachments.withPropertyChanges(changed => attachments._deserialize(values, 'model', changed), true);
     return attachments.model(true);
   }
 
   deserializeAttachments(doc, changed) {
     let _attachments = doc._attachments;
-    let attachments = this.attachments(false);
+    let attachments = this._attachments(false);
 
     if(!_attachments && !attachments) {
       return;
     }
 
     _attachments = _attachments || {};
-    attachments = attachments || this.attachments(true);
+    attachments = attachments || this._attachments(true);
 
     attachments._deserialize(_attachments, 'document', changed);
   }
 
   //
 
+  _deserializeDocumentKey(key) {
+    if(key.startsWith('_')) {
+      let sliced = key.slice(1);
+      if(prefixedKeys.includes(sliced)) {
+        return sliced;
+      }
+    }
+    return super._deserializeDocumentKey(key);
+  }
+
+  _serializeDocumentKey(key) {
+    if(prefixedKeys.includes(key)) {
+      return `_${key}`;
+    }
+    return super._serializeDocumentKey(key);
+  }
+
+  //
+
   _setValue(key, ...rest) {
-    if(key === '_attachments') {
-      return this.attachments(true)._deserialize(...rest);
+    if(isKeyUnderscored(key)) {
+      return;
+    }
+    if(key === 'attachments') {
+      return this._attachments(true)._deserialize(...rest);
     }
     return super._setValue(...arguments);
   }
 
-  setValue(key) {
+  _getValue(key) {
     if(isKeyUnderscored(key)) {
       return;
     }
-    return super.setValue(...arguments);
+    return super._getValue(...arguments);
   }
 
-  getValue(key) {
-    if(isKeyUnderscored(key)) {
-      return;
-    }
-    return super.getValue(...arguments);
-  }
-
-  willDeserialize(json, type) {
-    json = json || {};
-    if(type === 'model') {
-      json = copy(json, false);
-      replace('id', '_id', json);
-      replace('rev', '_rev', json);
-      replace('attachments', '_attachments', json);
-    }
-    return json;
-  }
-
-  didSerialize(json, type) {
-    if(type === 'model') {
-      replace('_id', 'id', json);
-      replace('_rev', 'rev', json);
-      replace('_attachments', 'attachments', json);
-    }
-    return json;
-  }
+  //
 
   deserializeDeleted(json, changed) {
     let type = 'document';
-    json = this.willDeserialize(json, type);
     let { id, rev } = json;
-    this._setValue('_id', id, type, changed);
-    this._setValue('_rev', rev, type, changed);
+    this._setValue('id', id, type, changed);
+    this._setValue('rev', rev, type, changed);
   }
 
   deserializeSaved(json, changed) {
     let type = 'document';
     let { id, rev } = json;
-    this._setValue('_id', id, type, changed);
-    this._setValue('_rev', rev, type, changed);
+    this._setValue('id', id, type, changed);
+    this._setValue('rev', rev, type, changed);
   }
 
   //

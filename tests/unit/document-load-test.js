@@ -117,10 +117,10 @@ configurations(module => {
 
     await doc.load();
     let rev = doc.get('rev');
-    doc._internal.values._rev = null;
+    doc._internal.values.rev = null;
 
     await doc.load({ force: true });
-    assert.equal(doc._internal.values._rev, rev);
+    assert.equal(doc._internal.values.rev, rev);
   });
 
 });
