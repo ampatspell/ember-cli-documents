@@ -27,8 +27,11 @@ export default Ember.Mixin.create({
   },
 
   _serializeShoebox() {
+    let identifier = this.get('identifier');
+    let documents = this.__serializeShoeboxDocuments();
     return {
-      documents: this.__serializeShoeboxDocuments()
+      identifier,
+      documents
     };
   }
 

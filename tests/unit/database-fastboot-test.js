@@ -9,6 +9,7 @@ test('serialize', function(assert) {
   this.db.doc({ id: 'three', name: 'Hamster' });
   let payload = this.db._serializeShoebox();
   assert.deepEqual(payload, {
+    identifier: "ember-cli-documents",
     documents: [
       {
         "_id": "one",
