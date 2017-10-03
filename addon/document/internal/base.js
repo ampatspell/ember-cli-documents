@@ -6,7 +6,7 @@ const {
   assert
 } = Ember;
 
-const types = [ 'document', 'model' ];
+const types = [ 'document', 'model', 'shoebox' ];
 
 export const empty = {};
 
@@ -145,8 +145,15 @@ export default ModelMixin(class InternalBase {
 
   //
 
+  shouldSerialize(type) {
+    return true;
+  }
+
   serialize(type) {
     this._assertType(type);
+    if(!this.shouldSerialize(type)) {
+      return;
+    }
     return this._serialize(type);
   }
 

@@ -44,7 +44,7 @@ export default class StubContent extends Content {
     this._notifyPropertiesChanged();
   }
 
-  serialize() {
+  _serialize() {
     return this.props;
   }
 

@@ -31,6 +31,10 @@ export default class InternalDocument extends InternalObject {
     return this.state.isNew;
   }
 
+  get isLoaded() {
+    return this.state.isLoaded;
+  }
+
   get isDeleted() {
     return this.state.isDeleted;
   }
@@ -159,6 +163,17 @@ export default class InternalDocument extends InternalObject {
     let { id, rev } = json;
     this._setValue('id', id, type, changed);
     this._setValue('rev', rev, type, changed);
+  }
+
+  //
+
+  shouldSerialize(type) {
+    if(type === 'shoebox') {
+      if(this.isNew || !this.isLoaded) {
+        return false;
+      }
+    }
+    return super.shouldSerialize(type);
   }
 
   //

@@ -65,7 +65,7 @@ export default Class => class MutateMixin extends Class {
   }
 
   _deserializeKey(key, type) {
-    if(type === 'document') {
+    if(type === 'document' || type === 'shoebox') {
       return this._deserializeDocumentKey(key);
     }
     return key;
@@ -76,7 +76,7 @@ export default Class => class MutateMixin extends Class {
   }
 
   _serializeKey(key, type) {
-    if(type === 'document') {
+    if(type === 'document' || type === 'shoebox') {
       return this._serializeDocumentKey(key);
     }
     return key;
@@ -103,7 +103,9 @@ export default Class => class MutateMixin extends Class {
       let value = values[_key];
       let key = this._serializeKey(_key, type);
       value = this._serializeValue(value, type);
-      json[key] = value;
+      if(value !== undefined) {
+        json[key] = value;
+      }
     }
     return json;
   }
