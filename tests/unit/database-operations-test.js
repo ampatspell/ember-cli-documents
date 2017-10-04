@@ -83,6 +83,8 @@ test('cancel queued operations on willDestroy', async function(assert) {
     invoked = true;
   });
 
+  assert.ok(this.db._operations.get('length') === 1);
+
   run(() => this.db.destroy());
 
   let settle = run(() => this.db.settle());
@@ -100,4 +102,6 @@ test('cancel queued operations on willDestroy', async function(assert) {
       "reason": "operation_destroyed"
     });
   }
+
+  assert.ok(this.db._operations.get('length') === 0);
 });

@@ -4,6 +4,7 @@ import Operation from './-operation';
 const {
   on,
   A,
+  copy,
   run: { next },
   RSVP: { defer, allSettled }
 } = Ember;
@@ -15,7 +16,7 @@ export default Ember.Mixin.create({
   }),
 
   __destroyAllOperations() {
-    let operations = this._operations;
+    let operations = copy(this._operations);
     operations.forEach(op => op.destroy());
   },
 
