@@ -1,6 +1,5 @@
 # TODO
 
-* store.settle promise
 * ember inspector integration
 * loadable collection and document computed properties
 * array deserialize should diff existing content not just clear existing content

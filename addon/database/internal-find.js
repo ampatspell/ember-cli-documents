@@ -3,7 +3,6 @@ import DocumentsError from '../util/error';
 import Operation from './-operation';
 
 const {
-  on,
   A,
   merge,
   RSVP: { reject }
@@ -36,20 +35,10 @@ const doc = fn => function(...args) {
 
 export default Ember.Mixin.create({
 
-  __createOperations: on('init', function() {
-    this._operations = new A();
-  }),
-
-  __registerDatabaseOperation(operation) {
-    let operations = this._operations;
-    operations.pushObject(operation);
-    operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
-  },
-
   __scheduleDatabaseOperation(label, opts, fn) {
     opts = merge({}, opts);
     let op = new Operation(label, { opts }, fn);
-    this.__registerDatabaseOperation(op);
+    this._registerDatabaseOperation(op);
     op.invoke();
     return op.promise;
   },

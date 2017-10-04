@@ -1,7 +1,6 @@
 import Ember from 'ember';
 
 const {
-  A,
   merge
 } = Ember;
 
@@ -24,8 +23,7 @@ export default Ember.Mixin.create({
   },
 
   __serializeShoeboxDatabases() {
-    let databases = this.get('openDatabases');
-    return A(Object.keys(databases)).map(key => this.__serializeShoeboxDatabase(databases[key]));
+    return this._openDatabases().map(database => this.__serializeShoeboxDatabase(database));
   },
 
   _serializeShoebox() {
