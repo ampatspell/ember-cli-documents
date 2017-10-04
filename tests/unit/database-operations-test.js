@@ -76,3 +76,28 @@ test('register function as an operation', async function(assert) {
 
   assert.ok(done);
 });
+
+test('cancel queued operations on willDestroy', async function(assert) {
+  let invoked = false;
+  let promise = this.db.operation('random', {}, () => {
+    invoked = true;
+  });
+
+  run(() => this.db.destroy());
+
+  let settle = run(() => this.db.settle());
+
+  await settle;
+
+  assert.ok(!invoked);
+
+  try {
+    await promise;
+    assert.ok(false, 'should throw');
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "internal",
+      "reason": "operation_destroyed"
+    });
+  }
+});

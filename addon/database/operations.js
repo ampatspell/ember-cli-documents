@@ -14,6 +14,11 @@ export default Ember.Mixin.create({
     this._operations = new A();
   }),
 
+  __destroyAllOperations() {
+    let operations = this._operations;
+    operations.forEach(op => op.destroy());
+  },
+
   __registerOperation(operation) {
     let operations = this._operations;
     operations.pushObject(operation);
@@ -56,8 +61,13 @@ export default Ember.Mixin.create({
   operation(label, opts, fn) {
     let op = new Operation(label, { opts }, fn);
     this.__registerOperation(op);
-    op.invoke();
+    next(() => op.invoke());
     return op.promise;
+  },
+
+  willDestroy() {
+    this.__destroyAllOperations();
+    this._super();
   }
 
 });
