@@ -11,6 +11,7 @@ export default Ember.Mixin.create({
 
   __scheduleInternalOperation(label, internal, props, fn) {
     let op = new Operation(label, assign({ internal }, props), fn);
+    this._registerInternalOperation(op);
     return internal.addOperation(op);
   },
 

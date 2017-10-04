@@ -1,9 +1,18 @@
 import Ember from 'ember';
 import { object } from '../util/computed';
 
+const {
+  A
+} = Ember;
+
 export default Ember.Mixin.create({
 
   openDatabases: object().readOnly(),
+
+  _openDatabases() {
+    let databases = this.get('openDatabases')
+    return A(A(Object.keys(databases)).map(key => databases[key]));
+  },
 
   _normalizeDatabaseIdentifier(identifier) {
     return identifier.trim();

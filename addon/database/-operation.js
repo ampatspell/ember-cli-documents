@@ -1,7 +1,8 @@
 import Ember from 'ember';
+import DocumentsError from '../util/error';
 
 const {
-  RSVP: { defer, resolve },
+  RSVP: { defer, resolve, reject },
   assign
 } = Ember;
 
@@ -12,6 +13,7 @@ export default class Operation {
     this.fn = fn;
     assign(this, props);
     this.deferred = defer();
+    this.destroyed = false;
   }
 
   _resolve(arg) {
@@ -26,10 +28,21 @@ export default class Operation {
     return this.deferred.promise;
   }
 
+  _invoke() {
+    if(this.destroyed) {
+      return reject(new DocumentsError({ error: 'internal', reason: 'operation_destroyed' }));
+    }
+    return this.fn(this);
+  }
+
   invoke() {
     resolve()
-      .then(() => this.fn(this))
+      .then(() => this._invoke())
       .then(arg => this._resolve(arg), err => this._reject(err));
+  }
+
+  destroy() {
+    this.destroyed = true;
   }
 
 }
