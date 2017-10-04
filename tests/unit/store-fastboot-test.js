@@ -47,3 +47,20 @@ test('deserialize', function(assert) {
   assert.ok(this.store.database('two').existing('one'));
   assert.ok(!this.store.database('two').existing('two'));
 });
+
+test('settle all db operations in __fastbootDefer', async function(assert) {
+  await this.recreate();
+
+  this.db.doc({ id: 'one' }).save();
+  this.db.doc({ id: 'two' }).save();
+
+  let settle = this.store.__fastbootDefer();
+
+  this.db.doc({ id: 'three' }).save();
+
+  assert.ok(this.db._operations.get('length') === 3);
+
+  await settle;
+
+  assert.ok(this.db._operations.get('length') === 0);
+});

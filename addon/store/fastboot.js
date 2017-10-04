@@ -2,13 +2,15 @@ import Ember from 'ember';
 
 const {
   getOwner,
-  RSVP: { resolve }
+  RSVP: { allSettled }
 } = Ember;
 
 export default Ember.Mixin.create({
 
   __fastbootDefer() {
-    return resolve();
+    return allSettled([
+      this.settle()
+    ]);
   },
 
   enableFastBootWithIdentifier(identifier) {
