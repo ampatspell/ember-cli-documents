@@ -1,6 +1,9 @@
 <div class="row">
-  {{proxy}}
+  {{doc}} {{doc.content}} {{doc.id}}
 </div>
 <div class="row">
-  {{ui-block/json proxy.state}}
+  <button {{action 'load'}}>Load</button>
+</div>
+<div class="row">
+  {{ui-block/json doc.state}}
 </div>

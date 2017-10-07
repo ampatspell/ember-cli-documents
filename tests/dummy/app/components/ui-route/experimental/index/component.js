@@ -2,18 +2,38 @@ import Ember from 'ember';
 import layout from './template';
 
 const {
-  computed
+  computed,
+  merge
 } = Ember;
+
+const docById = opts => {
+  opts = merge({ database: 'database', id: 'id' }, opts);
+  return computed(opts.database, opts.id, function() {
+    let database = this.get(opts.database);
+    if(!database) {
+      return;
+    }
+    let id = this.get(opts.id);
+    if(!id) {
+      return;
+    }
+    let internal = database._createInternalDocumentProxy({ id });
+    return internal.model(true);
+  }).readOnly();
+};
 
 export default Ember.Component.extend({
   layout,
 
   id: 'message:first',
 
-  proxy: computed(function() {
-    let internal = this.get('store')._createInternalDocumentProxy({ });
-    let model = internal.model(true);
-    return model;
-  })
+  doc: docById({ database: 'db', id: 'id' }),
+
+  actions: {
+    async load() {
+      let doc = this.get('doc');
+      await doc && doc.load();
+    }
+  }
 
 });

@@ -75,9 +75,9 @@ export default Ember.Mixin.create({
     return new InternalStoreChanges(this, opts);
   },
 
-  _createInternalDocumentProxy(opts) {
+  _createInternalDocumentProxy(database, opts) {
     let InternalDocumentProxy = this._internalFactory('proxy/document');
-    return new InternalDocumentProxy(this, opts);
+    return new InternalDocumentProxy(this, database, opts);
   }
 
 });

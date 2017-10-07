@@ -56,6 +56,10 @@ export default Ember.Mixin.create({
 
   _createInternalAttachment(props) {
     return this.get('store')._createInternalAttachment(null, props);
+  },
+
+  _createInternalDocumentProxy(opts) {
+    return this.get('store')._createInternalDocumentProxy(this, opts);
   }
 
 });
