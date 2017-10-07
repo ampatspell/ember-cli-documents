@@ -1,5 +1,9 @@
 # TODO
 
+* Don't transform document keys (except _id, _rev and _attachment(?))
+* `db.identity -> db._documents.all` mapping
+* `store.identity -> [ db.identity, ... ]`
+
 * ember inspector integration
 * loadable collection and document computed properties
 * array deserialize should diff existing content not just clear existing content
