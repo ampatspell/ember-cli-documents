@@ -7,6 +7,9 @@ module.exports = function(defaults) {
   let app = new EmberAddon(defaults, {
     dotEnv: {
       clientAllowedKeys: [ 'COUCHDB_HOST' ]
+    },
+    addons: {
+      blacklist: [ 'ember-cli-fastboot' ]
     }
   });
   return app.toTree();
