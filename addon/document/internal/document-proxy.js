@@ -48,6 +48,7 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
   scheduleLoad() {
     this._willLoad();
     return this.database._internalDocumentFirst(this.query).then(internal => {
+      // TODO: Don't populate loaded, filter should automatically pick up loaded doc
       return this._didLoad(internal);
     }, err => {
       return this._loadDidFail(err);

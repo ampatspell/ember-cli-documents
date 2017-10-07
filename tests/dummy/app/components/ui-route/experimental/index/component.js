@@ -17,6 +17,7 @@ const docById = opts => {
     if(!id) {
       return;
     }
+    // TODO: query & content lookup instead of `id`
     let internal = database._createInternalDocumentProxy({ id });
     return internal.model(true);
   }).readOnly();
