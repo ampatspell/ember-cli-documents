@@ -4,7 +4,7 @@ import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
 import environment from '../../config/environment';
 
-const host = environment.APP.COUCHDB_HOST;
+const host = environment.COUCHDB_HOST;
 
 const {
   RSVP: { resolve },
