@@ -3,7 +3,10 @@ import DocumentsError from 'documents/util/error';
 import createTransform from 'documents/util/create-array-transform-mixin';
 
 const {
-  computed
+  computed,
+  computed: { mapBy, reads },
+  on,
+  A
 } = Ember;
 
 const TransformMixin = createTransform({
@@ -24,9 +27,10 @@ export default Ember.ArrayProxy.extend(TransformMixin, {
   // destroy model
   // destroy database
 
-  content: computed('openDatabases', function() {
-    let dbs = this._internal.store.get('openDatabases');
-    console.log(dbs);
-  }).readOnly()
+  _databases: reads('_internal.store._databases.all'),
+
+  content: computed(function() {
+    return A();
+  })
 
 });
