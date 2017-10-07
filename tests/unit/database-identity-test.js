@@ -1,5 +1,10 @@
+import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+
+const {
+  run
+} = Ember;
 
 module('database-identity');
 
@@ -9,12 +14,24 @@ test('it exists', function(assert) {
   assert.ok(identity.get('length') === 0);
 });
 
-test('identity includes new models', function(assert) {
+test('identity includes new docs', function(assert) {
   let identity = this.db.get('identity');
   assert.ok(identity.get('length') === 0);
   let doc = this.db.doc();
   assert.ok(identity.get('length') === 1);
   assert.ok(identity.get('lastObject') === doc);
+});
+
+test('docs are removed from identity', function(assert) {
+  let identity = this.db.get('identity');
+  assert.ok(identity.get('length') === 0);
+
+  let doc = this.db.doc();
+  assert.ok(identity.get('lastObject') === doc);
+
+  run(() => doc.destroy());
+
+  assert.ok(identity.get('length') === 0);
 });
 
 test('identity is immutable', function(assert) {

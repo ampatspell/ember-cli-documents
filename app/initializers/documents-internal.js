@@ -1,6 +1,7 @@
 import Stores from 'documents/stores';
 
 import Store from 'documents/store';
+import StoreIdentity from 'documents/store/-identity';
 import Session from 'documents/session';
 
 import Database from 'documents/database';
@@ -42,7 +43,6 @@ export default {
     container.register('documents:store', Store);
     container.register('documents:session', Session);
     container.register('documents:database', Database);
-    container.register('documents:database/identity', DatabaseIdentity);
 
     container.register('documents:database/security', DatabaseSecurity);
     container.register('documents:database/security/pair', DatabaseSecurityPair);
@@ -75,5 +75,8 @@ export default {
 
     container.register('documents:internal/changes/database', InternalDatabaseChanges);
     container.register('documents:internal/changes/store', InternalStoreChanges);
+
+    container.register('documents:database/identity', DatabaseIdentity);
+    container.register('documents:store/identity', StoreIdentity);
   }
 };
