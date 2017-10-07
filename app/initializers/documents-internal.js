@@ -33,6 +33,9 @@ import StoreChanges from 'documents/changes/store/changes';
 import AdapterCouchStore from 'documents/adapter/couch/store';
 import AdapterCouchDatabase from 'documents/adapter/couch/database';
 
+import DocumentProxy from 'documents/document/document-proxy';
+import InternalDocumentProxy from 'documents/document/internal/document-proxy';
+
 export default {
   name: 'documents:internal',
   initialize(container) {
@@ -73,5 +76,8 @@ export default {
 
     container.register('documents:internal/changes/database', InternalDatabaseChanges);
     container.register('documents:internal/changes/store', InternalStoreChanges);
+
+    container.register('documents:internal/proxy/document', InternalDocumentProxy);
+    container.register('documents:proxy/document', DocumentProxy);
   }
 };
