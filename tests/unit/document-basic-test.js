@@ -124,5 +124,5 @@ test('id, name and fooBar set, get, serialize, deserialize', function(assert) {
   assert.equal(doc.get('fooBar'), 'hello', 'doc fooBar must be hello');
   assert.equal(doc._internal.values.fooBar, 'hello', 'doc foo_bar must be hello');
   assert.equal(doc.serialize('model').fooBar, 'hello', 'doc.serialized fooBar must be hello');
-  assert.equal(doc.serialize('document').foo_bar, 'hello', 'doc.serialized foo_bar must be hello');
+  assert.equal(doc.serialize('document').fooBar, 'hello', 'doc.serialized foo_bar must be hello');
 });
