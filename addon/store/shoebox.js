@@ -23,7 +23,7 @@ export default Ember.Mixin.create({
   },
 
   __serializeShoeboxDatabases() {
-    return this._openDatabases().map(database => this.__serializeShoeboxDatabase(database));
+    return this._databases.all.map(database => this.__serializeShoeboxDatabase(database));
   },
 
   _serializeShoebox() {
