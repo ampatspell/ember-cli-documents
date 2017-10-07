@@ -1,18 +1,21 @@
 import Ember from 'ember';
-import { object } from '../util/computed';
+import EmptyObject from '../util/empty-object';
 
 const {
-  A
+  A,
+  on,
+  copy
 } = Ember;
 
 export default Ember.Mixin.create({
 
-  openDatabases: object().readOnly(),
+  _databases: null,
 
-  _openDatabases() {
-    let databases = this.get('openDatabases')
-    return A(A(Object.keys(databases)).map(key => databases[key]));
-  },
+  _setupDatabases: on('init', function() {
+    this._databases = new EmptyObject();
+    this._databases.keyed = new EmptyObject();
+    this._databases.all = A();
+  }),
 
   _normalizeDatabaseIdentifier(identifier) {
     return identifier.trim();
@@ -27,29 +30,27 @@ export default Ember.Mixin.create({
   },
 
   database(identifier) {
-    let open = this.get('openDatabases');
+    let databases = this._databases;
     let normalizedIdentifier = this._normalizeDatabaseIdentifier(identifier);
-    let database = open[normalizedIdentifier];
+    let database = databases.keyed[normalizedIdentifier];
     if(!database) {
       database = this._createDatabase(normalizedIdentifier);
-      open[normalizedIdentifier] = database;
+      databases.keyed[normalizedIdentifier] = database;
+      databases.all.pushObject(database);
     }
     return database;
   },
 
   _databaseWillDestroy(db) {
     let identifier = db.get('identifier');
-    let open = this.get('openDatabases');
-    delete open[identifier];
+    let databases = this._databases;
+    delete databases.keyed[identifier];
+    databases.all.removeObject(db);
   },
 
   willDestroy() {
     this._super();
-    let open = this.get('openDatabases');
-    for(let key in open) {
-      let value = open[key];
-      value.destroy();
-    }
+    copy(this._databases.all).forEach(db => db.destroy());
   }
 
 });
