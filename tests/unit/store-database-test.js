@@ -29,16 +29,19 @@ test('create database returns another db for another identifier', function(asser
 });
 
 test('database is added to open databases', function(assert) {
-  let dbs = this.store.get('openDatabases');
+  let dbs = this.store._databases;
   assert.ok(!dbs.duck);
   let db = this.store.database('duck');
-  assert.ok(dbs.duck === db);
+  assert.ok(dbs.keyed.duck === db);
+  assert.ok(dbs.all.includes(db));
 });
 
 test('database on destroy is removed from open databases', function(assert) {
-  let dbs = this.store.get('openDatabases');
+  let dbs = this.store._databases;
   let db = this.store.database('duck');
-  assert.ok(dbs.duck);
+  assert.ok(dbs.keyed.duck);
+  assert.ok(dbs.all.includes(db));
   run(() => db.destroy());
-  assert.ok(!dbs.duck);
+  assert.ok(!dbs.keyed.duck);
+  assert.ok(!dbs.all.includes(db));
 });
