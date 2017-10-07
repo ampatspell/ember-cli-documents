@@ -15,7 +15,6 @@ export default {
     if(registered) {
       return;
     }
-    console.log(name, version);
     Ember.libraries.register(name, version);
     registered = true;
   }
