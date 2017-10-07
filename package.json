@@ -3,7 +3,11 @@
   "version": "0.0.3",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "couchdb",
+    "documents",
+    "persistence",
+    "rest"
   ],
   "license": "MIT",
   "author": "Arnis Vuskans <ampatspell@gmail.com>",
