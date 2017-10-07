@@ -1,5 +1,5 @@
 import DocumentObject from './object';
-import StateMixin from './-state-mixin';
+import DocumentStateMixin from './-document-state-mixin';
 import SerializedMixin from './-serialized-mixin';
 import { forward, property, promise } from './-properties';
 
@@ -8,7 +8,7 @@ const rev         = forward('getRev');
 const attachments = forward('getAttachments', 'setAttachments');
 const database    = property('database');
 
-export default DocumentObject.extend(StateMixin, SerializedMixin, {
+export default DocumentObject.extend(DocumentStateMixin, SerializedMixin, {
 
   id: id(),
   rev: rev(),

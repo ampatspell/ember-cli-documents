@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import InternalObject from './object';
-import State from './-state';
+import DocumentState from './-document-state';
 import Queue from './-queue';
 
 const {
@@ -15,7 +15,7 @@ export default class InternalDocument extends InternalObject {
   constructor(store, database) {
     super(store, null);
     this.database = database;
-    this.state = new State();
+    this.state = new DocumentState();
     this.queue = new Queue();
   }
 
