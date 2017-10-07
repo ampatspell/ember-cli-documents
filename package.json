@@ -25,14 +25,14 @@
     "coverage-server": "COVERAGE=true ember test --server"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.0.0-beta.4",
-    "serve-static": "^1.12.4"
+    "ember-cli-babel": "^6.8.2",
+    "serve-static": "^1.13.1"
   },
   "devDependencies": {
     "broccoli-asset-rev": "2.6.0",
     "ember-cli": "2.15.1",
     "ember-cli-code-coverage": "0.4.1",
-    "ember-cli-couch": "^1.0.7",
+    "ember-cli-couch": "^1.0.8",
     "ember-cli-dependency-checker": "2.0.1",
     "ember-cli-dotenv": "^1.2.0",
     "ember-cli-eslint": "4.2.0",
