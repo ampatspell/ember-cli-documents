@@ -1,4 +1,5 @@
 import Stores from 'documents/stores';
+import StoresIdentity from 'documents/stores/-identity';
 
 import Store from 'documents/store';
 import StoreIdentity from 'documents/store/-identity';
@@ -76,7 +77,8 @@ export default {
     container.register('documents:internal/changes/database', InternalDatabaseChanges);
     container.register('documents:internal/changes/store', InternalStoreChanges);
 
-    container.register('documents:database/identity', DatabaseIdentity);
+    container.register('documents:stores/identity', StoresIdentity);
     container.register('documents:store/identity', StoreIdentity);
+    container.register('documents:database/identity', DatabaseIdentity);
   }
 };
