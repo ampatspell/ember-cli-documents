@@ -21,7 +21,32 @@ import ProxyState from './-proxy-state';
   matcher -- matches
 */
 
-export default class DocumentProxyInternal extends ModelMixin(Base) {
+const ContentMixin = Class => class Content extends Class {
+
+  constructor() {
+    super(...arguments);
+    this._content = null;
+  }
+
+  content(create) {
+    let content = this._content;
+    if(!content) {
+      return null;
+    }
+    return content.model(create);
+  }
+
+  _setContent(internal, changed) {
+    if(this._content === internal) {
+      return;
+    }
+    this.content = internal;
+    changed('content');
+  }
+
+}
+
+export default class DocumentProxyInternal extends ContentMixin(ModelMixin(Base)) {
 
   constructor(store, database, opts) {
     super();
@@ -29,7 +54,6 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
     this.database = database;
     this.opts = opts;
     this.state = new ProxyState();
-    this.content = null;
     window.pr = this;
   }
 
@@ -37,32 +61,24 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
     return this.store._createDocumentProxy(this);
   }
 
-  _setContent(internal, changed) {
-    if(this.content === internal) {
-      return;
-    }
-    this.content = internal;
-    changed('content');
-  }
+  // _willLoad() {
+  //   this.withPropertyChanges(changed => {
+  //     this.state.onLoading(changed);
+  //   }, true);
+  // }
 
-  _willLoad() {
-    this.withPropertyChanges(changed => {
-      this.state.onLoading(changed);
-    }, true);
-  }
+  // _didLoad(internal) {
+  //   this.withPropertyChanges(changed => {
+  //     this._setContent(internal, changed);
+  //     this.state.onLoaded(changed);
+  //   }, true);
+  // }
 
-  _didLoad(internal) {
-    this.withPropertyChanges(changed => {
-      this._setContent(internal, changed);
-      this.state.onLoaded(changed);
-    }, true);
-  }
-
-  _loadDidFail(err) {
-    this.withPropertyChanges(changed => {
-      this.state.onError(err, changed);
-    }, true);
-  }
+  // _loadDidFail(err) {
+  //   this.withPropertyChanges(changed => {
+  //     this.state.onError(err, changed);
+  //   }, true);
+  // }
 
   scheduleLoad() {
     // this._willLoad();

@@ -10,11 +10,7 @@ const database = property('database');
 
 const content = () => computed({
   get() {
-    let content = this._internal.content;
-    if(!content) {
-      return null;
-    }
-    return content.model(true);
+    return this._internal.content(true);
   }
 }).readOnly();
 
