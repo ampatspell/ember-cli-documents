@@ -1,9 +1,4 @@
-import Ember from 'ember';
 import { toModel } from 'documents/util/internal';
-
-const {
-  String: { underscore, camelize }
-} = Ember;
 
 const arrayRemoveObject = (array, element) => {
   let idx = array.indexOf(element);
@@ -57,11 +52,7 @@ export default Class => class MutateMixin extends Class {
   //
 
   _deserializeDocumentKey(key) {
-    let value = camelize(key);
-    if(key.startsWith('_')) {
-      return `_${value}`;
-    }
-    return value;
+    return key;
   }
 
   _deserializeKey(key, type) {
@@ -72,7 +63,7 @@ export default Class => class MutateMixin extends Class {
   }
 
   _serializeDocumentKey(key) {
-    return underscore(key);
+    return key;
   }
 
   _serializeKey(key, type) {

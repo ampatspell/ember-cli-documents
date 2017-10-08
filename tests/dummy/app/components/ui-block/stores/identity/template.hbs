@@ -1,0 +1,13 @@
+{{#each documents as |doc|}}
+  <div>
+    {{doc.id}}
+    {{#if doc.isNew}}
+      [new]
+    {{else}}
+      / {{doc.rev}}
+    {{/if}}
+    {{#if doc.isDirty}}[dirty]{{/if}}
+  </div>
+{{else}}
+  <div>No documents</div>
+{{/each}}

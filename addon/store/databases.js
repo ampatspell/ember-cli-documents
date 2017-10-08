@@ -1,18 +1,11 @@
 import Ember from 'ember';
-import { object } from '../util/computed';
+import createNestedRegistry from '../util/create-nested-registry';
 
-const {
-  A
-} = Ember;
+const DatabasesRegistry = createNestedRegistry({ key: '_databases' });
 
-export default Ember.Mixin.create({
+export default Ember.Mixin.create(DatabasesRegistry, {
 
-  openDatabases: object().readOnly(),
-
-  _openDatabases() {
-    let databases = this.get('openDatabases')
-    return A(A(Object.keys(databases)).map(key => databases[key]));
-  },
+  _databases: null,
 
   _normalizeDatabaseIdentifier(identifier) {
     return identifier.trim();
@@ -27,29 +20,24 @@ export default Ember.Mixin.create({
   },
 
   database(identifier) {
-    let open = this.get('openDatabases');
+    let databases = this._databases;
     let normalizedIdentifier = this._normalizeDatabaseIdentifier(identifier);
-    let database = open[normalizedIdentifier];
+    let database = databases.get(normalizedIdentifier);
     if(!database) {
       database = this._createDatabase(normalizedIdentifier);
-      open[normalizedIdentifier] = database;
+      databases.set(normalizedIdentifier, database);
     }
     return database;
   },
 
   _databaseWillDestroy(db) {
     let identifier = db.get('identifier');
-    let open = this.get('openDatabases');
-    delete open[identifier];
+    this._databases.remove(identifier);
   },
 
   willDestroy() {
+    this._databases.destroy();
     this._super();
-    let open = this.cacheFor('openDatabases');
-    for(let key in open) {
-      let value = open[key];
-      value.destroy();
-    }
   }
 
 });
