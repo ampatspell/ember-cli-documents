@@ -20,6 +20,7 @@ export default {
     let changes = db.changes({ feed: 'event-source' });
     changes.start();
 
+    app.register('service:stores', stores, { instantiate: false });
     app.register('service:store', store, { instantiate: false });
     app.register('service:db', db, { instantiate: false });
 
