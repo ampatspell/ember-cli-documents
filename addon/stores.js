@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { object } from './util/computed';
-import { destroyObject } from './util/destroy';
 import createNestedRegistry from './util/create-nested-registry';
 
 const {
