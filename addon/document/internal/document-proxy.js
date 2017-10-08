@@ -15,6 +15,12 @@ import ProxyState from './-proxy-state';
 //   return opts.query.call(owner, properties);
 // }
 
+/*
+  state
+  loader -- query
+  matcher -- matches
+*/
+
 export default class DocumentProxyInternal extends ModelMixin(Base) {
 
   constructor(store, database, opts) {
