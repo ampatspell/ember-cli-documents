@@ -1,21 +1,11 @@
 import Ember from 'ember';
-import EmptyObject from '../util/empty-object';
+import createNestedRegistry from '../util/create-nested-registry';
 
-const {
-  A,
-  on,
-  copy
-} = Ember;
+const DatabasesRegistry = createNestedRegistry({ key: '_databases' });
 
-export default Ember.Mixin.create({
+export default Ember.Mixin.create(DatabasesRegistry, {
 
   _databases: null,
-
-  _setupDatabases: on('init', function() {
-    this._databases = new EmptyObject();
-    this._databases.keyed = new EmptyObject();
-    this._databases.all = A();
-  }),
 
   _normalizeDatabaseIdentifier(identifier) {
     return identifier.trim();
@@ -32,25 +22,22 @@ export default Ember.Mixin.create({
   database(identifier) {
     let databases = this._databases;
     let normalizedIdentifier = this._normalizeDatabaseIdentifier(identifier);
-    let database = databases.keyed[normalizedIdentifier];
+    let database = databases.get(normalizedIdentifier);
     if(!database) {
       database = this._createDatabase(normalizedIdentifier);
-      databases.keyed[normalizedIdentifier] = database;
-      databases.all.pushObject(database);
+      databases.set(normalizedIdentifier, database);
     }
     return database;
   },
 
   _databaseWillDestroy(db) {
     let identifier = db.get('identifier');
-    let databases = this._databases;
-    delete databases.keyed[identifier];
-    databases.all.removeObject(db);
+    this._databases.remove(identifier);
   },
 
   willDestroy() {
+    this._databases.destroy();
     this._super();
-    copy(this._databases.all).forEach(db => db.destroy());
   }
 
 });
