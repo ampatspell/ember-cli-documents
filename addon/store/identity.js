@@ -10,6 +10,12 @@ export default Ember.Mixin.create({
   identity: computed(function() {
     let _internal = { store: this };
     return this._modelFactory('store/identity').create({ _internal, content: A() });
-  }).readOnly()
+  }).readOnly(),
+
+  willDestroy() {
+    let identity = this.cacheFor('identity');
+    identity && identity.destroy();
+    this._super();
+  }
 
 });

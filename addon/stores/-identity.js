@@ -12,6 +12,11 @@ const UnifyMixin = createArrayUnify({
 
 export default Ember.ArrayProxy.extend(UnifyMixin, TransformMixin, {
 
-  _internal: null
+  _internal: null,
+
+  willDestroy() {
+    console.log(this+' willDestroy');
+    this._super();
+  }
 
 });
