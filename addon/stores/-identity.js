@@ -4,8 +4,8 @@ import createArrayUnify from 'documents/util/create-array-unify-mixin';
 
 const UnifyMixin = createArrayUnify({
   root: {
-    array: '_internal.store._databases.all',
-    key: '_documents.all'
+    array: '_internal.stores._stores.all',
+    key: 'identity.content'
   },
   content: 'content'
 });
