@@ -21,6 +21,7 @@ const values = internal => {
   }
 
   dep('_internal.owner', internal.opts.owner);
+  // TODO: get rid of @each. add explicit observers for documents, notify each document change separately and have enumerableObserver for adds and removes
   dep('_internal.documents.@each', internal.opts.document);
 
   return computed(...deps, function() {
