@@ -6,9 +6,6 @@ const {
   computed: { reads }
 } = Ember;
 
-const documentsKey = '_internal.documents';
-const ownerKey = '_internal.owner';
-
 const values = internal => {
   let deps = [];
 
@@ -23,8 +20,8 @@ const values = internal => {
     deps.push(`${prefix}.{${keys.join(',')}}`);
   }
 
-  dep(ownerKey, internal.opts.source);
-  dep(`${documentsKey}.@each`, internal.opts.target);
+  dep('_internal.owner', internal.opts.owner);
+  dep('_internal.documents.@each', internal.opts.document);
 
   return computed(...deps, function() {
     return this._internal.recompute();

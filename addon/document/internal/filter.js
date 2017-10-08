@@ -9,6 +9,15 @@ const {
 
 export default class FilterInternal extends ModelMixin(Base) {
 
+  /*
+    opts: {
+      owner: { id: 'id' },
+      document: { id: 'id' },
+      matches(doc, props) {
+        return doc.get('id') === props.id;
+      }
+    }
+  */
   constructor(store, database, owner, opts) {
     super();
     this.store = store;
@@ -28,7 +37,7 @@ export default class FilterInternal extends ModelMixin(Base) {
   get properties() {
     let properties = {};
     let owner = this.owner;
-    let source = this.opts.source;
+    let source = this.opts.owner;
     for(let key in source) {
       properties[key] = get(owner, source[key]);
     }

@@ -16,8 +16,8 @@ export default Ember.Component.extend({
   filter: computed(function() {
     let db = this.get('db');
     let filter = db._createInternalFilter(this, {
-      source: { id: 'id' },
-      target: { id: 'id' },
+      owner: { id: 'id' },
+      document: { id: 'id' },
       matches(doc, props) {
         return doc.get('id') === props.id;
       }
