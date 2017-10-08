@@ -2,51 +2,13 @@ import Base from './base';
 import ModelMixin from './-model-mixin';
 import ProxyState from './-proxy-state';
 
-// const mapProperties = (owner, mapping) => {
-//   let properties = {};
-//   for(let key in mapping) {
-//     properties[key] = get(owner, mapping[key]);
-//   }
-//   return properties;
-// }
-
-// const buildQuery = (owner, opts) => {
-//   let properties = mapProperties(owner, get(opts, 'properties'));
-//   return opts.query.call(owner, properties);
-// }
-
 /*
   state
   loader -- query
   matcher -- matches
 */
 
-const ContentMixin = Class => class Content extends Class {
-
-  constructor() {
-    super(...arguments);
-    this._content = null;
-  }
-
-  content(create) {
-    let content = this._content;
-    if(!content) {
-      return null;
-    }
-    return content.model(create);
-  }
-
-  _setContent(internal, changed) {
-    if(this._content === internal) {
-      return;
-    }
-    this.content = internal;
-    changed('content');
-  }
-
-}
-
-export default class DocumentProxyInternal extends ContentMixin(ModelMixin(Base)) {
+export default class DocumentProxyInternal extends ModelMixin(Base) {
 
   constructor(store, database, opts) {
     super();

@@ -1,3 +1,4 @@
+{{!--
 <div class="row">
   {{doc}} {{doc.content}} {{doc.id}}
 </div>
@@ -6,4 +7,14 @@
 </div>
 <div class="row">
   {{ui-block/json doc.state}}
+</div>
+--}}
+<div class="row">
+  {{filter}}
+</div>
+<div class="row">
+  length={{filter.values.length}}
+</div>
+<div class="row">
+  {{filter.value}}
 </div>

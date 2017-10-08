@@ -46,6 +46,10 @@ export default Ember.Mixin.create({
 
   _createDocumentProxy(_internal) {
     return this._modelFactory('proxy/document').create({ _internal });
+  },
+
+  _createFilter(_internal) {
+    return this._modelFactory('filter').create({ _internal });
   }
 
 });

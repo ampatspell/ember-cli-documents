@@ -8,10 +8,8 @@ const {
 
 const database = property('database');
 
-const content = () => computed({
-  get() {
-    return this._internal.content(true);
-  }
+const content = () => computed(function() {
+  return this._internal.content(true);
 }).readOnly();
 
 export default Ember.ObjectProxy.extend(ProxyStateMixin, {
