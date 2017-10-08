@@ -7,17 +7,19 @@ const {
   copy
 } = Ember;
 
+const {
+  values
+} = Object;
+
 const createDocumentProxy = (database, opts) => database._createInternalDocumentProxy(opts).model(true);
 
 export default opts => {
   opts = merge({ database: 'database', properties: {} }, opts);
-  let keys = Object.values(opts.properties);
-  return computed(opts.database, ...keys, function() {
-    let owner = this;
-    let { database, properties, query, matches } = opts;
-    database = this.get(database);
-    properties = copy(properties);
+  return computed(opts.database, ...values(opts.properties), function() {
+    let { query, matches } = opts;
+    let database = this.get(opts.database);
+    let properties = copy(opts.properties);
     assert(`Database not found for key ${opts.database}`, !!database);
-    return createDocumentProxy(database, { owner, properties, query, matches });
+    return createDocumentProxy(database, { owner: this, properties, query, matches });
   }).readOnly();
 };
