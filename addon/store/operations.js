@@ -7,7 +7,7 @@ const {
 export default Ember.Mixin.create({
 
   settle() {
-    return allSettled(this._openDatabases().map(db => db.settle()));
+    return allSettled(this._databases.all.map(db => db.settle()));
   }
 
 });

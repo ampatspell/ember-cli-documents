@@ -12,7 +12,7 @@ export default Ember.Mixin.create({
   }).readOnly(),
 
   willDestroy() {
-    let security = this.cacheFor('security');
+    let security = this.get('security');
     if(security) {
       security.destroy();
     }

@@ -12,6 +12,7 @@ import DatabaseDocumentFind from './database/document-find';
 import DatabaseChanges from './database/changes';
 import DatabaseShoebox from './database/shoebox';
 import DatabaseOperation from './database/operations';
+import DatabaseIdentity from './database/identity';
 
 export default Ember.Object.extend(
   DatabaseStore,
@@ -26,5 +27,6 @@ export default Ember.Object.extend(
   DatabaseDocumentFind,
   DatabaseChanges,
   DatabaseShoebox,
-  DatabaseOperation
+  DatabaseOperation,
+  DatabaseIdentity
 );

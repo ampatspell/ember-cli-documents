@@ -12,7 +12,7 @@ export default Ember.Mixin.create({
   }).readOnly(),
 
   willDestroy() {
-    let session = this.cacheFor('session');
+    let session = this.get('session');
     if(session) {
       session.destroy();
     }
