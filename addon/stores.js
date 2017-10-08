@@ -1,15 +1,18 @@
 import Ember from 'ember';
 import { object } from './util/computed';
 import { destroyObject } from './util/destroy';
+import createNestedRegistry from './util/create-nested-registry';
 
 const {
   getOwner,
   assign
 } = Ember;
 
-export default Ember.Service.extend({
+const StoresRegistry = createNestedRegistry({ key: '_stores' });
 
-  openStores: object().readOnly(),
+export default Ember.Service.extend(StoresRegistry, {
+
+  _stores: null,
 
   _storeFactory: null,
   _adapterFactories: object(),
@@ -45,8 +48,8 @@ export default Ember.Service.extend({
     let Adapter = this.adapterFactory(opts.adapter, 'store');
     let identifier = Adapter.class.identifierFor(opts);
 
-    let open = this.get('openStores');
-    let store = open[identifier];
+    let registry = this._stores;
+    let store = registry.get(identifier);
 
     if(!store) {
       let stores = this;
@@ -54,7 +57,7 @@ export default Ember.Service.extend({
       opts = assign(opts, { _adapter });
       store = this.createStore(opts);
       _adapter.setProperties({ store });
-      open[identifier] = store;
+      registry.set(identifier, store);
     }
 
     return store;
@@ -62,15 +65,11 @@ export default Ember.Service.extend({
 
   _storeWillDestroy(store) {
     let identifier = store.get('_adapter.identifier');
-    let openStores = this.get('openStores');
-    delete openStores[identifier];
+    this._stores.remove(identifier);
   },
 
   willDestroy() {
-    let stores = this.get('openStores');
-    if(stores) {
-      destroyObject(stores);
-    }
+    this._stores.destroy();
     this._super();
   }
 
