@@ -3,7 +3,6 @@ import Ember from 'ember';
 const {
   computed,
   merge,
-  get,
   assert,
   copy
 } = Ember;
