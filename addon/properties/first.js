@@ -11,15 +11,14 @@ const {
   values
 } = Object;
 
-const createDocumentProxy = (database, opts) => database._createInternalDocumentProxy(opts).model(true);
-
 export default opts => {
-  opts = merge({ database: 'database', properties: {} }, opts);
-  return computed(opts.database, ...values(opts.properties), function() {
+  opts = merge({ database: 'database', owner: {}, document: {} }, opts);
+  return computed(opts.database, ...values(opts.owner), function() {
     let { query, matches } = opts;
     let database = this.get(opts.database);
-    let properties = copy(opts.properties);
+    let owner = copy(opts.owner);
+    let document = copy(opts.document);
     assert(`Database not found for key ${opts.database}`, !!database);
-    return createDocumentProxy(database, { owner: this, properties, query, matches });
+    return database._createInternalDocumentProxy(this, { owner, document, matches, query }).model(true);
   }).readOnly();
 };

@@ -10,17 +10,33 @@ import ProxyState from './-proxy-state';
 
 export default class DocumentProxyInternal extends ModelMixin(Base) {
 
-  constructor(store, database, opts) {
+  constructor(store, database, owner, opts) {
     super();
     this.store = store;
     this.database = database;
+    this.owner = owner;
     this.opts = opts;
     this.state = new ProxyState();
+    this._filter = null;
     window.pr = this;
   }
 
   _createModel() {
     return this.store._createDocumentProxy(this);
+  }
+
+  _createFilter() {
+    let { owner, document, matches } = this.opts;
+    return this.database._createInternalFilter(this.owner, { owner, document, matches });
+  }
+
+  get filter() {
+    let filter = this._filter;
+    if(!filter) {
+      filter = this._createFilter();
+      this._filter = filter;
+    }
+    return filter;
   }
 
   // _willLoad() {

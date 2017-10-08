@@ -11,7 +11,8 @@ export default opts => {
 
   return first({
     database,
-    properties: { id },
+    owner: { id },
+    document: { id: 'id' },
     query(props) {
       let { id } = props;
       return { id };
