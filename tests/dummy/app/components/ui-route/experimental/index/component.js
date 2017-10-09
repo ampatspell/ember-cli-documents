@@ -2,6 +2,10 @@ import Ember from 'ember';
 import layout from './template';
 import { docById } from 'documents/properties';
 
+const {
+  RSVP: { resolve }
+} = Ember;
+
 export default Ember.Component.extend({
   layout,
 
@@ -10,9 +14,9 @@ export default Ember.Component.extend({
   doc: docById({ database: 'db', id: 'id' }),
 
   actions: {
-    async load() {
+    load() {
       let doc = this.get('doc');
-      await doc && doc.load();
+      return resolve(doc && doc.load());
     }
   }
 
