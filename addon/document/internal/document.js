@@ -39,9 +39,13 @@ export default class InternalDocument extends InternalObject {
     return this.state.isDeleted;
   }
 
-  _didDestroyModel() {
-    super._didDestroyModel();
-    this.database._didDestroyModelForInternalDocument(this);
+  _modelWillDestroy() {
+    if(this.isNew) {
+      // keep _model so it is not recreated on next `model(true)` call
+      this.database._willDestroyModelForNewInternalDocument(this);
+      return;
+    }
+    super._modelWillDestroy();
   }
 
   _createModel() {
