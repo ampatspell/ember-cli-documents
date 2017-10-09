@@ -42,3 +42,11 @@ test('updated doc is removed from values', function(assert) {
   assert.equal(filter.get('values.length'), 0);
   assert.equal(filter.get('value'), undefined);
 });
+
+test('added doc is added to values', function(assert) {
+  this.owner.set('type', 'duck');
+  let filter = this.filter();
+  assert.equal(filter.get('value'), undefined);
+  let duck = this.db.doc({ id: 'duck:yellow', type: 'duck' });
+  assert.equal(filter.get('value'), duck);
+});
