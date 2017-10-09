@@ -1,43 +1,20 @@
 import Ember from 'ember';
+import ModelMixin from './-model-mixin';
 
 const {
-  defineProperty,
   computed,
   computed: { reads }
 } = Ember;
 
-const values = internal => {
-  let deps = [];
+const values = () => computed(function() {
+  return this._internal.values;
+}).readOnly();
 
-  let dep = (prefix, hash) => {
-    if(!hash) {
-      return;
-    }
-    let keys = Object.values(hash);
-    if(keys.length === 0) {
-      return;
-    }
-    deps.push(`${prefix}.{${keys.join(',')}}`);
-  }
-
-  dep('_internal.owner', internal.opts.owner);
-  // TODO: get rid of @each. add explicit observers for documents, notify each document change separately and have enumerableObserver for adds and removes
-  dep('_internal.documents.@each', internal.opts.document);
-
-  return computed(...deps, function() {
-    return this._internal.recompute();
-  }).readOnly();
-}
-
-export default Ember.Object.extend({
+export default Ember.Object.extend(ModelMixin, {
 
   _internal: null,
 
-  init() {
-    this._super(...arguments);
-    defineProperty(this, 'values', values(this._internal));
-  },
-
+  values: values(),
   value: reads('values.firstObject').readOnly(),
 
 });

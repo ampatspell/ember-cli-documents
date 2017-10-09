@@ -50,3 +50,41 @@ test('added doc is added to values', function(assert) {
   let duck = this.db.doc({ id: 'duck:yellow', type: 'duck' });
   assert.equal(filter.get('value'), duck);
 });
+
+test('destroy stops observing', function(assert) {
+  let duck = this.db.doc({ id: 'duck:yellow', type: 'duck' });
+
+  let events = [];
+  let wrap = (name, func, obj) => {
+    let fn = obj[func];
+    obj[func] = function(...args) {
+      events.push({ name, func });
+      return fn.call(obj, ...args);
+    }
+  };
+
+  wrap('owner', 'removeObserver', this.owner);
+  wrap('duck', 'removeObserver', duck);
+  wrap('identity', 'removeEnumerableObserver', this.db.get('identity'));
+
+  this.owner.set('type', 'duck');
+  let filter = this.filter();
+  assert.equal(filter.get('value'), duck);
+
+  Ember.run(() => filter.destroy());
+
+  assert.deepEqual(events, [
+    {
+      "func": "removeObserver",
+      "name": "owner"
+    },
+    {
+      "func": "removeEnumerableObserver",
+      "name": "identity"
+    },
+    {
+      "func": "removeObserver",
+      "name": "duck"
+    }
+  ]);
+});
