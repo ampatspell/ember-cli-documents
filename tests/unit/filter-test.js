@@ -10,10 +10,10 @@ module('filter', {
   beforeEach() {
     this.owner = Ember.Object.create({ type: null });
     this.opts = {
-      owner: { type: 'type' },
-      document: { type: 'type' },
-      matches(doc, props) {
-        return doc.get('type') === props.type;
+      owner: [ 'type' ],
+      document: [ 'type' ],
+      matches(doc, owner) {
+        return doc.get('type') === owner.get('type');
       }
     };
     this.filter = () => this.db._createInternalFilter(this.owner, this.opts).model(true);
