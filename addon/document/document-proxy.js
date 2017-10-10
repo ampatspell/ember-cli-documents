@@ -17,6 +17,8 @@ const loader = () => computed(function() {
   return this._internal.loader(true).model(true);
 }).readOnly();
 
+// TODO: state in loader
+// TODO: forward load, reload to loader
 export default Ember.ObjectProxy.extend(ProxyStateMixin, {
 
   _internal: null,
