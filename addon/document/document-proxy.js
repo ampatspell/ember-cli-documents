@@ -13,12 +13,17 @@ const filter = () => computed(function() {
   return this._internal.filter(true).model(true);
 }).readOnly();
 
+const loader = () => computed(function() {
+  return this._internal.loader(true).model(true);
+}).readOnly();
+
 export default Ember.ObjectProxy.extend(ProxyStateMixin, {
 
   _internal: null,
 
   database: database(),
   filter: filter(),
+  loader: loader(),
 
   content: reads('filter.value').readOnly(),
 

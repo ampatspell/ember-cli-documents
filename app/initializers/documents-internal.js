@@ -42,6 +42,9 @@ import InternalDocumentProxy from 'documents/document/internal/document-proxy';
 import Filter from 'documents/document/filter';
 import InternalFilter from 'documents/document/internal/filter';
 
+import Loader from 'documents/document/loader';
+import InternalLoader from 'documents/document/internal/loader';
+
 export default {
   name: 'documents:internal',
   initialize(container) {
@@ -92,5 +95,8 @@ export default {
 
     container.register('documents:filter', Filter);
     container.register('documents:internal/filter', InternalFilter);
+
+    container.register('documents:loader', Loader);
+    container.register('documents:internal/loader', InternalLoader);
   }
 };

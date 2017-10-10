@@ -39,7 +39,7 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
     this.state = new ProxyState();
     this._filter = null;
     this._loader = null;
-    window.pr = this;
+    window.proxy = this;
   }
 
   _createModel() {
@@ -65,7 +65,8 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
   //
 
   _createLoader() {
-
+    let { owner, query } = this.opts;
+    return this.database._createInternalLoader(this.owner, { owner, query });
   }
 
   loader(create) {

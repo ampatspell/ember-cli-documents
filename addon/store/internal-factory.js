@@ -83,6 +83,11 @@ export default Ember.Mixin.create({
   _createInternalFilter(database, owner, opts) {
     let InternalFilter = this._internalFactory('filter');
     return new InternalFilter(this, database, owner, opts);
+  },
+
+  _createInternalLoader(database, owner, opts) {
+    let InternalLoader = this._internalFactory('loader');
+    return new InternalLoader(this, database, owner, opts);
   }
 
 });
