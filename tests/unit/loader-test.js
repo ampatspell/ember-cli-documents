@@ -95,3 +95,18 @@ test('two loads. second returns 1st promise', async function(assert) {
 
   run(() => loader.destroy());
 });
+
+test('destroy while loading', async function(assert) {
+  this.opts.autoload = false;
+  await this.docs.save({ _id: 'duck' });
+  this.owner.set('id', 'duck');
+
+  let loader = this.first();
+  let promise = loader._internal.reload();
+
+  run(() => loader.destroy());
+
+  await promise;
+
+  assert.ok(loader._internal.state.isLoaded);
+});
