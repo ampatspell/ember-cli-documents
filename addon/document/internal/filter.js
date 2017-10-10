@@ -224,4 +224,12 @@ export default class FilterInternal extends ModelMixin(Base) {
     this._stopObserving();
   }
 
+  destroy() {
+    this._stopObserving();
+    let model = this.model();
+    if(model) {
+      model.destroy();
+    }
+  }
+
 }

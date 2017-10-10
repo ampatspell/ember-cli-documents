@@ -10,7 +10,7 @@ const {
 const database = property('database');
 
 const filter = () => computed(function() {
-  return this._internal.filter.model(true);
+  return this._internal.filter(true).model(true);
 }).readOnly();
 
 export default Ember.ObjectProxy.extend(ProxyStateMixin, {
