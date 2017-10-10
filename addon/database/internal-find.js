@@ -61,7 +61,7 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
-  __scheduleDocumentFindOperation(opts, resolve) {
+  _scheduleDocumentFindOperation(opts, resolve) {
     opts = normalizeOpts(opts, {});
 
     let original = copy(opts, true);
@@ -115,9 +115,9 @@ export default Ember.Mixin.create({
     })));
   },
 
-  __scheduleDocumentFirstOperation(opts) {
+  _scheduleDocumentFirstOperation(opts) {
     opts = normalizeOpts(opts, { limit: 1 });
-    return this.__scheduleDocumentFindOperation(opts, ({ result, type }) => {
+    return this._scheduleDocumentFindOperation(opts, ({ result, type }) => {
       let internal;
       if(type === 'single') {
         internal = result;
@@ -132,11 +132,11 @@ export default Ember.Mixin.create({
   },
 
   _internalDocumentFind(opts) {
-    return this.__scheduleDocumentFindOperation(opts).promise;
+    return this._scheduleDocumentFindOperation(opts).promise;
   },
 
   _internalDocumentFirst(opts) {
-    return this.__scheduleDocumentFirstOperation(opts).promise;
+    return this._scheduleDocumentFirstOperation(opts).promise;
   }
 
 });
