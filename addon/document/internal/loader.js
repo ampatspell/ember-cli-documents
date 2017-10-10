@@ -28,8 +28,6 @@ class Operation {
 
 }
 
-
-// TODO: autoload
 export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
 
   /*

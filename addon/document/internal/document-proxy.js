@@ -11,7 +11,6 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
     this.opts = opts;
     this._filter = null;
     this._loader = null;
-    window.proxy = this;
   }
 
   _createModel() {
