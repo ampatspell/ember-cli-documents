@@ -36,9 +36,9 @@ const doc = fn => function(...args) {
 
 export default Ember.Mixin.create({
 
-  __scheduleDatabaseOperation(label, opts, fn, before, resolve) {
+  __scheduleDatabaseOperation(label, opts, fn, before, resolve, reject) {
     opts = merge({}, opts);
-    let op = new Operation(label, { opts }, fn, before, resolve);
+    let op = new Operation(label, { opts }, fn, before, resolve, reject);
     this._registerDatabaseOperation(op);
     op.invoke();
     return op;
@@ -61,7 +61,7 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
-  _scheduleDocumentFindOperation(opts, before, resolve) {
+  _scheduleDocumentFindOperation(opts, beforeFn, resolveFn, rejectFn) {
     opts = normalizeOpts(opts, {});
 
     let original = copy(opts, true);
@@ -75,18 +75,18 @@ export default Ember.Mixin.create({
     let force = opts.force;
     delete opts.force;
 
-    const schedule = (label, fn) => this.__scheduleDatabaseOperation(label, original, fn, before, resolve);
+    const schedule = (label, fn) => this.__scheduleDatabaseOperation(label, original, fn, beforeFn, resolveFn, rejectFn);
 
     if(id) {
       let internal = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
-        return this._scheduleInternalLoad(internal, { force }, before, internal => {
+        return this._scheduleInternalLoad(internal, { force }, beforeFn, internal => {
           let hash = result('single', internal);
-          if(resolve) {
-            return resolve(hash);
+          if(resolveFn) {
+            return resolveFn(hash);
           }
           return hash;
-        });
+        }, rejectFn);
       }
       return schedule('id', () => {
         delete opts.id;
@@ -115,9 +115,9 @@ export default Ember.Mixin.create({
     })));
   },
 
-  _scheduleDocumentFirstOperation(opts, before, resolve) {
+  _scheduleDocumentFirstOperation(opts, beforeFn, resolveFn, rejectFn) {
     opts = normalizeOpts(opts, { limit: 1 });
-    return this._scheduleDocumentFindOperation(opts, before, ({ result, type }) => {
+    return this._scheduleDocumentFindOperation(opts, beforeFn, ({ result, type }) => {
       let internal;
       if(type === 'single') {
         internal = result;
@@ -127,18 +127,18 @@ export default Ember.Mixin.create({
       if(!internal) {
         return reject(new DocumentsError({ error: 'not_found', reason: 'missing', status: 404 }));
       }
-      if(resolve) {
-        return resolve(internal);
+      if(resolveFn) {
+        return resolveFn(internal);
       }
       return internal;
-    });
+    }, rejectFn);
   },
 
-  _scheduleDocumentOperation(opts, type, before, resolve) {
+  _scheduleDocumentOperation(opts, type, before, resolve, reject) {
     if(type === 'first') {
-      return this._scheduleDocumentFirstOperation(opts, before, resolve);
+      return this._scheduleDocumentFirstOperation(opts, before, resolve, reject);
     } else if(type === 'find') {
-      return this._scheduleDocumentFindOperation(opts, before, resolve);
+      return this._scheduleDocumentFindOperation(opts, before, resolve, reject);
     } else {
       return reject(new DocumentsError({ error: 'internal', reason: `type must be 'first' or 'find' not ${type}` }));
     }

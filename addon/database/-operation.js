@@ -7,12 +7,13 @@ const {
 
 export default class Operation {
 
-  constructor(label, props, fn, before, resolve) {
+  constructor(label, props, fn, before, resolve, reject) {
     this.label = label;
     this.props = props;
     this.fn = fn;
     this.before = before;
     this.resolve = resolve;
+    this.reject = reject;
     this.deferred = defer();
     this.destroyed = false;
   }
@@ -42,6 +43,13 @@ export default class Operation {
     return arg;
   }
 
+  _invokeReject(err) {
+    if(this.reject) {
+      this.reject(err);
+    }
+    return reject(err);
+  }
+
   _invoke() {
     if(this.destroyed) {
       return reject(new DocumentsError({ error: 'internal', reason: 'operation_destroyed' }));
@@ -50,7 +58,7 @@ export default class Operation {
     return resolve()
       .then(() => this._invokeBefore())
       .then(() => this.fn())
-      .then(result => this._invokeResolve(result));
+      .then(result => this._invokeResolve(result), err => this._invokeReject(err));
   }
 
   invoke() {
