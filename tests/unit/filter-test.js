@@ -2,6 +2,10 @@ import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
+const {
+  run
+} = Ember;
+
 module('filter', {
   beforeEach() {
     this.owner = Ember.Object.create({ type: null });
@@ -71,7 +75,7 @@ test('destroy stops observing', function(assert) {
   let filter = this.filter();
   assert.equal(filter.get('value'), duck);
 
-  Ember.run(() => filter.destroy());
+  run(() => filter.destroy());
 
   assert.deepEqual(events, [
     {
@@ -87,4 +91,19 @@ test('destroy stops observing', function(assert) {
       "name": "duck"
     }
   ]);
+});
+
+test('destroyed new doc is removed', function(assert) {
+  let duck = this.db.doc({ id: 'duck:yellow', type: 'duck' });
+  this.owner.set('type', 'duck');
+
+  let filter = this.filter();
+
+  assert.equal(filter.get('values.length'), 1);
+  assert.equal(filter.get('value'), duck);
+
+  run(() => duck.destroy());
+
+  assert.equal(filter.get('values.length'), 0);
+  assert.equal(filter.get('value'), undefined);
 });
