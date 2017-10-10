@@ -5,6 +5,7 @@ import Operation from './-operation';
 const {
   A,
   merge,
+  copy,
   RSVP: { reject }
 } = Ember;
 
@@ -35,12 +36,12 @@ const doc = fn => function(...args) {
 
 export default Ember.Mixin.create({
 
-  __scheduleDatabaseOperation(label, opts, fn) {
+  __scheduleDatabaseOperation(label, opts, fn, resolve) {
     opts = merge({}, opts);
-    let op = new Operation(label, { opts }, fn);
+    let op = new Operation(label, { opts }, fn, resolve);
     this._registerDatabaseOperation(op);
     op.invoke();
-    return op.promise;
+    return op;
   },
 
   __loadInternalDocumentById: doc(function(documents, id, opts) {
@@ -60,8 +61,10 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
-  _internalDocumentFind(opts) {
+  __scheduleDocumentFindOperation(opts, resolve) {
     opts = normalizeOpts(opts, {});
+
+    let original = copy(opts, true);
 
     let id = opts.id;
     let all = opts.all;
@@ -72,12 +75,18 @@ export default Ember.Mixin.create({
     let force = opts.force;
     delete opts.force;
 
-    let schedule = (label, fn) => this.__scheduleDatabaseOperation(label, opts, fn);
+    const schedule = (label, fn) => this.__scheduleDatabaseOperation(label, original, fn, resolve);
 
     if(id) {
       let internal = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
-        return internal.load({ force }).then(() => result('single', internal));
+        return this._scheduleInternalLoad(internal, { force }, internal => {
+          let hash = result('single', internal);
+          if(resolve) {
+            return resolve(hash);
+          }
+          return hash;
+        });
       }
       return schedule('id', () => {
         delete opts.id;
@@ -100,25 +109,34 @@ export default Ember.Mixin.create({
       });
     }
 
-    return reject(new DocumentsError({
+    return schedule('error', () => reject(new DocumentsError({
       error: 'invalid_query',
       reason: 'opts must include { all: true }, { id }, { ddoc, view } or { selector }'
-    }));
+    })));
   },
 
-  _internalDocumentFirst(opts) {
+  __scheduleDocumentFirstOperation(opts) {
     opts = normalizeOpts(opts, { limit: 1 });
-    return this._internalDocumentFind(opts).then(({ result, type }) => {
+    return this.__scheduleDocumentFindOperation(opts, ({ result, type }) => {
+      let internal;
       if(type === 'single') {
-        return result;
+        internal = result;
+      } else {
+        internal = result[0];
       }
-      return result[0];
-    }).then(internal => {
       if(!internal) {
         return reject(new DocumentsError({ error: 'not_found', reason: 'missing', status: 404 }));
       }
       return internal;
     });
+  },
+
+  _internalDocumentFind(opts) {
+    return this.__scheduleDocumentFindOperation(opts).promise;
+  },
+
+  _internalDocumentFirst(opts) {
+    return this.__scheduleDocumentFirstOperation(opts).promise;
   }
 
 });

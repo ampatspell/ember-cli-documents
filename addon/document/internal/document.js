@@ -192,19 +192,19 @@ export default class InternalDocument extends InternalObject {
   //
 
   save() {
-    return this.database._scheduleInternalSave(this, ...arguments);
+    return this.database._scheduleInternalSave(this, ...arguments).promise;
   }
 
   load() {
-    return this.database._scheduleInternalLoad(this, ...arguments);
+    return this.database._scheduleInternalLoad(this, ...arguments).promise;
   }
 
   reload() {
-    return this.database._scheduleInternalReload(this, ...arguments);
+    return this.database._scheduleInternalReload(this, ...arguments).promise;
   }
 
   delete() {
-    return this.database._scheduleInternalDelete(this, ...arguments);
+    return this.database._scheduleInternalDelete(this, ...arguments).promise;
   }
 
 }

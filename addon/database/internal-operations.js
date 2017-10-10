@@ -9,8 +9,8 @@ const {
 
 export default Ember.Mixin.create({
 
-  __scheduleInternalOperation(label, internal, props, fn) {
-    let op = new Operation(label, assign({ internal }, props), fn);
+  __scheduleInternalOperation(label, internal, props, resolve, fn) {
+    let op = new Operation(label, assign({ internal }, props), fn, resolve);
     this._registerInternalOperation(op);
     return internal.addOperation(op);
   },
@@ -113,26 +113,26 @@ export default Ember.Mixin.create({
 
   //
 
-  _scheduleInternalSave(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-save', internal, { opts }, () => {
+  _scheduleInternalSave(internal, opts={}, resolve) {
+    return this.__scheduleInternalOperation('document-save', internal, { opts }, resolve, () => {
       return this.__performInternalSave(internal, opts);
     });
   },
 
-  _scheduleInternalDelete(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-delete', internal, { opts }, () => {
+  _scheduleInternalDelete(internal, opts={}, resolve) {
+    return this.__scheduleInternalOperation('document-delete', internal, { opts }, resolve, () => {
       return this.__performInternalDelete(internal, opts);
     });
   },
 
-  _scheduleInternalLoad(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-load', internal, { opts }, () => {
+  _scheduleInternalLoad(internal, opts={}, resolve) {
+    return this.__scheduleInternalOperation('document-load', internal, { opts }, resolve, () => {
       return this.__performInternalLoad(internal, opts);
     });
   },
 
-  _scheduleInternalReload(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-reload', internal, { opts }, () => {
+  _scheduleInternalReload(internal, opts={}, resolve) {
+    return this.__scheduleInternalOperation('document-reload', internal, { opts }, resolve, () => {
       return this.__performInternalLoad(internal, assign({}, opts, { force: true }));
     });
   }
