@@ -2,32 +2,6 @@ import Base from './base';
 import ModelMixin from './-model-mixin';
 import ProxyState from './-proxy-state';
 
-// _willLoad() {
-//   this.withPropertyChanges(changed => {
-//     this.state.onLoading(changed);
-//   }, true);
-// }
-// _didLoad(internal) {
-//   this.withPropertyChanges(changed => {
-//     this._setContent(internal, changed);
-//     this.state.onLoaded(changed);
-//   }, true);
-// }
-// _loadDidFail(err) {
-//   this.withPropertyChanges(changed => {
-//     this.state.onError(err, changed);
-//   }, true);
-// }
-//
-// this._willLoad();
-// return this.database._internalDocumentFirst(this.query).then(internal => {
-//   // TODO: Don't populate loaded, filter should automatically pick up loaded doc
-//   return this._didLoad(internal);
-// }, err => {
-//   return this._loadDidFail(err);
-// });
-
-
 export default class DocumentProxyInternal extends ModelMixin(Base) {
 
   constructor(store, database, owner, opts) {
@@ -66,7 +40,7 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
 
   _createLoader() {
     let { owner, query } = this.opts;
-    return this.database._createInternalLoader(this.owner, { owner, query });
+    return this.database._createInternalLoader(this, this.owner, { owner, query });
   }
 
   loader(create) {

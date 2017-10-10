@@ -66,8 +66,8 @@ export default Ember.Mixin.create({
     return this.get('store')._createInternalFilter(this, owner, opts);
   },
 
-  _createInternalLoader(owner, opts) {
-    return this.get('store')._createInternalLoader(this, owner, opts);
+  _createInternalLoader(parent, owner, opts) {
+    return this.get('store')._createInternalLoader(this, parent, owner, opts);
   }
 
 });
