@@ -41,7 +41,6 @@ import InternalDocumentProxy from 'documents/document/internal/document-proxy';
 
 import Filter from 'documents/document/filter';
 import InternalFilter from 'documents/document/internal/filter';
-
 import Loader from 'documents/document/loader';
 import InternalLoader from 'documents/document/internal/loader';
 
