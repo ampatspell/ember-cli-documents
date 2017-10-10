@@ -33,10 +33,9 @@ export default class Operation {
     if(this.destroyed) {
       return reject(new DocumentsError({ error: 'internal', reason: 'operation_destroyed' }));
     }
-    return this.fn(this).then(result => {
-      let resolve = this.resolve;
-      if(resolve) {
-        return resolve(result);
+    return resolve(this.fn(this)).then(result => {
+      if(this.resolve) {
+        return this.resolve(result);
       }
       return result;
     });
