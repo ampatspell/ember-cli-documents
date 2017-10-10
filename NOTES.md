@@ -1,6 +1,6 @@
 # TODO
 
-* extact `_internalDocumentFindOperation` from `_internalDocumentFind`
+* loader `load` -> `autoload fails` -> `isLoaded` is kept true
 * split internal/base into absolute base which is useful for proxies.
 * ember inspector integration
 * loadable collection and document computed properties
