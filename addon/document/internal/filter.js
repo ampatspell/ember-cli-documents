@@ -1,12 +1,13 @@
 import Ember from 'ember';
 import Base from './base';
 import ModelMixin from './-model-mixin';
+import ObserveOwner from './-observe-owner';
 
 const {
   A
 } = Ember;
 
-export default class FilterInternal extends ModelMixin(Base) {
+export default class FilterInternal extends ObserveOwner(ModelMixin(Base)) {
 
   /*
     opts: {
@@ -80,30 +81,6 @@ export default class FilterInternal extends ModelMixin(Base) {
 
   _ownerValueForKeyDidChange() {
     this._rematch();
-  }
-
-  _withOwnerObserving(cb) {
-    let owner = this.owner;
-    if(!owner) {
-      return;
-    }
-    let keys = Object.values(this.opts.owner);
-    if(keys.length === 0) {
-      return;
-    }
-    keys.forEach(key => cb(owner, key));
-  }
-
-  _startObservingOwner() {
-    this._withOwnerObserving((owner, key) => {
-      owner.addObserver(key, this, this._ownerValueForKeyDidChange);
-    });
-  }
-
-  _stopObservingOwner() {
-    this._withOwnerObserving((owner, key) => {
-      owner.removeObserver(key, this, this._ownerValueForKeyDidChange);
-    });
   }
 
   //
@@ -193,6 +170,10 @@ export default class FilterInternal extends ModelMixin(Base) {
   }
 
   //
+
+  get _modelWillDestroyUnsetsModel() {
+    return false;
+  }
 
   _didDestroyModel() {
     super._didDestroyModel();
