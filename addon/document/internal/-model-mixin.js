@@ -29,9 +29,15 @@ export default Class => class ModelMixin extends Class {
     model.destroy();
   }
 
+  get _modelWillDestroyUnsetsModel() {
+    return true;
+  }
+
   _modelWillDestroy() {
     let model = this._model;
-    this._model = null;
+    if(this._modelWillDestroyUnsetsModel) {
+      this._model = null;
+    }
     this._didDestroyModel(model);
   }
 
