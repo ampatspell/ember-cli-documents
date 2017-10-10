@@ -62,8 +62,6 @@ export default ModelMixin(class InternalBase {
   withPropertyChanges(cb, notify, except) {
     assert(`withPropertyChanges notify argument must be boolean`, typeof notify === 'boolean');
 
-    console.log('except', except);
-
     let model;
 
     if(notify) {

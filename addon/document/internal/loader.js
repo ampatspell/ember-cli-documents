@@ -55,12 +55,12 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
 
   //
 
-  _withState(cb) {
-    return this.withPropertyChanges(changed => cb(this.state, changed), true);
+  _withState(cb, except) {
+    return this.withPropertyChanges(changed => cb(this.state, changed), true, except);
   }
 
-  _willLoad() {
-    this._withState((state, changed) => state.onLoading(changed));
+  _willLoad(except) {
+    this._withState((state, changed) => state.onLoading(changed), except);
   }
 
   _didLoad() {
@@ -80,28 +80,52 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
     }
   }
 
-  _load(force) {
+  _load(force, except) {
     let query = this._query;
+    console.log('_load', query);
     if(force) {
       query.force = true;
     }
-    this._willLoad();
-    return this._loadQuery(query).then(() => this._didLoad(), err => this._loadDidFail(err));
+    this._willLoad(except);
+    return this._loadQuery(query)
+      .then(() => this._didLoad(), err => this._loadDidFail(err))
+      .finally(() => {
+        if(!this._needsLoad) {
+          return;
+        }
+        this._needsLoad = false;
+        return this._load();
+    });
   }
 
-  scheduleLoad() {
+  load() {
     if(this.state.isLoaded) {
       return resolve();
     }
     return this._load();
   }
 
-  scheduleReload() {
+  reload() {
     return this._load(true);
   }
 
+  _scheduleLoad(except) {
+    this._load(false, except).then(() => {}, err => {});
+  }
+
   _autoload(stateKey, ownerKey) {
-    Ember.Logger.info('_autoload', stateKey, ownerKey);
+    let { isLoading, isLoaded } =this.state;
+    if(ownerKey) {
+      if(isLoading) {
+        this._needsLoad = true;
+      } else {
+        this._scheduleLoad();
+      }
+    } else {
+      if(!isLoaded && !isLoading) {
+        this._scheduleLoad([ stateKey ]);
+      }
+    }
   }
 
   //

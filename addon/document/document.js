@@ -16,10 +16,10 @@ export default DocumentObject.extend(DocumentStateMixin, SerializedMixin, {
 
   database: database(),
 
-  save:   promise('scheduleSave'),
-  load:   promise('scheduleLoad'),
-  reload: promise('scheduleReload'),
-  delete: promise('scheduleDelete'),
+  save:   promise('save'),
+  load:   promise('load'),
+  reload: promise('reload'),
+  delete: promise('delete'),
 
   toStringExtension() {
     let database = this.get('database.identifier');

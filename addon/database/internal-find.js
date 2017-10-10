@@ -77,7 +77,7 @@ export default Ember.Mixin.create({
     if(id) {
       let internal = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
-        return internal.scheduleLoad({ force }).then(() => result('single', internal));
+        return internal.load({ force }).then(() => result('single', internal));
       }
       return schedule('id', () => {
         delete opts.id;

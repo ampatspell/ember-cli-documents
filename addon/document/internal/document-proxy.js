@@ -50,14 +50,6 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
     return loader;
   }
 
-  scheduleLoad() {
-    return this.loader(true).scheduleLoad();
-  }
-
-  scheduleReload() {
-    return this.loader(true).scheduleReload();
-  }
-
   //
 
   _didDestroyModel() {

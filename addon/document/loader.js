@@ -7,7 +7,7 @@ export default Ember.Object.extend(ModelMixin, LoaderStateMixin, {
 
   _internal: null,
 
-  load:   promise('scheduleLoad'),
-  reload: promise('scheduleReload')
+  load:   promise('load'),
+  reload: promise('reload')
 
 });
