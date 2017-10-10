@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import ProxyStateMixin from './-proxy-state-mixin';
-import { property, promise } from './-properties';
+import { property } from './-properties';
+import { makeForwardStateMixin } from './-loader-state-mixin';
 
 const {
   computed,
@@ -9,27 +9,30 @@ const {
 
 const database = property('database');
 
-const filter = () => computed(function() {
-  return this._internal.filter(true).model(true);
+const model = name => computed(function() {
+  let internal = this._internal;
+  return internal[name].call(internal, true).model(true);
 }).readOnly();
 
-const loader = () => computed(function() {
-  return this._internal.loader(true).model(true);
-}).readOnly();
+const loader = name => function(...args) {
+  let loader = this.get('loader');
+  return loader[name].call(loader, ...args);
+};
 
-// TODO: state in loader
-// TODO: forward load, reload to loader
-export default Ember.ObjectProxy.extend(ProxyStateMixin, {
+const ForwardStateMixin = makeForwardStateMixin('loader');
+
+export default Ember.ObjectProxy.extend(ForwardStateMixin, {
 
   _internal: null,
 
-  database: database(),
-  filter: filter(),
-  loader: loader(),
-
   content: reads('filter.value').readOnly(),
 
-  load:   promise('scheduleLoad'),
-  reload: promise('scheduleReload')
+  database: database(),
+
+  filter: model('filter'),
+  loader: model('loader'),
+
+  load:   loader('load'),
+  reload: loader('reload'),
 
 });

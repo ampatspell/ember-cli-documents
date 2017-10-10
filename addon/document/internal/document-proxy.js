@@ -1,6 +1,5 @@
 import Base from './base';
 import ModelMixin from './-model-mixin';
-import ProxyState from './-proxy-state';
 
 export default class DocumentProxyInternal extends ModelMixin(Base) {
 
@@ -10,7 +9,6 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
     this.database = database;
     this.owner = owner;
     this.opts = opts;
-    this.state = new ProxyState();
     this._filter = null;
     this._loader = null;
     window.proxy = this;
@@ -40,7 +38,7 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
 
   _createLoader() {
     let { owner, query } = this.opts;
-    return this.database._createInternalLoader(this, this.owner, { owner, query });
+    return this.database._createInternalLoader(this.owner, { owner, query }, 'first');
   }
 
   loader(create) {

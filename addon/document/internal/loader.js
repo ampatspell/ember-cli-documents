@@ -1,5 +1,11 @@
+import Ember from 'ember';
 import Base from './base';
 import ModelMixin from './-model-mixin';
+import LoaderState from './-loader-state';
+
+const {
+  RSVP: { resolve }
+} = Ember;
 
 // TODO: autoload
 // TODO: load on owner property changes -- observe owner in a mixin from filter
@@ -12,22 +18,34 @@ export default class LoaderInternal extends ModelMixin(Base) {
         return { id: props.id };
       }
     }
+    type: 'first' / 'find'
   */
-  constructor(store, database, parent, owner, opts) {
+  constructor(store, database, owner, opts, type) {
     super();
     this.store = store;
     this.database = database;
-    this.parent = parent;
     this.owner = owner;
+    this.type = type;
     this.opts = opts;
-  }
-
-  _withState(cb) {
-    return this.parent.withPropertyChanges(changed => cb(this.parent.state, changed), true);
+    this.state = new LoaderState();
   }
 
   _createModel() {
     return this.store._createLoader(this);
+  }
+
+  //
+
+  get _query() {
+    let query = this.opts.query;
+    let owner = this.owner;
+    return query.call(owner, owner);
+  }
+
+  //
+
+  _withState(cb) {
+    return this.withPropertyChanges(changed => cb(this.state, changed), true);
   }
 
   _willLoad() {
@@ -42,20 +60,33 @@ export default class LoaderInternal extends ModelMixin(Base) {
     this._withState((state, changed) => state.onError(err, changed));
   }
 
-  get query() {
-    let query = this.opts.query;
-    let owner = this.owner;
-    return query.call(owner, owner);
+  _loadQuery(query) {
+    let { type, database } = this;
+    if(type === 'first') {
+      return database._internalDocumentFirst(query);
+    } else if(type === 'find') {
+      return database._internalDocumentFind(query);
+    }
+  }
+
+  _load(force) {
+    let query = this._query;
+    if(force) {
+      query.force = true;
+    }
+    this._willLoad();
+    return this._loadQuery(query).then(() => this._didLoad(), err => this._loadDidFail());
   }
 
   scheduleLoad() {
-    this._willLoad();
-    // TODO: find or first
-    return this.database._internalDocumentFirst(this.query).then(() => {
-      return this._didLoad();
-    }, err => {
-      return this._loadDidFail(err);
-    });
+    if(this.state.isLoaded) {
+      return resolve();
+    }
+    return this._load();
+  }
+
+  scheduleReload() {
+    return this._load(true);
   }
 
 }

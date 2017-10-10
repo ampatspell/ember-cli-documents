@@ -17,6 +17,10 @@ export default Ember.Component.extend({
     load() {
       let doc = this.get('doc');
       return resolve(doc && doc.load());
+    },
+    reload() {
+      let doc = this.get('doc');
+      return resolve(doc && doc.reload());
     }
   }
 
