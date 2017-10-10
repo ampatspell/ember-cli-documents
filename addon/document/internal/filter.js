@@ -1,13 +1,13 @@
 import Ember from 'ember';
 import Base from './base';
 import ModelMixin from './-model-mixin';
+import OwnerPropertiesMixin from './-owner-properties-mixin';
 
 const {
-  get,
   A
 } = Ember;
 
-export default class FilterInternal extends ModelMixin(Base) {
+export default class FilterInternal extends OwnerPropertiesMixin(ModelMixin(Base)) {
 
   /*
     opts: {
@@ -33,29 +33,6 @@ export default class FilterInternal extends ModelMixin(Base) {
 
   get documents() {
     return this.database.get('identity');
-  }
-
-  get _ownerProperties() {
-    let properties = {};
-    let owner = this.owner;
-    let source = this.opts.owner;
-    for(let key in source) {
-      properties[key] = get(owner, source[key]);
-    }
-    return properties;
-  }
-
-  get _properties() {
-    let owner = this.owner;
-    if(!owner) {
-      return;
-    }
-    let props = {};
-    let source = this.opts.owner;
-    for(let key in source) {
-      props[key] = get(owner, source[key]);
-    }
-    return props;
   }
 
   __matches() {
