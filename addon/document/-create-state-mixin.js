@@ -5,12 +5,21 @@ const {
   assign
 } = Ember;
 
-export default keys => {
+export default (keys, fn) => {
 
   const getters = keys.reduce((obj, key) => {
-    obj[key] = computed(function() {
-      return this._internal.state[key];
-    }).readOnly();
+    let value;
+    if(fn) {
+      value = function() {
+        let internal = this._internal;
+        return internal[fn].call(internal, key);
+      }
+    } else {
+      value = function() {
+        return this._internal.state[key];
+      }
+    }
+    obj[key] = computed(value).readOnly();
     return obj;
   }, {});
 
