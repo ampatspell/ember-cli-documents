@@ -61,6 +61,7 @@ export default class LoaderInternal extends OwnerPropertiesMixin(ModelMixin(Base
 
   scheduleLoad() {
     this._willLoad();
+    // TODO: find or first
     return this.database._internalDocumentFirst(this.query).then(() => {
       return this._didLoad();
     }, err => {
