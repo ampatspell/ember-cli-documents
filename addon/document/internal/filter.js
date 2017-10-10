@@ -1,20 +1,19 @@
 import Ember from 'ember';
 import Base from './base';
 import ModelMixin from './-model-mixin';
-import OwnerPropertiesMixin from './-owner-properties-mixin';
 
 const {
   A
 } = Ember;
 
-export default class FilterInternal extends OwnerPropertiesMixin(ModelMixin(Base)) {
+export default class FilterInternal extends ModelMixin(Base) {
 
   /*
     opts: {
-      owner: { id: 'id' },
-      document: { id: 'id' },
-      matches(doc, props) {
-        return doc.get('id') === props.id;
+      owner: [ 'id' ],
+      document: [ 'id' ],
+      matches(doc, owner) {
+        return doc.get('id') === owner.get('id');
       }
     }
   */
@@ -38,8 +37,7 @@ export default class FilterInternal extends OwnerPropertiesMixin(ModelMixin(Base
   __matches() {
     let matches = this.opts.matches;
     let owner = this.owner;
-    let props = this._properties;
-    return doc => !!matches.call(owner, doc, props);
+    return doc => !!matches.call(owner, doc, owner);
   }
 
   _matches(doc) {
@@ -122,7 +120,7 @@ export default class FilterInternal extends OwnerPropertiesMixin(ModelMixin(Base
     if(docs.length === 0) {
       return;
     }
-    let keys = Object.values(this.opts.document);
+    let keys = this.opts.document;
     if(keys.length === 0) {
       return;
     }

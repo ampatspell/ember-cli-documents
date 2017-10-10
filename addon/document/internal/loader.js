@@ -1,14 +1,13 @@
 import Base from './base';
 import ModelMixin from './-model-mixin';
-import OwnerPropertiesMixin from './-owner-properties-mixin';
 
 // TODO: autoload
 // TODO: load on owner property changes -- observe owner in a mixin from filter
-export default class LoaderInternal extends OwnerPropertiesMixin(ModelMixin(Base)) {
+export default class LoaderInternal extends ModelMixin(Base) {
 
   /*
     opts: {
-      owner: { id: 'id' },
+      owner: [ 'id' ],
       query(props) {
         return { id: props.id };
       }
@@ -23,12 +22,8 @@ export default class LoaderInternal extends OwnerPropertiesMixin(ModelMixin(Base
     this.opts = opts;
   }
 
-  _withPropertyChanges() {
-    return this.parent.withPropertyChanges(...arguments);
-  }
-
-  get _state() {
-    return this.parent.state;
+  _withState(cb) {
+    return this.parent.withPropertyChanges(changed => cb(this.parent.state, changed), true);
   }
 
   _createModel() {
@@ -36,27 +31,21 @@ export default class LoaderInternal extends OwnerPropertiesMixin(ModelMixin(Base
   }
 
   _willLoad() {
-    this._withPropertyChanges(changed => {
-      this._state.onLoading(changed);
-    }, true);
+    this._withState((state, changed) => state.onLoading(changed));
   }
 
   _didLoad() {
-    this._withPropertyChanges(changed => {
-      this._state.onLoaded(changed);
-    }, true);
+    this._withState((state, changed) => state.onLoaded(changed));
   }
 
   _loadDidFail(err) {
-    this._withPropertyChanges(changed => {
-      this._state.onError(err, changed);
-    }, true);
+    this._withState((state, changed) => state.onError(err, changed));
   }
 
   get query() {
-    let properties = this._properties;
     let query = this.opts.query;
-    return query.call(this.owner, properties);
+    let owner = this.owner;
+    return query.call(owner, owner);
   }
 
   scheduleLoad() {

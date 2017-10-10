@@ -7,13 +7,12 @@ const {
   copy
 } = Ember;
 
-const {
-  values
-} = Object;
+const matches = () => true;
+const query = () => {};
 
 export default opts => {
-  opts = merge({ database: 'database', owner: {}, document: {} }, opts);
-  return computed(opts.database, ...values(opts.owner), function() {
+  opts = merge({ database: 'database', owner: [], document: [], matches, query }, opts);
+  return computed(opts.database, ...opts.owner, function() {
     let { query, matches } = opts;
     let database = this.get(opts.database);
     let owner = copy(opts.owner);
