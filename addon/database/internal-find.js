@@ -69,12 +69,15 @@ export default Ember.Mixin.create({
     let view = opts.view;
     let selector = opts.selector;
 
+    let force = opts.force;
+    delete opts.force;
+
     let schedule = (label, fn) => this.__scheduleDatabaseOperation(label, opts, fn);
 
     if(id) {
       let internal = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
-        return internal.scheduleLoad().then(() => result('single', internal));
+        return internal.scheduleLoad({ force }).then(() => result('single', internal));
       }
       return schedule('id', () => {
         delete opts.id;
