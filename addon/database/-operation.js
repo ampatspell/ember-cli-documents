@@ -2,17 +2,17 @@ import Ember from 'ember';
 import DocumentsError from '../util/error';
 
 const {
-  RSVP: { defer, resolve, reject },
-  assign
+  RSVP: { defer, resolve, reject }
 } = Ember;
 
 export default class Operation {
 
-  constructor(label, props, fn, resolve) {
+  constructor(label, props, fn, before, resolve) {
     this.label = label;
+    this.props = props;
     this.fn = fn;
+    this.before = before;
     this.resolve = resolve;
-    assign(this, props);
     this.deferred = defer();
     this.destroyed = false;
   }
@@ -29,16 +29,28 @@ export default class Operation {
     return this.deferred.promise;
   }
 
+  _invokeBefore() {
+    if(this.before) {
+      return this.before();
+    }
+  }
+
+  _invokeResolve(arg) {
+    if(this.resolve) {
+      return this.resolve(arg);
+    }
+    return arg;
+  }
+
   _invoke() {
     if(this.destroyed) {
       return reject(new DocumentsError({ error: 'internal', reason: 'operation_destroyed' }));
     }
-    return resolve(this.fn(this)).then(result => {
-      if(this.resolve) {
-        return this.resolve(result);
-      }
-      return result;
-    });
+
+    return resolve()
+      .then(() => this._invokeBefore())
+      .then(() => this.fn())
+      .then(result => this._invokeResolve(result));
   }
 
   invoke() {

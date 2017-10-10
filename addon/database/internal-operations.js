@@ -9,8 +9,8 @@ const {
 
 export default Ember.Mixin.create({
 
-  __scheduleInternalOperation(label, internal, props, resolve, fn) {
-    let op = new Operation(label, assign({ internal }, props), fn, resolve);
+  __scheduleInternalOperation(label, internal, props, before, resolve, fn) {
+    let op = new Operation(label, assign({ internal }, props), fn, before, resolve);
     this._registerInternalOperation(op);
     return internal.addOperation(op);
   },
@@ -113,26 +113,26 @@ export default Ember.Mixin.create({
 
   //
 
-  _scheduleInternalSave(internal, opts={}, resolve) {
-    return this.__scheduleInternalOperation('document-save', internal, { opts }, resolve, () => {
+  _scheduleInternalSave(internal, opts={}, before, resolve) {
+    return this.__scheduleInternalOperation('document-save', internal, { opts }, before, resolve, () => {
       return this.__performInternalSave(internal, opts);
     });
   },
 
-  _scheduleInternalDelete(internal, opts={}, resolve) {
-    return this.__scheduleInternalOperation('document-delete', internal, { opts }, resolve, () => {
+  _scheduleInternalDelete(internal, opts={}, before, resolve) {
+    return this.__scheduleInternalOperation('document-delete', internal, { opts }, before, resolve, () => {
       return this.__performInternalDelete(internal, opts);
     });
   },
 
-  _scheduleInternalLoad(internal, opts={}, resolve) {
-    return this.__scheduleInternalOperation('document-load', internal, { opts }, resolve, () => {
+  _scheduleInternalLoad(internal, opts={}, before, resolve) {
+    return this.__scheduleInternalOperation('document-load', internal, { opts }, before, resolve, () => {
       return this.__performInternalLoad(internal, opts);
     });
   },
 
-  _scheduleInternalReload(internal, opts={}, resolve) {
-    return this.__scheduleInternalOperation('document-reload', internal, { opts }, resolve, () => {
+  _scheduleInternalReload(internal, opts={}, before, resolve) {
+    return this.__scheduleInternalOperation('document-reload', internal, { opts }, before, resolve, () => {
       return this.__performInternalLoad(internal, assign({}, opts, { force: true }));
     });
   }

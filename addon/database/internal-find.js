@@ -36,9 +36,9 @@ const doc = fn => function(...args) {
 
 export default Ember.Mixin.create({
 
-  __scheduleDatabaseOperation(label, opts, fn, resolve) {
+  __scheduleDatabaseOperation(label, opts, fn, before, resolve) {
     opts = merge({}, opts);
-    let op = new Operation(label, { opts }, fn, resolve);
+    let op = new Operation(label, { opts }, fn, before, resolve);
     this._registerDatabaseOperation(op);
     op.invoke();
     return op;
@@ -61,7 +61,7 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
-  _scheduleDocumentFindOperation(opts, resolve) {
+  _scheduleDocumentFindOperation(opts, before, resolve) {
     opts = normalizeOpts(opts, {});
 
     let original = copy(opts, true);
@@ -75,12 +75,12 @@ export default Ember.Mixin.create({
     let force = opts.force;
     delete opts.force;
 
-    const schedule = (label, fn) => this.__scheduleDatabaseOperation(label, original, fn, resolve);
+    const schedule = (label, fn) => this.__scheduleDatabaseOperation(label, original, fn, before, resolve);
 
     if(id) {
       let internal = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
-        return this._scheduleInternalLoad(internal, { force }, internal => {
+        return this._scheduleInternalLoad(internal, { force }, before, internal => {
           let hash = result('single', internal);
           if(resolve) {
             return resolve(hash);
@@ -115,9 +115,9 @@ export default Ember.Mixin.create({
     })));
   },
 
-  _scheduleDocumentFirstOperation(opts) {
+  _scheduleDocumentFirstOperation(opts, before, resolve) {
     opts = normalizeOpts(opts, { limit: 1 });
-    return this._scheduleDocumentFindOperation(opts, ({ result, type }) => {
+    return this._scheduleDocumentFindOperation(opts, before, ({ result, type }) => {
       let internal;
       if(type === 'single') {
         internal = result;
@@ -127,8 +127,21 @@ export default Ember.Mixin.create({
       if(!internal) {
         return reject(new DocumentsError({ error: 'not_found', reason: 'missing', status: 404 }));
       }
+      if(resolve) {
+        return resolve(internal);
+      }
       return internal;
     });
+  },
+
+  _scheduleDocumentOperation(opts, type, before, resolve) {
+    if(type === 'first') {
+      return this._scheduleDocumentFirstOperation(opts, before, resolve);
+    } else if(type === 'find') {
+      return this._scheduleDocumentFindOperation(opts, before, resolve);
+    } else {
+      return reject(new DocumentsError({ error: 'internal', reason: `type must be 'first' or 'find' not ${type}` }));
+    }
   },
 
   _internalDocumentFind(opts) {
