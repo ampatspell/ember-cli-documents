@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import { property } from './-properties';
 import { makeForwardStateMixin } from './-loader-state-mixin';
+import ModelMixin from './-model-mixin';
 
 const {
   computed,
@@ -21,7 +22,7 @@ const loader = name => function(...args) {
 
 const ForwardStateMixin = makeForwardStateMixin('loader');
 
-export default Ember.ObjectProxy.extend(ForwardStateMixin, {
+export default Ember.ObjectProxy.extend(ForwardStateMixin, ModelMixin, {
 
   _internal: null,
 
