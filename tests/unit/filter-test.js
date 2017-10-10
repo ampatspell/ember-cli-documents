@@ -25,6 +25,7 @@ test('create filter', function(assert) {
   assert.ok(filter);
   assert.equal(filter.get('values.length'), 0);
   assert.equal(filter.get('value'), undefined);
+  run(() => filter.destroy());
 });
 
 test('create filter with existing matched values', function(assert) {
@@ -34,6 +35,7 @@ test('create filter with existing matched values', function(assert) {
   let filter = this.filter();
   assert.equal(filter.get('values.length'), 1);
   assert.equal(filter.get('value'), duck);
+  run(() => filter.destroy());
 });
 
 test('updated doc is removed from values', function(assert) {
@@ -45,6 +47,7 @@ test('updated doc is removed from values', function(assert) {
   duck.set('type', 'ducky');
   assert.equal(filter.get('values.length'), 0);
   assert.equal(filter.get('value'), undefined);
+  run(() => filter.destroy());
 });
 
 test('added doc is added to values', function(assert) {
@@ -53,6 +56,7 @@ test('added doc is added to values', function(assert) {
   assert.equal(filter.get('value'), undefined);
   let duck = this.db.doc({ id: 'duck:yellow', type: 'duck' });
   assert.equal(filter.get('value'), duck);
+  run(() => filter.destroy());
 });
 
 test('destroy stops observing', function(assert) {
@@ -106,4 +110,6 @@ test('destroyed new doc is removed', function(assert) {
 
   assert.equal(filter.get('values.length'), 0);
   assert.equal(filter.get('value'), undefined);
+
+  run(() => filter.destroy());
 });
