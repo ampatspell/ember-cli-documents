@@ -70,7 +70,7 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
 
   loader(create) {
     let loader = this._loader;
-    if(!loader) {
+    if(!loader && create) {
       loader = this._createLoader();
       this._loader = loader;
     }
@@ -93,6 +93,11 @@ export default class DocumentProxyInternal extends ModelMixin(Base) {
     let filter = this.filter();
     if(filter) {
       filter.destroy();
+    }
+
+    let loader = this.loader();
+    if(loader) {
+      loader.destroy();
     }
   }
 
