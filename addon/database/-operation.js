@@ -8,9 +8,10 @@ const {
 
 export default class Operation {
 
-  constructor(label, props, fn) {
+  constructor(label, props, fn, resolve) {
     this.label = label;
     this.fn = fn;
+    this.resolve = resolve;
     assign(this, props);
     this.deferred = defer();
     this.destroyed = false;
@@ -32,7 +33,13 @@ export default class Operation {
     if(this.destroyed) {
       return reject(new DocumentsError({ error: 'internal', reason: 'operation_destroyed' }));
     }
-    return this.fn(this);
+    return this.fn(this).then(result => {
+      let resolve = this.resolve;
+      if(resolve) {
+        return resolve(result);
+      }
+      return result;
+    });
   }
 
   invoke() {
