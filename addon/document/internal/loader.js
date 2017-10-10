@@ -63,7 +63,7 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
   //
 
   _state(key) {
-    this._scheduleAutoload(false, [ key ]);
+    this._scheduleAutoload(false, true, [ key ]);
     return this.state[key];
   }
 
@@ -95,13 +95,13 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
 
   //
 
-  _scheduleLoad(force, except) {
+  _scheduleLoad(force, reuse, except) {
     this._withState((state, changed) => state.onLoadScheduled(changed), except);
 
     let operations = this.operations;
     let operation = operations.get('lastObject');
 
-    if(!operation || (force && this.state.isLoaded && !operation.force)) {
+    if(!operation || !reuse || (force && this.state.isLoaded && !operation.force)) {
       operation = new Operation(this, force);
       operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
       operations.pushObject(operation);
@@ -122,28 +122,28 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
     return !state.isLoaded && !state.isLoading;
   }
 
-  _scheduleAutoload(force, except) {
+  _scheduleAutoload(force, reuse, except) {
     if(!this._needsAutoload(force)) {
       return;
     }
-    this._scheduleLoad(force, except);
+    this._scheduleLoad(force, reuse, except);
   }
 
   load() {
     if(this.state.isLoaded) {
       return resolve();
     }
-    return this._scheduleLoad(false).promise;
+    return this._scheduleLoad(false, true).promise;
   }
 
   reload() {
-    return this._scheduleLoad(true).promise;
+    return this._scheduleLoad(true, true).promise;
   }
 
   //
 
   _ownerValueForKeyDidChange() {
-    this._scheduleAutoload(true);
+    this._scheduleAutoload(true, false);
   }
 
   _startObserving() {

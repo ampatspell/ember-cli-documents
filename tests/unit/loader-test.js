@@ -4,7 +4,7 @@ import { test } from '../helpers/qunit';
 
 const {
   run,
-  RSVP: { all }
+  RSVP: { all, allSettled }
 } = Ember;
 
 module('loader', {
@@ -18,6 +18,7 @@ module('loader', {
       }
     };
     this.first = () => this.db._createInternalLoader(this.owner, this.opts, 'first').model(true);
+    this.settle = loader => allSettled(loader._internal.operations.map(op => op.promise));
     await this.recreate();
   }
 });
@@ -109,4 +110,74 @@ test('destroy while loading', async function(assert) {
   await promise;
 
   assert.ok(loader._internal.state.isLoaded);
+});
+
+test('autoload for isLoading, isLoaded', async function(assert) {
+  await this.docs.save({ _id: 'duck' });
+  this.owner.set('id', 'duck');
+  let loader = this.first();
+
+  assert.equal(loader._internal.state.isLoading, false);
+  assert.equal(loader.get('isLoading'), true);
+  assert.equal(loader._internal.state.isLoading, true);
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  assert.equal(loader.get('isLoading'), true);
+  assert.equal(loader.get('isLoaded'), false);
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  await this.settle(loader);
+});
+
+test('autoload and force load', async function(assert) {
+  await this.docs.save({ _id: 'duck' });
+  this.owner.set('id', 'duck');
+  let loader = this.first();
+
+  assert.equal(loader._internal.state.isLoading, false);
+  assert.equal(loader.get('isLoading'), true);
+  assert.equal(loader._internal.state.isLoading, true);
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  loader.reload();
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  await this.settle(loader);
+});
+
+test('load and force load', async function(assert) {
+  await this.docs.save({ _id: 'duck' });
+  this.owner.set('id', 'duck');
+  let loader = this.first();
+
+  loader.load();
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  loader.reload();
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  loader.reload();
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  await this.settle(loader);
+});
+
+test('load and force load', async function(assert) {
+  await this.docs.save({ _id: 'duck' });
+  let loader = this.first();
+
+  assert.equal(loader._internal.operations.get('length'), 0);
+
+  this.owner.set('id', 'du');
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  this.owner.set('id', 'duc');
+  assert.equal(loader._internal.operations.get('length'), 2);
+
+  this.owner.set('id', 'duck');
+  assert.equal(loader._internal.operations.get('length'), 3);
+
+  await this.settle(loader);
+
+  assert.ok(this.db.existing('duck'));
 });
