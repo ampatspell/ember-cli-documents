@@ -1,12 +1,15 @@
 import Ember from 'ember';
 
 const {
+  merge,
   assign,
   A,
 } = Ember;
 
-export default (defaults, proto) => {
-  let keys = A(Object.keys(defaults));
+export default opts => {
+  opts = merge({ defaults: {}, states: {}, proto: {} }, opts);
+
+  let keys = A(Object.keys(opts.defaults));
   let create = hash => {
     A(Object.keys(hash)).forEach(key => {
       if(!keys.includes(key)) {
@@ -15,6 +18,7 @@ export default (defaults, proto) => {
     });
     return hash;
   };
+
   let states = {
     onDirty: create({
       isDirty: true
@@ -66,10 +70,14 @@ export default (defaults, proto) => {
     })
   };
 
+  for(let key in opts.states) {
+    states[key] = opts.states[key];
+  }
+
   class State {
 
     constructor() {
-      assign(this, defaults);
+      assign(this, opts.defaults);
     }
 
     set(props, changed) {
@@ -128,8 +136,8 @@ export default (defaults, proto) => {
 
   }
 
-  if(proto) {
-    assign(State.prototype, proto);
+  if(opts.proto) {
+    assign(State.prototype, opts.proto);
   }
 
   return { keys, State };

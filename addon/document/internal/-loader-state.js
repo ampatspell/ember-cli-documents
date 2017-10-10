@@ -4,13 +4,16 @@ const {
   keys,
   State
 } = createState({
-  isLoading: false,
-  isLoaded: false,
-  isError: false,
-  error: null
-}, {
-  onLoadScheduled(changed) {
-    this.set({ isLoading: true }, changed);
+  defaults: {
+    isLoading: false,
+    isLoaded: false,
+    isError: false,
+    error: null
+  },
+  proto: {
+    onLoadScheduled(changed) {
+      this.set({ isLoading: true }, changed);
+    }
   }
 });
 
