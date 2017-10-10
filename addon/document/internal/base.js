@@ -59,8 +59,10 @@ export default ModelMixin(class InternalBase {
     this._invokeOnParents(parent => parent.withPropertyChanges(changed => changed('serialized'), true));
   }
 
-  withPropertyChanges(cb, notify) {
+  withPropertyChanges(cb, notify, except) {
     assert(`withPropertyChanges notify argument must be boolean`, typeof notify === 'boolean');
+
+    console.log('except', except);
 
     let model;
 
@@ -75,7 +77,7 @@ export default ModelMixin(class InternalBase {
     let changes = [];
 
     let changed = key => {
-      if(model && notify) {
+      if(model && notify && (!except || !except.includes(key))) {
         model.notifyPropertyChange(key);
       }
       if(!changes.includes(key)) {
