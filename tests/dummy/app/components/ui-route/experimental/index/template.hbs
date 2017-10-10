@@ -1,7 +1,14 @@
 <div class="row">
+  {{input value=id}}
+</div>
+<div class="row">
   {{doc}}
 </div>
-<div>
+<div class="row">
+  isLoading={{doc.isLoading}},
+  isLoaded={{doc.isLoaded}}
+</div>
+<div class="row">
   {{ui-block/json doc.serialized}}
 </div>
 <div class="row">
