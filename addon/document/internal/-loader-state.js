@@ -8,6 +8,10 @@ const {
   isLoaded: false,
   isError: false,
   error: null
+}, {
+  onLoadScheduled(changed) {
+    this.set({ isLoading: true }, changed);
+  }
 });
 
 export {

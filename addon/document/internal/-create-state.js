@@ -2,10 +2,10 @@ import Ember from 'ember';
 
 const {
   assign,
-  A
+  A,
 } = Ember;
 
-export default defaults => {
+export default (defaults, proto) => {
   let keys = A(Object.keys(defaults));
   let create = hash => {
     A(Object.keys(hash)).forEach(key => {
@@ -126,6 +126,10 @@ export default defaults => {
       this.set(assign({ error }, states.onError), changed);
     }
 
+  }
+
+  if(proto) {
+    assign(State.prototype, proto);
   }
 
   return { keys, State };
