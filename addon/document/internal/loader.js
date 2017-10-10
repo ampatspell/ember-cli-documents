@@ -2,6 +2,7 @@ import Ember from 'ember';
 import Base from './base';
 import ModelMixin from './-model-mixin';
 import LoaderState from './-loader-state';
+import ObserveOwner from './-observe-owner';
 
 const {
   RSVP: { resolve }
@@ -9,7 +10,7 @@ const {
 
 // TODO: autoload
 // TODO: load on owner property changes -- observe owner in a mixin from filter
-export default class LoaderInternal extends ModelMixin(Base) {
+export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
 
   /*
     opts: {
@@ -28,6 +29,11 @@ export default class LoaderInternal extends ModelMixin(Base) {
     this.type = type;
     this.opts = opts;
     this.state = new LoaderState();
+  }
+
+  _didCreateModel() {
+    super._didCreateModel();
+    this._startObserving();
   }
 
   _createModel() {
@@ -75,7 +81,7 @@ export default class LoaderInternal extends ModelMixin(Base) {
       query.force = true;
     }
     this._willLoad();
-    return this._loadQuery(query).then(() => this._didLoad(), err => this._loadDidFail());
+    return this._loadQuery(query).then(() => this._didLoad(), err => this._loadDidFail(err));
   }
 
   scheduleLoad() {
@@ -87,6 +93,39 @@ export default class LoaderInternal extends ModelMixin(Base) {
 
   scheduleReload() {
     return this._load(true);
+  }
+
+  //
+
+  _ownerValueForKeyDidChange() {
+    // TODO: load
+  }
+
+  _startObserving() {
+    this._startObservingOwner();
+  }
+
+  _stopObserving() {
+    this._stopObservingOwner();
+  }
+
+  //
+
+  get _modelWillDestroyUnsetsModel() {
+    return false;
+  }
+
+  _didDestroyModel() {
+    super._didDestroyModel();
+    this._stopObserving();
+  }
+
+  destroy() {
+    this._stopObserving();
+    let model = this.model();
+    if(model) {
+      model.destroy();
+    }
   }
 
 }
