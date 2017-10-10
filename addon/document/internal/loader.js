@@ -31,6 +31,11 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
     this.state = new LoaderState();
   }
 
+  _state(key) {
+    this._autoload(key, null);
+    return this.state[key];
+  }
+
   _didCreateModel() {
     super._didCreateModel();
     this._startObserving();
@@ -95,10 +100,14 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
     return this._load(true);
   }
 
+  _autoload(stateKey, ownerKey) {
+    Ember.Logger.info('_autoload', stateKey, ownerKey);
+  }
+
   //
 
-  _ownerValueForKeyDidChange() {
-    // TODO: load
+  _ownerValueForKeyDidChange(sender, key) {
+    this._autoload(null, key);
   }
 
   _startObserving() {

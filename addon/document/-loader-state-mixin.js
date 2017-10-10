@@ -15,4 +15,4 @@ export const makeForwardStateMixin = target => {
   return Ember.Mixin.create(props);
 };
 
-export default create(keys);
+export default create(keys, '_state');
