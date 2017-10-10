@@ -82,7 +82,6 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
 
   _load(force, except) {
     let query = this._query;
-    console.log('_load', query);
     if(force) {
       query.force = true;
     }
@@ -110,7 +109,7 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
   }
 
   _scheduleLoad(except) {
-    this._load(false, except).then(() => {}, err => {});
+    this._load(false, except).then(() => {}, () => {});
   }
 
   _autoload(stateKey, ownerKey) {
