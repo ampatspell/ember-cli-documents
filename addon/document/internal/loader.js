@@ -6,7 +6,8 @@ import ObserveOwner from './-observe-owner';
 
 const {
   RSVP: { resolve, defer },
-  A
+  A,
+  merge
 } = Ember;
 
 class Operation {
@@ -45,8 +46,8 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
     this.store = store;
     this.database = database;
     this.owner = owner;
+    this.opts = merge({ autoload: true }, opts);
     this.type = type;
-    this.opts = opts;
     this.state = new LoaderState();
     this.operations = A();
   }
@@ -81,9 +82,11 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
 
   _scheduleDocumentOperation(force) {
     let { database, query } = this;
+
     if(force) {
       query.force = true;
     }
+
     return database._scheduleDocumentOperation(query, this.type, () => {
       this._withState((state, changed) => state.onLoading(changed));
     }, () => {
