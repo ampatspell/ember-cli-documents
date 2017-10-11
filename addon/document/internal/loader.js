@@ -101,12 +101,6 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
     let operations = this.operations;
     let operation = operations.get('lastObject');
 
-    // isLoaded should be false onError
-    // but the problem is that next autoload is triggered and this thing goes into infinite loop
-    // solution is to have state.isAutoload. and then check for that && state.isError
-    //
-    // if(state.isAutoload && state.isError && isAutoload) { return; }
-
     if(!operation || !reuse || (force && this.state.isLoaded && !operation.force)) {
       operation = new Operation(this, force);
       operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
@@ -125,7 +119,7 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
       return true;
     }
     let state = this.state;
-    return !state.isLoaded && !state.isLoading;
+    return !state.isLoaded && !state.isLoading && !state.isError;
   }
 
   _scheduleAutoload(force, reuse, except) {
@@ -149,6 +143,7 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
   //
 
   _ownerValueForKeyDidChange() {
+    this._withState((state, changed) => state.onReset(changed));
     this._scheduleAutoload(true, false);
   }
 

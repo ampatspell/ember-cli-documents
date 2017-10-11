@@ -11,6 +11,9 @@ const {
     error: null
   },
   proto: {
+    onReset(changed) {
+      this.set({ isLoaded: false, isError: false, error: null }, changed);
+    },
     onLoadScheduled(changed) {
       this.set({ isLoading: true }, changed);
     }

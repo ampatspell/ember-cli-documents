@@ -1,7 +1,6 @@
 # TODO
 
 * loader `enabled` which can be set from parent (disable when identity has a doc)
-* loader `load` -> `autoload fails` -> `isLoaded` is kept true
 * split internal/base into absolute base which is useful for proxies.
 * ember inspector integration
 * loadable collection and document computed properties
