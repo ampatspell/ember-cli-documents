@@ -1,5 +1,6 @@
 # TODO
 
+* loader `first` vs `find` type for linked documents support
 * `documents/properties` owner dependency vs inlne value handling
 * loader `enabled` which can be set from parent (disable when identity has a doc)
 * split internal/base into absolute base which is useful for proxies.
