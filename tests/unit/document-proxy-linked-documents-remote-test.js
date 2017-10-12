@@ -38,6 +38,8 @@ module('document-proxy-linked-remote', {
         return doc.get('type') === 'duck';
       },
       query(owner) {
+        // TODO: additional param for expectation after load otherwise throw `not_found`?
+        // then that can be used in general for `first`
         let key = owner.get('key');
         return { ddoc: 'duck', view: 'by-id-with-feathers', limit: undefined, key };
       }
