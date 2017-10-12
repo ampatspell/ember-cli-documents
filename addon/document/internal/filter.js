@@ -98,7 +98,7 @@ export default class FilterInternal extends ObserveOwner(ModelMixin(Base)) {
       return;
     }
     let keys = this.opts.document;
-    if(keys.length === 0) {
+    if(!keys || keys.length === 0) {
       return;
     }
     keys.forEach(key => docs.forEach(doc => cb(doc, key)));

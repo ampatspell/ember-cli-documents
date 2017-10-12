@@ -8,7 +8,7 @@ export default Class => class ObserveOwnerMixin extends Class {
       return;
     }
     let keys = this.opts.owner;
-    if(keys.length === 0) {
+    if(!keys || keys.length === 0) {
       return;
     }
     keys.forEach(key => cb(owner, key));
