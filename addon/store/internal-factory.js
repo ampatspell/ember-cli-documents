@@ -80,6 +80,11 @@ export default Ember.Mixin.create({
     return new InternalDocumentProxy(this, database, owner, opts);
   },
 
+  _createInternalArrayProxy(database, owner, opts) {
+    let InternalArrayProxy = this._internalFactory('proxy/array');
+    return new InternalArrayProxy(this, database, owner, opts);
+  },
+
   _createInternalFilter(database, owner, opts) {
     let InternalFilter = this._internalFactory('filter');
     return new InternalFilter(this, database, owner, opts);

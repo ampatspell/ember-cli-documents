@@ -62,6 +62,10 @@ export default Ember.Mixin.create({
     return this.get('store')._createInternalDocumentProxy(this, owner, opts);
   },
 
+  _createInternalArrayProxy(owner, opts) {
+    return this.get('store')._createInternalArrayProxy(this, owner, opts);
+  },
+
   _createInternalFilter(owner, opts) {
     return this.get('store')._createInternalFilter(this, owner, opts);
   },
