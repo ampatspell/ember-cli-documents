@@ -1,26 +1,45 @@
 import Ember from 'ember';
 import layout from './template';
-import { docById } from 'documents/properties';
+import { docById, find } from 'documents/properties';
 
 const {
-  RSVP: { resolve }
+  RSVP: { resolve },
+  computed: { reads }
 } = Ember;
+
+const byType = opts => {
+  let { database, type } = opts;
+  return find({
+    database,
+    owner: [ type ],
+    document: [ 'type' ],
+    query(owner) {
+      let key = owner.get(type);
+      return { ddoc: 'main', view: 'by-type', key };
+    },
+    matches(doc, owner) {
+      return doc.get('type') === owner.get(type);
+    }
+  });
+};
 
 export default Ember.Component.extend({
   layout,
 
+  type: 'duck',
   id: 'message:first',
 
   doc: docById({ database: 'db', id: 'id' }),
+  docs: byType({ database: 'db', type: 'type' }),
+
+  subject: reads('docs'),
 
   actions: {
     load() {
-      let doc = this.get('doc');
-      return resolve(doc && doc.load());
+      return this.get('subject').load();
     },
     reload() {
-      let doc = this.get('doc');
-      return resolve(doc && doc.reload());
+      return this.get('subject').reload();
     }
   }
 

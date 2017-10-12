@@ -1,20 +1,27 @@
 <div class="row">
   {{input value=id}}
+  {{input value=type}}
 </div>
 <div class="row">
-  {{doc}}
+  {{subject}}
 </div>
 <div class="row">
-  isLoading={{doc.isLoading}},
-  isLoaded={{doc.isLoaded}}
+  isLoading={{subject.isLoading}},
+  isLoaded={{subject.isLoaded}}
 </div>
 <div class="row">
-  {{ui-block/json doc.serialized}}
+  {{ui-block/json subject.state}}
+</div>
+<div class="row">
+  {{#if subject.id}}
+    {{ui-block/json subject.serialized}}
+  {{else}}
+    {{#each subject as |doc|}}
+      {{ui-block/json doc.serialized}}
+    {{/each}}
+  {{/if}}
 </div>
 <div class="row">
   <button {{action 'load'}}>Load</button>
   <button {{action 'reload'}}>Reload</button>
-</div>
-<div class="row">
-  {{ui-block/json doc.state}}
 </div>
