@@ -1,39 +1,12 @@
 import Ember from 'ember';
-import { property } from './-properties';
-import { makeForwardStateMixin } from './-loader-state-mixin';
-import ModelMixin from './-model-mixin';
+import proxy from './-proxy';
 
 const {
-  computed,
   computed: { reads }
 } = Ember;
 
-const database = property('database');
+export default proxy(Ember.ObjectProxy).extend({
 
-const model = name => computed(function() {
-  let internal = this._internal;
-  return internal[name].call(internal, true).model(true);
-}).readOnly();
-
-const loader = name => function(...args) {
-  let loader = this.get('loader');
-  return loader[name].call(loader, ...args);
-};
-
-const ForwardStateMixin = makeForwardStateMixin('loader');
-
-export default Ember.ObjectProxy.extend(ForwardStateMixin, ModelMixin, {
-
-  _internal: null,
-
-  content: reads('filter.value').readOnly(),
-
-  database: database(),
-
-  filter: model('filter'),
-  loader: model('loader'),
-
-  load:   loader('load'),
-  reload: loader('reload'),
+  content: reads('filter.value').readOnly()
 
 });
