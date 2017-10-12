@@ -13,6 +13,8 @@ const byType = opts => {
     owner: [ type ],
     document: [ 'type' ],
     query(owner) {
+      // additional param for expectation after load otherwise throw `not_found`?
+      // then that can be used in general for `first`
       let key = owner.get(type);
       return { ddoc: 'main', view: 'by-type', key };
     },
