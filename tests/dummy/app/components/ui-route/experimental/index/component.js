@@ -3,7 +3,6 @@ import layout from './template';
 import { docById, find } from 'documents/properties';
 
 const {
-  RSVP: { resolve },
   computed: { reads }
 } = Ember;
 
