@@ -10,7 +10,7 @@ const {
 const matches = () => true;
 const query = () => {};
 
-export default opts => {
+const proxy = factory => opts => {
   opts = merge({ database: 'database', owner: [], document: [], matches, query }, opts);
   return computed(opts.database, function() {
     let { query, matches } = opts;
@@ -18,6 +18,9 @@ export default opts => {
     let owner = copy(opts.owner);
     let document = copy(opts.document);
     assert(`Database not found for key ${opts.database}`, !!database);
-    return database._createInternalDocumentProxy(this, { owner, document, matches, query }).model(true);
+    return factory(database, this, { owner, document, matches, query }).model(true);
   }).readOnly();
 };
+
+export const first = proxy((database, ...args) => database._createInternalDocumentProxy(...args));
+export const find  = proxy((database, ...args) => database._createInternalArrayProxy(...args));

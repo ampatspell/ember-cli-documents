@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import first from './first';
+import { first } from './proxy';
 
 const {
   merge
@@ -24,7 +24,7 @@ const buildExcludeNew = (opts, document) => {
 }
 
 export default opts => {
-  opts = merge({ database: 'database', id: 'id' }, opts);
+  opts = merge({ id: 'id' }, opts);
   let { database, id } = opts;
 
   let owner = [ id ];
