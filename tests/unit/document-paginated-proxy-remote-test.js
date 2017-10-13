@@ -8,10 +8,10 @@ const {
 
 const ddoc = {
   views: {
-    'by-type': {
+    'all': {
       map(doc) {
         /* global emit */
-        emit(doc.type);
+        emit(doc._id);
       }
     }
   }
@@ -21,17 +21,21 @@ module('document-paginated-proxy-remote', {
   async beforeEach() {
     this.owner = Ember.Object.create({ type: 'duck' });
     this.opts = {
-      owner: [ 'type' ],
-      document: [ 'type' ],
       matches(doc, owner) {
-        return doc.get('type') === owner.get('type');
+        return true;
       },
       query(owner) {
-        let type = owner.get('type');
-        return { ddoc: 'main', view: 'by-type', key: type };
+        return { ddoc: 'main', view: 'all', limit: 3 };
       }
     };
     this.create = () => this.db._createInternalPaginatedProxy(this.owner, this.opts).model(true);
+    this.insert = (count=10) => {
+      let promises = [];
+      for(let i = 0; i < count; i++) {
+        promises.push(this.docs.save({ _id: `duck:${i}` }));
+      }
+      return all(promises);
+    }
     await this.recreate();
     await this.docs.get('design').save('main', ddoc);
   }
@@ -41,4 +45,11 @@ test('exists', function(assert) {
   let proxy = this.create();
   assert.ok(proxy);
   assert.ok(proxy._internal);
+});
+
+test('load', async function(assert) {
+  await this.insert();
+  let proxy = this.create();
+  await proxy.load();
+  assert.equal(proxy.get('length'), 3);
 });

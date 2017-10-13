@@ -31,10 +31,6 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
 
   //
 
-  // get _loaderType() {
-  //   return 'first';
-  // }
-
   _createLoader() {
     let { owner, query } = this.opts;
     let type = this._loaderType;
