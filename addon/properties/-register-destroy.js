@@ -1,10 +1,10 @@
-const __ember_cli_documents__ = '__ember_cli_documents__';
+const key = '__ember_cli_documents__';
 
 export default (owner, fn) => {
   if(!owner.willDestroy) {
     return;
   }
-  let array = owner.willDestroy[__ember_cli_documents__];
+  let array = owner.willDestroy[key];
   if(!array) {
     array = [];
     let willDestroy = owner.willDestroy;
@@ -15,7 +15,7 @@ export default (owner, fn) => {
       }
       willDestroy.apply(owner, arguments);
     }
-    owner.willDestroy[__ember_cli_documents__] = array;
+    owner.willDestroy[key] = array;
   }
   array.push(fn);
 };
