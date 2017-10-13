@@ -22,6 +22,16 @@ const extractMatch = opts => {
   return fn;
 };
 
+const matchResult = ({ result, type }, match) => {
+  if(type === 'single') {
+    if(result && match(result)) {
+      return result;
+    }
+  } else {
+    return A(result).find(internal => match(internal));
+  }
+};
+
 const result = (type, result) => ({ type, result });
 
 const view = fn => function(...args) {
@@ -131,15 +141,8 @@ export default Ember.Mixin.create({
   _scheduleDocumentFirstOperation(opts, beforeFn, resolveFn, rejectFn) {
     opts = this._normalizeInternalFindOptions(opts, { limit: 1 });
     let match = extractMatch(opts);
-    return this._scheduleDocumentFindOperation(opts, beforeFn, ({ result, type }) => {
-      let internal;
-      if(type === 'single') {
-        if(result && match(result)) {
-          internal = result;
-        }
-      } else {
-        internal = A(result).find(internal => match(internal));
-      }
+    return this._scheduleDocumentFindOperation(opts, beforeFn, result => {
+      let internal = matchResult(result, match);
       if(!internal) {
         return reject(new DocumentsError({ error: 'not_found', reason: 'missing', status: 404 }));
       }
