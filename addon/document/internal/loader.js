@@ -1,8 +1,6 @@
 import Ember from 'ember';
-import Base from './base';
-import ModelMixin from './-model-mixin';
+import Loader from './-loader';
 import LoaderState from './-loader-state';
-import ObserveOwner from './-observe-owner';
 
 const {
   RSVP: { resolve, defer },
@@ -10,26 +8,7 @@ const {
   merge
 } = Ember;
 
-class Operation {
-
-  constructor(loader, force) {
-    this.loader = loader;
-    this.force = force;
-    this.deferred = defer();
-  }
-
-  invoke() {
-    let operation = this.loader._scheduleDocumentOperation(this.force);
-    operation.promise.then(arg => this.deferred.resolve(arg), err => this.deferred.reject(err));
-  }
-
-  get promise() {
-    return this.deferred.promise;
-  }
-
-}
-
-export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
+export default class LoaderInternal extends Loader {
 
   /*
     opts: {
@@ -42,34 +21,16 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
     type: 'first' / 'find'
   */
   constructor(store, database, owner, opts, type) {
-    super();
-    this.store = store;
-    this.database = database;
-    this.owner = owner;
-    this.opts = merge({ autoload: true }, opts);
+    super(store, database, owner, opts);
     this.type = type;
-    this.state = new LoaderState();
-    this.operations = A();
   }
 
-  _didCreateModel() {
-    super._didCreateModel();
-    this._startObserving();
+  _createLoaderState() {
+    return new LoaderState();
   }
 
   _createModel() {
     return this.store._createLoader(this);
-  }
-
-  //
-
-  _state(key) {
-    this._scheduleAutoload(false, true, [ key ]);
-    return this.state[key];
-  }
-
-  _withState(cb, except) {
-    return this.withPropertyChanges(changed => cb(this.state, changed), true, except);
   }
 
   //
@@ -101,80 +62,14 @@ export default class LoaderInternal extends ObserveOwner(ModelMixin(Base)) {
   _scheduleLoad(force, reuse, except) {
     this._withState((state, changed) => state.onLoadScheduled(changed), except);
 
-    let operations = this.operations;
-    let operation = operations.get('lastObject');
+    let operation = this._lastOperation();
 
     if(!operation || !reuse || (force && this.state.isLoaded && !operation.force)) {
-      operation = new Operation(this, force);
-      operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
-      operations.pushObject(operation);
+      operation = this._createOperation(() => this._scheduleDocumentOperation(force));
       operation.invoke();
     }
 
     return operation;
-  }
-
-  _needsAutoload(force) {
-    if(this.opts.autoload === false) {
-      return false;
-    }
-    if(force) {
-      return true;
-    }
-    let state = this.state;
-    return !state.isLoaded && !state.isLoading && !state.isError;
-  }
-
-  _scheduleAutoload(force, reuse, except) {
-    if(!this._needsAutoload(force)) {
-      return;
-    }
-    this._scheduleLoad(force, reuse, except);
-  }
-
-  load() {
-    if(this.state.isLoaded) {
-      return resolve();
-    }
-    return this._scheduleLoad(false, true).promise;
-  }
-
-  reload() {
-    return this._scheduleLoad(true, true).promise;
-  }
-
-  //
-
-  _ownerValueForKeyDidChange() {
-    this._withState((state, changed) => state.onReset(changed));
-    this._scheduleAutoload(true, false);
-  }
-
-  _startObserving() {
-    this._startObservingOwner();
-  }
-
-  _stopObserving() {
-    this._stopObservingOwner();
-  }
-
-  //
-
-  get _modelWillDestroyUnsetsModel() {
-    return false;
-  }
-
-  _didDestroyModel() {
-    super._didDestroyModel();
-    this._stopObserving();
-  }
-
-  destroy() {
-    this._stopObserving();
-    let model = this.model();
-    if(model) {
-      model.destroy();
-    }
   }
 
 }
