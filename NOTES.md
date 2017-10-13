@@ -2,8 +2,11 @@
 
 * computed property for paginated
 * loader state vs proxy state for ArrayProxy and ObjectProxy
-* `documents/properties` owner dependency vs inlne value handling, `isNew` default, `prop`
+* `documents/properties` owner dependency vs inlne value handling, `isNew` default, `prop`. `byId.extend`
+* support proxy w/o loader
+* loader is already loaded if identical query was invoked
 * loader `enabled` which can be set from parent (disable when identity has a doc)
+* proxy state. deleted doc should have err.error=not_found
 * split internal/base into absolute base which is useful for proxies.
 * ember inspector integration
 * array deserialize should diff existing content not just clear existing content
