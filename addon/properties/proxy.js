@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import registerDestroy from './-register-destroy';
 
 const {
   computed,
@@ -18,7 +19,9 @@ const proxy = factory => opts => {
     let owner = copy(opts.owner);
     let document = copy(opts.document);
     assert(`Database not found for key ${opts.database}`, !!database);
-    return factory(database, this, { owner, document, matches, query }).model(true);
+    let internal = factory(database, this, { owner, document, matches, query });
+    registerDestroy(this, () => internal.destroy());
+    return internal.model(true);
   }).readOnly();
 };
 

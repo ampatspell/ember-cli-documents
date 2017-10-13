@@ -66,4 +66,13 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
     }
   }
 
+  //
+
+  destroy() {
+    let model = this.model(false);
+    if(model) {
+      model.destroy();
+    }
+  }
+
 }
