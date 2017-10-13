@@ -1,7 +1,6 @@
 # TODO
 
-* `document-proxy-linked-documents-remote-test` should I throw error on missing content?
-* `documents/properties` owner dependency vs inlne value handling
+* `documents/properties` owner dependency vs inlne value handling, `isNew` default
 * loader `enabled` which can be set from parent (disable when identity has a doc)
 * split internal/base into absolute base which is useful for proxies.
 * ember inspector integration
