@@ -5,7 +5,6 @@
 * loader `enabled` which can be set from parent (disable when identity has a doc)
 * split internal/base into absolute base which is useful for proxies.
 * ember inspector integration
-* loadable collection and document computed properties
 * array deserialize should diff existing content not just clear existing content
 
 # Notes
