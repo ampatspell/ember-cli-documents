@@ -19,6 +19,19 @@
 * http://docs.couchdb.org/en/2.1.0/ddocs/views/pagination.html
 * https://blog.couchbase.com/startkeydocid-behaviour/
 
+``` javascript
+export default Ember.Object.extend({
+
+  author: null, // doc or whatnot
+  posts: paginated({ key: 'author.id' }),
+
+  // startkey, start
+  // startkey, end
+  // startkey_docid
+
+});
+```
+
 ## Properties
 
 ``` javascript

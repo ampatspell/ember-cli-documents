@@ -21,10 +21,10 @@ module('document-paginated-proxy-remote', {
   async beforeEach() {
     this.owner = Ember.Object.create({ type: 'duck' });
     this.opts = {
-      matches(doc, owner) {
+      matches(/*doc, owner*/) {
         return true;
       },
-      query(owner) {
+      query(/*owner*/) {
         return { ddoc: 'main', view: 'all', limit: 3 };
       }
     };
