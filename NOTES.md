@@ -1,5 +1,6 @@
 # TODO
 
+* loader state vs proxy state for ArrayProxy and ObjectProxy
 * `documents/properties` owner dependency vs inlne value handling, `isNew` default
 * loader `enabled` which can be set from parent (disable when identity has a doc)
 * split internal/base into absolute base which is useful for proxies.
