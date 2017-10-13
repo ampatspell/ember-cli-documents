@@ -47,9 +47,19 @@ module('document-proxy-linked-remote', {
     this.create = () => this.db._createInternalDocumentProxy(this.owner, this.opts).model(true);
     this.insert = async () => {
       await all([
-        this.docs.save({ _id: 'duck:yellow', type: 'duck', feathers: [ 'duck:yellow:feather:yellow', 'duck:yellow:feather:green' ] }),
-        this.docs.save({ _id: 'duck:yellow:feather:yellow', type: 'feather' }),
-        this.docs.save({ _id: 'duck:yellow:feather:green', type: 'feather' }),
+        this.docs.save({
+          _id: 'duck:yellow',
+          type: 'duck',
+          feathers: [ 'duck:yellow:feather:yellow', 'duck:yellow:feather:green' ]
+        }),
+        this.docs.save({
+          _id: 'duck:yellow:feather:yellow',
+          type: 'feather'
+        }),
+        this.docs.save({
+          _id: 'duck:yellow:feather:green',
+          type: 'feather'
+        })
       ]);
     };
     await this.recreate();
