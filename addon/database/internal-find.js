@@ -9,11 +9,17 @@ const {
   RSVP: { reject }
 } = Ember;
 
-const normalizeOpts = (opts, defaults) => {
-  if(typeof opts === 'string') {
-    opts = { id: opts };
+const defaultMatch = () => true;
+
+const extractMatch = opts => {
+  let fn;
+  if(opts.match) {
+    fn = opts.match;
+    delete opts.match;
+  } else {
+    fn = defaultMatch;
   }
-  return merge(defaults, opts);
+  return fn;
 };
 
 const result = (type, result) => ({ type, result });
@@ -61,8 +67,15 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
+  _normalizeInternalFindOptions(opts, defaults={}) {
+    if(typeof opts === 'string') {
+      opts = { id: opts };
+    }
+    return merge(defaults, opts);
+  },
+
   _scheduleDocumentFindOperation(opts, beforeFn, resolveFn, rejectFn) {
-    opts = normalizeOpts(opts, {});
+    opts = this._normalizeInternalFindOptions(opts, {});
 
     let original = copy(opts, true);
 
@@ -116,13 +129,16 @@ export default Ember.Mixin.create({
   },
 
   _scheduleDocumentFirstOperation(opts, beforeFn, resolveFn, rejectFn) {
-    opts = normalizeOpts(opts, { limit: 1 });
+    opts = this._normalizeInternalFindOptions(opts, { limit: 1 });
+    let match = extractMatch(opts);
     return this._scheduleDocumentFindOperation(opts, beforeFn, ({ result, type }) => {
       let internal;
       if(type === 'single') {
-        internal = result;
+        if(result && match(result)) {
+          internal = result;
+        }
       } else {
-        internal = result[0];
+        internal = A(result).find(internal => match(internal));
       }
       if(!internal) {
         return reject(new DocumentsError({ error: 'not_found', reason: 'missing', status: 404 }));

@@ -38,39 +38,34 @@ module('document-proxy-linked-remote', {
         return doc.get('type') === 'duck';
       },
       query(owner) {
-        // TODO: additional param for expectation after load otherwise throw `not_found`?
-        // then that can be used in general for `first`
         let key = owner.get('key');
         return { ddoc: 'duck', view: 'by-id-with-feathers', limit: undefined, key };
       }
     };
     this.create = () => this.db._createInternalDocumentProxy(this.owner, this.opts).model(true);
-    this.insert = async () => {
-      await all([
-        this.docs.save({
-          _id: 'duck:yellow',
-          type: 'duck',
-          feathers: [ 'duck:yellow:feather:yellow', 'duck:yellow:feather:green' ]
-        }),
-        this.docs.save({
-          _id: 'duck:yellow:feather:yellow',
-          type: 'feather'
-        }),
-        this.docs.save({
-          _id: 'duck:yellow:feather:green',
-          type: 'feather'
-        })
-      ]);
-    };
-    await this.recreate();
-    await all([
-      this.docs.get('design').save('duck', ddoc),
-      this.insert()
+    this.insertDuck = () => this.docs.save({
+      _id: 'duck:yellow',
+      type: 'duck',
+      feathers: [ 'duck:yellow:feather:yellow', 'duck:yellow:feather:green' ]
+    });
+    this.insertFeathers = () => all([
+      this.docs.save({
+        _id: 'duck:yellow:feather:yellow',
+        type: 'feather'
+      }),
+      this.docs.save({
+        _id: 'duck:yellow:feather:green',
+        type: 'feather'
+      })
     ]);
+    this.insert = () => all([ this.insertDuck(), this.insertFeathers() ]);
+    await this.recreate();
+    await this.docs.get('design').save('duck', ddoc);
   }
 });
 
 test('load', async function(assert) {
+  await this.insert();
   let proxy = this.create();
   await proxy.load();
   let duck = this.db.existing('duck:yellow');
@@ -78,4 +73,21 @@ test('load', async function(assert) {
   assert.ok(this.db.existing('duck:yellow:feather:yellow'));
   assert.ok(this.db.existing('duck:yellow:feather:green'));
   assert.ok(proxy.get('content') === duck);
+});
+
+test('load fails for missing duck', async function(assert) {
+  await this.insertFeathers();
+  let proxy = this.create();
+  try {
+    await proxy.load();
+  } catch(err) {
+    assert.ok(!this.db.existing('duck:yellow'));
+    assert.ok(!this.db.existing('duck:yellow:feather:yellow'));
+    assert.ok(!this.db.existing('duck:yellow:feather:green'));
+    assert.deepEqual(err.toJSON(), {
+      "error": "not_found",
+      "reason": "missing",
+      "status": 404
+    });
+  }
 });

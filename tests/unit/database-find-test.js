@@ -86,3 +86,39 @@ test('first all missing', async function(assert) {
     });
   }
 });
+
+test('first with match rejects', async function(assert) {
+  await this.docs.save({ _id: 'foo' });
+  let doc;
+  try {
+    await this.db.first({
+      all: true,
+      match(doc_) {
+        doc = doc_;
+        return false;
+      }
+    });
+    assert.ok(false, 'should throw');
+  } catch(e) {
+    assert.ok(doc);
+    assert.deepEqual(e.toJSON(), {
+      "error": "not_found",
+      "reason": e.reason,
+      "status": 404
+    });
+  }
+});
+
+test('first with match resolves', async function(assert) {
+  await this.docs.save({ _id: 'thing' });
+  let doc;
+  let result = await this.db.first({
+    all: true,
+    match(doc_) {
+      doc = doc_;
+      return true;
+    }
+  });
+  assert.equal(result.get('id'), 'thing');
+  assert.ok(result === doc);
+});
