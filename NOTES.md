@@ -13,10 +13,11 @@
 
 # Notes
 
-## Computed property teardown examples
+## Pagination
 
-* https://github.com/runspired/rate-limit-computed/blob/master/addon/throttled.js#L35
-* https://github.com/machty/ember-concurrency/blob/master/addon/utils.js#L45
+* https://bitbucket.org/ampatspell/ember-cli-sofa/src/98e4012231eb/addon/view/?at=default
+* http://docs.couchdb.org/en/2.1.0/ddocs/views/pagination.html
+* https://blog.couchbase.com/startkeydocid-behaviour/
 
 ## Properties
 
