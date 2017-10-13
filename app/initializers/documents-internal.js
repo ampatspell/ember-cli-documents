@@ -42,6 +42,9 @@ import InternalDocumentProxy from 'documents/document/internal/document-proxy';
 import ArrayProxy from 'documents/document/array-proxy';
 import InternalArrayProxy from 'documents/document/internal/array-proxy';
 
+import PaginatedProxy from 'documents/document/paginated-proxy';
+import InternalPaginatedProxy from 'documents/document/internal/paginated-proxy';
+
 import Filter from 'documents/document/filter';
 import InternalFilter from 'documents/document/internal/filter';
 import Loader from 'documents/document/loader';
@@ -96,6 +99,8 @@ export default {
     container.register('documents:internal/proxy/document', InternalDocumentProxy);
     container.register('documents:proxy/array', ArrayProxy);
     container.register('documents:internal/proxy/array', InternalArrayProxy);
+    container.register('documents:proxy/paginated', PaginatedProxy);
+    container.register('documents:internal/proxy/paginated', InternalPaginatedProxy);
 
     container.register('documents:filter', Filter);
     container.register('documents:internal/filter', InternalFilter);

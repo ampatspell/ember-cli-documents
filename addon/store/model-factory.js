@@ -53,6 +53,11 @@ export default Ember.Mixin.create({
     return this._modelFactory('proxy/array').create({ _internal, content });
   },
 
+  _createPaginatedProxy(_internal) {
+    let content = _internal.values;
+    return this._modelFactory('proxy/paginated').create({ _internal, content });
+  },
+
   _createFilter(_internal) {
     return this._modelFactory('filter').create({ _internal });
   },

@@ -85,6 +85,11 @@ export default Ember.Mixin.create({
     return new InternalArrayProxy(this, database, owner, opts);
   },
 
+  _createInternalPaginatedProxy(database, owner, opts) {
+    let InternalPaginatedProxy = this._internalFactory('proxy/paginated');
+    return new InternalPaginatedProxy(this, database, owner, opts);
+  },
+
   _createInternalFilter(database, owner, opts) {
     let InternalFilter = this._internalFactory('filter');
     return new InternalFilter(this, database, owner, opts);
