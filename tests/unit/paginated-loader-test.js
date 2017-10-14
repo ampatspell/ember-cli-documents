@@ -17,7 +17,7 @@ module('paginated-loader', {
       }
     };
     this.loader = () => this.db._createInternalPaginatedLoader(this.owner, this.opts).model(true);
-    this.settle = loader => loader.settle();
+    this.settle = loader => loader._internal.settle();
   }
 });
 

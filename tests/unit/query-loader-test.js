@@ -18,7 +18,7 @@ module('query-loader', {
       }
     };
     this.first = () => this.db._createInternalQueryLoader(this.owner, this.opts, 'first').model(true);
-    this.settle = loader => loader.settle();
+    this.settle = loader => loader._internal.settle();
   }
 });
 
