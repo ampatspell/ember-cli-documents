@@ -24,6 +24,15 @@ export default class PaginatedLoaderInternal extends Loader {
     return this.store._createPaginatedLoader(this);
   }
 
-  // TODO: schedule load
+  //
+
+  load() {
+  }
+
+  loadMore() {
+  }
+
+  reload() {
+  }
 
 }

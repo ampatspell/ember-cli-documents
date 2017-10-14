@@ -4,7 +4,7 @@ import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
 
 const {
-  RSVP: { resolve, defer, allSettled },
+  RSVP: { defer, allSettled },
   A,
   merge
 } = Ember;
@@ -119,19 +119,6 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   settle() {
     return allSettled(this.operations.map(op => op.promise));
-  }
-
-  // load
-
-  load() {
-    if(this.state.isLoaded) {
-      return resolve();
-    }
-    return this._scheduleLoad(false, true).promise;
-  }
-
-  reload() {
-    return this._scheduleLoad(true, true).promise;
   }
 
   //

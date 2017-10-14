@@ -1,5 +1,10 @@
+import Ember from 'ember';
 import Loader from './-loader';
 import QueryLoaderState from './-query-loader-state';
+
+const {
+  RSVP: { resolve }
+} = Ember;
 
 export default class QueryLoaderInternal extends Loader {
 
@@ -63,6 +68,19 @@ export default class QueryLoaderInternal extends Loader {
     }
 
     return operation;
+  }
+
+  //
+
+  load() {
+    if(this.state.isLoaded) {
+      return resolve();
+    }
+    return this._scheduleLoad(false, true).promise;
+  }
+
+  reload() {
+    return this._scheduleLoad(true, true).promise;
   }
 
 }

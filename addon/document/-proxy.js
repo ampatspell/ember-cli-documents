@@ -19,10 +19,10 @@ const loader = name => function(...args) {
   return loader[name].call(loader, ...args);
 };
 
-export default (Class, loaderKeys) => {
+export default (Class, loaderKeys, loaderMapping) => {
   const ForwardStateMixin = makeForwardStateMixin('loader', loaderKeys);
 
-  return Class.extend(ForwardStateMixin, ModelMixin, {
+  let props = {
 
     _internal: null,
 
@@ -34,5 +34,13 @@ export default (Class, loaderKeys) => {
     load:   loader('load'),
     reload: loader('reload')
 
-  });
+  };
+
+  if(loaderMapping) {
+    for(let key in loaderMapping) {
+      props[key] = loader(loaderMapping[key]);
+    }
+  }
+
+  return Class.extend(ForwardStateMixin, ModelMixin, props);
 }
