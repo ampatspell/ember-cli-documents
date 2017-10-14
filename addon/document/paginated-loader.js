@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import ModelMixin from './-model-mixin';
 import createLoaderStateMixin from './-create-loader-state-mixin';
-import { keys } from './internal/-query-loader-state';
+import { keys } from './internal/-paginated-loader-state';
 import { promise } from './-properties';
 
 export {

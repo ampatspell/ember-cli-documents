@@ -50,6 +50,9 @@ import InternalFilter from 'documents/document/internal/filter';
 import QueryLoader from 'documents/document/query-loader';
 import InternalQueryLoader from 'documents/document/internal/query-loader';
 
+import PaginatedLoader from 'documents/document/paginated-loader';
+import InternalPaginatedLoader from 'documents/document/internal/paginated-loader';
+
 export default {
   name: 'documents:internal',
   initialize(container) {
@@ -107,5 +110,8 @@ export default {
 
     container.register('documents:query-loader', QueryLoader);
     container.register('documents:internal/query-loader', InternalQueryLoader);
+
+    container.register('documents:paginated-loader', PaginatedLoader);
+    container.register('documents:internal/paginated-loader', InternalPaginatedLoader);
   }
 };

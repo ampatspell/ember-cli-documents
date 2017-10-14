@@ -64,6 +64,10 @@ export default Ember.Mixin.create({
 
   _createQueryLoader(_internal) {
     return this._modelFactory('query-loader').create({ _internal });
+  },
+
+  _createPaginatedLoader(_internal) {
+    return this._modelFactory('paginated-loader').create({ _internal });
   }
 
 });

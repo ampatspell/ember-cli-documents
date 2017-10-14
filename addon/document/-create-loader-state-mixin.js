@@ -1,12 +1,11 @@
 import Ember from 'ember';
-import { keys } from './internal/-query-loader-state';
 import create from './-create-state-mixin';
 
 const {
   computed: { reads }
 } = Ember;
 
-export const makeForwardStateMixin = target => {
+export const makeForwardStateMixin = (target, keys) => {
   const forward = key => reads(`${target}.${key}`).readOnly();
   let props = {
     state: forward('state'),
@@ -15,4 +14,4 @@ export const makeForwardStateMixin = target => {
   return Ember.Mixin.create(props);
 };
 
-export default create(keys, '_stateProp');
+export default keys => create(keys, '_stateProp');

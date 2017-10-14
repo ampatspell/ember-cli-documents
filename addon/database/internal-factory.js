@@ -76,6 +76,10 @@ export default Ember.Mixin.create({
 
   _createInternalQueryLoader(owner, opts, type) {
     return this.get('store')._createInternalQueryLoader(this, owner, opts, type);
+  },
+
+  _createInternalPaginatedLoader(owner, opts) {
+    return this.get('store')._createInternalPaginatedLoader(this, owner, opts);
   }
 
 });
