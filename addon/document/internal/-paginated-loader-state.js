@@ -7,12 +7,13 @@ const {
   defaults: {
     isLoading: false,
     isLoaded: false,
+    isMoreAvailable: false,
     isError: false,
     error: null
   },
   proto: {
     onReset(changed) {
-      this.set({ isLoaded: false, isError: false, error: null }, changed);
+      this.set({ isLoaded: false, isMoreAvailable: false, isError: false, error: null }, changed);
     },
     onLoadScheduled(changed) {
       this.set({ isLoading: true }, changed);
