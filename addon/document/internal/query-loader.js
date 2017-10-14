@@ -57,6 +57,14 @@ export default class QueryLoaderInternal extends Loader {
 
   //
 
+  // TODO: _scheduleLoad params
+  //
+  //         force, reuse, except
+  // load:   false, true
+  // reload: true,  true
+  // auto:   true,  false          (owner property change)
+  // auto:   true,  false, [key]   (state query)
+  //
   _scheduleLoad(force, reuse, except) {
     this._withState((state, changed) => state.onLoadScheduled(changed), except);
 
