@@ -3,6 +3,7 @@ import Ember from 'ember';
 import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
 import environment from '../../config/environment';
+import tap from './tap-document-requests';
 
 const host = environment.COUCHDB_HOST;
 
@@ -56,6 +57,10 @@ export default identifier => {
       recreate(db) {
         db = db || this.db;
         return this.admin(db).then(() => db.get('documents.database').recreate({ documents: true, design: true }));
+      },
+      tap(db) {
+        db = db || this.db;
+        return tap(db.get('documents'));
       },
       beforeEach() {
         this.application = startApp();
