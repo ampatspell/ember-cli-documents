@@ -14,6 +14,7 @@ export default class PaginatedLoaderInternal extends Loader {
   */
   constructor(store, database, owner, opts) {
     super(store, database, owner, opts);
+    this._loadState = {};
   }
 
   _createLoaderState() {
@@ -22,6 +23,15 @@ export default class PaginatedLoaderInternal extends Loader {
 
   _createModel() {
     return this.store._createPaginatedLoader(this);
+  }
+
+  //
+
+  get query() {
+    let state = this._loadState;
+    let query = this.opts.query;
+    let owner = this.owner;
+    return query.call(owner, owner, state);
   }
 
   //
