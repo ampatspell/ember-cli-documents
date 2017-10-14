@@ -4,7 +4,7 @@ import { test } from '../helpers/qunit';
 
 const {
   run,
-  RSVP: { all, allSettled }
+  RSVP: { all }
 } = Ember;
 
 module('query-loader', {
@@ -18,8 +18,7 @@ module('query-loader', {
       }
     };
     this.first = () => this.db._createInternalQueryLoader(this.owner, this.opts, 'first').model(true);
-    this.settle = loader => allSettled(loader._internal.operations.map(op => op.promise));
-    await this.recreate();
+    this.settle = loader => loader.settle();
   }
 });
 
@@ -43,6 +42,8 @@ test('loader has query', function(assert) {
 });
 
 test('load succeeds', async function(assert) {
+  await this.recreate();
+
   this.opts.autoload = false;
 
   await this.docs.save({ _id: 'duck' });
@@ -62,6 +63,8 @@ test('load succeeds', async function(assert) {
 });
 
 test('load fails', async function(assert) {
+  await this.recreate();
+
   this.opts.autoload = false;
 
   this.owner.set('id', 'duck');
@@ -79,6 +82,8 @@ test('load fails', async function(assert) {
 });
 
 test('two loads. second returns 1st promise', async function(assert) {
+  await this.recreate();
+
   this.opts.autoload = false;
 
   await this.docs.save({ _id: 'duck' });
@@ -98,6 +103,8 @@ test('two loads. second returns 1st promise', async function(assert) {
 });
 
 test('destroy while loading', async function(assert) {
+  await this.recreate();
+
   this.opts.autoload = false;
   await this.docs.save({ _id: 'duck' });
   this.owner.set('id', 'duck');
@@ -113,6 +120,8 @@ test('destroy while loading', async function(assert) {
 });
 
 test('autoload for isLoading, isLoaded', async function(assert) {
+  await this.recreate();
+
   await this.docs.save({ _id: 'duck' });
   this.owner.set('id', 'duck');
   let loader = this.first();
@@ -130,6 +139,8 @@ test('autoload for isLoading, isLoaded', async function(assert) {
 });
 
 test('autoload and force load', async function(assert) {
+  await this.recreate();
+
   await this.docs.save({ _id: 'duck' });
   this.owner.set('id', 'duck');
   let loader = this.first();
@@ -146,6 +157,8 @@ test('autoload and force load', async function(assert) {
 });
 
 test('load and force load', async function(assert) {
+  await this.recreate();
+
   await this.docs.save({ _id: 'duck' });
   this.owner.set('id', 'duck');
   let loader = this.first();
@@ -163,6 +176,8 @@ test('load and force load', async function(assert) {
 });
 
 test('load and force load', async function(assert) {
+  await this.recreate();
+
   await this.docs.save({ _id: 'duck' });
   let loader = this.first();
 

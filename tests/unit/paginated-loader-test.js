@@ -3,8 +3,7 @@ import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
 const {
-  run,
-  RSVP: { allSettled }
+  run
 } = Ember;
 
 module('paginated-loader', {
@@ -18,7 +17,7 @@ module('paginated-loader', {
       }
     };
     this.loader = () => this.db._createInternalPaginatedLoader(this.owner, this.opts).model(true);
-    this.settle = loader => allSettled(loader._internal.operations.map(op => op.promise));
+    this.settle = loader => loader.settle();
   }
 });
 
@@ -30,3 +29,5 @@ test('it exists', function(assert) {
 
   run(() => loader.destroy());
 });
+
+test.skip('paginated loader actually does something', function() {});
