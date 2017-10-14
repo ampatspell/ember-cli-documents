@@ -7,7 +7,7 @@ const {
   RSVP: { all, allSettled }
 } = Ember;
 
-module('loader', {
+module('query-loader', {
   async beforeEach() {
     this.owner = Ember.Object.create({ id: null });
     this.opts = {
@@ -17,7 +17,7 @@ module('loader', {
         return { id };
       }
     };
-    this.first = () => this.db._createInternalLoader(this.owner, this.opts, 'first').model(true);
+    this.first = () => this.db._createInternalQueryLoader(this.owner, this.opts, 'first').model(true);
     this.settle = loader => allSettled(loader._internal.operations.map(op => op.promise));
     await this.recreate();
   }

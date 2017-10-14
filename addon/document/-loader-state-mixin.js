@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { keys } from './internal/-loader-state';
+import { keys } from './internal/-query-loader-state';
 import create from './-create-state-mixin';
 
 const {

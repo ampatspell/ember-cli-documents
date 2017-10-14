@@ -47,8 +47,8 @@ import InternalPaginatedProxy from 'documents/document/internal/paginated-proxy'
 
 import Filter from 'documents/document/filter';
 import InternalFilter from 'documents/document/internal/filter';
-import Loader from 'documents/document/loader';
-import InternalLoader from 'documents/document/internal/loader';
+import QueryLoader from 'documents/document/query-loader';
+import InternalQueryLoader from 'documents/document/internal/query-loader';
 
 export default {
   name: 'documents:internal',
@@ -105,7 +105,7 @@ export default {
     container.register('documents:filter', Filter);
     container.register('documents:internal/filter', InternalFilter);
 
-    container.register('documents:loader', Loader);
-    container.register('documents:internal/loader', InternalLoader);
+    container.register('documents:query-loader', QueryLoader);
+    container.register('documents:internal/query-loader', InternalQueryLoader);
   }
 };

@@ -34,7 +34,7 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
   _createLoader() {
     let { owner, query } = this.opts;
     let type = this._loaderType;
-    return this.database._createInternalLoader(this.owner, { owner, query }, type);
+    return this.database._createInternalQueryLoader(this.owner, { owner, query }, type);
   }
 
   loader(create) {

@@ -1,14 +1,7 @@
-import Ember from 'ember';
 import Loader from './-loader';
-import LoaderState from './-loader-state';
+import QueryLoaderState from './-query-loader-state';
 
-const {
-  RSVP: { resolve, defer },
-  A,
-  merge
-} = Ember;
-
-export default class LoaderInternal extends Loader {
+export default class QueryLoaderInternal extends Loader {
 
   /*
     opts: {
@@ -26,11 +19,11 @@ export default class LoaderInternal extends Loader {
   }
 
   _createLoaderState() {
-    return new LoaderState();
+    return new QueryLoaderState();
   }
 
   _createModel() {
-    return this.store._createLoader(this);
+    return this.store._createQueryLoader(this);
   }
 
   //

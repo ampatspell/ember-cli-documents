@@ -62,8 +62,8 @@ export default Ember.Mixin.create({
     return this._modelFactory('filter').create({ _internal });
   },
 
-  _createLoader(_internal) {
-    return this._modelFactory('loader').create({ _internal });
+  _createQueryLoader(_internal) {
+    return this._modelFactory('query-loader').create({ _internal });
   }
 
 });
