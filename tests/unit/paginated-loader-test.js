@@ -28,7 +28,5 @@ test('it exists', function(assert) {
   let loader = this.loader();
   assert.ok(loader);
 
-  console.log(loader);
-
-  // run(() => loader.destroy());
+  run(() => loader.destroy());
 });
