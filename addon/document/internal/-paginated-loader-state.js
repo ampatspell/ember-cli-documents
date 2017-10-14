@@ -7,16 +7,20 @@ const {
   defaults: {
     isLoading: false,
     isLoaded: false,
-    isMoreAvailable: false,
+    isMore: false,
     isError: false,
     error: null
   },
   proto: {
     onReset(changed) {
-      this.set({ isLoaded: false, isMoreAvailable: false, isError: false, error: null }, changed);
+      this.set({ isLoaded: false, isMore: false, isError: false, error: null }, changed);
     },
     onLoadScheduled(changed) {
       this.set({ isLoading: true }, changed);
+    },
+    onLoadedPaginated(isMore, changed) {
+      this.onLoaded(changed);
+      this.set({ isMore }, changed);
     }
   }
 });
