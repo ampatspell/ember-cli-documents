@@ -1,6 +1,6 @@
-import ProxyInternal from './-proxy';
+import QueryProxyInternal from './-query-proxy';
 
-export default class ArrayProxyInternal extends ProxyInternal {
+export default class ArrayProxyInternal extends QueryProxyInternal {
 
   _createModel() {
     return this.store._createArrayProxy(this);

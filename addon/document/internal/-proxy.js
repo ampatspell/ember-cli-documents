@@ -11,6 +11,7 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
     this.opts = opts;
     this._filter = null;
     this._loader = null;
+    console.log(opts);
   }
 
   //
@@ -30,12 +31,6 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
   }
 
   //
-
-  _createLoader() {
-    let { owner, query } = this.opts;
-    let type = this._loaderType;
-    return this.database._createInternalQueryLoader(this.owner, { owner, query }, type);
-  }
 
   loader(create) {
     let loader = this._loader;
