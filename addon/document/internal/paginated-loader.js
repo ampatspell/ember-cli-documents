@@ -28,6 +28,14 @@ export default class PaginatedLoaderInternal extends Loader {
     this._loadState = null;
   }
 
+  get loadState() {
+    return this._loadState;
+  }
+
+  _notifyLoadStateChange() {
+    this.parent._loaderLoadStateDidChange(this);
+  }
+
   _createLoaderState() {
     return new PaginatedLoaderState();
   }
@@ -49,8 +57,9 @@ export default class PaginatedLoaderInternal extends Loader {
 
   _didLoad(array) {
     let { state, isMore } = this._invokeLoaded(array);
-    this._loadState = state;
+    this._loadState = state || null;
     this._withState((state, changed) => state.onLoadedPaginated(isMore, changed));
+    this._notifyLoadStateChange();
   }
 
   _loadDidFail(err) {
@@ -93,6 +102,8 @@ export default class PaginatedLoaderInternal extends Loader {
   _scheduleForceReload() {
     this._loadState = null;
     this._withState((state, changed) => state.onReset(changed));
+    this._notifyLoadStateChange();
+
     let operation = this._createOperation({ force: true }, () => this._scheduleDocumentOperation(true));
     operation.invoke();
     return operation;
