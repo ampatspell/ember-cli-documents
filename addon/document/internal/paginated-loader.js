@@ -62,25 +62,71 @@ export default class PaginatedLoaderInternal extends Loader {
     return database._scheduleDocumentFindOperation(query, before, resolve, reject);
   }
 
-  _scheduleLoad(force, reuse, except) {
-    console.log(`_scheduleLoad force=${force}, reuse=${reuse}, except=${except}`);
-    // TODO: force, reuse -- use type arg with 'load', 'reload', 'autoload'
+  // _scheduleLoad(force, reuse, except) {
+  //   console.log(`_scheduleLoad force=${force}, reuse=${reuse}, except=${except}`);
+  //   // TODO: force, reuse -- use type arg with 'load', 'reload', 'autoload'
 
-    this._withState((state, changed) => state.onLoadScheduled(changed), except);
+  //   this._withState((state, changed) => state.onLoadScheduled(changed), except);
 
-    let operation = this._createOperation(() => this._scheduleDocumentOperation(force));
+  //   let operation = this._createOperation(() => this._scheduleDocumentOperation(force));
+  //   operation.invoke();
+  //   return operation;
+  // }
+
+  __scheduleLoad(more) {
+    this._withState((state, changed) => state.onLoadScheduled(changed));
+    let operation = this._createOperation({ more }, () => this._scheduleDocumentOperation(false));
     operation.invoke();
     return operation;
   }
 
-  //
+  _scheduleLoad() {
+    let operation = this._lastOperation();
 
-  load() {
-    if(this.state.isLoaded) {
-      return resolve();
+    if(operation) {
+      return operation;
     }
-    return this._scheduleLoad(false, true).promise;
+
+    return this.__scheduleLoad(false);
   }
+
+  _scheduleForceReload() {
+    this._loadState = null;
+    this._withState((state, changed) => state.onReset(changed));
+    let operation = this._createOperation({ force: true }, () => this._scheduleDocumentOperation(true));
+    operation.invoke();
+    return operation;
+  }
+
+  _scheduleReload() {
+    let operation = this._lastOperation();
+
+    if(operation && (operation.opts.force || !this.state.isLoaded)) {
+      return operation;
+    }
+
+    return this._scheduleForceReload();
+  }
+
+  _scheduleLoadMore() {
+    let operation = this._lastOperation();
+
+    if(operation && operation.opts.more) {
+      return operation;
+    }
+
+    return this.__scheduleLoad(true);
+  }
+
+  _scheduleAutoload(except) {
+    if(!this._needsAutoload()) {
+      return;
+    }
+    this._withState((state, changed) => state.onLoadScheduled(changed), except);
+    return this._scheduleLoad();
+  }
+
+  //
 
   loadMore() {
     if(!this.state.isLoaded) {
@@ -91,10 +137,7 @@ export default class PaginatedLoaderInternal extends Loader {
       return resolve();
     }
 
-    return this._scheduleLoad(false, true).promise;
+    return this._scheduleLoadMore().promise;
   }
-
-  // reload() {
-  // }
 
 }

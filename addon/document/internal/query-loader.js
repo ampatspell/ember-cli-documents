@@ -74,11 +74,10 @@ export default class QueryLoaderInternal extends Loader {
       return operation;
     }
 
-    if(!operation) {
-      this._withState((state, changed) => state.onLoadScheduled(changed));
-      operation = this._createOperation({}, () => this._scheduleDocumentOperation(false));
-      operation.invoke();
-    }
+    this._withState((state, changed) => state.onLoadScheduled(changed));
+
+    operation = this._createOperation({}, () => this._scheduleDocumentOperation(false));
+    operation.invoke();
 
     return operation;
   }
