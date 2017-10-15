@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import { docById } from 'documents/properties';
+import docById from 'documents/properties/experimental/doc-by-id';
 
 const {
   run,
