@@ -52,7 +52,8 @@ export default class PaginatedLoaderInternal extends Loader {
 
   _invokeLoaded(array) {
     let docs = A(array.map(internal => internal.model(true)));
-    return this.opts.loaded(docs);
+    let state = this._loadState || null;
+    return this.opts.loaded(state, docs);
   }
 
   _didLoad(array) {

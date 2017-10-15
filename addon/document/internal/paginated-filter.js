@@ -1,15 +1,17 @@
 import Ember from 'ember';
 
 const {
-  A
+  A,
+  copy
 } = Ember;
 
 export default class PaginatedFilter {
 
-  constructor(array, state) {
+  constructor(array, opts, state) {
     this._array = array;
     this._state = state;
     this._values = null;
+    this.opts = opts;
   }
 
   get values() {
@@ -23,13 +25,51 @@ export default class PaginatedFilter {
   }
 
   set state(value) {
-    console.log('PaginatedFilter', 'set state', value);
+    this._state = value;
+    this._rematch();
   }
 
   _remove(docs) {
     let values = this._values;
-    console.log('_remove', A(docs).mapBy('id'));
     values.removeObjects(docs);
+  }
+
+  _push(docs) {
+    let values = this._values;
+    values.addObjects(docs);
+  }
+
+  __matches() {
+    let state = this._state;
+    if(!state) {
+      return () => false;
+    }
+    let matches = this.opts.matches;
+    return doc => !!matches.call(null, doc, null, state);
+  }
+
+  _match(docs) {
+    let matches = this.__matches();
+    let matched = docs.filter(doc => matches(doc));
+    this._push(matched);
+  }
+
+  _rematch() {
+    let matches = this.__matches();
+
+    let docs = this._array;
+    let remove = A(copy(docs));
+    let add = [];
+
+    docs.forEach(doc => {
+      if(matches(doc)) {
+        add.push(doc);
+        remove.removeObject(doc);
+      }
+    });
+
+    this._remove(remove);
+    this._push(add);
   }
 
   get _arrayObserverOptions() {
@@ -44,17 +84,15 @@ export default class PaginatedFilter {
   }
 
   _arrayDidChange(array, removeCount, adding) {
-    console.log('PaginatedFilter', 'array did change', adding);
+    this._match(adding);
   }
 
   _startObserving() {
-    console.log('PaginatedFilter', 'start observing');
     let array = this._array;
     array.addEnumerableObserver(this, this._arrayObserverOptions);
   }
 
   _stopObserving() {
-    console.log('PaginatedFilter', 'stop observing');
     let array = this._array;
     array.removeEnumerableObserver(this, this._arrayObserverOptions);
   }

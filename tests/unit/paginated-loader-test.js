@@ -61,7 +61,7 @@ module('paginated-loader', {
           endkey
         };
       },
-      loaded(array) {
+      loaded(state_, array) {
         let opts = _opts;
 
         let { length, lastObject } = array.getProperties('length', 'lastObject');

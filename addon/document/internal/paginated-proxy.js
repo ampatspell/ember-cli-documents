@@ -28,7 +28,8 @@ export default class PaginatedProxyInternal extends ProxyInternal {
   paginatedFilter(create) {
     let filter = this._paginatedFilter;
     if(!filter && create) {
-      filter = new PaginatedFilter(this.all, this._loadState);
+      let { matches } = this.opts;
+      filter = new PaginatedFilter(this.all, { matches }, this._loadState);
       this._paginatedFilter = filter;
     }
     return filter;

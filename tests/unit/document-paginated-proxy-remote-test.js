@@ -60,19 +60,24 @@ module('document-paginated-proxy-remote', {
           endkey
         };
       },
-      loaded(array) {
+      loaded(state_, array) {
         let opts = _opts;
 
-        let { length, lastObject } = array.getProperties('length', 'lastObject');
+        let { length, lastObject: last } = array.getProperties('length', 'lastObject');
 
         let isMore = false;
         let state = null;
 
-        if(lastObject) {
-          let id = lastObject.get('id');
+        if(last) {
+          let value;
+          if(state_) {
+            value = array.objectAt(length - 2);
+          } else {
+            value = last;
+          }
           state = {
-            id: id,
-            value: id
+            id:    last.get('id'),
+            value: value.get('id')
           };
           isMore = length > opts.limit;
         }
@@ -82,7 +87,10 @@ module('document-paginated-proxy-remote', {
           state
         };
       },
-      matches(doc) {
+      matches(doc, owner, state) {
+        if(state) {
+          return doc.get('id') < state.value;
+        }
         return doc.get('type') === 'duck';
       },
     };
@@ -106,7 +114,7 @@ test('exists', function(assert) {
   run(() => proxy.destroy());
 });
 
-test.todo('content includes only state-matched docs', async function(assert) {
+test('content includes only state-matched docs', async function(assert) {
   await this.insert();
   let proxy = this.create();
 
@@ -135,19 +143,57 @@ test('content includes only state-matched docs with all loaded previously', asyn
   run(() => proxy.destroy());
 });
 
-test.only('content includes only state-matched docs with some loaded previously', async function(assert) {
+test('content includes only state-matched docs with some loaded previously', async function(assert) {
   await this.insert();
   await this.db.find({ ddoc: 'main', view: 'all', keys: [ 'duck:5', 'duck:3' ] });
 
   let proxy = this.create();
 
-  assert.equal(proxy.get('length'), 0);
+  assert.deepEqual(proxy.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoaded": false,
+    "isLoading": false,
+    "isMore": false
+  });
+  assert.deepEqual(proxy.mapBy('id'), [ ]);
   assert.equal(proxy.get('all.length'), 2);
 
   await proxy.load();
 
-  assert.equal(proxy.get('length'), 3);
+  assert.deepEqual(proxy.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoaded": true,
+    "isLoading": false,
+    "isMore": true
+  });
+  assert.deepEqual(proxy.mapBy('id'), [ "duck:0", "duck:1", "duck:2" ]);
   assert.equal(proxy.get('all.length'), 5);
+
+  await proxy.loadMore();
+
+  assert.deepEqual(proxy.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoaded": true,
+    "isLoading": false,
+    "isMore": true
+  });
+  assert.deepEqual(proxy.mapBy('id'), [ "duck:0", "duck:1", "duck:2", "duck:5", "duck:3", "duck:4" ]);
+  assert.equal(proxy.get('all.length'), 8);
+
+  await proxy.loadMore();
+
+  assert.deepEqual(proxy.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoaded": true,
+    "isLoading": false,
+    "isMore": false
+  });
+  assert.deepEqual(proxy.mapBy('id'), [ "duck:0", "duck:1", "duck:2", "duck:5", "duck:3", "duck:4", "duck:6", "duck:7" ]);
+  assert.equal(proxy.get('all.length'), 10);
 
   run(() => proxy.destroy());
 });
