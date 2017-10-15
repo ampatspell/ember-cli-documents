@@ -39,6 +39,10 @@ class Tap {
     });
   }
 
+  clear() {
+    this.requests = [];
+  }
+
 }
 
 export default docs => {
