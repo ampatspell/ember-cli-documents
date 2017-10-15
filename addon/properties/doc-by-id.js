@@ -37,14 +37,14 @@ export default opts => {
     owner,
     document,
     query(owner) {
-      let id = owner.get('id');
+      let id = owner.get(opts.id);
       return { id };
     },
     matches(doc, owner) {
       if(excludeNew(doc)) {
         return;
       }
-      let id = owner.get('id');
+      let id = owner.get(opts.id);
       return doc.get('id') === id;
     }
   });
