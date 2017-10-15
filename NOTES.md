@@ -1,6 +1,5 @@
 # TODO
 
-* computed property for paginated
 * clean up Proxy stack impl
 * loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * loader state vs proxy state for ArrayProxy and ObjectProxy
