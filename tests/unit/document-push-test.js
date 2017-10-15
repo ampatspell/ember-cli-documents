@@ -141,3 +141,22 @@ test('push with underscored nested keys', function(assert) {
     }
   });
 });
+
+test('push does not deserialize identical rev', function(assert) {
+  this.db.push({ _id: 'foof', _rev: '1-asd', message: 'one' });
+  assert.equal(this.db.existing('foof').get('message'), 'one');
+
+  this.db.push({ _id: 'foof', _rev: '1-asd', message: 'two' });
+  assert.equal(this.db.existing('foof').get('message'), 'one');
+
+  this.db.push({ _id: 'foof', _rev: '2-asd', message: 'three' });
+  assert.equal(this.db.existing('foof').get('message'), 'three');
+});
+
+test('push always deserialize for missing rev', function(assert) {
+  this.db.push({ _id: 'foof', message: 'one' });
+  assert.equal(this.db.existing('foof').get('message'), 'one');
+
+  this.db.push({ _id: 'foof', message: 'two' });
+  assert.equal(this.db.existing('foof').get('message'), 'two');
+});

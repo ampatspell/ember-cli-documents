@@ -90,6 +90,12 @@ export default Ember.Mixin.create({
   },
 
   _deserializeInternalLoad(internal, doc, type) {
+    let rev = doc._rev;
+
+    if(rev && internal.getRev() === rev) {
+      return internal;
+    }
+
     if(doc._deleted) {
       return this.__deserializeInternalLoadDeleted(internal, doc);
     } else {
