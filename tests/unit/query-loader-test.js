@@ -17,7 +17,10 @@ module('query-loader', {
         return { id };
       }
     };
-    this.first = () => this.db._createInternalQueryLoader(this.owner, this.opts, 'first').model(true);
+    this.parent = {
+      withPropertyChanges() {}
+    };
+    this.first = () => this.db._createInternalQueryLoader(this.parent, this.owner, this.opts, 'first').model(true);
     this.settle = loader => loader._internal.settle();
   }
 });

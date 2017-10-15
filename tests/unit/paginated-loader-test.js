@@ -91,7 +91,10 @@ module('paginated-loader', {
       }
       return all(promises);
     }
-    this.loader = () => this.db._createInternalPaginatedLoader(this.owner, this.opts).model(true);
+    this.parent = {
+      withPropertyChanges() {}
+    };
+    this.loader = () => this.db._createInternalPaginatedLoader(this.parent, this.owner, this.opts).model(true);
     this.settle = loader => loader._internal.settle();
     this.design = () => this.docs.get('design').save('main', ddoc);
   }

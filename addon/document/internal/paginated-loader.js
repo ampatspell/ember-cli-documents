@@ -23,8 +23,8 @@ export default class PaginatedLoaderInternal extends Loader {
       }
     }
   */
-  constructor(store, database, owner, opts) {
-    super(store, database, owner, opts);
+  constructor(store, parent, database, owner, opts) {
+    super(store, parent, database, owner, opts);
     this._loadState = null;
   }
 

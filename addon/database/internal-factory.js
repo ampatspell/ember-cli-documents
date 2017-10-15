@@ -78,12 +78,12 @@ export default Ember.Mixin.create({
     return this.get('store')._createInternalFilter(this, owner, opts);
   },
 
-  _createInternalQueryLoader(owner, opts, type) {
-    return this.get('store')._createInternalQueryLoader(this, owner, opts, type);
+  _createInternalQueryLoader(parent, owner, opts, type) {
+    return this.get('store')._createInternalQueryLoader(parent, this, owner, opts, type);
   },
 
-  _createInternalPaginatedLoader(owner, opts) {
-    return this.get('store')._createInternalPaginatedLoader(this, owner, opts);
+  _createInternalPaginatedLoader(parent, owner, opts) {
+    return this.get('store')._createInternalPaginatedLoader(parent, this, owner, opts);
   }
 
 });

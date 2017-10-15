@@ -95,14 +95,14 @@ export default Ember.Mixin.create({
     return new InternalFilter(this, database, owner, opts);
   },
 
-  _createInternalQueryLoader(database, owner, opts, type) {
+  _createInternalQueryLoader(parent, database, owner, opts, type) {
     let InternalQueryLoader = this._internalFactory('query-loader');
-    return new InternalQueryLoader(this, database, owner, opts, type);
+    return new InternalQueryLoader(this, parent, database, owner, opts, type);
   },
 
-  _createInternalPaginatedLoader(database, owner, opts) {
+  _createInternalPaginatedLoader(parent, database, owner, opts) {
     let InternalPaginatedLoader = this._internalFactory('paginated-loader');
-    return new InternalPaginatedLoader(this, database, owner, opts);
+    return new InternalPaginatedLoader(this, parent, database, owner, opts);
   }
 
 });

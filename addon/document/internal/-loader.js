@@ -31,9 +31,8 @@ class Operation {
 
 export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
-  constructor(store, database, owner, opts) {
-    super();
-    this.store = store;
+  constructor(store, parent, database, owner, opts) {
+    super(store, parent);
     this.database = database;
     this.owner = owner;
     this.opts = merge({ autoload: true }, opts);
