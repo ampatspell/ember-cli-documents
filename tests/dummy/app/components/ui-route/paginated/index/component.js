@@ -32,14 +32,15 @@ export default Ember.Component.extend({
   }),
 
   actions: {
-    async setup() {
+    setup() {
       let docs = this.get('db.documents');
-      await docs.get('design').save('duck', ddoc);
-      let ducks = [];
-      for(let i = 0; i < 10; i++) {
-        ducks.push(docs.save({ _id: `duck:${i}`, type: 'duck' }));
-      }
-      await allSettled(ducks);
+      return docs.get('design').save('duck', ddoc).then(() => {
+        let ducks = [];
+        for(let i = 0; i < 10; i++) {
+          ducks.push(docs.save({ _id: `duck:${i}`, type: 'duck' }));
+        }
+        return allSettled(ducks);
+      });
     },
     load() {
       return this.get('docs').load();
