@@ -58,8 +58,8 @@ export default opts => {
         state
       };
     },
-    matches(doc, owner) {
-      console.log(doc.getProperties('id', 'type', 'isLoaded'), doc+'');
+    matches(doc) {
+      // console.log(doc.getProperties('id', 'type', 'isLoaded'), doc+'');
       return doc.get('type') === type;
     }
   });
