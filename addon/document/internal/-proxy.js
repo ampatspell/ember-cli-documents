@@ -1,4 +1,4 @@
-import Base from './base';
+import Base from './-base';
 import ModelMixin from './-model-mixin';
 
 export default class BaseProxyInternal extends ModelMixin(Base) {

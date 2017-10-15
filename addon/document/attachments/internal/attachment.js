@@ -1,4 +1,4 @@
-import Base from '../../internal/base';
+import Base from '../../internal/-base';
 
 export default class Attachment extends Base {
 

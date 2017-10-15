@@ -11,7 +11,7 @@ const {
   typeOf
 } = Ember;
 
-import { empty } from './base';
+import { empty } from './-base';
 
 export default Class => class DeserializeMixin extends Class {
 

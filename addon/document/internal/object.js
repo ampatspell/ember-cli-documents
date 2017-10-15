@@ -1,4 +1,4 @@
-import InternalBase from './base';
+import InternalBase from './-base';
 import MutateMixin from './-mutate-mixin';
 import DeserializeMixin from './-deserialize-mixin';
 import SerializeMixin from './-serialize-mixin';

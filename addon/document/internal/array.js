@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import InternalBase, { empty } from './base';
+import InternalBase, { empty } from './-base';
 import SerializeMixin from './-serialize-mixin';
 import DeserializeMixin from './-deserialize-mixin';
 import { toModel, toInternal, isInternal } from 'documents/util/internal';

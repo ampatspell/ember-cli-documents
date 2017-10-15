@@ -1,4 +1,4 @@
-import InternalBase from '../document/internal/base';
+import InternalBase from '../document/internal/-base';
 
 export const isDocumentModel = 'isDocumentModel';
 

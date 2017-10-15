@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Base from './base';
+import Base from './-base';
 import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
 
