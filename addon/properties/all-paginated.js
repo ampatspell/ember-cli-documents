@@ -38,7 +38,7 @@ export default opts => {
         endkey
       };
     },
-    didLoad(array) {
+    loaded(array) {
       let { length, lastObject } = array.getProperties('length', 'lastObject');
 
       let isMore = false;
