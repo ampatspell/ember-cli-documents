@@ -71,7 +71,7 @@ module('document-paginated-proxy-remote', {
         if(last) {
           let value;
           if(state_) {
-            value = array.objectAt(length - 2);
+            value = array.objectAt(length - 2) || last;
           } else {
             value = last;
           }
