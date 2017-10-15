@@ -108,7 +108,7 @@ export default Ember.Mixin.create({
     assert(`doc._id must be string`, typeof doc._id === 'string');
 
     let id = doc._id;
-    let internal = this._existingInternalDocument(id, { deleted: true, create: true });
+    let { internal } = this._existingInternalDocument(id, { deleted: true, create: true });
 
     return this._deserializeInternalLoad(internal, doc, type);
   },

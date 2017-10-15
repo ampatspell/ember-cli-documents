@@ -101,7 +101,7 @@ export default Ember.Mixin.create({
     const schedule = (label, fn) => this.__scheduleDatabaseOperation(label, original, fn, beforeFn, resolveFn, rejectFn);
 
     if(id) {
-      let internal = this._existingInternalDocument(id, { deleted: true });
+      let { internal } = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
         return this._scheduleInternalLoad(internal, { force }, beforeFn, internal => {
           let hash = result('single', internal);
