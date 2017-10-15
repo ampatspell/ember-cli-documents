@@ -26,6 +26,12 @@ module('document-paginated-proxy-remote', {
       },
       query(/*owner*/) {
         return { ddoc: 'main', view: 'all', limit: 3 };
+      },
+      didLoad() {
+        return {
+          isMore: false,
+          state: {}
+        };
       }
     };
     this.create = () => this.db._createInternalPaginatedProxy(this.owner, this.opts).model(true);
