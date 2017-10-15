@@ -8,7 +8,6 @@ export default class PaginatedProxyInternal extends ProxyInternal {
 
   _createLoader() {
     let { owner, query, didLoad } = this.opts;
-    console.log(this.opts);
     return this.database._createInternalPaginatedLoader(this.owner, { owner, query, didLoad });
   }
 
