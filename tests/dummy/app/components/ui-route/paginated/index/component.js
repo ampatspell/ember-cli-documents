@@ -3,7 +3,8 @@ import layout from './template';
 import { allPaginated } from 'documents/properties';
 
 const {
-  RSVP: { allSettled }
+  RSVP: { allSettled },
+  on
 } = Ember;
 
 /* global emit */
@@ -25,6 +26,11 @@ export default Ember.Component.extend({
 
   docs: allPaginated({ database: 'db', ddoc: 'duck', view: 'all', limit: 3, type: 'duck' }),
 
+  setGlobal: on('didInsertElement', function() {
+    let docs = this.get('docs');
+    window.docs = docs;
+  }),
+
   actions: {
     async setup() {
       let docs = this.get('db.documents');
@@ -37,6 +43,9 @@ export default Ember.Component.extend({
     },
     load() {
       return this.get('docs').load();
+    },
+    loadMore() {
+      return this.get('docs').loadMore();
     },
     reload() {
       return this.get('docs').reload();

@@ -10,7 +10,6 @@
   {{ui-block/json docs.state}}
 </div>
 <div class="row">
-  {{log docs}}
   {{#each docs as |doc|}}
     {{ui-block/json doc.serialized}}
   {{/each}}
@@ -18,5 +17,6 @@
 <div class="row">
   <button {{action 'setup'}}>Setup</button>
   <button {{action 'load'}}>Load</button>
+  <button {{action 'loadMore'}}>Load more</button>
   <button {{action 'reload'}}>Reload</button>
 </div>
