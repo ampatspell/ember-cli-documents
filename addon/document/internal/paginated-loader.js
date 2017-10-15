@@ -37,7 +37,7 @@ export default class PaginatedLoaderInternal extends Loader {
   }
 
   _didLoad(array) {
-    let { state, isMore } = this.opts.loaded(array);
+    let { state, isMore } = this.opts.loaded(array.map(internal => internal.model(true)));
     this._loadState = state;
     this._withState((state, changed) => state.onLoadedPaginated(isMore, changed));
   }

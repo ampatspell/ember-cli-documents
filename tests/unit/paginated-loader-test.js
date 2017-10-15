@@ -64,14 +64,13 @@ module('paginated-loader', {
       loaded(array) {
         let opts = _opts;
 
-        let length = array.get('length');
-        let last = array.get('lastObject');
+        let { length, lastObject } = array.getProperties('length', 'lastObject');
 
         let isMore = false;
         let state = null;
 
-        if(last) {
-          let id = last.getId();
+        if(lastObject) {
+          let id = lastObject.get('id');
           state = {
             id: id,
             value: id

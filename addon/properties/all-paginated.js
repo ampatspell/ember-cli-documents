@@ -45,7 +45,7 @@ export default opts => {
       let state = null;
 
       if(lastObject) {
-        let id = lastObject.getId();
+        let id = lastObject.get('id');
         state = {
           id: id,
           value: id
