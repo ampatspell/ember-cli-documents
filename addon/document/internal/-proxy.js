@@ -11,7 +11,6 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
     this.opts = opts;
     this._filter = null;
     this._loader = null;
-    console.log(opts);
   }
 
   //
