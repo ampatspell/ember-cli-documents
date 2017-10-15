@@ -175,7 +175,7 @@ test('load and force load', async function(assert) {
   await this.settle(loader);
 });
 
-test('load and force load', async function(assert) {
+test('load on owner property change', async function(assert) {
   await this.recreate();
 
   await this.docs.save({ _id: 'duck' });

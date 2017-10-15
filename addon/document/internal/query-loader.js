@@ -1,10 +1,5 @@
-import Ember from 'ember';
 import Loader from './-loader';
 import QueryLoaderState from './-query-loader-state';
-
-const {
-  RSVP: { resolve }
-} = Ember;
 
 export default class QueryLoaderInternal extends Loader {
 
@@ -55,38 +50,45 @@ export default class QueryLoaderInternal extends Loader {
 
   //
 
-  // TODO: _scheduleLoad params
-  //
-  //         force, reuse, except
-  // load:   false, true
-  // reload: true,  true
-  // auto:   true,  false          (owner property change)
-  // auto:   true,  false, [key]   (state query)
-  //
-  _scheduleLoad(force, reuse, except) {
-    this._withState((state, changed) => state.onLoadScheduled(changed), except);
+  _scheduleForceReload() {
+    this._withState((state, changed) => state.onReset(changed));
+    let operation = this._createOperation({ force: true }, () => this._scheduleDocumentOperation(true));
+    operation.invoke();
+    return operation;
+  }
 
+  _scheduleReload() {
     let operation = this._lastOperation();
 
-    if(!operation || !reuse || (force && this.state.isLoaded && !operation.force)) {
-      operation = this._createOperation(() => this._scheduleDocumentOperation(force));
+    if(operation && (operation.opts.force || !this.state.isLoaded)) {
+      return operation;
+    }
+
+    return this._scheduleForceReload();
+  }
+
+  _scheduleLoad() {
+    let operation = this._lastOperation();
+
+    if(operation) {
+      return operation;
+    }
+
+    if(!operation) {
+      this._withState((state, changed) => state.onLoadScheduled(changed));
+      operation = this._createOperation({}, () => this._scheduleDocumentOperation(false));
       operation.invoke();
     }
 
     return operation;
   }
 
-  //
-
-  load() {
-    if(this.state.isLoaded) {
-      return resolve();
+  _scheduleAutoload(except) {
+    if(!this._needsAutoload()) {
+      return;
     }
-    return this._scheduleLoad(false, true).promise;
-  }
-
-  reload() {
-    return this._scheduleLoad(true, true).promise;
+    this._withState((state, changed) => state.onLoadScheduled(changed), except);
+    return this._scheduleLoad();
   }
 
 }

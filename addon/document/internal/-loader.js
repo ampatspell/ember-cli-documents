@@ -4,15 +4,16 @@ import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
 
 const {
-  RSVP: { defer, allSettled },
+  RSVP: { resolve, defer, allSettled },
   A,
   merge
 } = Ember;
 
 class Operation {
 
-  constructor(loader, fn) {
+  constructor(loader, opts, fn) {
     this.loader = loader;
+    this.opts = opts;
     this.fn = fn;
     this.deferred = defer();
   }
@@ -43,8 +44,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   //
 
   _ownerValueForKeyDidChange() {
-    this._withState((state, changed) => state.onReset(changed));
-    this._scheduleAutoload(true, false);
+    this._scheduleForceReload();
   }
 
   _startObserving() {
@@ -74,7 +74,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   }
 
   _stateProp(key) {
-    this._scheduleAutoload(false, true, [ key ]);
+    this._scheduleAutoload([ key ]);
     return this.state[key];
   }
 
@@ -84,29 +84,24 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   // autoload
 
-  _needsAutoload(force) {
+  _needsLoad() {
+    let state = this.state;
+    return !state.isLoaded;
+  }
+
+  _needsAutoload() {
     if(this.opts.autoload === false) {
       return false;
-    }
-    if(force) {
-      return true;
     }
     let state = this.state;
     return !state.isLoaded && !state.isLoading && !state.isError;
   }
 
-  _scheduleAutoload(force, reuse, except) {
-    if(!this._needsAutoload(force)) {
-      return;
-    }
-    this._scheduleLoad(force, reuse, except);
-  }
-
   //
 
-  _createOperation(fn) {
+  _createOperation(opts, fn) {
     let operations = this.operations;
-    let operation = new Operation(this, fn);
+    let operation = new Operation(this, opts, fn);
     operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
     operations.pushObject(operation);
     return operation;
@@ -119,6 +114,17 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   settle() {
     return allSettled(this.operations.map(op => op.promise));
+  }
+
+  load() {
+    if(!this._needsLoad()) {
+      return resolve();
+    }
+    return this._scheduleLoad().promise;
+  }
+
+  reload() {
+    return this._scheduleReload().promise;
   }
 
   //
