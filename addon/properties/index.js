@@ -1,12 +1,16 @@
 import {
   first,
-  find
+  find,
+  paginated
 } from './proxy';
 
 import docById from './doc-by-id';
+import allPaginated from './all-paginated';
 
 export {
   first,
   find,
-  docById
+  paginated,
+  docById,
+  allPaginated // temporary
 };

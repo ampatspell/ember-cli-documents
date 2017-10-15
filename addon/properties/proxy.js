@@ -25,5 +25,6 @@ const proxy = factory => opts => {
   }).readOnly();
 };
 
-export const first = proxy((database, ...args) => database._createInternalDocumentProxy(...args));
-export const find  = proxy((database, ...args) => database._createInternalArrayProxy(...args));
+export const first     = proxy((database, ...args) => database._createInternalDocumentProxy(...args));
+export const find      = proxy((database, ...args) => database._createInternalArrayProxy(...args));
+export const paginated = proxy((database, ...args) => database._createInternalPaginatedProxy(...args));
