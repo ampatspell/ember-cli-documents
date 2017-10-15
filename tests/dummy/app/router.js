@@ -9,6 +9,8 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('experimental', function() {
   });
+  this.route('paginated', function() {
+  });
   this.route('message', function() {
   });
 });

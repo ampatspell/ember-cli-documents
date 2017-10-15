@@ -31,7 +31,7 @@ export default Ember.Component.extend({
   doc: docById({ database: 'db', id: 'id' }),
   docs: byType({ database: 'db', type: 'type' }),
 
-  subject: reads('docs'),
+  subject: reads('doc'),
 
   actions: {
     load() {
