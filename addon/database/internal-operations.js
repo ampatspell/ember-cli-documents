@@ -108,7 +108,7 @@ export default Ember.Mixin.create({
     let id = internal.getId();
 
     return this.get('documents').load(id).then(json => {
-      return this._deserializeInternalLoad(internal, json, 'document');
+      return this._deserializeInternalLoad(internal, json, 'document', opts.force);
     }, err => {
       return this._deserializeInternalLoadDidFail(internal, err);
     });

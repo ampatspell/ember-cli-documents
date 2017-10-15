@@ -160,3 +160,16 @@ test('push always deserialize for missing rev', function(assert) {
   this.db.push({ _id: 'foof', message: 'two' });
   assert.equal(this.db.existing('foof').get('message'), 'two');
 });
+
+test('reload same rev is deserialized', async function(assert) {
+  await this.recreate();
+  await this.docs.save({ _id: 'duck', name: 'Yellow' });
+
+  let doc = await this.db.first('duck');
+  assert.equal(doc.get('name'), 'Yellow');
+
+  doc.set('name', 'Green');
+  await doc.reload();
+
+  assert.equal(doc.get('name'), 'Yellow');
+});

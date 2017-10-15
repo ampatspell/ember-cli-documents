@@ -89,10 +89,10 @@ export default Ember.Mixin.create({
     return internal;
   },
 
-  _deserializeInternalLoad(internal, doc, type) {
+  _deserializeInternalLoad(internal, doc, type, force) {
     let rev = doc._rev;
 
-    if(rev && internal.getRev() === rev) {
+    if(!force && rev && internal.getRev() === rev) {
       return internal;
     }
 
