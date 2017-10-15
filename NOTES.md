@@ -10,6 +10,7 @@
 * loader `enabled` which can be set from parent (disable when identity has a doc)
 * proxy state. deleted doc should have err.error=not_found
 * split internal/base into absolute base which is useful for proxies.
+* batch identity adds and removes `this._withIdentityMutation(mutation => ...)`
 * ember inspector integration
 * array deserialize should diff existing content not just clear existing content
 
