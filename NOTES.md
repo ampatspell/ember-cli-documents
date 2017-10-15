@@ -2,6 +2,7 @@
 
 * computed property for paginated
 * clean up Proxy stack impl
+* simplify proxy loads
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * `documents/properties` owner dependency vs inlne value handling, `isNew` default, `prop`. `byId.extend`
 * support proxy w/o loader

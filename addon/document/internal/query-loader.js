@@ -46,13 +46,11 @@ export default class QueryLoaderInternal extends Loader {
       query.force = true;
     }
 
-    return database._scheduleDocumentOperation(query, this.type, () => {
-      this._withState((state, changed) => state.onLoading(changed));
-    }, () => {
-      this._withState((state, changed) => state.onLoaded(changed));
-    }, err => {
-      this._withState((state, changed) => state.onError(err, changed));
-    });
+    const before  = () => this._withState((state, changed) => state.onLoading(changed));
+    const resolve = () => this._withState((state, changed) => state.onLoaded(changed));
+    const reject  = err => this._withState((state, changed) => state.onError(err, changed));
+
+    return database._scheduleDocumentOperation(query, this.type, before, resolve, reject);
   }
 
   //
