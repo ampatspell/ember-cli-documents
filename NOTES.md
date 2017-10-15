@@ -2,7 +2,7 @@
 
 * computed property for paginated
 * clean up Proxy stack impl
-* loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved
+* loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * `documents/properties` owner dependency vs inlne value handling, `isNew` default, `prop`. `byId.extend`
 * support proxy w/o loader
