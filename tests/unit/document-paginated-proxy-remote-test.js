@@ -21,18 +21,18 @@ module('document-paginated-proxy-remote', {
   async beforeEach() {
     this.owner = Ember.Object.create({ type: 'duck' });
     this.opts = {
-      matches(/*doc, owner*/) {
-        return true;
-      },
       query(/*owner*/) {
         return { ddoc: 'main', view: 'all', limit: 3 };
       },
-      didLoad() {
+      loaded() {
         return {
           isMore: false,
           state: {}
         };
-      }
+      },
+      matches(/*doc, owner*/) {
+        return true;
+      },
     };
     this.create = () => this.db._createInternalPaginatedProxy(this.owner, this.opts).model(true);
     this.insert = (count=10) => {

@@ -61,7 +61,7 @@ module('paginated-loader', {
           endkey
         };
       },
-      didLoad(array) {
+      loaded(array) {
         let opts = _opts;
 
         let length = array.get('length');
