@@ -3,6 +3,7 @@ import Loader from './-loader';
 import PaginatedLoaderState from './-paginated-loader-state';
 
 const {
+  A,
   RSVP: { resolve }
 } = Ember;
 
@@ -12,8 +13,13 @@ export default class PaginatedLoaderInternal extends Loader {
     opts: {
       autoload: true,
       owner: [ 'id' ],
-      query(props) {
+      query(props, state) {
         return { id: props.id };
+      },
+      loaded(docs) {
+        let isMore = true;
+        let state = { foo };
+        return { isMore, state };
       }
     }
   */
@@ -36,8 +42,13 @@ export default class PaginatedLoaderInternal extends Loader {
     this._withState((state, changed) => state.onLoading(changed));
   }
 
+  _invokeLoaded(array) {
+    let docs = A(array.map(internal => internal.model(true)));
+    return this.opts.loaded(docs);
+  }
+
   _didLoad(array) {
-    let { state, isMore } = this.opts.loaded(array.map(internal => internal.model(true)));
+    let { state, isMore } = this._invokeLoaded(array);
     this._loadState = state;
     this._withState((state, changed) => state.onLoadedPaginated(isMore, changed));
   }
@@ -61,17 +72,6 @@ export default class PaginatedLoaderInternal extends Loader {
 
     return database._scheduleDocumentFindOperation(query, before, resolve, reject);
   }
-
-  // _scheduleLoad(force, reuse, except) {
-  //   console.log(`_scheduleLoad force=${force}, reuse=${reuse}, except=${except}`);
-  //   // TODO: force, reuse -- use type arg with 'load', 'reload', 'autoload'
-
-  //   this._withState((state, changed) => state.onLoadScheduled(changed), except);
-
-  //   let operation = this._createOperation(() => this._scheduleDocumentOperation(force));
-  //   operation.invoke();
-  //   return operation;
-  // }
 
   __scheduleLoad(more) {
     this._withState((state, changed) => state.onLoadScheduled(changed));
