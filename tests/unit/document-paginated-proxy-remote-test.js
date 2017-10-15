@@ -3,6 +3,7 @@ import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
 const {
+  run,
   RSVP: { all }
 } = Ember;
 
@@ -102,6 +103,7 @@ test('exists', function(assert) {
   let proxy = this.create();
   assert.ok(proxy);
   assert.ok(proxy._internal);
+  run(() => proxy.destroy());
 });
 
 test.todo('content includes only state-matched docs', async function(assert) {
@@ -113,16 +115,39 @@ test.todo('content includes only state-matched docs', async function(assert) {
   await proxy.load();
 
   assert.equal(proxy.get('length'), 3);
+
+  run(() => proxy.destroy());
 });
 
-test.todo('content includes only state-matched docs with all loaded previously', async function(assert) {
+test('content includes only state-matched docs with all loaded previously', async function(assert) {
   await this.insert();
   await this.db.find({ ddoc: 'main', view: 'all' });
   let proxy = this.create();
 
   assert.equal(proxy.get('length'), 0);
+  assert.equal(proxy.get('all.length'), 10);
 
   await proxy.load();
 
   assert.equal(proxy.get('length'), 3);
+  assert.equal(proxy.get('all.length'), 10);
+
+  run(() => proxy.destroy());
+});
+
+test.only('content includes only state-matched docs with some loaded previously', async function(assert) {
+  await this.insert();
+  await this.db.find({ ddoc: 'main', view: 'all', keys: [ 'duck:5', 'duck:3' ] });
+
+  let proxy = this.create();
+
+  assert.equal(proxy.get('length'), 0);
+  assert.equal(proxy.get('all.length'), 2);
+
+  await proxy.load();
+
+  assert.equal(proxy.get('length'), 3);
+  assert.equal(proxy.get('all.length'), 5);
+
+  run(() => proxy.destroy());
 });

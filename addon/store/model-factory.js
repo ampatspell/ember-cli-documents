@@ -54,8 +54,9 @@ export default Ember.Mixin.create({
   },
 
   _createPaginatedProxy(_internal) {
+    let all = _internal.all;
     let content = _internal.values;
-    return this._modelFactory('proxy/paginated').create({ _internal, content });
+    return this._modelFactory('proxy/paginated').create({ _internal, all, content });
   },
 
   _createFilter(_internal) {

@@ -4,4 +4,8 @@ import { keys } from './paginated-loader';
 
 export default proxy(Ember.ArrayProxy, keys, {
   loadMore: 'loadMore'
+}).extend({
+
+  all: null
+
 });
