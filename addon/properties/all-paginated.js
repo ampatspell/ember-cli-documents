@@ -14,7 +14,7 @@ export default opts => {
 
   return paginated({
     database,
-    document: [ 'id' ],
+    document: [ 'id', 'type' ],
     query(owner, state) {
       let skip;
       let startkey;
@@ -38,17 +38,22 @@ export default opts => {
         endkey
       };
     },
-    loaded(array) {
-      let { length, lastObject } = array.getProperties('length', 'lastObject');
+    loaded(state_, array) {
+      let { length, lastObject: last } = array.getProperties('length', 'lastObject');
 
       let isMore = false;
       let state = null;
 
-      if(lastObject) {
-        let id = lastObject.get('id');
+      if(last) {
+        let value;
+        if(state_) {
+          value = array.objectAt(length - 2);
+        } else {
+          value = last;
+        }
         state = {
-          id: id,
-          value: id
+          id:    last.get('id'),
+          value: value.get('id')
         };
         isMore = length > opts.limit;
       }
@@ -58,8 +63,10 @@ export default opts => {
         state
       };
     },
-    matches(doc) {
-      // console.log(doc.getProperties('id', 'type', 'isLoaded'), doc+'');
+    matches(doc, owner, state) {
+      if(state) {
+        return doc.get('id') < state.value;
+      }
       return doc.get('type') === type;
     }
   });
