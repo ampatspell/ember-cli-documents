@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import layout from './template';
-import { allPaginated } from 'documents/properties';
+import allPaginated from 'documents/properties/experimental/all-paginated';
 
 const {
   RSVP: { allSettled },

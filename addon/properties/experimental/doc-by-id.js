@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { first } from './proxy';
+import { first } from '../proxy';
 
 const {
   merge

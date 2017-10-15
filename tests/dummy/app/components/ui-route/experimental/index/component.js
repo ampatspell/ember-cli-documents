@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import layout from './template';
-import { docById, find } from 'documents/properties';
+import { find } from 'documents/properties';
+import docById from 'documents/properties/experimental/doc-by-id';
 
 const {
   computed: { reads }

@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { paginated } from './proxy';
+import { paginated } from '../proxy';
 
 const {
   merge
@@ -47,7 +47,7 @@ export default opts => {
       if(last) {
         let value;
         if(state_) {
-          value = array.objectAt(length - 2);
+          value = array.objectAt(length - 2) || last;
         } else {
           value = last;
         }
