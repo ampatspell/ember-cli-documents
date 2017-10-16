@@ -9,7 +9,7 @@ const {
 
 const factories = {
   first:     '_createInternalDocumentProxy',
-  fiind:     '_createInternalArrayProxy',
+  find:     '_createInternalArrayProxy',
   paginated: '_createInternalPaginatedProxy'
 };
 
