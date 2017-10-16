@@ -1,5 +1,12 @@
+import Ember from 'ember';
 import Base from './-base';
 import ModelMixin from './-model-mixin';
+import { isFunction, isArray } from 'documents/util/assert';
+
+const {
+  merge,
+  copy
+} = Ember;
 
 export default class BaseProxyInternal extends ModelMixin(Base) {
 
@@ -8,9 +15,21 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
     this.store = store;
     this.database = database;
     this.owner = owner;
-    this.opts = opts;
+    this.opts = this._normalizeOptions(opts);
     this._filter = null;
     this._loader = null;
+  }
+
+  _normalizeOptions(opts) {
+    opts = merge({ owner: [], document: [] }, opts);
+    let { query, matches, owner, document } = opts;
+    isFunction('query', query);
+    isFunction('matches', matches);
+    isArray('owner', owner);
+    isArray('document', document);
+    owner = copy(owner);
+    document = copy(document);
+    return { owner, document, matches, query };
   }
 
   //

@@ -1,7 +1,20 @@
+import Ember from 'ember';
 import ProxyInternal from './-proxy';
 import PaginatedFilter from './paginated-filter';
+import { isFunction } from 'documents/util/assert';
+
+const {
+  merge
+} = Ember;
 
 export default class PaginatedProxyInternal extends ProxyInternal {
+
+  _normalizeOptions(opts) {
+    let normalized = super._normalizeOptions(opts);
+    let { loaded } = opts;
+    isFunction('loaded', loaded);
+    return merge({ loaded }, normalized);
+  }
 
   _createModel() {
     return this.store._createPaginatedProxy(this);

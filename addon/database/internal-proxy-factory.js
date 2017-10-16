@@ -1,11 +1,6 @@
 import Ember from 'ember';
-import { isOneOf, isFunction } from 'documents/util/assert';
+import { isOneOf } from 'documents/util/assert';
 import registerDestroy from 'documents/util/register-destroy';
-
-const {
-  merge,
-  copy
-} = Ember;
 
 const factories = {
   first:     '_createInternalDocumentProxy',
@@ -24,19 +19,8 @@ export default Ember.Mixin.create({
     return fn.call(this, owner, opts);
   },
 
-  __normalizeInternalProxyOpts(opts) {
-    let normalized = merge({ owner: [], document: [] }, opts);
-    let { query, matches, loaded } = normalized;
-    isFunction('query', query);
-    isFunction('matches', matches);
-    let owner = copy(normalized.owner);
-    let document = copy(normalized.document);
-    return { owner, document, matches, query, loaded };
-  },
-
-  _createInternalProxy(type, owner, opts) {
-    let normalizedOpts = this.__normalizeInternalProxyOpts(opts);
-    let internal = this.__createInternalProxy(type, owner, normalizedOpts);
+  _createInternalProxy(type, owner, opts={}) {
+    let internal = this.__createInternalProxy(type, owner, opts);
     registerDestroy(owner, () => internal.destroy());
     return internal;
   }

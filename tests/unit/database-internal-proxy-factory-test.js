@@ -9,11 +9,19 @@ const {
 module('database-internal-proxy-factory', {
   beforeEach() {
     this.owner = Ember.Object.create();
+    this.opts = {
+      query() {
+      },
+      matches() {
+      },
+      loaded() {
+      }
+    };
   }
 });
 
 test('destroy', function(assert) {
-  let internal = this.db._createInternalProxy('first', this.owner, {});
+  let internal = this.db._createInternalProxy('first', this.owner, this.opts);
   assert.ok(internal);
   let proxy = internal.model(true);
   run(() => this.owner.destroy());
@@ -21,16 +29,16 @@ test('destroy', function(assert) {
 });
 
 test('first', function(assert) {
-  let internal = this.db._createInternalProxy('first', null, {});
+  let internal = this.db._createInternalProxy('first', null, this.opts);
   assert.ok(internal);
 });
 
 test('find', function(assert) {
-  let internal = this.db._createInternalProxy('find', null, {});
+  let internal = this.db._createInternalProxy('find', null, this.opts);
   assert.ok(internal);
 });
 
 test('paginated', function(assert) {
-  let internal = this.db._createInternalProxy('paginated', null, {});
+  let internal = this.db._createInternalProxy('paginated', null, this.opts);
   assert.ok(internal);
 });
