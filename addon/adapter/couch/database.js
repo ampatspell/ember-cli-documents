@@ -5,9 +5,9 @@ export default Adapter.extend({
   adapter: null,
 
   databaseDocuments(database) {
-    let identifier = database.get('identifier');
+    let name = database.get('name');
     let couch = this.get('adapter.couch');
-    return couch.database(identifier);
+    return couch.database(name);
   },
 
   changesListener(opts) {

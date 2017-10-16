@@ -1,6 +1,5 @@
 # TODO
 
-* database name mapping for store
 * clean up Proxy stack impl
 * loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * loader state vs proxy state for ArrayProxy and ObjectProxy
@@ -14,25 +13,6 @@
 * array deserialize should diff existing content not just clear existing content
 
 # Notes
-
-## Pagination
-
-* https://bitbucket.org/ampatspell/ember-cli-sofa/src/98e4012231eb/addon/view/?at=default
-* http://docs.couchdb.org/en/2.1.0/ddocs/views/pagination.html
-* https://blog.couchbase.com/startkeydocid-behaviour/
-
-``` javascript
-export default Ember.Object.extend({
-
-  author: null, // doc or whatnot
-  posts: paginated({ key: 'author.id' }),
-
-  // startkey, start
-  // startkey, end
-  // startkey_docid
-
-});
-```
 
 ## Properties
 
