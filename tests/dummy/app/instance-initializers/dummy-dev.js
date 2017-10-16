@@ -22,10 +22,8 @@ export default {
     let store = stores.store({
       url,
       databaseNameForIdentifier: identifier => databaseMapping[identifier],
-      // fastbootIdentifier: 'dummy-ducments'
+      fastbootIdentifier: 'dummy-documents'
     });
-
-    store.enableFastBootWithIdentifier('dummy-documents');
 
     let db = store.database('main');
 

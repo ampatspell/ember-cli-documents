@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { object } from '../util/computed';
+import { omit, pick } from '../util/object';
 import createNestedRegistry from '../util/create-nested-registry';
 
 const {
@@ -51,12 +52,23 @@ export default Ember.Mixin.create(StoresRegistry, {
     let store = registry.get(identifier);
 
     if(!store) {
-      let stores = this;
-      let _adapter = Adapter.create(assign({ _adapter: opts.adapter, identifier, stores }, opts));
-      opts = assign(opts, { _adapter });
-      store = this.createStore(opts);
+      let _adapter = Adapter.create({
+        stores: this,
+        identifier,
+        adapter: opts.adapter,
+        opts: omit(opts, [ 'adapter', 'databaseNameForIdentifier', 'fastbootIdentifier' ])
+      });
+
+      store = this.createStore({
+        stores: this,
+        _adapter,
+        _opts: pick(opts, [ 'databaseNameForIdentifier', 'fastbootIdentifier' ])
+      });
+
       _adapter.setProperties({ store });
       registry.set(identifier, store);
+
+      store._didInitialize();
     }
 
     return store;
