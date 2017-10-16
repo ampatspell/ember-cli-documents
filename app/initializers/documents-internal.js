@@ -3,6 +3,7 @@ import StoresIdentity from 'documents/stores/-identity';
 
 import Store from 'documents/store';
 import StoreIdentity from 'documents/store/-identity';
+import Databases from 'documents/store/-databases';
 import Session from 'documents/session';
 
 import Database from 'documents/database';
@@ -59,6 +60,7 @@ export default {
     container.register('documents:stores', Stores);
 
     container.register('documents:store', Store);
+    container.register('documents:databases', Databases);
     container.register('documents:session', Session);
     container.register('documents:database', Database);
 
