@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { isOneOf } from 'documents/util/assert';
+import { isOneOf, isFunction } from 'documents/util/assert';
 import registerDestroy from 'documents/util/register-destroy';
 
 const {
@@ -15,9 +15,6 @@ const factories = {
 
 const factoryKeys = Object.keys(factories);
 
-const defaultMatches = () => true;
-const defaultQuery = () => {};
-
 export default Ember.Mixin.create({
 
   __createInternalProxy(type, owner, opts) {
@@ -28,8 +25,10 @@ export default Ember.Mixin.create({
   },
 
   __normalizeInternalProxyOpts(opts) {
-    let normalized = merge({ owner: [], document: [], matches: defaultMatches, query: defaultQuery }, opts);
+    let normalized = merge({ owner: [], document: [] }, opts);
     let { query, matches, loaded } = normalized;
+    isFunction('query', query);
+    isFunction('matches', matches);
     let owner = copy(normalized.owner);
     let document = copy(normalized.document);
     return { owner, document, matches, query, loaded };
