@@ -15,8 +15,8 @@ const factories = {
 
 const factoryKeys = Object.keys(factories);
 
-const matches = () => true;
-const query = () => {};
+const defaultMatches = () => true;
+const defaultQuery = () => {};
 
 export default Ember.Mixin.create({
 
@@ -28,7 +28,7 @@ export default Ember.Mixin.create({
   },
 
   __normalizeInternalProxyOpts(opts) {
-    let normalized = merge({ database: 'database', owner: [], document: [], matches, query }, opts);
+    let normalized = merge({ database: 'database', owner: [], document: [], matches: defaultMatches, query: defaultQuery }, opts);
     let { query, matches, loaded } = normalized;
     let owner = copy(normalized.owner);
     let document = copy(normalized.document);
