@@ -21,14 +21,15 @@ export default {
 
     let store = stores.store({
       url,
-      databaseNameForIdentifier: identifier => databaseMapping[identifier]
+      databaseNameForIdentifier: identifier => databaseMapping[identifier],
+      // fastbootIdentifier: 'dummy-ducments'
     });
 
     store.enableFastBootWithIdentifier('dummy-documents');
 
     let db = store.database('main');
 
-    let changes = db.changes({ feed: 'event-source' });
+    let changes = db.changes({ feed: [ 'event-source', 'long-polling' ] });
     changes.start();
 
     app.register('service:stores', stores, { instantiate: false });
