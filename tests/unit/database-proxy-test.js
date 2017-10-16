@@ -44,3 +44,23 @@ test('create document proxy without owner', async function(assert) {
 
   run(() => proxy.destroy());
 });
+
+test('create paginated proxy without loaded', function(assert) {
+  try {
+    this.db.proxy('paginated', null, {
+      document: [ 'id' ],
+      query() {
+        return { id: 'hello' };
+      },
+      matches(doc) {
+        return doc.get('id') === 'hello';
+      }
+    });
+    assert.ok(false, 'should throw');
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "assertion",
+      "reason": "loaded must be function"
+    });
+  }
+});
