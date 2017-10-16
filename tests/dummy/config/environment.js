@@ -15,7 +15,8 @@ module.exports = function(environment) {
       }
     },
     APP: {
-    }
+    },
+    COUCHDB_HOST: process.env.COUCHDB_HOST
   };
 
   if (environment === 'development') {
