@@ -28,7 +28,7 @@ export default Ember.Mixin.create({
   },
 
   __normalizeInternalProxyOpts(opts) {
-    let normalized = merge({ database: 'database', owner: [], document: [], matches: defaultMatches, query: defaultQuery }, opts);
+    let normalized = merge({ owner: [], document: [], matches: defaultMatches, query: defaultQuery }, opts);
     let { query, matches, loaded } = normalized;
     let owner = copy(normalized.owner);
     let document = copy(normalized.document);
