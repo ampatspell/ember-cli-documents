@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import Base, { empty } from '../../internal/base';
+import Base, { empty } from '../../internal/-base';
 import MutateMixin from '../../internal/-mutate-mixin';
 import EmptyObject from 'documents/util/empty-object';
 

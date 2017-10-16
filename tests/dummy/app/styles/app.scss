@@ -12,6 +12,18 @@ $font-family: 'Raleway', sans-serif;
     > .title {
       font-weight: 600;
     }
+    > .links {
+      font-size: 13px;
+      padding-top: 5px;
+      a {
+        display: inline-block;
+        text-decoration: none;
+        color: #000;
+        &.active {
+          font-weight: 600;
+        }
+      }
+    }
   }
   > .content {
 

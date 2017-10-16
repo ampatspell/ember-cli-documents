@@ -42,6 +42,33 @@ export default Ember.Mixin.create({
 
   _createStoreChangesModel(_internal) {
     return this._changesModelFactory('store').create({ _internal });
+  },
+
+  _createDocumentProxy(_internal) {
+    return this._modelFactory('proxy/document').create({ _internal });
+  },
+
+  _createArrayProxy(_internal) {
+    let content = _internal.values;
+    return this._modelFactory('proxy/array').create({ _internal, content });
+  },
+
+  _createPaginatedProxy(_internal) {
+    let all = _internal.all;
+    let content = _internal.values;
+    return this._modelFactory('proxy/paginated').create({ _internal, all, content });
+  },
+
+  _createFilter(_internal) {
+    return this._modelFactory('filter').create({ _internal });
+  },
+
+  _createQueryLoader(_internal) {
+    return this._modelFactory('query-loader').create({ _internal });
+  },
+
+  _createPaginatedLoader(_internal) {
+    return this._modelFactory('paginated-loader').create({ _internal });
   }
 
 });

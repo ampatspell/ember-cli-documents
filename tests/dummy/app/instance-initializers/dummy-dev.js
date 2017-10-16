@@ -7,17 +7,27 @@ const {
   Logger: { info }
 } = Ember;
 
+const databaseMapping = {
+  main: 'thing',
+  _users: '_users'
+};
+
+const url = `${COUCHDB_HOST}:6016`;
+
 export default {
   name: 'dummy:dev',
   initialize(app) {
     let stores = app.lookup('documents:stores');
-    let store = stores.store({ url: `${COUCHDB_HOST}:6016` });
 
-    store.enableFastBootWithIdentifier('dummy-documents');
+    let store = stores.store({
+      url,
+      databaseNameForIdentifier: identifier => databaseMapping[identifier],
+      fastbootIdentifier: 'dummy-documents'
+    });
 
-    let db = store.database('thing');
+    let db = store.database('main');
 
-    let changes = db.changes({ feed: 'event-source' });
+    let changes = db.changes({ feed: [ 'event-source', 'long-polling' ] });
     changes.start();
 
     app.register('service:stores', stores, { instantiate: false });

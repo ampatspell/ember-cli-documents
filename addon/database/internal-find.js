@@ -5,14 +5,31 @@ import Operation from './-operation';
 const {
   A,
   merge,
+  copy,
   RSVP: { reject }
 } = Ember;
 
-const normalizeOpts = (opts, defaults) => {
-  if(typeof opts === 'string') {
-    opts = { id: opts };
+const defaultMatch = () => true;
+
+const extractMatch = opts => {
+  let fn;
+  if(opts.match) {
+    fn = opts.match;
+    delete opts.match;
+  } else {
+    fn = defaultMatch;
   }
-  return merge(defaults, opts);
+  return fn;
+};
+
+const matchResult = ({ result, type }, match) => {
+  if(type === 'single') {
+    if(result && match(result)) {
+      return result;
+    }
+  } else {
+    return A(result).find(internal => match(internal));
+  }
 };
 
 const result = (type, result) => ({ type, result });
@@ -35,12 +52,12 @@ const doc = fn => function(...args) {
 
 export default Ember.Mixin.create({
 
-  __scheduleDatabaseOperation(label, opts, fn) {
+  __scheduleDatabaseOperation(label, opts, fn, before, resolve, reject) {
     opts = merge({}, opts);
-    let op = new Operation(label, { opts }, fn);
+    let op = new Operation(label, { opts }, fn, before, resolve, reject);
     this._registerDatabaseOperation(op);
     op.invoke();
-    return op.promise;
+    return op;
   },
 
   __loadInternalDocumentById: doc(function(documents, id, opts) {
@@ -60,8 +77,17 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
-  _internalDocumentFind(opts) {
-    opts = normalizeOpts(opts, {});
+  _normalizeInternalFindOptions(opts, defaults={}) {
+    if(typeof opts === 'string') {
+      opts = { id: opts };
+    }
+    return merge(defaults, opts);
+  },
+
+  _scheduleDocumentFindOperation(opts, beforeFn, resolveFn, rejectFn) {
+    opts = this._normalizeInternalFindOptions(opts, {});
+
+    let original = copy(opts, true);
 
     let id = opts.id;
     let all = opts.all;
@@ -69,12 +95,21 @@ export default Ember.Mixin.create({
     let view = opts.view;
     let selector = opts.selector;
 
-    let schedule = (label, fn) => this.__scheduleDatabaseOperation(label, opts, fn);
+    let force = opts.force;
+    delete opts.force;
+
+    const schedule = (label, fn) => this.__scheduleDatabaseOperation(label, original, fn, beforeFn, resolveFn, rejectFn);
 
     if(id) {
-      let internal = this._existingInternalDocument(id, { deleted: true });
+      let { internal } = this._existingInternalDocument(id, { deleted: true });
       if(internal) {
-        return internal.scheduleLoad().then(() => result('single', internal));
+        return this._scheduleInternalLoad(internal, { force }, beforeFn, internal => {
+          let hash = result('single', internal);
+          if(resolveFn) {
+            return resolveFn(hash);
+          }
+          return hash;
+        }, rejectFn);
       }
       return schedule('id', () => {
         delete opts.id;
@@ -97,25 +132,43 @@ export default Ember.Mixin.create({
       });
     }
 
-    return reject(new DocumentsError({
+    return schedule('error', () => reject(new DocumentsError({
       error: 'invalid_query',
       reason: 'opts must include { all: true }, { id }, { ddoc, view } or { selector }'
-    }));
+    })));
   },
 
-  _internalDocumentFirst(opts) {
-    opts = normalizeOpts(opts, { limit: 1 });
-    return this._internalDocumentFind(opts).then(({ result, type }) => {
-      if(type === 'single') {
-        return result;
-      }
-      return result[0];
-    }).then(internal => {
+  _scheduleDocumentFirstOperation(opts, beforeFn, resolveFn, rejectFn) {
+    opts = this._normalizeInternalFindOptions(opts, { limit: 1 });
+    let match = extractMatch(opts);
+    return this._scheduleDocumentFindOperation(opts, beforeFn, result => {
+      let internal = matchResult(result, match);
       if(!internal) {
         return reject(new DocumentsError({ error: 'not_found', reason: 'missing', status: 404 }));
       }
+      if(resolveFn) {
+        return resolveFn(internal);
+      }
       return internal;
-    });
+    }, rejectFn);
+  },
+
+  _scheduleDocumentOperation(opts, type, before, resolve, reject) {
+    if(type === 'first') {
+      return this._scheduleDocumentFirstOperation(opts, before, resolve, reject);
+    } else if(type === 'find') {
+      return this._scheduleDocumentFindOperation(opts, before, resolve, reject);
+    } else {
+      return reject(new DocumentsError({ error: 'internal', reason: `type must be 'first' or 'find' not ${type}` }));
+    }
+  },
+
+  _internalDocumentFind(opts) {
+    return this._scheduleDocumentFindOperation(opts).promise;
+  },
+
+  _internalDocumentFirst(opts) {
+    return this._scheduleDocumentFirstOperation(opts).promise;
   }
 
 });

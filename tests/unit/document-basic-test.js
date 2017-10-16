@@ -126,3 +126,10 @@ test('id, name and fooBar set, get, serialize, deserialize', function(assert) {
   assert.equal(doc.serialize('model').fooBar, 'hello', 'doc.serialized fooBar must be hello');
   assert.equal(doc.serialize('document').fooBar, 'hello', 'doc.serialized foo_bar must be hello');
 });
+
+test('document has toString extension', function(assert) {
+  let doc = this.db.doc();
+  assert.ok((doc+'').includes('ember-cli-documents/>'));
+  doc.set('id', 'thing');
+  assert.ok((doc+'').includes('ember-cli-documents/thing>'));
+});

@@ -7,8 +7,9 @@ test('database exist', function(assert) {
   assert.ok(this.db);
 });
 
-test('database has identifier', function(assert) {
+test('database has name and identifier', function(assert) {
   assert.equal(this.db.get('identifier'), 'ember-cli-documents');
+  assert.equal(this.db.get('name'), 'ember-cli-documents');
 });
 
 test('database has store', function(assert) {

@@ -73,6 +73,36 @@ export default Ember.Mixin.create({
   _createInternalStoreChanges(opts) {
     let InternalStoreChanges = this._internalChangesFactory('store');
     return new InternalStoreChanges(this, opts);
+  },
+
+  _createInternalDocumentProxy(database, owner, opts) {
+    let InternalDocumentProxy = this._internalFactory('proxy/document');
+    return new InternalDocumentProxy(this, database, owner, opts);
+  },
+
+  _createInternalArrayProxy(database, owner, opts) {
+    let InternalArrayProxy = this._internalFactory('proxy/array');
+    return new InternalArrayProxy(this, database, owner, opts);
+  },
+
+  _createInternalPaginatedProxy(database, owner, opts) {
+    let InternalPaginatedProxy = this._internalFactory('proxy/paginated');
+    return new InternalPaginatedProxy(this, database, owner, opts);
+  },
+
+  _createInternalFilter(database, owner, opts) {
+    let InternalFilter = this._internalFactory('filter');
+    return new InternalFilter(this, database, owner, opts);
+  },
+
+  _createInternalQueryLoader(parent, database, owner, opts, type) {
+    let InternalQueryLoader = this._internalFactory('query-loader');
+    return new InternalQueryLoader(this, parent, database, owner, opts, type);
+  },
+
+  _createInternalPaginatedLoader(parent, database, owner, opts) {
+    let InternalPaginatedLoader = this._internalFactory('paginated-loader');
+    return new InternalPaginatedLoader(this, parent, database, owner, opts);
   }
 
 });

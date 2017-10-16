@@ -5,12 +5,13 @@ import DocumentsError from '../util/error';
 const {
   merge,
   assign,
+  RSVP: { resolve }
 } = Ember;
 
 export default Ember.Mixin.create({
 
-  __scheduleInternalOperation(label, internal, props, fn) {
-    let op = new Operation(label, assign({ internal }, props), fn);
+  __scheduleInternalOperation(label, internal, props, before, resolve, reject, fn) {
+    let op = new Operation(label, assign({ internal }, props), fn, before, resolve, reject);
     this._registerInternalOperation(op);
     return internal.addOperation(op);
   },
@@ -20,9 +21,11 @@ export default Ember.Mixin.create({
   __validateInternalDocumentUniqueness(internal) {
     let id = internal.getId();
     let existing = this._internalDocumentWithId(id);
+
     if(!existing || existing === internal) {
       return;
     }
+
     throw new DocumentsError({
       error: 'conflict',
       reason: 'Document update conflict'
@@ -40,7 +43,7 @@ export default Ember.Mixin.create({
 
     let state = internal.state;
     if(!(state.isNew || state.isDeleted) && !state.isDirty && !opts.force) {
-      return;
+      return resolve(internal);
     }
 
     this.__validateInternalDocumentUniqueness(internal);
@@ -93,11 +96,11 @@ export default Ember.Mixin.create({
     let state = internal.state;
 
     if(state.isLoaded && opts.force !== true) {
-      return;
+      return resolve(internal);
     }
 
     if(state.isNew) {
-      return;
+      return resolve(internal);
     }
 
     internal.setState('onLoading');
@@ -105,7 +108,7 @@ export default Ember.Mixin.create({
     let id = internal.getId();
 
     return this.get('documents').load(id).then(json => {
-      return this._deserializeInternalLoad(internal, json, 'document');
+      return this._deserializeInternalLoad(internal, json, 'document', opts.force);
     }, err => {
       return this._deserializeInternalLoadDidFail(internal, err);
     });
@@ -113,26 +116,26 @@ export default Ember.Mixin.create({
 
   //
 
-  _scheduleInternalSave(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-save', internal, { opts }, () => {
+  _scheduleInternalSave(internal, opts={}, before, resolve, reject) {
+    return this.__scheduleInternalOperation('document-save', internal, { opts }, before, resolve, reject, () => {
       return this.__performInternalSave(internal, opts);
     });
   },
 
-  _scheduleInternalDelete(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-delete', internal, { opts }, () => {
+  _scheduleInternalDelete(internal, opts={}, before, resolve, reject) {
+    return this.__scheduleInternalOperation('document-delete', internal, { opts }, before, resolve, reject, () => {
       return this.__performInternalDelete(internal, opts);
     });
   },
 
-  _scheduleInternalLoad(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-load', internal, { opts }, () => {
+  _scheduleInternalLoad(internal, opts={}, before, resolve, reject) {
+    return this.__scheduleInternalOperation('document-load', internal, { opts }, before, resolve, reject, () => {
       return this.__performInternalLoad(internal, opts);
     });
   },
 
-  _scheduleInternalReload(internal, opts={}) {
-    return this.__scheduleInternalOperation('document-reload', internal, { opts }, () => {
+  _scheduleInternalReload(internal, opts={}, before, resolve, reject) {
+    return this.__scheduleInternalOperation('document-reload', internal, { opts }, before, resolve, reject, () => {
       return this.__performInternalLoad(internal, assign({}, opts, { force: true }));
     });
   }

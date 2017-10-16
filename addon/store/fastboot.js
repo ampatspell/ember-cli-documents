@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 const {
+  get,
   getOwner,
   RSVP: { allSettled }
 } = Ember;
@@ -13,7 +14,7 @@ export default Ember.Mixin.create({
     ]);
   },
 
-  enableFastBootWithIdentifier(identifier) {
+  __enableFastBootWithIdentifier(identifier) {
     let fastboot = getOwner(this).lookup('service:fastboot');
     if(!fastboot) {
       return;
@@ -44,5 +45,12 @@ export default Ember.Mixin.create({
       store._deserializeShoebox(payload);
     }
   },
+
+  _didInitialize() {
+    let identifier = get(this._opts, 'fastbootIdentifier');
+    if(identifier) {
+      this.__enableFastBootWithIdentifier(identifier);
+    }
+  }
 
 });

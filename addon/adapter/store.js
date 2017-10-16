@@ -8,8 +8,8 @@ export default Ember.Object.extend({
   _adapter: null,
 
   _databaseAdapterFactory() {
-    let { _adapter, stores } = this.getProperties('_adapter', 'stores');
-    return stores.adapterFactory(_adapter, 'database');
+    let { adapter, stores } = this.getProperties('adapter', 'stores');
+    return stores.adapterFactory(adapter, 'database');
   },
 
   createDatabaseAdapter() {

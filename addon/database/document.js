@@ -18,9 +18,12 @@ export default Ember.Mixin.create({
 
   existing(id, opts) {
     isString('id', id);
-    let internal = this._existingInternalDocument(id, opts);
+    let { internal, created } = this._existingInternalDocument(id, opts);
     if(!internal) {
       return;
+    }
+    if(created) {
+      this._storeSavedInternalDocument(internal);
     }
     return internal.model(true);
   },

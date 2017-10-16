@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import InternalObject from './object';
-import State from './-state';
+import DocumentState from './-document-state';
 import Queue from './-queue';
 
 const {
@@ -15,7 +15,7 @@ export default class InternalDocument extends InternalObject {
   constructor(store, database) {
     super(store, null);
     this.database = database;
-    this.state = new State();
+    this.state = new DocumentState();
     this.queue = new Queue();
   }
 
@@ -39,9 +39,12 @@ export default class InternalDocument extends InternalObject {
     return this.state.isDeleted;
   }
 
-  _didDestroyModel() {
-    super._didDestroyModel();
-    this.database._didDestroyModelForInternalDocument(this);
+  _modelWillDestroy() {
+    if(this.isNew) {
+      // keep _model so it is not recreated on next `model(true)` call
+      this.database._willDestroyModelForNewInternalDocument(this);
+    }
+    super._modelWillDestroy();
   }
 
   _createModel() {
@@ -188,20 +191,20 @@ export default class InternalDocument extends InternalObject {
 
   //
 
-  scheduleSave() {
-    return this.database._scheduleInternalSave(this, ...arguments);
+  save() {
+    return this.database._scheduleInternalSave(this, ...arguments).promise;
   }
 
-  scheduleLoad() {
-    return this.database._scheduleInternalLoad(this, ...arguments);
+  load() {
+    return this.database._scheduleInternalLoad(this, ...arguments).promise;
   }
 
-  scheduleReload() {
-    return this.database._scheduleInternalReload(this, ...arguments);
+  reload() {
+    return this.database._scheduleInternalReload(this, ...arguments).promise;
   }
 
-  scheduleDelete() {
-    return this.database._scheduleInternalDelete(this, ...arguments);
+  delete() {
+    return this.database._scheduleInternalDelete(this, ...arguments).promise;
   }
 
 }

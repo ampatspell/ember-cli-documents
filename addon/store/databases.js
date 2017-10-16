@@ -1,5 +1,10 @@
 import Ember from 'ember';
+import { isString } from '../util/assert';
 import createNestedRegistry from '../util/create-nested-registry';
+
+const {
+  get
+} = Ember;
 
 const DatabasesRegistry = createNestedRegistry({ key: '_databases' });
 
@@ -11,10 +16,20 @@ export default Ember.Mixin.create(DatabasesRegistry, {
     return identifier.trim();
   },
 
-  _createDatabase(identifier) {
+  _databaseNameForIdentifier(identifier) {
+    let fn = get(this._opts, 'databaseNameForIdentifier');
+    if(fn) {
+      let name = fn(identifier);
+      isString('database name', name);
+      return name;
+    }
+    return identifier;
+  },
+
+  _createDatabase(identifier, name) {
     let store = this;
     let _adapter = this.get('_adapter').createDatabaseAdapter();
-    let database = this._factoryFor(`documents:database`).create({ store, _adapter, identifier });
+    let database = this._factoryFor(`documents:database`).create({ store, _adapter, name, identifier });
     _adapter.setProperties({ database });
     return database;
   },
@@ -24,7 +39,8 @@ export default Ember.Mixin.create(DatabasesRegistry, {
     let normalizedIdentifier = this._normalizeDatabaseIdentifier(identifier);
     let database = databases.get(normalizedIdentifier);
     if(!database) {
-      database = this._createDatabase(normalizedIdentifier);
+      let name = this._databaseNameForIdentifier(normalizedIdentifier);
+      database = this._createDatabase(normalizedIdentifier, name);
       databases.set(normalizedIdentifier, database);
     }
     return database;

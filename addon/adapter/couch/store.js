@@ -3,7 +3,9 @@ import Adapter from '../store';
 
 const {
   getOwner,
-  computed
+  computed,
+  computed: { reads },
+  get
 } = Ember;
 
 const couch = () => computed('url', function() {
@@ -16,7 +18,7 @@ export default Adapter.extend({
 
   couch: couch(),
 
-  url: null,
+  url: reads('opts.url').readOnly(),
 
   storeDocuments() {
     return this.get('couch');
@@ -30,7 +32,8 @@ export default Adapter.extend({
 }).reopenClass({
 
   identifierFor(opts) {
-    return `couch-${opts.url}`;
+    let url = get(opts, 'url');
+    return `couch-${url}`;
   }
 
 });

@@ -14,7 +14,7 @@ export default class Queue {
   add(operation) {
     this.array.push(operation);
     this._scheduleNext();
-    return operation.promise;
+    return operation;
   }
 
   _scheduleNext() {

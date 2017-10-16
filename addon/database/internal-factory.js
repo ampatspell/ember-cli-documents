@@ -24,22 +24,26 @@ export default Ember.Mixin.create({
   __createExistingInternalDocument(id) {
     let values = { _id: id };
     let internal = this.__createInternalDocument(values, { isNew: false, isDirty: false }, 'document');
-    this._storeSavedInternalDocument(internal);
     return internal;
   },
 
   _existingInternalDocument(id, opts) {
     let { create, deleted } = assign({ create: false, deleted: false }, opts);
     let internal = this._internalDocumentWithId(id, deleted);
+    let created = false;
     if(!internal && create) {
       if(!deleted) {
         internal = this._internalDocumentWithId(id, true);
       }
       if(!internal) {
         internal = this.__createExistingInternalDocument(id);
+        created = true;
       }
     }
-    return internal;
+    return {
+      internal,
+      created
+    };
   },
 
   _createInternalArray(values, type) {
@@ -56,6 +60,30 @@ export default Ember.Mixin.create({
 
   _createInternalAttachment(props) {
     return this.get('store')._createInternalAttachment(null, props);
+  },
+
+  _createInternalDocumentProxy(owner, opts) {
+    return this.get('store')._createInternalDocumentProxy(this, owner, opts);
+  },
+
+  _createInternalArrayProxy(owner, opts) {
+    return this.get('store')._createInternalArrayProxy(this, owner, opts);
+  },
+
+  _createInternalPaginatedProxy(owner, opts) {
+    return this.get('store')._createInternalPaginatedProxy(this, owner, opts);
+  },
+
+  _createInternalFilter(owner, opts) {
+    return this.get('store')._createInternalFilter(this, owner, opts);
+  },
+
+  _createInternalQueryLoader(parent, owner, opts, type) {
+    return this.get('store')._createInternalQueryLoader(parent, this, owner, opts, type);
+  },
+
+  _createInternalPaginatedLoader(parent, owner, opts) {
+    return this.get('store')._createInternalPaginatedLoader(parent, this, owner, opts);
   }
 
 });
