@@ -1,30 +1,20 @@
 import Ember from 'ember';
-import registerDestroy from './-register-destroy';
 
 const {
   computed,
   merge,
-  assert,
-  copy
+  assert
 } = Ember;
 
-const matches = () => true;
-const query = () => {};
-
-const proxy = factory => opts => {
-  opts = merge({ database: 'database', owner: [], document: [], matches, query }, opts);
+const proxy = type => opts => {
+  opts = merge({ database: 'database' }, opts);
   return computed(opts.database, function() {
-    let { query, matches, loaded } = opts;
     let database = this.get(opts.database);
-    let owner = copy(opts.owner);
-    let document = copy(opts.document);
     assert(`Database not found for key ${opts.database}`, !!database);
-    let internal = factory(database, this, { owner, document, matches, query, loaded });
-    registerDestroy(this, () => internal.destroy());
-    return internal.model(true);
+    return database._createInternalProxy(type, this, opts).model(true);
   }).readOnly();
 };
 
-export const first     = proxy((database, ...args) => database._createInternalDocumentProxy(...args));
-export const find      = proxy((database, ...args) => database._createInternalArrayProxy(...args));
-export const paginated = proxy((database, ...args) => database._createInternalPaginatedProxy(...args));
+export const first     = proxy('first');
+export const find      = proxy('find');
+export const paginated = proxy('paginated');

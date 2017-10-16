@@ -1,6 +1,9 @@
 const key = '__ember_cli_documents__';
 
 export default (owner, fn) => {
+  if(!owner) {
+    return;
+  }
   if(!owner.willDestroy) {
     return;
   }

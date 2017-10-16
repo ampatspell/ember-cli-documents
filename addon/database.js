@@ -3,6 +3,7 @@ import DatabaseStore from './database/store';
 import DatabaseSecurity from './database/security';
 import DatabaseInternalIdentity from './database/internal-identity';
 import DatabaseInternalFactory from './database/internal-factory';
+import DatabaseInternalProxyFactory from './database/internal-proxy-factory';
 import DatabaseInternalDeserialize from './database/internal-deserialize';
 import DatabaseInternalOperations from './database/internal-operations';
 import DatabaseInternalFind from './database/internal-find';
@@ -19,6 +20,7 @@ export default Ember.Object.extend(
   DatabaseSecurity,
   DatabaseInternalIdentity,
   DatabaseInternalFactory,
+  DatabaseInternalProxyFactory,
   DatabaseInternalDeserialize,
   DatabaseInternalOperations,
   DatabaseInternalFind,
