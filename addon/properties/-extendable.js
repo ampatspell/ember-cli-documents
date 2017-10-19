@@ -19,6 +19,7 @@ const mergeArrays = (base, extend, key) => {
 };
 
 const mergeFunctions = (base, extend, key) => {
+  // TODO: just wrap in array
   let base_ = base[key];
   let extend_ = extend[key];
   if(extend_) {
@@ -51,6 +52,7 @@ const invokeBuilders = (opts, builders) => {
 const build = (opts, builders) => {
   let arr = invokeBuilders(opts, builders);
   let merged = mergeBuilders(arr);
+  // TODO: make a function _super chains
   return merged;
 };
 
