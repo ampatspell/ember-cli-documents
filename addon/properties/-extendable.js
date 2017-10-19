@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { omit } from '../util/object';
 
 const {
   A,
@@ -25,13 +26,16 @@ const mergeFunctions = (base, extend, key) => {
   }
 }
 
-const mergeBuilders = array => array.reduce((result, item) => {
-  mergeArrays(result, item, 'owner');
-  mergeArrays(result, item, 'document');
-  mergeFunctions(result, item, 'query');
-  mergeFunctions(result, item, 'matches');
-  mergeFunctions(result, item, 'loaded');
-  return merge(result, item);
+const omitSpecial = step => omit(step, [ 'owner', 'document', 'query', 'matches', 'load' ]);
+const mergeStep = (result, step) => merge(result, omitSpecial(step));
+
+const mergeBuilders = array => array.reduce((result, step) => {
+  mergeArrays(result, step, 'owner');
+  mergeArrays(result, step, 'document');
+  mergeFunctions(result, step, 'query');
+  mergeFunctions(result, step, 'matches');
+  mergeFunctions(result, step, 'loaded');
+  return mergeStep(result, step);
 }, {});
 
 const invokeBuilders = (opts, builders) => {
@@ -39,12 +43,16 @@ const invokeBuilders = (opts, builders) => {
   let step = copy(opts, true);
   return [ opts, ...builders.map(builder => {
     let result = builder(step);
-    step = merge(step, result);
+    step = mergeStep(result, step);
     return copy(result, true);
   }) ];
 };
 
-const build = (opts, builders) => mergeBuilders(invokeBuilders(opts, builders));
+const build = (opts, builders) => {
+  let arr = invokeBuilders(opts, builders);
+  let merged = mergeBuilders(arr);
+  return merged;
+};
 
 const extendable = (target, builders = []) => {
   let fn = opts => {
