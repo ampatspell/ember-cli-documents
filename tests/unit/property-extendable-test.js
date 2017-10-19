@@ -12,7 +12,7 @@ module('property-extendable', {
 
 test('sanity', function(assert) {
   let subject = this.build();
-  let result = subject.extend(opts => ({ one: true })).extend(opts => ({ two: true }))({ three: true });
+  let result = subject.extend(() => ({ one: true })).extend(() => ({ two: true }))({ three: true });
   assert.deepEqual(result, {
     "one": true,
     "three": true,
@@ -22,7 +22,7 @@ test('sanity', function(assert) {
 
 test('extend overrides unknown property', function(assert) {
   let subject = this.build();
-  let result = subject.extend(opts => ({ id: 'one' })).extend(opts => ({ id: 'two' }))({});
+  let result = subject.extend(() => ({ id: 'one' })).extend(() => ({ id: 'two' }))({});
   assert.deepEqual(result, {
     id: 'two'
   });
@@ -30,9 +30,9 @@ test('extend overrides unknown property', function(assert) {
 
 test('extend splits', function(assert) {
   let subject = this.build();
-  let base = subject.extend(opts => ({ base: 'base' }));
-  let one = base.extend(opts => ({ id: 'one' })).extend(opts => ({ name: 'one' }))({ use: 'one' });
-  let two = base.extend(opts => ({ id: 'two' })).extend(opts => ({ name: 'two' }))({ use: 'two' });
+  let base = subject.extend(() => ({ base: 'base' }));
+  let one = base.extend(() => ({ id: 'one' })).extend(() => ({ name: 'one' }))({ use: 'one' });
+  let two = base.extend(() => ({ id: 'two' })).extend(() => ({ name: 'two' }))({ use: 'two' });
   assert.deepEqual(one, {
     "base": "base",
     "id": "one",
@@ -53,8 +53,8 @@ test('extend splits', function(assert) {
 
 test('extend appends owner and document', function(assert) {
   let subject = this.build()
-    .extend(opts => ({ owner: [ 'owner_one' ], document: [ 'document_one' ] }))
-    .extend(opts => ({ owner: [ 'owner_two' ], document: [ 'document_two' ] }))
+    .extend(() => ({ owner: [ 'owner_one' ], document: [ 'document_one' ] }))
+    .extend(() => ({ owner: [ 'owner_two' ], document: [ 'document_two' ] }))
   let result = subject(({ owner: [ 'owner_three' ], document: [ 'document_three' ] }))
   assert.deepEqual(result, {
     "document": [
@@ -73,7 +73,7 @@ test('extend appends owner and document', function(assert) {
 test('query fn without _super', function(assert) {
   assert.expect(2);
   let result = {};
-  let subject = this.build().extend(opts => ({
+  let subject = this.build().extend(() => ({
     query() {
       assert.ok(!this._super);
       return result;
@@ -86,13 +86,13 @@ test('extend query', function(assert) {
   assert.expect(4);
   let one = {};
   let two = {};
-  let subject = this.build().extend(opts => ({
+  let subject = this.build().extend(() => ({
     id: 'one',
     query() {
       assert.ok(!this._super);
       return one;
     }
-  })).extend(opts => ({
+  })).extend(() => ({
     id: 'two',
     query() {
       assert.ok(this._super);
@@ -108,15 +108,15 @@ test('extend with undefined in between', function(assert) {
   let one = {};
   let two = {};
   let subject = this.build()
-    .extend(opts => ({
+    .extend(() => ({
       id: 'one',
       query() {
         assert.ok(!this._super);
         return one;
       }
     }))
-    .extend(opts => ({}))
-    .extend(opts => ({
+    .extend(() => ({}))
+    .extend(() => ({
       id: 'two',
       query() {
         assert.ok(this._super);
