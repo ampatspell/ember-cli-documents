@@ -3,7 +3,6 @@ import { omit } from '../util/object';
 
 const {
   A,
-  merge,
   copy
 } = Ember;
 
@@ -18,12 +17,18 @@ const __mergeArray = (opts, next, key) => {
 }
 
 const __mergeFunction = (opts, next, key) => {
+  let opts_ = opts[key];
+  if(!opts_) {
+    opts_ = [];
+    opts[key] = opts_;
+  }
+
   let fn = next[key];
   if(!fn) {
     return;
   }
-  let _super = opts[key];
-  opts[key] = (...args) => fn.call({ _super }, ...args);
+
+  opts_.push(fn);
 }
 
 const __mergeUnknown = (opts, next) => {
@@ -36,14 +41,37 @@ const __mergeUnknown = (opts, next) => {
 const _mergeStep = (opts, next) => {
   opts = copy(opts, true);
   arrays.forEach(key => __mergeArray(opts, next, key));
-  // functions.forEach(key => __mergeFunction(opts, next, key));
+  functions.forEach(key => __mergeFunction(opts, next, key));
   __mergeUnknown(opts, next);
+  return opts;
+};
+
+const _mergeFunctions = (opts, key) => {
+  let arr = opts[key].reverse();
+  delete opts[key];
+
+  if(arr.length === 0) {
+    return;
+  }
+
+  let last = null;
+
+  arr.forEach(fn => {
+    let _super = last;
+    last = (...args) => fn.call({ _super }, ...args);
+  });
+
+  opts[key] = last;
+};
+
+const _postMerge = opts => {
+  functions.forEach(key => _mergeFunctions(opts, key));
   return opts;
 };
 
 const __invoke = (builder, opts) => {
   if(typeof builder === 'function') {
-    return builder.call({}, opts);
+    return builder.call({}, omit(opts, functions));
   }
   return builder;
 }
@@ -56,13 +84,11 @@ const _merge = builders => {
   let opts = _mergeStep({}, {});
 
   builders.forEach(builder => {
-    console.log('>', copy(opts, true));
     let result = _invoke(builder, opts);
-    console.log('<', copy(result, true));
     opts = _mergeStep(opts, result);
   });
 
-  console.log(opts);
+  opts = _postMerge(opts);
 
   return opts;
 };
