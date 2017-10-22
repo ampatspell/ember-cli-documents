@@ -65,6 +65,5 @@ export default {
       owner: 'author:ampatspell',
       blog: 'blog:ducks'
     });
-
   }
 };

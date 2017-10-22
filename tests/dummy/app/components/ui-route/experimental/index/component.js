@@ -1,36 +1,29 @@
 import Ember from 'ember';
 import layout from './template';
-import { find } from 'documents/properties';
-import docById from 'documents/properties/experimental/doc-by-id';
+import { first } from 'documents/properties';
 
 const {
   computed: { reads }
 } = Ember;
 
-const byType = opts => {
-  let { database, type } = opts;
-  return find({
-    database,
-    owner: [ type ],
-    document: [ 'type' ],
-    query(owner) {
-      let key = owner.get(type);
-      return { ddoc: 'main', view: 'by-type', key };
-    },
-    matches(doc, owner) {
-      return doc.get('type') === owner.get(type);
-    }
-  });
-};
+const byId = first.extend(opts => ({
+  owner: [ opts.id ],
+  document: [ 'id' ],
+  query(owner) {
+    let id = owner.get(opts.id);
+    return { id };
+  },
+  matches(doc, owner) {
+    return doc.get('id') === owner.get(opts.id);
+  }
+}));
 
 export default Ember.Component.extend({
   layout,
 
-  type: 'duck',
   id: 'message:first',
 
-  doc: docById({ database: 'db', id: 'id' }),
-  docs: byType({ database: 'db', type: 'type' }),
+  doc: byId({ database: 'db', id: 'id' }),
 
   subject: reads('doc'),
 

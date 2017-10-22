@@ -1,5 +1,6 @@
 # TODO
 
+* provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * clean up Proxy stack impl
 * loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last

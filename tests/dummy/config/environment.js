@@ -1,6 +1,8 @@
 /* eslint-env node */
 'use strict';
 
+require('dotenv').config();
+
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'dummy',
