@@ -158,9 +158,17 @@ test('extend has default owner and appends it', function(assert) {
 test('extend appends owner and document', function(assert) {
   let subject = this.build()
     .extend(opts => {
+      assert.deepEqual(opts, {
+        "document": [],
+        "owner": []
+      });
       return { owner: [ 'owner_one' ], document: [ 'document_one' ] };
     })
     .extend(opts => {
+      assert.deepEqual(opts, {
+        "document": [ 'document_one' ],
+        "owner": [ 'owner_one' ]
+      });
       return { owner: [ 'owner_two' ], document: [ 'document_two' ] };
     });
 
