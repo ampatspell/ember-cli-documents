@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import docById from 'documents/properties/by-id';
+import docById from 'documents/properties/first-by-id';
 import { getDefinition } from 'documents/properties/proxy';
 
 const {
