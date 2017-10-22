@@ -8,7 +8,6 @@ import createDefaultsMixin from 'documents/properties/create-defaults-mixin';
 import { pick } from 'documents/util/object';
 
 const databaseMixin = createDefaultsMixin({ database: 'db' });
-
 const byIdWithDatabase = databaseMixin(byId);
 const isNewById = isNewMixin(byIdWithDatabase);
 
@@ -41,7 +40,7 @@ test('isNew mixin', function(assert) {
   let Owner = Ember.Object.extend({
     duckId: 'duck',
     isNew: null,
-    doc: isNewById({ database: 'db', id: prop('duckId'), new: prop('isNew') })
+    doc: isNewById({ id: prop('duckId'), new: prop('isNew') })
   });
 
   let owner = Owner.create({ db: this.db });
