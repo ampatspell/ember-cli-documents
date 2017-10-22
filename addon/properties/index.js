@@ -7,3 +7,7 @@ export {
   find,
   paginated
 } from './extendable';
+
+export {
+  prop
+} from './prop';
