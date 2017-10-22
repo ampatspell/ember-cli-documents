@@ -23,14 +23,16 @@ test('sanity', function(assert) {
   let result = subject.extend(opts => {
     assert.deepEqual(opts, {
       "document": [],
-      "owner": []
+      "owner": [],
+      "three": true,
+      "two": true
     });
     return { one: true };
   }).extend(opts => {
     assert.deepEqual(opts, {
       "document": [],
       "owner": [],
-      "one": true
+      "three": true
     });
     return { two: true };
   })({ three: true });
@@ -52,23 +54,24 @@ test('extend overrides unknown property', function(assert) {
   let result = subject.extend(opts => {
     assert.deepEqual(opts, {
       "document": [],
-      "owner": []
-    });
+      "owner": [],
+      "id": "two"
+    }, '1');
     return { id: 'one' };
   }).extend(opts => {
     assert.deepEqual(opts, {
       "document": [],
       "owner": [],
-      "id": "one"
-    });
+      "id": "three"
+    }, '2');
     return { id: 'two' };
-  })({});
+  })({ id: 'three' });
 
   assert.deepEqual(result, {
     "document": [],
     "owner": [],
-    "id": "two"
-  });
+    "id": "one"
+  }, '3');
 });
 
 test('extend splits', function(assert) {
@@ -120,7 +123,10 @@ test('extend has default owner and appends it', function(assert) {
     .extend(opts => {
       assert.deepEqual(opts, {
         "document": [],
-        "owner": []
+        "owner": [
+          "owner_two",
+          "owner_three"
+        ]
       });
       return { owner: [ 'owner_one' ] };
     })
@@ -128,7 +134,7 @@ test('extend has default owner and appends it', function(assert) {
       assert.deepEqual(opts, {
         "document": [],
         "owner": [
-          "owner_one"
+          "owner_three"
         ]
       });
       return { owner: [ 'owner_two' ] };
@@ -137,10 +143,7 @@ test('extend has default owner and appends it', function(assert) {
   let result = subject(opts => {
     assert.deepEqual(opts, {
       "document": [],
-      "owner": [
-        "owner_one",
-        "owner_two"
-      ]
+      "owner": []
     });
     return { owner: [ 'owner_three' ] }
   });
@@ -159,15 +162,25 @@ test('extend appends owner and document', function(assert) {
   let subject = this.build()
     .extend(opts => {
       assert.deepEqual(opts, {
-        "document": [],
-        "owner": []
+        "document": [
+          "document_two",
+          "document_three"
+        ],
+        "owner": [
+          "owner_two",
+          "owner_three"
+        ]
       });
       return { owner: [ 'owner_one' ], document: [ 'document_one' ] };
     })
     .extend(opts => {
       assert.deepEqual(opts, {
-        "document": [ 'document_one' ],
-        "owner": [ 'owner_one' ]
+        "document": [
+          "document_three"
+        ],
+        "owner": [
+          "owner_three"
+        ]
       });
       return { owner: [ 'owner_two' ], document: [ 'document_two' ] };
     });
@@ -294,4 +307,37 @@ test('extend loaded', function(assert) {
     one: true,
     two: true
   });
+});
+
+test('extend order and parent opts for actual usecase', function(assert) {
+  let prop = this.build().extend(opts => {
+    opts = merge({ id: 'id' }, opts);
+    let { id } = opts;
+    return {
+      owner: [ opts.id ],
+      document: [ 'id' ],
+      query() {
+        assert.equal(id, 'docId');
+        return { id };
+      }
+    };
+  }).extend(opts => {
+    opts = merge({ database: 'database' }, opts);
+    let { database } = opts;
+    return {
+      database
+    };
+  });
+
+  let result = prop({ database: 'db', id: 'docId' });
+
+  assert.deepEqual(result, {
+    database: 'db',
+    id: 'docId',
+    document: [ 'id' ],
+    owner: [ 'docId' ],
+    query: result.query
+  });
+
+  assert.deepEqual(result.query(), { id: 'docId' });
 });
