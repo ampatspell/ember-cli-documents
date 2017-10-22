@@ -4,7 +4,6 @@ import { test } from '../helpers/qunit';
 import { first } from 'documents/properties';
 
 const {
-  run,
   merge
 } = Ember;
 
