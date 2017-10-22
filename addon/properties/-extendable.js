@@ -7,64 +7,68 @@ const {
   copy
 } = Ember;
 
-const mergeArrays = (base, extend, key) => {
-  let base_ = base[key];
-  let extend_ = extend[key];
-  if(!base_ && !extend_) {
-    return;
-  }
-  base_ = base_ || [];
-  extend_ = extend_ || [];
-  base[key] = A([...base_, ...extend_]).uniq().map(item => item);
-};
+const arrays = [ 'owner', 'document' ];
+const functions = [ 'query', 'matches', 'loaded' ];
+const special = [ ...arrays, ...functions ];
 
-const mergeFunctions = (base, extend, key) => {
-  // TODO: just wrap in array
-  let base_ = base[key];
-  let extend_ = extend[key];
-  if(extend_) {
-    base[key] = (...args) => extend_.call({ _super: base_ }, ...args);
-  }
+const _mergeArray = (opts, next, key) => {
+  let opts_ = opts[key] || [];
+  let next_ = next[key] || [];
+  opts[key] = A([ ...opts_, ...next_ ]).uniq();
 }
 
-const omitSpecial = step => omit(step, [ 'owner', 'document', 'query', 'matches', 'load' ]);
-const mergeStep = (result, step) => merge(result, omitSpecial(step));
+const _mergeFunction = (opts, next, key) => {
+  let fn = next[key];
+  if(!fn) {
+    return;
+  }
+  let _super = opts[key];
+  opts[key] = (...args) => fn.call({ _super }, ...args);
+}
 
-const mergeBuilders = array => array.reduce((result, step) => {
-  mergeArrays(result, step, 'owner');
-  mergeArrays(result, step, 'document');
-  mergeFunctions(result, step, 'query');
-  mergeFunctions(result, step, 'matches');
-  mergeFunctions(result, step, 'loaded');
-  return mergeStep(result, step);
-}, {});
+const _mergeUnknown = (opts, next) => {
+  merge(opts, omit(next, special));
+}
 
-const invokeBuilders = (opts, builders) => {
-  builders.reverse();
-  let step = copy(opts, true);
-  return [ opts, ...builders.map(builder => {
-    let result = builder(step);
-    step = mergeStep(result, step);
-    return copy(result, true);
-  }) ];
+const _merge = (opts, next) => {
+  opts = copy(opts, true);
+  arrays.forEach(key => _mergeArray(opts, next, key));
+  functions.forEach(key => _mergeFunction(opts, next, key));
+  _mergeUnknown(opts, next);
+  return opts;
 };
 
-const build = (opts, builders) => {
-  let arr = invokeBuilders(opts, builders);
-  let merged = mergeBuilders(arr);
-  // TODO: make a function _super chains
-  return merged;
-};
+const __invoke = (builder, opts) => {
+  if(typeof builder === 'function') {
+    return builder.call({}, opts);
+  }
+  return builder;
+}
 
-const extendable = (target, builders = []) => {
-  let fn = opts => {
-    return target(build(opts, [ ...fn._builders ]));
-  };
-  fn._builders = builders;
-  fn.extend = builder => {
-    return extendable(target, [ ...fn._builders, builder ]);
-  };
+const _invoke = (builder, opts) => __invoke(builder, opts) || {};
+
+class Context {
+
+  constructor(opts) {
+    opts = opts || _merge({}, {});
+    this.opts = copy(opts, true);
+  }
+
+  extend(builder) {
+    let opts = _merge(this.opts, _invoke(builder, this.opts));
+    return new this.constructor(opts);
+  }
+
+  build(builder) {
+    return this.extend(builder).opts;
+  }
+
+}
+
+const extendable = (target, context) => {
+  let fn = opts => target(context.build(opts));
+  fn.extend = builder => extendable(target, context.extend(builder))
   return fn;
 };
 
-export default target => extendable(target);
+export default target => extendable(target, new Context());
