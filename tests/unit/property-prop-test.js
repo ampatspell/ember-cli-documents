@@ -5,26 +5,54 @@ import { first } from 'documents/properties';
 
 const {
   run,
+  merge
 } = Ember;
 
 module('property-prop');
 
 const byId = first.extend(opts => {
-  let { id } = opts;
+  opts = merge({ id: 'id' }, opts);
   return {
-    database: 'db',
-    query() {
+    owner: [ opts.id ],
+    document: [ 'id' ],
+    query(owner) {
+      let id = owner.get(opts.id);
+      return { id };
     },
-    matches() {
+    matches(doc, owner) {
+      return doc.get('id') === owner.get(opts.id);
     }
   }
 });
 
-test.skip('property prop', function(assert) {
+const withDatabaseMixin = extendable => extendable.extend(opts => {
+  opts = merge({ database: 'database' }, opts);
+  let { database } = opts;
+  return {
+    database
+  };
+});
+
+const byIdWithDatabase = withDatabaseMixin(byId);
+
+test('property with value', function(assert) {
   let Owner = Ember.Object.extend({
-    doc: byId({ id: 'duck' })
+    duckId: 'yellow',
+    doc: byIdWithDatabase({ database: 'db', id: 'duckId' })
   });
 
   let owner = Owner.create({ db: this.db });
-  assert.deepEqual(owner.get('doc._internal.opts'), {});
+
+  let opts = owner.get('doc._internal.opts');
+
+  assert.deepEqual(opts, {
+    document: [ 'id' ],
+    owner: [ 'duckId' ],
+    matches: opts.matches,
+    query: opts.query,
+  });
+
+  assert.deepEqual(opts.query(owner), {
+    id: 'yellow'
+  });
 });
