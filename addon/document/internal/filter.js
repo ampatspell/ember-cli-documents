@@ -36,9 +36,8 @@ export default class FilterInternal extends ObserveOwner(ModelMixin(Base)) {
   }
 
   __matches() {
-    let matches = this.opts.matches;
     let owner = this.owner;
-    return doc => !!matches.call(owner, doc, owner);
+    return doc => !!this.opts.matches(doc, owner);
   }
 
   _matches(doc) {

@@ -70,7 +70,7 @@ export default class PaginatedLoaderInternal extends Loader {
   _scheduleDocumentOperation(force) {
     let { database, owner, _loadState, opts } = this;
 
-    let query = opts.query.call({}, owner, _loadState);
+    let query = opts.query(owner, _loadState);
 
     if(force) {
       query.force = true;

@@ -44,8 +44,7 @@ export default class PaginatedFilter {
     if(!state) {
       return () => false;
     }
-    let matches = this.opts.matches;
-    return doc => !!matches.call(null, doc, null, state);
+    return doc => !!this.opts.matches(doc, null, state);
   }
 
   _match(docs) {
