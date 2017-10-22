@@ -31,7 +31,7 @@ export default class QueryLoaderInternal extends Loader {
   get query() {
     let query = this.opts.query;
     let owner = this.owner;
-    return query.call(owner, owner);
+    return query.call({}, owner);
   }
 
   _scheduleDocumentOperation(force) {
