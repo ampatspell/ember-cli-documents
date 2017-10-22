@@ -13,7 +13,7 @@ const special = [ ...arrays, ...functions ];
 const __mergeArray = (opts, next, key) => {
   let opts_ = opts[key] || [];
   let next_ = next[key] || [];
-  opts[key] = A([ ...next_, ...opts_ ]).uniq();
+  opts[key] = A(A([ ...next_, ...opts_ ]).compact()).uniq();
 }
 
 const __mergeFunction = (opts, next, key) => {
