@@ -45,3 +45,14 @@ test('database on destroy is removed from open databases', function(assert) {
   assert.ok(!dbs.keyed.duck);
   assert.ok(!dbs.all.includes(db));
 });
+
+test('dataabse identifier must be string', function(assert) {
+  try {
+    this.store.database({});
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "assertion",
+      "reason": "identifier must be string"
+    });
+  }
+});

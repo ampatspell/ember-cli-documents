@@ -13,6 +13,7 @@ export default Ember.Mixin.create(DatabasesRegistry, {
   _databases: null,
 
   _normalizeDatabaseIdentifier(identifier) {
+    isString('identifier', identifier);
     return identifier.trim();
   },
 
