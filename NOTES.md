@@ -1,6 +1,5 @@
 # TODO
 
-* clean up Proxy stack impl
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * support proxy w/o loader
 * don't attempt to load if loader.query is falsy
