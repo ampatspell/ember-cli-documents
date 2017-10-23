@@ -3,6 +3,7 @@
 * clean up Proxy stack impl
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * support proxy w/o loader
+* don't attempt to load if loader.query is falsy
 * export and reorganize properties
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * how hard would it be to implement `find({ ids: [...] })` as a single operation given some of ids is already loaded?
