@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { property } from './-properties';
-import { makeForwardStateMixin } from './-create-loader-state-mixin';
 import ModelMixin from './-model-mixin';
 
 const {
@@ -14,33 +13,21 @@ const model = name => computed(function() {
   return internal[name].call(internal, true).model(true);
 }).readOnly();
 
-const loader = name => function(...args) {
+export const loader = name => function(...args) {
   let loader = this.get('loader');
   return loader[name].call(loader, ...args);
 };
 
-export default (Class, loaderKeys, loaderMapping) => {
-  const ForwardStateMixin = makeForwardStateMixin('loader', loaderKeys);
+export default Class => Class.extend(ModelMixin, {
 
-  let props = {
+  _internal: null,
 
-    _internal: null,
+  database: database(),
 
-    database: database(),
+  filter: model('filter'),
+  loader: model('loader'),
 
-    filter: model('filter'),
-    loader: model('loader'),
+  load:   loader('load'),
+  reload: loader('reload')
 
-    load:   loader('load'),
-    reload: loader('reload')
-
-  };
-
-  if(loaderMapping) {
-    for(let key in loaderMapping) {
-      props[key] = loader(loaderMapping[key]);
-    }
-  }
-
-  return Class.extend(ForwardStateMixin, ModelMixin, props);
-}
+});
