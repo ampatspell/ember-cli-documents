@@ -1,11 +1,11 @@
 import Ember from 'ember';
-import proxy from './-query-proxy';
+import QueryProxyMixin from './-query-proxy-mixin';
 
 const {
   computed: { reads }
 } = Ember;
 
-export default proxy(Ember.ObjectProxy).extend({
+export default Ember.ObjectProxy.extend(QueryProxyMixin, {
 
   content: reads('filter.value').readOnly()
 

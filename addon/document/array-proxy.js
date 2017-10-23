@@ -1,4 +1,4 @@
 import Ember from 'ember';
-import proxy from './-query-proxy';
+import QueryProxyMixin from './-query-proxy-mixin';
 
-export default proxy(Ember.ArrayProxy);
+export default Ember.ArrayProxy.extend(QueryProxyMixin);
