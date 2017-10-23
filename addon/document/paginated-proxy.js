@@ -1,11 +1,11 @@
 import Ember from 'ember';
-import proxy from './-proxy';
-import { keys } from './paginated-loader';
+import ProxyMixin, { loader } from './-proxy-mixin';
+import { ForwardStateMixin } from './query-loader';
 
-export default proxy(Ember.ArrayProxy, keys, {
-  loadMore: 'loadMore'
-}).extend({
+export default Ember.ArrayProxy.extend(ProxyMixin, ForwardStateMixin, {
 
-  all: null
+  all: null,
+
+  loadMore: loader('loadMore')
 
 });

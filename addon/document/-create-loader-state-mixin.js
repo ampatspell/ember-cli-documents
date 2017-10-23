@@ -5,7 +5,7 @@ const {
   computed: { reads }
 } = Ember;
 
-export const makeForwardStateMixin = (target, keys) => {
+export const createForwardStateMixin = (target, keys) => {
   const forward = key => reads(`${target}.${key}`).readOnly();
   let props = {
     state: forward('state'),
@@ -14,4 +14,4 @@ export const makeForwardStateMixin = (target, keys) => {
   return Ember.Mixin.create(props);
 };
 
-export default keys => create(keys, '_stateProp');
+export const createLoaderStateMixin = keys => create(keys, '_stateProp');

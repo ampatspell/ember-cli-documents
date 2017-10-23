@@ -1,12 +1,10 @@
 import Ember from 'ember';
 import ModelMixin from './-model-mixin';
-import createLoaderStateMixin from './-create-loader-state-mixin';
+import { createLoaderStateMixin, createForwardStateMixin } from './-create-loader-state-mixin';
 import { keys } from './internal/-paginated-loader-state';
 import { promise } from './-properties';
 
-export {
-  keys
-};
+export const ForwardStateMixin = createForwardStateMixin('loader', keys);
 
 const LoaderStateMixin = createLoaderStateMixin(keys);
 
