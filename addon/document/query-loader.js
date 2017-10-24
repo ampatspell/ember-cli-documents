@@ -10,8 +10,6 @@ const LoaderStateMixin = createLoaderStateMixin(keys);
 
 export default Ember.Object.extend(ModelMixin, LoaderStateMixin, {
 
-  _internal: null,
-
   load:   promise('load'),
   reload: promise('reload')
 

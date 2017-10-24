@@ -16,3 +16,13 @@
 * array deserialize should diff existing content not just clear existing content
 
 # Notes
+
+## Loader state vs proxy.content state
+
+> "Assertion Failed: You modified "subject.isLoading" twice on <dummy@documents:proxy/document::ember484> in a single render.
+
+Due to the fact that proxy.content is document which has isLoading triggered at the same runloop where loader triggers it's own isLoading.
+
+* Loader should continue to have separate state
+* DocumentProxy should forward state (and trigger prop changes) only if there is no content
+* All proxies should have some unified principle how state is forwarded.
