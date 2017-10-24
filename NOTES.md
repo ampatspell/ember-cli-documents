@@ -14,6 +14,8 @@
 * batch identity adds and removes `this._withIdentityMutation(mutation => ...)`
 * ember inspector integration (for proxies?)
 * array deserialize should diff existing content not just clear existing content
+* have a `json` and `toJSON` instead of `serialized` and `serialize`.
+* `object.copy()` for documents, objects and arrays. makes a detached, deep copy.
 
 # Notes
 
