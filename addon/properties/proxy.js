@@ -4,21 +4,32 @@ import { omit } from 'documents/util/object';
 const {
   Object: EmberObject,
   computed,
-  merge,
-  assert
+  merge
 } = Ember;
 
 const __documents_proxy_definition__ = '__documents_proxy_definition__';
 
 const proxy = type => opts => {
   opts = merge({ database: 'database' }, opts);
-  return computed(opts.database, function() {
+  return computed(opts.database, function(key) {
+    let cacheKey = `__documents_proxy_${key}`;
+
+    let current = this[cacheKey];
+    if(current) {
+      current.destroy();
+      delete this[cacheKey];
+    }
+
     let database = this.get(opts.database);
-    assert(`Database not found for key ${opts.database}`, !!database);
-    return database._createInternalProxy(type, this, omit(opts, [ 'database' ])).model(true);
-  }).meta({
-    [__documents_proxy_definition__]: opts
-  }).readOnly();
+    if(!database) {
+      return;
+    }
+
+    let internal = database._createInternalProxy(type, this, omit(opts, [ 'database' ]));
+    this[cacheKey] = internal;
+
+    return internal.model(true);
+  }).meta({ [__documents_proxy_definition__]: opts }).readOnly();
 };
 
 export const first     = proxy('first');
