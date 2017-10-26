@@ -184,7 +184,7 @@ export default Ember.Mixin.create({
 
     return schedule('error', () => reject(new DocumentsError({
       error: 'invalid_query',
-      reason: 'opts must include { all: true }, { id }, { ddoc, view } or { selector }'
+      reason: 'opts must include { all: true }, { id }, { ids }, { ddoc, view } or { selector }'
     })));
   },
 

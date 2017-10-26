@@ -7,15 +7,17 @@ module('database-internal-find', {
   }
 });
 
+const err = {
+  "error": "invalid_query",
+  "reason": "opts must include { all: true }, { id }, { ids }, { ddoc, view } or { selector }"
+};
+
 test('invalid arg throws for find', async function(assert) {
   try {
     await this.db._internalDocumentFind({});
     assert.ok(false, 'should throw');
   } catch(e) {
-    assert.deepEqual(e.toJSON(), {
-      "error": "invalid_query",
-      "reason": "opts must include { all: true }, { id }, { ddoc, view } or { selector }"
-    });
+    assert.deepEqual(e.toJSON(), err);
   }
 });
 
@@ -24,9 +26,6 @@ test('invalid arg throws for first', async function(assert) {
     await this.db._internalDocumentFirst({});
     assert.ok(false, 'should throw');
   } catch(e) {
-    assert.deepEqual(e.toJSON(), {
-      "error": "invalid_query",
-      "reason": "opts must include { all: true }, { id }, { ddoc, view } or { selector }"
-    });
+    assert.deepEqual(e.toJSON(), err);
   }
 });
