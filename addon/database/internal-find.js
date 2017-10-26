@@ -34,13 +34,15 @@ const matchResult = ({ result, type }, match) => {
 
 const result = (type, result) => ({ type, result });
 
+const docsFromRows = json => A(json.rows).map(row => row.doc);
+
 const view = fn => function(...args) {
   let opts = args.pop();
   opts = merge({ include_docs: true }, opts);
   args.push(opts);
   args.unshift(this.get('documents'));
   return fn.call(this, ...args).then(json => {
-    let docs = A(json.rows).map(row => row.doc);
+    let docs = docsFromRows(json);
     return result('array', this._deserializeDocuments(docs, 'document'));
   });
 };
