@@ -1,29 +1,18 @@
 import Ember from 'ember';
 import layout from './template';
-import { first } from 'documents/properties';
+import { prop } from 'documents/properties';
+import byId from 'documents/properties/first-by-id';
 
 const {
   computed: { reads }
 } = Ember;
-
-const byId = first.extend(opts => ({
-  owner: [ opts.id ],
-  document: [ 'id' ],
-  query(owner) {
-    let id = owner.get(opts.id);
-    return { id };
-  },
-  matches(doc, owner) {
-    return doc.get('id') === owner.get(opts.id);
-  }
-}));
 
 export default Ember.Component.extend({
   layout,
 
   id: 'message:first',
 
-  doc: byId({ database: 'db', id: 'id' }),
+  doc: byId({ database: 'db', id: prop('id') }),
 
   subject: reads('doc'),
 

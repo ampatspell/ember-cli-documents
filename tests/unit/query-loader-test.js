@@ -14,6 +14,9 @@ module('query-loader', {
       owner: [ 'id' ],
       query(owner) {
         let id = owner.get('id');
+        if(!id) {
+          return;
+        }
         return { id };
       }
     };
@@ -38,7 +41,7 @@ test('loader has query', function(assert) {
 
   this.owner.set('id', 'duck');
   let loader = this.first();
-  assert.deepEqual(loader._internal.query, {
+  assert.deepEqual(loader._internal._query(), {
     "id": "duck"
   });
   run(() => loader.destroy());
@@ -198,4 +201,75 @@ test('load on owner property change', async function(assert) {
   await this.settle(loader);
 
   assert.ok(this.db.existing('duck'));
+});
+
+test('loadable updates on query', async function(assert) {
+  let loader = this.first();
+
+  assert.equal(loader._internal.state.isLoadable, true);
+  assert.equal(loader.get('isLoadable'), false);
+  assert.equal(loader._internal.state.isLoadable, false);
+
+  await this.settle(loader);
+});
+
+test('loadable updates on owner prop change', async function(assert) {
+  let loader = this.first();
+
+  assert.equal(loader.get('isLoadable'), false);
+  this.owner.set('id', 'foo');
+  assert.equal(loader.get('isLoadable'), true);
+
+  await this.settle(loader);
+});
+
+test('loadable is set to false on owner prop change', async function(assert) {
+  this.owner.set('id', 'duck');
+  let loader = this.first();
+
+  assert.equal(loader.get('isLoadable'), true);
+  this.owner.set('id', null);
+  assert.equal(loader.get('isLoadable'), false);
+
+  await this.settle(loader);
+});
+
+test('loadable updates on load', async function(assert) {
+  let loader = this.first();
+  assert.equal(loader._internal.state.isLoadable, true);
+
+  let promise = loader.load();
+  assert.equal(loader.get('isLoadable'), false);
+  assert.equal(loader._internal.state.isLoadable, false);
+
+  try {
+    await promise;
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "loader",
+      "reason": "not_loadable"
+    });
+  }
+
+  await this.settle(loader);
+});
+
+test('loadable updates on reload', async function(assert) {
+  let loader = this.first();
+  assert.equal(loader._internal.state.isLoadable, true);
+
+  let promise = loader.reload();
+  assert.equal(loader.get('isLoadable'), false);
+  assert.equal(loader._internal.state.isLoadable, false);
+
+  try {
+    await promise;
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "loader",
+      "reason": "not_loadable"
+    });
+  }
+
+  await this.settle(loader);
 });

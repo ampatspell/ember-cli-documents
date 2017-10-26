@@ -7,8 +7,12 @@ export default class QueryLoaderInternal extends Loader {
     opts: {
       autoload: true,
       owner: [ 'id' ],
-      query(props) {
-        return { id: props.id };
+      query(owner) {
+        let id = owner.get('id');
+        if(!id) {
+          return;
+        }
+        return { id };
       }
     }
     type: 'first' / 'find'
@@ -28,13 +32,18 @@ export default class QueryLoaderInternal extends Loader {
 
   //
 
-  get query() {
+  _query() {
     let owner = this.owner;
     return this.opts.query(owner);
   }
 
   _scheduleDocumentOperation(force) {
-    let { database, query } = this;
+    let database = this.database;
+    let query = this._query();
+
+    if(!query) {
+      debugger;
+    }
 
     if(force) {
       query.force = true;
