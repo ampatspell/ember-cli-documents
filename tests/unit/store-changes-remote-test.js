@@ -24,6 +24,9 @@ configurations(module => {
       if(change.name === '_dbs') {
         return;
       }
+      if(change.type === 'updated') {
+        return;
+      }
       assert.ok(change.get());
       events.push({ name: change.name, type: change.type });
     });
