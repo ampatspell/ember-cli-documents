@@ -1,6 +1,7 @@
 import Ember from 'ember';
 
 const {
+  A,
   assign
 } = Ember;
 
@@ -44,6 +45,13 @@ export default Ember.Mixin.create({
       internal,
       created
     };
+  },
+
+  _existingInternalDocuments(ids, opts) {
+    return A(ids).map(id => {
+      let { internal, created } = this._existingInternalDocument(id, opts);
+      return { id, internal, created };
+    });
   },
 
   _createInternalArray(values, type) {
