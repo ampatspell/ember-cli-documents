@@ -1,12 +1,12 @@
 # TODO
 
 * don't attempt to load if loader.query is falsy, don't set `{ isLoading: true }` in preflight
+* loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * support proxy w/o loader
 * export and reorganize properties
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
-* loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * loader is already loaded if identical query was invoked
 * proxy state. deleted doc should have err.error=not_found
 * split internal/base into absolute base which is useful for proxies.
@@ -27,6 +27,10 @@
 * Current query hash should be created
 * isLoadable is based on that
 * cached query recreated/invalidated on owner props change
+
+This also includes needed changes for load operations.
+
+So, if query is pre-built, in next runloop that might already be invalidated. That cancelPending thing
 
 ## find `{ id }`, `{ ids }`
 
