@@ -273,3 +273,27 @@ test('loadable updates on reload', async function(assert) {
 
   await this.settle(loader);
 });
+
+test('isLoadable does not start loading', async function(assert) {
+  this.owner.set('id', 'duck');
+  let loader = this.first();
+
+  assert.equal(loader.get('isLoadable'), true);
+  assert.equal(loader._internal.operations.get('length'), 0);
+
+  await this.settle(loader);
+});
+
+test.todo('state.isLoadable is false', async function(assert) {
+  let loader = this.first();
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": false,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  await this.settle(loader);
+});

@@ -74,7 +74,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   }
 
   _stateProp(key) {
-    this._scheduleAutoloadIfLoadable([ key ]);
+    this._scheduleAutoloadIfLoadable([ key ], key);
     return this.state[key];
   }
 
@@ -138,8 +138,11 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return true;
   }
 
-  _scheduleAutoloadIfLoadable(except) {
+  _scheduleAutoloadIfLoadable(except, key) {
     if(!this._isLoadable(except)) {
+      return;
+    }
+    if(key === 'isLoadable') {
       return;
     }
     return this._scheduleAutoload(except);

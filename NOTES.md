@@ -22,6 +22,12 @@
 
 # Notes
 
+## Loader
+
+* Current query hash should be created
+* isLoadable is based on that
+* cached query recreated/invalidated on owner props change
+
 ## find `{ id }`, `{ ids }`
 
 Basically idea is to support usecases w/o changes listener.
