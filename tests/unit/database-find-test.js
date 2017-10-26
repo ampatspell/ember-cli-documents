@@ -122,3 +122,13 @@ test('first with match resolves', async function(assert) {
   assert.equal(result.get('id'), 'thing');
   assert.ok(result === doc);
 });
+
+test.todo('find by ids with all found', async function(assert) {
+  await all([
+    this.docs.save({ _id: 'one' }),
+    this.docs.save({ _id: 'two' })
+  ]);
+
+  let result = await this.db.find({ ids: [ 'one', 'two' ] });
+  assert.deepEqual(result.mapBy('id'), [ 'one', 'two' ]);
+});

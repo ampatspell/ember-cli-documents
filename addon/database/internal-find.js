@@ -79,6 +79,42 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
+  __loadInternalDocumentsByIds(ids, opts) {
+    let keys = [];
+    let loadedIds = [];
+    let internals = [];
+    this._existingInternalDocuments(ids, { deleted: true }).forEach(({ id, internal }) => {
+      if(internal) {
+        if(this._shouldPerformInternalLoad(internal, opts)) {
+          internals.push(internal);
+          keys.push(id);
+        } else {
+          loadedIds.push(id);
+        }
+      } else {
+        keys.push(id);
+      }
+    });
+
+    internals.forEach(internal => {
+      internal.setState('onLoading');
+    });
+
+    return this.get('documents').all({ include_docs: true, keys }).then(json => {
+      let docs = docsFromRows(json);
+      let loaded = this._deserializeDocuments(docs, 'document');
+
+      let existing = [];
+      this._existingInternalDocuments(loadedIds).forEach(({ internal }) => {
+        if(internal) {
+          existing.push(internal);
+        }
+      });
+
+      return result('array', A([ ...existing, ...loaded ]));
+    });
+  },
+
   _normalizeInternalFindOptions(opts, defaults={}) {
     if(typeof opts === 'string') {
       opts = { id: opts };
@@ -92,6 +128,7 @@ export default Ember.Mixin.create({
     let original = copy(opts, true);
 
     let id = opts.id;
+    let ids = opts.ids;
     let all = opts.all;
     let ddoc = opts.ddoc;
     let view = opts.view;
@@ -116,6 +153,11 @@ export default Ember.Mixin.create({
       return schedule('id', () => {
         delete opts.id;
         return this.__loadInternalDocumentById(id, opts);
+      });
+    } else if(ids) {
+      return schedule('ids', () => {
+        delete opts.ids;
+        return this.__loadInternalDocumentsByIds(ids, opts);
       });
     } else if(all) {
       return schedule('all', () => {
