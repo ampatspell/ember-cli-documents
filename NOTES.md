@@ -1,11 +1,11 @@
 # TODO
 
+* `find({ ids: [...] })` as a single operation given some of ids is already loaded
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * support proxy w/o loader
 * don't attempt to load if loader.query is falsy
 * export and reorganize properties
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
-* how hard would it be to implement `find({ ids: [...] })` as a single operation given some of ids is already loaded?
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * loader is already loaded if identical query was invoked
@@ -17,7 +17,22 @@
 * have a `json` and `toJSON` instead of `serialized` and `serialize`.
 * `object.copy()` for documents, objects and arrays. makes a detached, deep copy.
 
+
 # Notes
+
+## find `{ id }`, `{ ids }`
+
+Basically idea is to support usecases w/o changes listener.
+
+* always load byId, byIds, force means force deserialize?
+* but anyway, always mark existing internals `{ isLoading: true }`
+
+```
+db.find({ id, force })
+db.find({ ids, force })
+```
+
+After that, proxies can come up with load id/ids based on existing models.
 
 ## Loader state vs proxy.content state
 

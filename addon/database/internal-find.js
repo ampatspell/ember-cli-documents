@@ -79,7 +79,7 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
-  __loadInternalDocumentsByIds(ids, opts) {
+  __loadInternalDocumentsByIds(ids, force, opts) {
     let keys = [];
     let loadedIds = [];
     let internals = [];
@@ -157,7 +157,7 @@ export default Ember.Mixin.create({
     } else if(ids) {
       return schedule('ids', () => {
         delete opts.ids;
-        return this.__loadInternalDocumentsByIds(ids, opts);
+        return this.__loadInternalDocumentsByIds(ids, force, opts);
       });
     } else if(all) {
       return schedule('all', () => {
