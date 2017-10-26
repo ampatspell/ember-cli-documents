@@ -17,6 +17,7 @@
 * have a `json` and `toJSON` instead of `serialized` and `serialize`.
 * `object.copy()` for documents, objects and arrays. makes a detached, deep copy.
 * figure out how to get saves in one `_bulk_docs` call (also `all_or_nothing: true` would be nice option for `db.save(docs)`)
+* view reduce proxy for load, reload & underlying internal stuff for that in `db.find` or `db.reduce`
 
 # Notes
 
