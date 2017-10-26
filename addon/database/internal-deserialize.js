@@ -93,6 +93,7 @@ export default Ember.Mixin.create({
     let rev = doc._rev;
 
     if(!force && rev && internal.getRev() === rev) {
+      internal.setState('onLoaded');
       return internal;
     }
 

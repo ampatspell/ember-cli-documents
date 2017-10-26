@@ -6,7 +6,7 @@ const {
   A,
   merge,
   copy,
-  RSVP: { reject }
+  RSVP: { resolve, reject }
 } = Ember;
 
 const defaultMatch = () => true;
@@ -34,13 +34,15 @@ const matchResult = ({ result, type }, match) => {
 
 const result = (type, result) => ({ type, result });
 
+const extractDocumentsFromViewJSON = json => A(A(json.rows).map(row => row.doc));
+
 const view = fn => function(...args) {
   let opts = args.pop();
   opts = merge({ include_docs: true }, opts);
   args.push(opts);
   args.unshift(this.get('documents'));
   return fn.call(this, ...args).then(json => {
-    let docs = A(json.rows).map(row => row.doc);
+    let docs = extractDocumentsFromViewJSON(json);
     return result('array', this._deserializeDocuments(docs, 'document'));
   });
 };
@@ -77,6 +79,48 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
+  __loadDocumentsByIds(ids, opts) {
+    ids = A(ids);
+    if(ids.length === 0) {
+      return resolve(A());
+    }
+    opts = merge({ include_docs: true, keys: ids }, opts);
+    return this.get('documents').all(opts).then(json => extractDocumentsFromViewJSON(json));
+  },
+
+  __loadedDocumentsByIds(ids) {
+    let missing = [];
+    let existing = [];
+
+    this._existingInternalDocuments(ids).map(({ id, internal }) => {
+      if(internal) {
+        existing.push(internal);
+      } else {
+        missing.push(id);
+      }
+    });
+
+    if(missing.length) {
+      return reject(new DocumentsError({ error: 'not_found', reason: 'missing', missing }));
+    }
+
+    return resolve(A(existing));
+  },
+
+  __loadInternalDocumentsByIds(ids, force, opts) {
+    let load = [];
+    this._existingInternalDocuments(ids, { deleted: true }).forEach(({ id, internal }) => {
+      if(!internal || this._shouldPerformInternalLoad(internal, { force })) {
+        load.push(id);
+      }
+    });
+
+    return this.__loadDocumentsByIds(load, opts).then(docs => {
+      this._deserializeDocuments(docs, 'document');
+      return this.__loadedDocumentsByIds(ids);
+    }).then(internals => result('array', internals));
+  },
+
   _normalizeInternalFindOptions(opts, defaults={}) {
     if(typeof opts === 'string') {
       opts = { id: opts };
@@ -90,6 +134,7 @@ export default Ember.Mixin.create({
     let original = copy(opts, true);
 
     let id = opts.id;
+    let ids = opts.ids;
     let all = opts.all;
     let ddoc = opts.ddoc;
     let view = opts.view;
@@ -114,6 +159,11 @@ export default Ember.Mixin.create({
       return schedule('id', () => {
         delete opts.id;
         return this.__loadInternalDocumentById(id, opts);
+      });
+    } else if(ids) {
+      return schedule('ids', () => {
+        delete opts.ids;
+        return this.__loadInternalDocumentsByIds(ids, force, opts);
       });
     } else if(all) {
       return schedule('all', () => {
