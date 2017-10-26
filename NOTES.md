@@ -1,11 +1,11 @@
 # TODO
 
 * `find({ ids: [...] })` as a single operation given some of ids is already loaded
+* provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
+* don't attempt to load if loader.query is falsy
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * support proxy w/o loader
-* don't attempt to load if loader.query is falsy
 * export and reorganize properties
-* provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * loader is already loaded if identical query was invoked
