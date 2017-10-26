@@ -19,13 +19,13 @@ const configs = {
     store: {
       url: `${host}:6016`
     },
-    feed: 'event-source'
+    feed: 'continuous'
   },
   'couchdb-2.1': {
     store: {
       url: `${host}:6020`
     },
-    feed: 'long-polling'
+    feed: 'continuous'
   }
 };
 
