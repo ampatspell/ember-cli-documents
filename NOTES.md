@@ -26,6 +26,7 @@ Basically idea is to support usecases w/o changes listener.
 
 * always load byId, byIds, force means force deserialize?
 * but anyway, always mark existing internals `{ isLoading: true }`
+* `{ ids }` should reject if some of docs are not found _and_ if any of existing internals are marked deleted
 
 ```
 db.find({ id, force })
