@@ -123,7 +123,7 @@ test('first with match resolves', async function(assert) {
   assert.ok(result === doc);
 });
 
-test.todo('find by ids with all found', async function(assert) {
+test('find by ids with all found', async function(assert) {
   await all([
     this.docs.save({ _id: 'one' }),
     this.docs.save({ _id: 'two' })

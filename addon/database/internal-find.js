@@ -6,7 +6,7 @@ const {
   A,
   merge,
   copy,
-  RSVP: { reject }
+  RSVP: { resolve, reject }
 } = Ember;
 
 const defaultMatch = () => true;
@@ -34,7 +34,7 @@ const matchResult = ({ result, type }, match) => {
 
 const result = (type, result) => ({ type, result });
 
-const docsFromRows = json => A(json.rows).map(row => row.doc);
+const extractDocumentsFromViewJSON = json => A(A(json.rows).map(row => row.doc));
 
 const view = fn => function(...args) {
   let opts = args.pop();
@@ -42,7 +42,7 @@ const view = fn => function(...args) {
   args.push(opts);
   args.unshift(this.get('documents'));
   return fn.call(this, ...args).then(json => {
-    let docs = docsFromRows(json);
+    let docs = extractDocumentsFromViewJSON(json);
     return result('array', this._deserializeDocuments(docs, 'document'));
   });
 };
@@ -79,40 +79,46 @@ export default Ember.Mixin.create({
       .then(json => result('array', this._deserializeDocuments(json.docs, 'document')));
   },
 
-  __loadInternalDocumentsByIds(ids, force, opts) {
-    let keys = [];
-    let loadedIds = [];
-    let internals = [];
-    this._existingInternalDocuments(ids, { deleted: true }).forEach(({ id, internal }) => {
+  __loadDocumentsByIds(ids, opts) {
+    ids = A(ids);
+    if(ids.length === 0) {
+      return resolve(A());
+    }
+    opts = merge({ include_docs: true, keys: ids }, opts);
+    return this.get('documents').all(opts).then(json => extractDocumentsFromViewJSON(json));
+  },
+
+  __loadedDocumentsByIds(ids) {
+    let missing = [];
+    let existing = [];
+
+    this._existingInternalDocuments(ids).map(({ id, internal }) => {
       if(internal) {
-        if(this._shouldPerformInternalLoad(internal, opts)) {
-          internals.push(internal);
-          keys.push(id);
-        } else {
-          loadedIds.push(id);
-        }
+        existing.push(internal);
       } else {
-        keys.push(id);
+        missing.push(id);
       }
     });
 
-    internals.forEach(internal => {
-      internal.setState('onLoading');
+    if(missing.length) {
+      return reject(new DocumentsError({ error: 'not_found', reason: 'missing', missing }));
+    }
+
+    return resolve(A(existing));
+  },
+
+  __loadInternalDocumentsByIds(ids, force, opts) {
+    let load = [];
+    this._existingInternalDocuments(ids, { deleted: true }).forEach(({ id, internal }) => {
+      if(!internal || this._shouldPerformInternalLoad(internal, { force })) {
+        load.push(id);
+      }
     });
 
-    return this.get('documents').all({ include_docs: true, keys }).then(json => {
-      let docs = docsFromRows(json);
-      let loaded = this._deserializeDocuments(docs, 'document');
-
-      let existing = [];
-      this._existingInternalDocuments(loadedIds).forEach(({ internal }) => {
-        if(internal) {
-          existing.push(internal);
-        }
-      });
-
-      return result('array', A([ ...existing, ...loaded ]));
-    });
+    return this.__loadDocumentsByIds(load, opts).then(docs => {
+      this._deserializeDocuments(docs, 'document');
+      return this.__loadedDocumentsByIds(ids);
+    }).then(internals => result('array', internals));
   },
 
   _normalizeInternalFindOptions(opts, defaults={}) {
