@@ -41,10 +41,6 @@ export default class QueryLoaderInternal extends Loader {
     let database = this.database;
     let query = this._query();
 
-    if(!query) {
-      debugger;
-    }
-
     if(force) {
       query.force = true;
     }
