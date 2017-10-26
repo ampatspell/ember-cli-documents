@@ -92,14 +92,24 @@ export default Ember.Mixin.create({
 
   //
 
-  __performInternalLoad(internal, opts) {
+  _shouldPerformInternalLoad(internal, opts) {
+    opts = opts || {};
+
     let state = internal.state;
 
     if(state.isLoaded && opts.force !== true) {
-      return resolve(internal);
+      return false;
     }
 
     if(state.isNew) {
+      return false;
+    }
+
+    return true;
+  },
+
+  __performInternalLoad(internal, opts) {
+    if(!this._shouldPerformInternalLoad(internal, opts)) {
       return resolve(internal);
     }
 
