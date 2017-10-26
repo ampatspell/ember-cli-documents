@@ -35,6 +35,8 @@ db.find({ ids, force })
 
 After that, proxies can come up with load id/ids based on existing models.
 
+Proxy def can have a mixin for `byId`, `byIds` which would choose whether to load existing, loaded docs. Not sure if necessary.
+
 ## Loader state vs proxy.content state
 
 > "Assertion Failed: You modified "subject.isLoading" twice on <dummy@documents:proxy/document::ember484> in a single render.
