@@ -67,10 +67,15 @@ export default class PaginatedLoaderInternal extends Loader {
     this._withState((state, changed) => state.onError(err, changed));
   }
 
-  _scheduleDocumentOperation(force) {
-    let { database, owner, _loadState, opts } = this;
+  _query() {
+    let { owner, opts, _loadState } = this;
+    return opts.query(owner, _loadState);
+  }
 
-    let query = opts.query(owner, _loadState);
+  _scheduleDocumentOperation(force) {
+    let { database } = this;
+
+    let query = this._query();
 
     if(force) {
       query.force = true;
