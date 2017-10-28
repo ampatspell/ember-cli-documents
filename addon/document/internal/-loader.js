@@ -30,7 +30,7 @@ class Operation {
 
 }
 
-const INVALIDATED = { __invalidated__: true };
+const INVALIDATED = {};
 
 export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 

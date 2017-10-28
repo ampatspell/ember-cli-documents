@@ -76,7 +76,7 @@ export default opts => {
     states[key] = opts.states[key];
   }
 
-  class State {
+  class BaseState {
 
     constructor() {
       assign(this, opts.defaults);
@@ -138,8 +138,12 @@ export default opts => {
 
   }
 
+  let State;
+
   if(typeof opts.extend === 'function') {
-    State = opts.extend(State, opts);
+    State = opts.extend(BaseState, opts);
+  } else {
+    State = BaseState;
   }
 
   return { keys, State };
