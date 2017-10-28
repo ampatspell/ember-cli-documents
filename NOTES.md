@@ -3,6 +3,7 @@
 * don't attempt to load if loader.query is falsy, don't set `{ isLoading: true }` in preflight
 * loader needs `cancelPending` where canceled pending ops are resolved when added op is resolved, have a proper queue for loads, especially for force reloads so that latest force reload resolves last
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
+* `_shouldDeserializeInternalLoad` `parseInt(doc._rev)` compare to existing int so only newer revs are deserialized
 * loader state vs proxy state for ArrayProxy and ObjectProxy
 * support proxy w/o loader
 * export and reorganize properties
