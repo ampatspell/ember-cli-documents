@@ -86,7 +86,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   //
 
-  _loadableDidChange(notify) {
+  _loadableDidChange() {
     this.withPropertyChanges(changed => {
       changed('isLoadable');
       changed('state');
