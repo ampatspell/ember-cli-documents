@@ -13,18 +13,18 @@ const {
   },
   extend: State => class PaginatedState extends State {
 
-    onReset(changed) {
-      this.set({ isLoaded: false, isMore: false, isError: false, error: null }, changed);
-    }
+    // onReset(changed) {
+    //   this.set({ isLoaded: false, isMore: false, isError: false, error: null }, changed);
+    // }
 
-    onLoadScheduled(changed) {
-      this.set({ isLoading: true }, changed);
-    }
+    // onLoadScheduled(changed) {
+    //   this.set({ isLoading: true }, changed);
+    // }
 
-    onLoadedPaginated(isMore, changed) {
-      this.onLoaded(changed);
-      this.set({ isMore }, changed);
-    }
+    // onLoadedPaginated(isMore, changed) {
+    //   this.onLoaded(changed);
+    //   this.set({ isMore }, changed);
+    // }
 
   }
 });
