@@ -108,9 +108,6 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return this.state[key];
   }
 
-  _withState(cb, notify, except) {
-    return this.withPropertyChanges(changed => cb(this.state, changed), notify, except);
-  }
 
   //
 
@@ -120,6 +117,8 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
     operations.pushObject(operation);
     return operation;
+  _withState(cb, except) {
+    return this.withPropertyChanges(changed => cb(this.state, changed), true, except);
   }
 
   // _lastOperation() {
