@@ -114,7 +114,7 @@ test('exists', function(assert) {
   run(() => proxy.destroy());
 });
 
-test('content includes only state-matched docs', async function(assert) {
+test.skip('content includes only state-matched docs', async function(assert) {
   await this.insert();
   let proxy = this.create();
 
@@ -127,7 +127,7 @@ test('content includes only state-matched docs', async function(assert) {
   run(() => proxy.destroy());
 });
 
-test('content includes only state-matched docs with all loaded previously', async function(assert) {
+test.skip('content includes only state-matched docs with all loaded previously', async function(assert) {
   await this.insert();
   await this.db.find({ ddoc: 'main', view: 'all' });
   let proxy = this.create();
@@ -143,7 +143,7 @@ test('content includes only state-matched docs with all loaded previously', asyn
   run(() => proxy.destroy());
 });
 
-test('content includes only state-matched docs with some loaded previously', async function(assert) {
+test.skip('content includes only state-matched docs with some loaded previously', async function(assert) {
   await this.insert();
   await this.db.find({ ddoc: 'main', view: 'all', keys: [ 'duck:5', 'duck:3' ] });
 

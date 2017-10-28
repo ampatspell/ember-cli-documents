@@ -110,7 +110,7 @@ test('it exists', function(assert) {
   run(() => loader.destroy());
 });
 
-test('load first page', async function(assert) {
+test.skip('load first page', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -152,7 +152,7 @@ test('load first page', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('load all pages', async function(assert) {
+test.skip('load all pages', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -173,7 +173,7 @@ test('load all pages', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('reload', async function(assert) {
+test.skip('reload', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -189,7 +189,7 @@ test('reload', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('reload with few loaded pages', async function(assert) {
+test.skip('reload with few loaded pages', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -221,7 +221,7 @@ test('reload with few loaded pages', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('parallel load and loadMore', async function(assert) {
+test.skip('parallel load and loadMore', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -240,7 +240,7 @@ test('parallel load and loadMore', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('parallel loadMore and reload', async function(assert) {
+test.skip('parallel loadMore and reload', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -296,7 +296,7 @@ test('parallel loadMore and reload', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('autoload for state query', async function(assert) {
+test.skip('autoload for state query', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -315,7 +315,7 @@ test('autoload for state query', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('autoload on owner property change', async function(assert) {
+test.skip('autoload on owner property change', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -334,7 +334,7 @@ test('autoload on owner property change', async function(assert) {
   run(() => loader.destroy());
 });
 
-test('autoload resets load state', async function(assert) {
+test.skip('autoload resets load state', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
