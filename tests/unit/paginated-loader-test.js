@@ -28,10 +28,14 @@ let _opts = {
 
 module('paginated-loader', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ id: null });
+    this.owner = Ember.Object.create({ id: 'zeeba' });
     this.opts = {
       owner: [ 'id' ],
       query(owner, state) {
+        if(!owner.get('id')) {
+          return;
+        }
+
         let opts = _opts;
 
         let ddoc = opts.ddoc;
@@ -110,7 +114,13 @@ test('it exists', function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('load first page', async function(assert) {
+test('not loadable', async function(assert) {
+  this.owner.set('id', null);
+  let loader = this.loader();
+  assert.equal(loader.get('isLoadable'), false);
+});
+
+test('load first page', async function(assert) {
   this.opts.autoload = false;
   await this.recreate();
   await all([ this.insert(), this.design() ]);
@@ -156,6 +166,26 @@ test.skip('load first page', async function(assert) {
   run(() => loader.destroy());
 });
 
+test.skip('load and loadMore', async function(assert) {
+  this.opts.autoload = false;
+
+  await this.recreate();
+  await all([ this.insert(), this.design() ]);
+  let tap = this.tap();
+  let loader = this.loader();
+
+  await loader.load();
+
+  await loader.loadMore();
+
+  assert.deepEqual(tap.urls, [
+    "GET _design/main/_view/all?endkey={}&include_docs=true&limit=4",
+    "GET _design/main/_view/all?startkey=\"duck:3\"&endkey={}&include_docs=true&startkey_docid=duck:3&limit=4&skip=1",
+  ]);
+
+  run(() => loader.destroy());
+});
+
 test.skip('load all pages', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
@@ -177,7 +207,7 @@ test.skip('load all pages', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('reload', async function(assert) {
+test('reload', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();

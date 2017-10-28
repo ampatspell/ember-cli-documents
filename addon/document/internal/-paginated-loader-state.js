@@ -1,19 +1,13 @@
-import Ember from 'ember';
 import createState from './-create-state';
-import { stateMixin, computed, defaults as defaults_ } from './-query-loader-state';
+import { stateMixin, computed as computed_, defaults } from './-query-loader-state';
 
-const {
-  merge
-} = Ember;
-
-const defaults = merge({ isMore: false }, defaults_);
+const computed = [ ...computed_, 'isMore' ];
 
 const extend = State => class PaginatedState extends stateMixin(State) {
 
-  // onLoadedPaginated(isMore, changed) {
-  //   this.onLoaded(changed);
-  //   this.set({ isMore }, changed);
-  // }
+  get isMore() {
+    return this._loader._isMore;
+  }
 
 }
 

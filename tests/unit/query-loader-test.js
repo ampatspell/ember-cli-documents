@@ -42,7 +42,7 @@ test('loader has query', function(assert) {
   this.owner.set('id', 'duck');
   let loader = this.first();
   assert.deepEqual(loader._internal._query(true), {
-    hash: {
+    query: {
       id: 'duck'
     }
   });

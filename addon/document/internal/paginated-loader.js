@@ -33,11 +33,15 @@ export default class PaginatedLoaderInternal extends Loader {
   */
   constructor(store, parent, database, owner, opts) {
     super(store, parent, database, owner, opts, 'find');
-    this._loadState = null;
+    this._invalidateQueryDependentKeys.push('isMore');
   }
 
-  get loadState() {
-    return this._loadState;
+  get _isMore() {
+    let query = this._query(false);
+    if(query) {
+      return query.isMore;
+    }
+    return false;
   }
 
   _notifyLoadStateChange() {
@@ -53,8 +57,30 @@ export default class PaginatedLoaderInternal extends Loader {
   }
 
   _createQuery() {
-    let { owner, opts, _loadState } = this;
-    return opts.query(owner, _loadState);
+    let state = null;
+    let query = this.opts.query(this.owner, state);
+    return {
+      query,
+      isMore: false,
+      state: null
+    };
+  }
+
+  //
+
+  _operationDidResolve({ result }) {
+    let query = this._query(false);
+    if(!query) {
+      return;
+    }
+
+    let docs = A(result.map(internal => internal.model(true)));
+
+    let { state, isMore } = this.opts.loaded(query.state, docs);
+    query.isMore = isMore;
+    query.state = state;
+
+    this._withState((state, changed) => changed('isMore'));
   }
 
   //
@@ -70,6 +96,7 @@ export default class PaginatedLoaderInternal extends Loader {
     // if(!isLoaded) return this._scheduleLoad();
     // immediately isLoading
     // reset to { isError:false }
+    return { promise: resolve() };
   }
 
 }
@@ -88,10 +115,6 @@ loadMore() {
   return this._scheduleLoadMore().promise;
 }
 
-_willLoad() {
-  this._withState((state, changed) => state.onLoading(changed));
-}
-
 _invokeLoaded(array) {
   let docs = A(array.map(internal => internal.model(true)));
   let state = this._loadState || null;
@@ -103,26 +126,6 @@ _didLoad(array) {
   this._loadState = state || null;
   this._withState((state, changed) => state.onLoadedPaginated(isMore, changed));
   this._notifyLoadStateChange();
-}
-
-_loadDidFail(err) {
-  this._withState((state, changed) => state.onError(err, changed));
-}
-
-_scheduleDocumentOperation(force) {
-  let { database } = this;
-
-  let query = this._query();
-
-  if(force) {
-    query.force = true;
-  }
-
-  const before = () => this._willLoad();
-  const resolve = ({ result }) => this._didLoad(result);
-  const reject = err => this._loadDidFail(err);
-
-  return database._scheduleDocumentFindOperation(query, before, resolve, reject);
 }
 
 __scheduleLoad(more) {

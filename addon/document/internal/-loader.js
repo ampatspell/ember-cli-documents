@@ -44,6 +44,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     this._state = null;
     this.__query = INVALIDATED;
     this._needsReload = false;
+    this._invalidateQueryDependentKeys = [ 'isLoadable', 'state' ];
   }
 
   //
@@ -75,7 +76,10 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     if(!hash) {
       return;
     }
-    return { hash };
+    if(!hash.query) {
+      return;
+    }
+    return hash;
   }
 
   _query(create) {
@@ -92,11 +96,9 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   }
 
   _invalidateQuery() {
+    console.log('_invalidateQuery');
     this.__query = INVALIDATED;
-    this.withPropertyChanges(changed => {
-      changed('isLoadable');
-      changed('state');
-    }, true);
+    this.withPropertyChanges(changed => this._invalidateQueryDependentKeys.forEach(key => changed(key)), true);
   }
 
   //
@@ -173,6 +175,9 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return operation;
   }
 
+  _operationDidResolve() {
+  }
+
   _scheduleOperation(label, query, query_) {
 
     // const before  = () => this._withState((state, changed) => state.onLoading(changed));
@@ -189,8 +194,9 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
       }
     };
 
-    const resolve = () => {
+    const resolve = info => {
       console.log('resolve');
+      this._operationDidResolve(info);
       if(this.__operationCount() === 1) {
         console.log('onLoaded');
         this._withState((state, changed) => state.onLoaded(changed));
@@ -205,7 +211,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
       }
     };
 
-    const fn = () => this.__scheduleDocumentOperation(merge(query_ || {}, query.hash), before, resolve, reject);
+    const fn = () => this.__scheduleDocumentOperation(merge(query_ || {}, query.query), before, resolve, reject);
     let operation = this.__createOperation({ label, query }, fn);
 
     this._withState((state, changed) => state.onLoadScheduled(changed));
