@@ -9,7 +9,7 @@ const defaults = {
 
 const computed = [ 'isLoadable' ];
 
-const extend = State => class QueryLoaderState extends State {
+const stateMixin = Class => class QueryLoaderStateMixin extends Class {
 
   constructor(loader) {
     super();
@@ -26,23 +26,15 @@ const extend = State => class QueryLoaderState extends State {
 
 }
 
-const {
-  keys,
-  State
-} = createState({ defaults, computed, extend });
+const extend = State => class QueryLoaderState extends stateMixin(State) {}
+
+const { keys, State } = createState({ defaults, computed, extend });
 
 export {
+  defaults,
+  computed,
+  stateMixin,
   keys
 };
 
 export default State;
-
-// onLoadable(isLoadable, changed) {
-//   this.set({ isLoadable }, changed);
-// },
-// onReset(changed) {
-//   this.set({ isLoadable: true, isLoaded: false, isError: false, error: null }, changed);
-// },
-// onLoadScheduled(changed) {
-//   this.set({ isLoading: true }, changed);
-// }
