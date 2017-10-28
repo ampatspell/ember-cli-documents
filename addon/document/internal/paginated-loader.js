@@ -36,6 +36,13 @@ export default class PaginatedLoaderInternal extends Loader {
     this._invalidateQueryDependentKeys.push('isMore');
   }
 
+  get loadState() {
+    let query = this.query(false);
+    if(query) {
+      return query.state;
+    }
+  }
+
   get _isMore() {
     let query = this._query(false);
     if(query) {
@@ -56,12 +63,18 @@ export default class PaginatedLoaderInternal extends Loader {
     return this.store._createPaginatedLoader(this);
   }
 
-  _createQuery() {
+  _createQuery(previous) {
+    console.log('_createQuery', previous);
     let state = null;
+    let isMore = false;
+    if(previous) {
+      state = previous.state || null;
+      isMore = previous.isMore;
+    }
     let query = this.opts.query(this.owner, state);
     return {
       query,
-      isMore: false,
+      isMore,
       state: null
     };
   }
@@ -81,6 +94,16 @@ export default class PaginatedLoaderInternal extends Loader {
     query.state = state;
 
     this._withState((state, changed) => changed('isMore'));
+    // this._notifyLoadStateChange();
+  }
+
+  _willScheduleReloadOperation() {
+    console.log('_willScheduleReloadOperation');
+    this._withState((state, changed) => {
+      state.onReload(changed);
+      this.__invalidateQuery(changed);
+      // this._notifyLoadStateChange();
+    });
   }
 
   //
@@ -93,10 +116,25 @@ export default class PaginatedLoaderInternal extends Loader {
 
   _scheduleLoadMore() {
     console.log('_scheduleLoadMore');
-    // if(!isLoaded) return this._scheduleLoad();
-    // immediately isLoading
-    // reset to { isError:false }
-    return { promise: resolve() };
+
+    let { isLoaded, isMore } = this.state;
+
+    if(!isLoaded) {
+      return this._scheduleLoad();
+    } else if(!isMore) {
+      return this._resolveOperation();
+    }
+
+    let operation = this._existingOperation(opts => true);
+
+    if(operation) {
+      return operation;
+    }
+
+    let query = this._recreateQuery();
+    // this._notifyLoadStateChange();
+
+    return this._scheduleOperation('more', query);
   }
 
 }

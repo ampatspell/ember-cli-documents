@@ -166,7 +166,7 @@ test('load first page', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('load and loadMore', async function(assert) {
+test('load and loadMore', async function(assert) {
   this.opts.autoload = false;
 
   await this.recreate();
@@ -174,7 +174,7 @@ test.skip('load and loadMore', async function(assert) {
   let tap = this.tap();
   let loader = this.loader();
 
-  await loader.load();
+  await loader.loadMore();
 
   await loader.loadMore();
 
@@ -186,7 +186,7 @@ test.skip('load and loadMore', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('load all pages', async function(assert) {
+test('load all pages', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -223,11 +223,12 @@ test('reload', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('reload with few loaded pages', async function(assert) {
+test('reload with few loaded pages', async function(assert) {
+  this.opts.autoload = false;
+
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
-  this.opts.autoload = false;
   let loader = this.loader();
 
   await loader.loadMore();
@@ -240,13 +241,21 @@ test.skip('reload with few loaded pages', async function(assert) {
 
   tap.clear();
 
-  await loader.reload();
+  let promise = loader.reload();
+
+  assert.equal(loader.get('isLoaded'), false);
+
+  await promise;
+
+  assert.equal(loader.get('isLoaded'), true);
 
   assert.deepEqual(tap.urls, [
     "GET _design/main/_view/all?endkey={}&include_docs=true&limit=4"
   ]);
 
   tap.clear();
+
+  assert.equal(loader.get('isLoaded'), true);
 
   await loader.load();
 
@@ -255,7 +264,7 @@ test.skip('reload with few loaded pages', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('parallel load and loadMore', async function(assert) {
+test('parallel load and loadMore', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -274,7 +283,7 @@ test.skip('parallel load and loadMore', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('parallel loadMore and reload', async function(assert) {
+test('parallel loadMore and reload', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -286,6 +295,7 @@ test.skip('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": false,
     "isMore": true
@@ -296,6 +306,7 @@ test.skip('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": true,
     "isMore": true
@@ -306,6 +317,7 @@ test.skip('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": true,
     "isMore": false
@@ -316,6 +328,7 @@ test.skip('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": false,
     "isMore": true
@@ -330,7 +343,7 @@ test.skip('parallel loadMore and reload', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('autoload for state query', async function(assert) {
+test('autoload for state query', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -349,14 +362,17 @@ test.skip('autoload for state query', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('autoload on owner property change', async function(assert) {
+test('autoload on owner property change', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
   let loader = this.loader();
 
   this.owner.set('id', 'one');
+  assert.equal(loader.get('isLoading'), true);
+
   this.owner.set('id', 'two');
+  assert.equal(loader.get('isLoading'), true);
 
   await loader._internal.settle();
 
@@ -368,7 +384,7 @@ test.skip('autoload on owner property change', async function(assert) {
   run(() => loader.destroy());
 });
 
-test.skip('autoload resets load state', async function(assert) {
+test('autoload resets load state', async function(assert) {
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
@@ -377,8 +393,13 @@ test.skip('autoload resets load state', async function(assert) {
   await loader.load();
   await loader.loadMore();
 
+  assert.equal(loader.get('isLoading'), false);
+
   this.owner.set('id', 'one');
+  assert.equal(loader.get('isLoading'), true);
+
   this.owner.set('id', 'two');
+  assert.equal(loader.get('isLoading'), true);
 
   await loader._internal.settle();
 
