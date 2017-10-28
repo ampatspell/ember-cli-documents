@@ -59,14 +59,14 @@ export default class PaginatedLoaderInternal extends Loader {
 
   //
 
-  _scheduleLoadMore() {
-    console.log('_scheduleLoadMore');
+  loadMore() {
+    return this._withRejectNotLoadable(() => this._scheduleLoadMore().promise);
   }
 
   //
 
-  loadMore() {
-    return this._withRejectNotLoadable(() => this._scheduleLoadMore().promise);
+  _scheduleLoadMore() {
+    console.log('_scheduleLoadMore');
   }
 
 }
