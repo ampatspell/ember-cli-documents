@@ -190,12 +190,18 @@ test('load on owner property change', async function(assert) {
   assert.equal(loader._internal.operations.get('length'), 0);
 
   this.owner.set('id', 'du');
+  assert.equal(loader._internal.operations.get('length'), 0);
+  assert.equal(loader.get('isLoading'), true);
   assert.equal(loader._internal.operations.get('length'), 1);
 
   this.owner.set('id', 'duc');
+  assert.equal(loader._internal.operations.get('length'), 1);
+  assert.equal(loader.get('isLoading'), true);
   assert.equal(loader._internal.operations.get('length'), 2);
 
   this.owner.set('id', 'duck');
+  assert.equal(loader._internal.operations.get('length'), 2);
+  assert.equal(loader.get('isLoading'), true);
   assert.equal(loader._internal.operations.get('length'), 3);
 
   await this.settle(loader);

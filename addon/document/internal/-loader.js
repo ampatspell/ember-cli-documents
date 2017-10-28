@@ -43,15 +43,14 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     this.operations = A();
     this._state = null;
     this.__query = INVALIDATED;
+    this._needsReload = false;
   }
 
   //
 
   _ownerValueForKeyDidChange() {
     this._invalidateQuery();
-    if(this._isLoadable) {
-      this._scheduleReload();
-    }
+    this._setNeedsReload();
   }
 
   _startObserving() {
@@ -205,12 +204,30 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   //
 
+  _setNeedsReload() {
+    if(this._needsReload === true) {
+      return;
+    }
+    this._needsReload = true;
+    this._withState((state, changed) => {
+      changed('isLoading');
+      changed('isLoaded');
+    });
+  }
+
+  _needsReloadScheduled() {
+    this._needsReload = false;
+  }
+
   _needsAutoload() {
     if(this.opts.autoload === false) {
       return false;
     }
     if(!this._isLoadable) {
       return false;
+    }
+    if(this._needsReload) {
+      return true;
     }
     let state = this.state;
     return !state.isLoaded && !state.isLoading && !state.isError;
@@ -222,7 +239,8 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
       return;
     }
     console.log('_scheduleAutoload', except);
-    // immediately isLoading
+    this._scheduleLoad();
+    this._needsReloadScheduled();
   }
 
   _scheduleLoad() {
