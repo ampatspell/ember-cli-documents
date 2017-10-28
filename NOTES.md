@@ -1,5 +1,6 @@
 # TODO
 
+* move default `-create-state` states to appropriate classes
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * `_shouldDeserializeInternalLoad` `parseInt(doc._rev)` compare to existing int so only newer revs are deserialized
 * loader state vs proxy state for ArrayProxy and ObjectProxy
