@@ -261,7 +261,18 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
     let query = this._query();
 
-    let operation = this.__existingOperation(opts => opts.query === query && opts.label === 'reload');
+    let isLoaded = this.state.isLoaded;
+
+    let operation = this.__existingOperation(opts => {
+      if(opts.query !== query) {
+        return;
+      }
+      if(isLoaded && opts.label !== 'reload') {
+        return false;
+      }
+      return true;
+    });
+
     if(operation) {
       return operation;
     }
