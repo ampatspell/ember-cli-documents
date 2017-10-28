@@ -108,23 +108,9 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return this.state[key];
   }
 
-
-  //
-
-  _createOperation(opts, fn) {
-    let operations = this.operations;
-    let operation = new Operation(this, opts, fn);
-    operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
-    operations.pushObject(operation);
-    return operation;
   _withState(cb, except) {
     return this.withPropertyChanges(changed => cb(this.state, changed), true, except);
   }
-
-  // _lastOperation() {
-  //   let operations = this.operations;
-  //   return operations.get('lastObject');
-  // }
 
   //
 
@@ -145,6 +131,66 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   reload() {
     return this._withRejectNotLoadable(() => this._scheduleReload().promise);
+  }
+
+  //
+
+  __scheduleDocumentOperation(query, before, resolve, reject) {
+    let database = this.database;
+    return database._scheduleDocumentOperation(query, this.type, before, resolve, reject);
+  }
+
+  __createOperation(opts, fn) {
+    let operations = this.operations;
+    let operation = new Operation(this, opts, fn);
+    operation.promise.catch(() => {}).finally(() => operations.removeObject(operation));
+    operations.pushObject(operation);
+    return operation;
+  }
+
+  __operationCount() {
+    return this.operations.length;
+  }
+
+  _scheduleOperation(label, query) {
+
+    // const before  = () => this._withState((state, changed) => state.onLoading(changed));
+    // const resolve = () => this._withState((state, changed) => state.onLoaded(changed));
+    // const reject  = err => this._withState((state, changed) => state.onError(err, changed));
+
+    console.log('_scheduleOperation', label, query);
+
+    const before  = () => {
+      console.log('before');
+      if(this.__operationCount() === 1) {
+        console.log('onLoading');
+        this._withState((state, changed) => state.onLoading(changed));
+      }
+    };
+
+    const resolve = () => {
+      console.log('resolve');
+      if(this.__operationCount() === 1) {
+        console.log('onLoaded');
+        this._withState((state, changed) => state.onLoaded(changed));
+      }
+    };
+
+    const reject  = err => {
+      console.log('reject', err);
+      if(this.__operationCount() === 1) {
+        console.log('onError');
+        this._withState((state, changed) => state.onError(err, changed));
+      }
+    };
+
+    const fn = () => this.__scheduleDocumentOperation(query, before, resolve, reject);
+    let operation = this.__createOperation({ label, query }, fn);
+
+    this._withState((state, changed) => state.onLoadScheduled(changed));
+
+    operation.invoke();
+    return operation;
   }
 
   //
