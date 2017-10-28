@@ -48,8 +48,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   _ownerValueForKeyDidChange() {
     this._invalidateQuery();
-    console.log('schedule force load');
-    // this._scheduleForceReloadIfLoadable();
+    this._scheduleReload();
   }
 
   _startObserving() {
@@ -73,7 +72,6 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     let query = this.__query;
     if(query === INVALIDATED) {
       query = this._createQuery();
-      console.log('_query create', query);
       this.__query = query;
     }
     return query;
@@ -81,17 +79,13 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   _invalidateQuery() {
     this.__query = INVALIDATED;
-    this._loadableDidChange();
-  }
-
-  //
-
-  _loadableDidChange() {
     this.withPropertyChanges(changed => {
       changed('isLoadable');
       changed('state');
     }, true);
   }
+
+  //
 
   get _isLoadable() {
     return !!this._query();
@@ -108,29 +102,13 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   _stateProp(key) {
     if(key !== 'isLoadable') {
-      console.log('schedule autoload');
-      // this._scheduleAutoloadIfLoadable([ key ]);
+      this._scheduleAutoload([ key ]);
     }
     return this.state[key];
   }
 
   _withState(cb, notify, except) {
     return this.withPropertyChanges(changed => cb(this.state, changed), notify, except);
-  }
-
-  // autoload
-
-  _needsLoad() {
-    let state = this.state;
-    return !state.isLoaded;
-  }
-
-  _needsAutoload() {
-    if(this.opts.autoload === false) {
-      return false;
-    }
-    let state = this.state;
-    return !state.isLoaded && !state.isLoading && !state.isError;
   }
 
   //
@@ -143,75 +121,59 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return operation;
   }
 
-  _lastOperation() {
-    let operations = this.operations;
-    return operations.get('lastObject');
-  }
+  // _lastOperation() {
+  //   let operations = this.operations;
+  //   return operations.get('lastObject');
+  // }
+
+  //
 
   settle() {
     return allSettled(this.operations.map(op => op.promise));
   }
 
-  load() {
-    if(!this._needsLoad()) {
-      return resolve();
+  _withRejectNotLoadable(cb) {
+    if(!this._isLoadable) {
+      return reject(new DocumentsError({ error: 'loader', reason: 'not_loadable' }));
     }
-    console.log('schedule load');
-    return resolve();
-    // return this._scheduleLoadIfLoadable();
+    return cb();
+  }
+
+  load() {
+    return this._withRejectNotLoadable(() => this._scheduleLoad().promise);
   }
 
   reload() {
-    console.log('schedule reload');
-    return resolve();
-    // return this._scheduleReloadIfLoadable();
+    return this._withRejectNotLoadable(() => this._scheduleReload().promise);
   }
 
   //
 
-  // _isLoadable(except) {
-  //   let query = this._query();
-  //   if(!query) {
-  //     this._withState((state, changed) => state.onLoadable(false, changed), except);
-  //     return false;
-  //   }
-  //   return true;
-  // }
+  _needsAutoload() {
+    if(this.opts.autoload === false) {
+      return false;
+    }
+    if(!this._isLoadable) {
+      return false;
+    }
+    let state = this.state;
+    return !state.isLoaded && !state.isLoading && !state.isError;
+  }
 
-  // _scheduleAutoloadIfLoadable(except, key) {
-  //   if(!this._isLoadable(except)) {
-  //     return;
-  //   }
-  //   if(key === 'isLoadable') {
-  //     return;
-  //   }
-  //   return this._scheduleAutoload(except);
-  // }
+  _scheduleAutoload(except) {
+    if(!this._needsAutoload()) {
+      return;
+    }
+    console.log('_scheduleAutoload', except);
+  }
 
-  // _scheduleForceReloadIfLoadable() {
-  //   if(!this._isLoadable()) {
-  //     return;
-  //   }
-  //   return this._scheduleForceReload();
-  // }
+  _scheduleLoad() {
+    console.log('_scheduleLoad');
+  }
 
-  // _rejectNotLoadable() {
-  //   return reject(new DocumentsError({ error: 'loader', reason: 'not_loadable' }));
-  // }
-
-  // _scheduleLoadIfLoadable() {
-  //   if(!this._isLoadable()) {
-  //     return this._rejectNotLoadable();
-  //   }
-  //   return this._scheduleLoad().promise;
-  // }
-
-  // _scheduleReloadIfLoadable() {
-  //   if(!this._isLoadable()) {
-  //     return this._rejectNotLoadable();
-  //   }
-  //   return this._scheduleReload().promise;
-  // }
+  _scheduleReload() {
+    console.log('_scheduleReload');
+  }
 
   //
 
