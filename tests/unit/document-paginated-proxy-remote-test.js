@@ -150,6 +150,7 @@ test('content includes only state-matched docs with some loaded previously', asy
   let proxy = this.create();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": false,
@@ -162,6 +163,7 @@ test('content includes only state-matched docs with some loaded previously', asy
   await proxy.load();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": true,
@@ -174,6 +176,7 @@ test('content includes only state-matched docs with some loaded previously', asy
   await proxy.loadMore();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": true,
@@ -186,6 +189,7 @@ test('content includes only state-matched docs with some loaded previously', asy
   await proxy.loadMore();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": true,

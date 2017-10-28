@@ -43,6 +43,7 @@ test('proxy has state', function(assert) {
   assert.deepEqual(proxy.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": false
   });

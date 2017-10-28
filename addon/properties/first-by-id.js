@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { first, prop } from './index';
+import { isBlank } from '../util/string';
 
 const {
   merge
@@ -13,7 +14,7 @@ export default first.extend(opts => {
     document: [ 'id' ],
     query(owner) {
       let id = opts.id.value(owner);
-      if(!id) {
+      if(isBlank(id)) {
         return;
       }
       return { id };

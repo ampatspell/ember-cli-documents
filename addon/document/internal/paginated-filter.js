@@ -25,6 +25,9 @@ export default class PaginatedFilter {
   }
 
   set state(value) {
+    if(this._state === value) {
+      return;
+    }
     this._state = value;
     this._rematch();
   }

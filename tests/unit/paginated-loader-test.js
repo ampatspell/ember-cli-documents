@@ -28,10 +28,14 @@ let _opts = {
 
 module('paginated-loader', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ id: null });
+    this.owner = Ember.Object.create({ id: 'zeeba' });
     this.opts = {
       owner: [ 'id' ],
       query(owner, state) {
+        if(!owner.get('id')) {
+          return;
+        }
+
         let opts = _opts;
 
         let ddoc = opts.ddoc;
@@ -110,16 +114,24 @@ test('it exists', function(assert) {
   run(() => loader.destroy());
 });
 
+test('not loadable', async function(assert) {
+  this.owner.set('id', null);
+  let loader = this.loader();
+  assert.equal(loader.get('isLoadable'), false);
+});
+
 test('load first page', async function(assert) {
+  this.opts.autoload = false;
   await this.recreate();
   await all([ this.insert(), this.design() ]);
+
   let tap = this.tap();
-  this.opts.autoload = false;
   let loader = this.loader();
 
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": false,
     "isMore": false
@@ -130,6 +142,7 @@ test('load first page', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": true,
     "isMore": false
@@ -140,6 +153,7 @@ test('load first page', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": false,
     "isMore": true
@@ -147,6 +161,26 @@ test('load first page', async function(assert) {
 
   assert.deepEqual(tap.urls, [
     "GET _design/main/_view/all?endkey={}&include_docs=true&limit=4"
+  ]);
+
+  run(() => loader.destroy());
+});
+
+test('load and loadMore', async function(assert) {
+  this.opts.autoload = false;
+
+  await this.recreate();
+  await all([ this.insert(), this.design() ]);
+  let tap = this.tap();
+  let loader = this.loader();
+
+  await loader.loadMore();
+
+  await loader.loadMore();
+
+  assert.deepEqual(tap.urls, [
+    "GET _design/main/_view/all?endkey={}&include_docs=true&limit=4",
+    "GET _design/main/_view/all?startkey=\"duck:3\"&endkey={}&include_docs=true&startkey_docid=duck:3&limit=4&skip=1",
   ]);
 
   run(() => loader.destroy());
@@ -190,10 +224,11 @@ test('reload', async function(assert) {
 });
 
 test('reload with few loaded pages', async function(assert) {
+  this.opts.autoload = false;
+
   await this.recreate();
   await all([ this.insert(), this.design() ]);
   let tap = this.tap();
-  this.opts.autoload = false;
   let loader = this.loader();
 
   await loader.loadMore();
@@ -206,13 +241,21 @@ test('reload with few loaded pages', async function(assert) {
 
   tap.clear();
 
-  await loader.reload();
+  let promise = loader.reload();
+
+  assert.equal(loader.get('isLoaded'), false);
+
+  await promise;
+
+  assert.equal(loader.get('isLoaded'), true);
 
   assert.deepEqual(tap.urls, [
     "GET _design/main/_view/all?endkey={}&include_docs=true&limit=4"
   ]);
 
   tap.clear();
+
+  assert.equal(loader.get('isLoaded'), true);
 
   await loader.load();
 
@@ -252,6 +295,7 @@ test('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": false,
     "isMore": true
@@ -262,6 +306,7 @@ test('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": true,
     "isMore": true
@@ -272,6 +317,7 @@ test('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": true,
     "isMore": false
@@ -282,6 +328,7 @@ test('parallel loadMore and reload', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": false,
     "isMore": true
@@ -322,7 +369,10 @@ test('autoload on owner property change', async function(assert) {
   let loader = this.loader();
 
   this.owner.set('id', 'one');
+  assert.equal(loader.get('isLoading'), true);
+
   this.owner.set('id', 'two');
+  assert.equal(loader.get('isLoading'), true);
 
   await loader._internal.settle();
 
@@ -343,8 +393,13 @@ test('autoload resets load state', async function(assert) {
   await loader.load();
   await loader.loadMore();
 
+  assert.equal(loader.get('isLoading'), false);
+
   this.owner.set('id', 'one');
+  assert.equal(loader.get('isLoading'), true);
+
   this.owner.set('id', 'two');
+  assert.equal(loader.get('isLoading'), true);
 
   await loader._internal.settle();
 

@@ -14,6 +14,9 @@ module('query-loader', {
       owner: [ 'id' ],
       query(owner) {
         let id = owner.get('id');
+        if(!id) {
+          return;
+        }
         return { id };
       }
     };
@@ -38,8 +41,10 @@ test('loader has query', function(assert) {
 
   this.owner.set('id', 'duck');
   let loader = this.first();
-  assert.deepEqual(loader._internal.query, {
-    "id": "duck"
+  assert.deepEqual(loader._internal._query(true), {
+    query: {
+      id: 'duck'
+    }
   });
   run(() => loader.destroy());
 });
@@ -187,15 +192,151 @@ test('load on owner property change', async function(assert) {
   assert.equal(loader._internal.operations.get('length'), 0);
 
   this.owner.set('id', 'du');
+  assert.equal(loader._internal.operations.get('length'), 0);
+  assert.equal(loader.get('isLoading'), true);
   assert.equal(loader._internal.operations.get('length'), 1);
 
   this.owner.set('id', 'duc');
+  assert.equal(loader._internal.operations.get('length'), 1);
+  assert.equal(loader.get('isLoading'), true);
   assert.equal(loader._internal.operations.get('length'), 2);
 
   this.owner.set('id', 'duck');
+  assert.equal(loader._internal.operations.get('length'), 2);
+  assert.equal(loader.get('isLoading'), true);
   assert.equal(loader._internal.operations.get('length'), 3);
 
   await this.settle(loader);
 
   assert.ok(this.db.existing('duck'));
+});
+
+test('loadable is false', async function(assert) {
+  let loader = this.first();
+  assert.equal(loader.get('isLoadable'), false);
+  await this.settle(loader);
+});
+
+test('loadable updates on owner prop change', async function(assert) {
+  let loader = this.first();
+
+  assert.equal(loader.get('isLoadable'), false);
+  this.owner.set('id', 'foo');
+  assert.equal(loader.get('isLoadable'), true);
+
+  await this.settle(loader);
+});
+
+test('loadable is set to false on owner prop change', async function(assert) {
+  this.owner.set('id', 'duck');
+  let loader = this.first();
+
+  assert.equal(loader.get('isLoadable'), true);
+  this.owner.set('id', null);
+  assert.equal(loader.get('isLoadable'), false);
+
+  await this.settle(loader);
+});
+
+test('not loadable load rejects', async function(assert) {
+  let loader = this.first();
+  try {
+    await loader.load();
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "loader",
+      "reason": "not_loadable"
+    });
+  }
+
+  await this.settle(loader);
+});
+
+test('reload reject if not loadable', async function(assert) {
+  let loader = this.first();
+  try {
+    await loader.reload();
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "loader",
+      "reason": "not_loadable"
+    });
+  }
+
+  await this.settle(loader);
+});
+
+test('isLoadable does not start loading', async function(assert) {
+  this.owner.set('id', 'duck');
+  let loader = this.first();
+
+  assert.equal(loader.get('isLoadable'), true);
+  assert.equal(loader._internal.operations.get('length'), 0);
+
+  await this.settle(loader);
+});
+
+test('state.isLoadable is false', async function(assert) {
+  let loader = this.first();
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": false,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  assert.equal(loader.get('isLoadable'), false);
+  assert.equal(loader.get('isLoaded'), false);
+
+  await this.settle(loader);
+});
+
+test('state.isLoadable is true', async function(assert) {
+  this.owner.set('id', 'hello');
+  let loader = this.first();
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  await this.settle(loader);
+});
+
+test('state.isLoadable becomes true, load starts on state query', async function(assert) {
+  await this.recreate();
+  await this.docs.save({ _id: 'hello' });
+
+  let loader = this.first();
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": false,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  this.owner.set('id', 'hello');
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  assert.equal(loader._internal.operations.get('length'), 0);
+
+  assert.equal(loader.get('isLoading'), true);
+
+  assert.equal(loader._internal.operations.get('length'), 1);
+
+  await this.settle(loader);
 });

@@ -7,12 +7,14 @@ const {
 } = Ember;
 
 export default opts => {
-  opts = merge({ defaults: {}, states: {}, proto: {} }, opts);
+  opts = merge({ defaults: {}, states: {}, computed: [] }, opts);
 
-  let keys = A(Object.keys(opts.defaults));
+  let storedKeys = A(Object.keys(opts.defaults));
+  let keys = [ ...storedKeys, ...opts.computed ];
+
   let create = hash => {
     A(Object.keys(hash)).forEach(key => {
-      if(!keys.includes(key)) {
+      if(!storedKeys.includes(key)) {
         delete hash[key];
       }
     });
@@ -74,7 +76,7 @@ export default opts => {
     states[key] = opts.states[key];
   }
 
-  class State {
+  class BaseState {
 
     constructor() {
       assign(this, opts.defaults);
@@ -136,8 +138,12 @@ export default opts => {
 
   }
 
-  if(opts.proto) {
-    assign(State.prototype, opts.proto);
+  let State;
+
+  if(typeof opts.extend === 'function') {
+    State = opts.extend(BaseState, opts);
+  } else {
+    State = BaseState;
   }
 
   return { keys, State };

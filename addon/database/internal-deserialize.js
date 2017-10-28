@@ -89,10 +89,20 @@ export default Ember.Mixin.create({
     return internal;
   },
 
-  _deserializeInternalLoad(internal, doc, type, force) {
-    let rev = doc._rev;
+  _shouldDeserializeInternalLoad(existing, doc) {
+    let _rev = doc._rev;
+    if(!_rev) {
+      return true;
+    }
+    let _existing = existing.getRev();
+    if(!_existing) {
+      return true;
+    }
+    return _existing !== _rev;
+  },
 
-    if(!force && rev && internal.getRev() === rev) {
+  _deserializeInternalLoad(internal, doc, type, force) {
+    if(!force && !this._shouldDeserializeInternalLoad(internal, doc)) {
       internal.setState('onLoaded');
       return internal;
     }

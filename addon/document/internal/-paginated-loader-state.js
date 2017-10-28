@@ -1,29 +1,26 @@
 import createState from './-create-state';
+import { stateMixin, computed as computed_, defaults } from './-query-loader-state';
 
-const {
-  keys,
-  State
-} = createState({
-  defaults: {
-    isLoading: false,
-    isLoaded: false,
-    isMore: false,
-    isError: false,
-    error: null
-  },
-  proto: {
-    onReset(changed) {
-      this.set({ isLoaded: false, isMore: false, isError: false, error: null }, changed);
-    },
-    onLoadScheduled(changed) {
-      this.set({ isLoading: true }, changed);
-    },
-    onLoadedPaginated(isMore, changed) {
-      this.onLoaded(changed);
-      this.set({ isMore }, changed);
-    }
+const computed = [ ...computed_, 'isMore' ];
+
+const extend = State => class PaginatedState extends stateMixin(State) {
+
+  get isMore() {
+    return this._loader._isMore;
   }
-});
+
+  onReload(changed) {
+    this.set({
+      isLoading: false,
+      isLoaded: false,
+      isError: false,
+      error: null
+    }, changed);
+  }
+
+}
+
+const { keys, State } = createState({ defaults, computed, extend });
 
 export {
   keys

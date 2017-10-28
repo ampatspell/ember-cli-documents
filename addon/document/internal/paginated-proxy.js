@@ -25,14 +25,14 @@ export default class PaginatedProxyInternal extends ProxyInternal {
     return this.database._createInternalPaginatedLoader(this, this.owner, { owner, query, loaded });
   }
 
-  get _loadState() {
-    return this.loader(true).loadState;
+  get _queryState() {
+    return this.loader(true)._queryState;
   }
 
-  _loaderLoadStateDidChange() {
+  _loaderQueryStateDidChange() {
     let filter = this.paginatedFilter(false);
     if(filter) {
-      filter.state = this._loadState;
+      filter.state = this._queryState;
     }
   }
 

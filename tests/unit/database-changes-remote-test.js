@@ -65,11 +65,11 @@ configurations(module => {
 
     let json = await this.docs.save({ _id: 'one', type: 'duck' });
 
-    await later(300);
+    await later(500);
 
     await this.docs.delete('one', json.rev);
 
-    await later(300);
+    await later(500);
 
     assert.deepEqual(events, [
       {

@@ -17,6 +17,9 @@ module('document-proxy', {
       },
       query(owner) {
         let id = owner.get('id');
+        if(!id) {
+          return;
+        }
         return { id };
       }
     };
@@ -37,12 +40,14 @@ test('proxy has loader and filter', function(assert) {
 });
 
 test('proxy has state', function(assert) {
+  this.owner.set('id', 'foof');
   let proxy = this.create();
   assert.deepEqual(proxy.get('state'), {
     "error": null,
     "isError": false,
     "isLoaded": false,
-    "isLoading": false
+    "isLoading": false,
+    "isLoadable": true
   });
 });
 

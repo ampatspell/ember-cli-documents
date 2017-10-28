@@ -59,21 +59,19 @@ test('load', async function(assert) {
   assert.equal(proxy._internal.loader(true).state.isLoaded, false);
   assert.equal(proxy._internal.loader(true).state.isLoading, false);
 
-  assert.equal(proxy.get('isLoading'), true);
-  await this.settle(proxy);
-
+  assert.equal(proxy.get('isLoading'), false);
   assert.equal(proxy.get('length'), 0);
-  assert.equal(proxy._internal.loader(true).state.isLoaded, false);
-  assert.equal(proxy._internal.loader(true).state.isLoading, false);
 
   owner.get('duckIds').pushObject('yellow');
 
   assert.equal(proxy._internal.loader(true).state.isLoading, false);
+  assert.equal(proxy.get('isLoading'), true);
   await this.settle(proxy);
 
   owner.get('duckIds').pushObject('green');
 
   assert.equal(proxy._internal.loader(true).state.isLoading, false);
+  assert.equal(proxy.get('isLoading'), true);
   await this.settle(proxy);
 
   assert.deepEqual(proxy.mapBy('id'), [ 'yellow', 'green' ]);
