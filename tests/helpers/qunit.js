@@ -12,10 +12,10 @@ const {
 } = Ember;
 
 const wrap = q => function(name, fn) {
-  return q(name, function(assert) {
+  return q(name, async function(assert) {
     assert = extendAssert(assert);
     try {
-      return fn.call(this, assert);
+      return await fn.call(this, assert);
     } catch(e) {
       error(e && e.stack || e);
       throw e;
