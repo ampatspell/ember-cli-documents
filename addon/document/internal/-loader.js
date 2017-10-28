@@ -70,11 +70,19 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   //
 
+  __createQuery() {
+    let hash = this._createQuery();
+    if(!hash) {
+      return;
+    }
+    return { hash };
+  }
+
   _query(create) {
     let query = this.__query;
     if(query === INVALIDATED) {
       if(create) {
-        query = this._createQuery();
+        query = this.__createQuery();
         this.__query = query;
       } else {
         query = undefined;
@@ -197,7 +205,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
       }
     };
 
-    const fn = () => this.__scheduleDocumentOperation(merge(query_ || {}, query), before, resolve, reject);
+    const fn = () => this.__scheduleDocumentOperation(merge(query_ || {}, query.hash), before, resolve, reject);
     let operation = this.__createOperation({ label, query }, fn);
 
     this._withState((state, changed) => state.onLoadScheduled(changed));
