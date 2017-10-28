@@ -3,8 +3,7 @@ import Loader from './-loader';
 import PaginatedLoaderState from './-paginated-loader-state';
 
 const {
-  A,
-  RSVP: { resolve }
+  A
 } = Ember;
 
 export default class PaginatedLoaderInternal extends Loader {
@@ -125,7 +124,7 @@ export default class PaginatedLoaderInternal extends Loader {
       return this._resolveOperation();
     }
 
-    let operation = this._existingOperation(opts => true);
+    let operation = this._existingOperation(() => true);
 
     if(operation) {
       return operation;
