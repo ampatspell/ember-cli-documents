@@ -114,7 +114,7 @@ test('exists', function(assert) {
   run(() => proxy.destroy());
 });
 
-test.skip('content includes only state-matched docs', async function(assert) {
+test('content includes only state-matched docs', async function(assert) {
   await this.insert();
   let proxy = this.create();
 
@@ -127,7 +127,7 @@ test.skip('content includes only state-matched docs', async function(assert) {
   run(() => proxy.destroy());
 });
 
-test.skip('content includes only state-matched docs with all loaded previously', async function(assert) {
+test('content includes only state-matched docs with all loaded previously', async function(assert) {
   await this.insert();
   await this.db.find({ ddoc: 'main', view: 'all' });
   let proxy = this.create();
@@ -143,13 +143,14 @@ test.skip('content includes only state-matched docs with all loaded previously',
   run(() => proxy.destroy());
 });
 
-test.skip('content includes only state-matched docs with some loaded previously', async function(assert) {
+test('content includes only state-matched docs with some loaded previously', async function(assert) {
   await this.insert();
   await this.db.find({ ddoc: 'main', view: 'all', keys: [ 'duck:5', 'duck:3' ] });
 
   let proxy = this.create();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": false,
@@ -162,6 +163,7 @@ test.skip('content includes only state-matched docs with some loaded previously'
   await proxy.load();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": true,
@@ -174,6 +176,7 @@ test.skip('content includes only state-matched docs with some loaded previously'
   await proxy.loadMore();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": true,
@@ -186,6 +189,7 @@ test.skip('content includes only state-matched docs with some loaded previously'
   await proxy.loadMore();
 
   assert.deepEqual(proxy.get('state'), {
+    "isLoadable": true,
     "error": null,
     "isError": false,
     "isLoaded": true,
