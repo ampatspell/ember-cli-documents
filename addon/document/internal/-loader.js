@@ -49,7 +49,9 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   _ownerValueForKeyDidChange() {
     this._invalidateQuery();
-    this._scheduleReload();
+    if(this._isLoadable) {
+      this._scheduleReload();
+    }
   }
 
   _startObserving() {
@@ -208,6 +210,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   _scheduleAutoload(except) {
     if(!this._needsAutoload()) {
+      console.log('_scheduleAutoload', 'needs=false');
       return;
     }
     console.log('_scheduleAutoload', except);
@@ -216,12 +219,25 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   _scheduleLoad() {
     console.log('_scheduleLoad');
+
+    // existing load by query
+    // if exists, return that
+    // otherwise create a op with query and type 'load'
+
+    let query = this._query();
+    return this._scheduleOperation('load', query);
+
     // immediately isLoading
     // reset to { isError:false }
   }
 
   _scheduleReload() {
     console.log('_scheduleReload');
+
+    let query = this._query();
+    query.force = true;
+    return this._scheduleOperation('reload', query);
+
     // reset to { isLoaded:false, isError:false }
   }
 
