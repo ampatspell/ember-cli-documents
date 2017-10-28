@@ -154,13 +154,21 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return this.operations.length;
   }
 
-  _scheduleOperation(label, query) {
+  __existingOperation(match) {
+    let operation = this.operations.get('lastObject');
+    if(!operation || !match(operation.opts)) {
+      return;
+    }
+    return operation;
+  }
+
+  _scheduleOperation(label, query, query_) {
 
     // const before  = () => this._withState((state, changed) => state.onLoading(changed));
     // const resolve = () => this._withState((state, changed) => state.onLoaded(changed));
     // const reject  = err => this._withState((state, changed) => state.onError(err, changed));
 
-    console.log('_scheduleOperation', label, query);
+    console.log('_scheduleOperation', label, query, query_);
 
     const before  = () => {
       console.log('before');
@@ -186,7 +194,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
       }
     };
 
-    const fn = () => this.__scheduleDocumentOperation(query, before, resolve, reject);
+    const fn = () => this.__scheduleDocumentOperation(merge(query_ || {}, query), before, resolve, reject);
     let operation = this.__createOperation({ label, query }, fn);
 
     this._withState((state, changed) => state.onLoadScheduled(changed));
@@ -220,25 +228,27 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   _scheduleLoad() {
     console.log('_scheduleLoad');
 
-    // existing load by query
-    // if exists, return that
-    // otherwise create a op with query and type 'load'
-
     let query = this._query();
-    return this._scheduleOperation('load', query);
 
-    // immediately isLoading
-    // reset to { isError:false }
+    let operation = this.__existingOperation(opts => opts.query === query);
+    if(operation) {
+      return operation;
+    }
+
+    return this._scheduleOperation('load', query);
   }
 
   _scheduleReload() {
     console.log('_scheduleReload');
 
     let query = this._query();
-    query.force = true;
-    return this._scheduleOperation('reload', query);
 
-    // reset to { isLoaded:false, isError:false }
+    let operation = this.__existingOperation(opts => opts.query === query && opts.label === 'reload');
+    if(operation) {
+      return operation;
+    }
+
+    return this._scheduleOperation('reload', query, { force: true });
   }
 
   //
