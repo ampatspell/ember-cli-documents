@@ -37,7 +37,7 @@ export default class PaginatedLoaderInternal extends Loader {
   }
 
   _createLoaderState() {
-    return new PaginatedLoaderState();
+    return new PaginatedLoaderState(this);
   }
 
   _createModel() {
@@ -67,7 +67,7 @@ export default class PaginatedLoaderInternal extends Loader {
     this._withState((state, changed) => state.onError(err, changed));
   }
 
-  _query() {
+  _createQuery() {
     let { owner, opts, _loadState } = this;
     return opts.query(owner, _loadState);
   }

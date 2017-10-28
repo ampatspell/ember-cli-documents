@@ -23,7 +23,7 @@ export default class QueryLoaderInternal extends Loader {
   }
 
   _createLoaderState() {
-    return new QueryLoaderState();
+    return new QueryLoaderState(this);
   }
 
   _createModel() {
@@ -32,7 +32,7 @@ export default class QueryLoaderInternal extends Loader {
 
   //
 
-  _query() {
+  _createQuery() {
     let owner = this.owner;
     return this.opts.query(owner);
   }

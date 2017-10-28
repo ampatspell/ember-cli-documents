@@ -30,6 +30,8 @@ class Operation {
 
 }
 
+const INVALIDATED = { __invalidated__: true };
+
 export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   constructor(store, parent, database, owner, opts) {
@@ -39,12 +41,15 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     this.opts = merge({ autoload: true }, opts);
     this.operations = A();
     this._state = null;
+    this.__query = INVALIDATED;
   }
 
   //
 
   _ownerValueForKeyDidChange() {
-    this._scheduleForceReloadIfLoadable();
+    this._invalidateQuery();
+    console.log('schedule force load');
+    // this._scheduleForceReloadIfLoadable();
   }
 
   _startObserving() {
@@ -64,6 +69,34 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   //
 
+  _query() {
+    let query = this.__query;
+    if(query === INVALIDATED) {
+      query = this._createQuery();
+      console.log('_query create', query);
+      this.__query = query;
+    }
+    return query;
+  }
+
+  _invalidateQuery() {
+    this.__query = INVALIDATED;
+    this._loadableDidChange();
+  }
+
+  //
+
+  _loadableDidChange(notify) {
+    this.withPropertyChanges(changed => {
+      changed('isLoadable');
+      changed('state');
+    }, true);
+  }
+
+  get _isLoadable() {
+    return !!this._query();
+  }
+
   get state() {
     let state = this._state;
     if(!state) {
@@ -74,12 +107,15 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   }
 
   _stateProp(key) {
-    this._scheduleAutoloadIfLoadable([ key ], key);
+    if(key !== 'isLoadable') {
+      console.log('schedule autoload');
+      // this._scheduleAutoloadIfLoadable([ key ]);
+    }
     return this.state[key];
   }
 
-  _withState(cb, except) {
-    return this.withPropertyChanges(changed => cb(this.state, changed), true, except);
+  _withState(cb, notify, except) {
+    return this.withPropertyChanges(changed => cb(this.state, changed), notify, except);
   }
 
   // autoload
@@ -120,58 +156,62 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     if(!this._needsLoad()) {
       return resolve();
     }
-    return this._scheduleLoadIfLoadable();
+    console.log('schedule load');
+    return resolve();
+    // return this._scheduleLoadIfLoadable();
   }
 
   reload() {
-    return this._scheduleReloadIfLoadable();
+    console.log('schedule reload');
+    return resolve();
+    // return this._scheduleReloadIfLoadable();
   }
 
   //
 
-  _isLoadable(except) {
-    let query = this._query();
-    if(!query) {
-      this._withState((state, changed) => state.onLoadable(false, changed), except);
-      return false;
-    }
-    return true;
-  }
+  // _isLoadable(except) {
+  //   let query = this._query();
+  //   if(!query) {
+  //     this._withState((state, changed) => state.onLoadable(false, changed), except);
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
-  _scheduleAutoloadIfLoadable(except, key) {
-    if(!this._isLoadable(except)) {
-      return;
-    }
-    if(key === 'isLoadable') {
-      return;
-    }
-    return this._scheduleAutoload(except);
-  }
+  // _scheduleAutoloadIfLoadable(except, key) {
+  //   if(!this._isLoadable(except)) {
+  //     return;
+  //   }
+  //   if(key === 'isLoadable') {
+  //     return;
+  //   }
+  //   return this._scheduleAutoload(except);
+  // }
 
-  _scheduleForceReloadIfLoadable() {
-    if(!this._isLoadable()) {
-      return;
-    }
-    return this._scheduleForceReload();
-  }
+  // _scheduleForceReloadIfLoadable() {
+  //   if(!this._isLoadable()) {
+  //     return;
+  //   }
+  //   return this._scheduleForceReload();
+  // }
 
-  _rejectNotLoadable() {
-    return reject(new DocumentsError({ error: 'loader', reason: 'not_loadable' }));
-  }
+  // _rejectNotLoadable() {
+  //   return reject(new DocumentsError({ error: 'loader', reason: 'not_loadable' }));
+  // }
 
-  _scheduleLoadIfLoadable() {
-    if(!this._isLoadable()) {
-      return this._rejectNotLoadable();
-    }
-    return this._scheduleLoad().promise;
-  }
+  // _scheduleLoadIfLoadable() {
+  //   if(!this._isLoadable()) {
+  //     return this._rejectNotLoadable();
+  //   }
+  //   return this._scheduleLoad().promise;
+  // }
 
-  _scheduleReloadIfLoadable() {
-    if(!this._isLoadable()) {
-      return this._rejectNotLoadable();
-    }
-    return this._scheduleReload().promise;
-  }
+  // _scheduleReloadIfLoadable() {
+  //   if(!this._isLoadable()) {
+  //     return this._rejectNotLoadable();
+  //   }
+  //   return this._scheduleReload().promise;
+  // }
 
   //
 

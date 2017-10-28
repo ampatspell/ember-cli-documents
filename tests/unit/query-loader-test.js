@@ -41,7 +41,7 @@ test('loader has query', function(assert) {
 
   this.owner.set('id', 'duck');
   let loader = this.first();
-  assert.deepEqual(loader._internal._query(), {
+  assert.deepEqual(loader._internal._query(true), {
     "id": "duck"
   });
   run(() => loader.destroy());
@@ -284,13 +284,55 @@ test('isLoadable does not start loading', async function(assert) {
   await this.settle(loader);
 });
 
-test.todo('state.isLoadable is false', async function(assert) {
+test('state.isLoadable is false', async function(assert) {
   let loader = this.first();
 
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
     "isLoadable": false,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  assert.equal(loader.get('isLoadable'), false);
+  assert.equal(loader.get('isLoaded'), false);
+
+  await this.settle(loader);
+});
+
+test('state.isLoadable is true', async function(assert) {
+  this.owner.set('id', 'hello');
+  let loader = this.first();
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  await this.settle(loader);
+});
+
+test('state.isLoadable becomes true', async function(assert) {
+  let loader = this.first();
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": false,
+    "isLoaded": false,
+    "isLoading": false
+  });
+
+  this.owner.set('id', 'hello');
+
+  assert.deepEqual(loader.get('state'), {
+    "error": null,
+    "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": false
   });
