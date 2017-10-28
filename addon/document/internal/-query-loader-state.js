@@ -20,6 +20,10 @@ const extend = State => class QueryLoaderState extends State {
     return this._loader._isLoadable;
   }
 
+  onLoadScheduled(changed) {
+    this.set({ isLoading: true, isError: false, error: null }, changed);
+  }
+
 }
 
 const {
