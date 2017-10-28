@@ -67,6 +67,9 @@ export default class PaginatedLoaderInternal extends Loader {
 
   _scheduleLoadMore() {
     console.log('_scheduleLoadMore');
+    // if(!isLoaded) return this._scheduleLoad();
+    // immediately isLoading
+    // reset to { isError:false }
   }
 
 }

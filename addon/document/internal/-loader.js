@@ -165,14 +165,18 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
       return;
     }
     console.log('_scheduleAutoload', except);
+    // immediately isLoading
   }
 
   _scheduleLoad() {
     console.log('_scheduleLoad');
+    // immediately isLoading
+    // reset to { isError:false }
   }
 
   _scheduleReload() {
     console.log('_scheduleReload');
+    // reset to { isLoaded:false, isError:false }
   }
 
   //
