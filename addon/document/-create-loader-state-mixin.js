@@ -8,7 +8,7 @@ const {
 export const createForwardStateMixin = (target, keys) => {
   const forward = key => reads(`${target}.${key}`).readOnly();
   let props = {
-    state: forward('state'),
+    state: forward('state')
   };
   keys.forEach(key => props[key] = forward(key));
   return Ember.Mixin.create(props);
