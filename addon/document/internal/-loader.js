@@ -70,11 +70,15 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   //
 
-  _query() {
+  _query(create) {
     let query = this.__query;
     if(query === INVALIDATED) {
-      query = this._createQuery();
-      this.__query = query;
+      if(create) {
+        query = this._createQuery();
+        this.__query = query;
+      } else {
+        query = undefined;
+      }
     }
     return query;
   }
@@ -90,7 +94,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   //
 
   get _isLoadable() {
-    return !!this._query();
+    return !!this._query(true);
   }
 
   get state() {
@@ -246,7 +250,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   _scheduleLoad() {
     console.log('_scheduleLoad');
 
-    let query = this._query();
+    let query = this._query(true);
 
     let operation = this.__existingOperation(opts => opts.query === query);
     if(operation) {
@@ -259,7 +263,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   _scheduleReload() {
     console.log('_scheduleReload');
 
-    let query = this._query();
+    let query = this._query(true);
 
     let isLoaded = this.state.isLoaded;
 

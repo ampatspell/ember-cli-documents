@@ -111,15 +111,17 @@ test('it exists', function(assert) {
 });
 
 test.skip('load first page', async function(assert) {
+  this.opts.autoload = false;
   await this.recreate();
   await all([ this.insert(), this.design() ]);
+
   let tap = this.tap();
-  this.opts.autoload = false;
   let loader = this.loader();
 
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": false,
     "isMore": false
@@ -130,6 +132,7 @@ test.skip('load first page', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": false,
     "isLoading": true,
     "isMore": false
@@ -140,6 +143,7 @@ test.skip('load first page', async function(assert) {
   assert.deepEqual(loader.get('state'), {
     "error": null,
     "isError": false,
+    "isLoadable": true,
     "isLoaded": true,
     "isLoading": false,
     "isMore": true
