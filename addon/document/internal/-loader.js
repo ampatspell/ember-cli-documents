@@ -34,11 +34,12 @@ const INVALIDATED = {};
 
 export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
-  constructor(store, parent, database, owner, opts) {
+  constructor(store, parent, database, owner, opts, type) {
     super(store, parent);
     this.database = database;
     this.owner = owner;
     this.opts = merge({ autoload: true }, opts);
+    this.type = type;
     this.operations = A();
     this._state = null;
     this.__query = INVALIDATED;

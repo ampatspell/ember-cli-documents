@@ -18,8 +18,7 @@ export default class QueryLoaderInternal extends Loader {
     type: 'first' / 'find'
   */
   constructor(store, parent, database, owner, opts, type) {
-    super(store, parent, database, owner, opts);
-    this.type = type;
+    super(store, parent, database, owner, opts, type);
   }
 
   _createLoaderState() {
