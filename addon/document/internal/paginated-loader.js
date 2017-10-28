@@ -37,7 +37,7 @@ export default class PaginatedLoaderInternal extends Loader {
   }
 
   get loadState() {
-    let query = this.query(false);
+    let query = this._query(false);
     if(query) {
       return query.state;
     }
