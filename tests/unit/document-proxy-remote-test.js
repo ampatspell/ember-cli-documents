@@ -46,3 +46,21 @@ test('proxy load result appears in content', async function(assert) {
 
   assert.equal(proxy.get('name'), 'Yellow');
 });
+
+test('deleted doc', async function(assert) {
+  this.opts.autoload = false;
+  this.owner.set('id', 'duck');
+  await this.docs.save({ _id: 'duck', name: 'Yellow' });
+
+  let proxy = this.create();
+
+  await proxy.load();
+
+  let duck = proxy.get('content');
+
+  assert.equal(proxy.get('name'), 'Yellow');
+
+  await duck.delete();
+
+  assert.ok(!proxy.get('content'));
+});
