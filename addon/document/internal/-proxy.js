@@ -21,7 +21,7 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
   }
 
   _normalizeOptions(opts) {
-    opts = merge({ owner: [], document: [] }, opts);
+    opts = merge({ autoload: true, owner: [], document: [] }, opts);
     let { autoload, query, matches, owner, document } = opts;
     isFunction('query', query);
     isFunction('matches', matches);
