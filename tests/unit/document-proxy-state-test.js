@@ -24,7 +24,7 @@ module('document-proxy-state', {
   }
 });
 
-test.skip('notify property change', async function(assert) {
+test('proxy does not notify isLoading change from doc', async function(assert) {
   await this.recreate();
   await this.docs.save({ _id: 'thing' });
   this.opts.autoload = false;
@@ -32,10 +32,10 @@ test.skip('notify property change', async function(assert) {
   this.owner.set('id', 'thing');
   let proxy = this.create();
 
-  proxy.get('isLoading');
+  let log = [];
 
   proxy.addObserver('isLoading', () => {
-    // console.log('proxy.isLoading', proxy.get('isLoading'));
+    log.push([ 'proxy', proxy.get('isLoading') ]);
   });
 
   assert.ok(!proxy.get('content'));
@@ -43,10 +43,24 @@ test.skip('notify property change', async function(assert) {
   assert.ok(proxy.get('content'));
 
   thing.addObserver('isLoading', () => {
-    // console.log('thing.isLoading', thing.get('isLoading'));
+    log.push([ 'thing', thing.get('isLoading') ]);
   });
 
   await thing.load();
+
+  assert.deepEqual(log, [
+    [ "thing", true ],
+    [ "thing", false ]
+  ]);
+
+  log = [];
+
+  await proxy.load();
+
+  assert.deepEqual(log, [
+    [ "proxy", true ],
+    [ "proxy", false ]
+  ]);
 
   run(() => proxy.destroy());
 });
