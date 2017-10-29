@@ -94,10 +94,18 @@ export default Ember.Mixin.create({
     if(!_rev) {
       return true;
     }
+
     let _existing = existing.getRev();
     if(!_existing) {
       return true;
     }
+
+    let _revInt = parseInt(_rev);
+    let _existingInt = parseInt(_existing);
+    if(!isNaN(_revInt) && !isNaN(_existingInt)) {
+      return _revInt > _existingInt;
+    }
+
     return _existing !== _rev;
   },
 
