@@ -139,7 +139,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return state;
   }
 
-  _stateProp(key) {
+  _getStateProperty(key) {
     if(key !== 'isLoadable') {
       this._scheduleAutoload([ key ]);
     }
