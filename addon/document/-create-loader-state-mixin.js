@@ -14,4 +14,4 @@ export const createForwardStateMixin = (target, keys) => {
   return Ember.Mixin.create(props);
 };
 
-export const createLoaderStateMixin = keys => create(keys, '_stateProp');
+export const createLoaderStateMixin = keys => create(keys, '_getStateProperty');
