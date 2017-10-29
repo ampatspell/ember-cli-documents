@@ -45,6 +45,7 @@ test('property with string value', function(assert) {
   let opts = owner.get('doc._internal.opts');
 
   assert.deepEqual(opts, {
+    autoload: true,
     document: [ 'id' ],
     owner: [],
     matches: opts.matches,
@@ -67,6 +68,7 @@ test('property with prop', function(assert) {
   let opts = owner.get('doc._internal.opts');
 
   assert.deepEqual(opts, {
+    autoload: true,
     document: [ 'id' ],
     owner: [ 'duckId' ],
     matches: opts.matches,
