@@ -21,16 +21,6 @@
 
 # Notes
 
-## Loader
-
-* Current query hash should be created
-* isLoadable is based on that
-* cached query recreated/invalidated on owner props change
-
-This also includes needed changes for load operations.
-
-So, if query is pre-built, in next runloop that might already be invalidated. That cancelPending thing
-
 ## find `{ id }`, `{ ids }`
 
 Basically idea is to support usecases w/o changes listener.
