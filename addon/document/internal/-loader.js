@@ -291,11 +291,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   }
 
   _scheduleReload(except) {
-    this._willScheduleReloadOperation();
-    this._needsReload = false;
-
     let query = this._query(true);
-
     let isLoaded = this.state.isLoaded;
 
     let operation = this._existingOperation(opts => {
@@ -311,6 +307,11 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     if(operation) {
       return operation;
     }
+
+    this._willScheduleReloadOperation();
+
+    this._needsReload = false;
+    query = this._query(true);
 
     return this._scheduleOperation('reload', query, { force: true }, except);
   }
