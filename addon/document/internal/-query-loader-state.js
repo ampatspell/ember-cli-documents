@@ -20,8 +20,37 @@ const stateMixin = Class => class QueryLoaderStateMixin extends Class {
     return this._loader._isLoadable;
   }
 
+  onLoading(changed) {
+    this.set({
+      isLoading: true,
+      isError: false,
+      error: null
+    }, changed);
+  }
+
+  onLoaded(changed) {
+    this.set({
+      isLoading: false,
+      isLoaded: true,
+      isError: false,
+      error: null
+    }, changed);
+  }
+
+  onError(error, changed) {
+    this.set({
+      isLoading: false,
+      isError: true,
+      error
+    }, changed);
+  }
+
   onLoadScheduled(changed) {
-    this.set({ isLoading: true, isError: false, error: null }, changed);
+    this.set({
+      isLoading: true,
+      isError: false,
+      error: null
+    }, changed);
   }
 
 }
