@@ -14,7 +14,7 @@ const model = name => computed(function() {
 
 export const loader = name => function(...args) {
   let loader = this.get('loader');
-  return loader[name].call(loader, ...args);
+  return loader[name].call(loader, ...args).then(() => this);
 };
 
 export default Mixin.create(ModelMixin, {
