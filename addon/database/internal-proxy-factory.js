@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { isOneOf } from 'documents/util/assert';
-import registerDestroy from 'documents/util/register-destroy';
 
 const factories = {
   first:     '_createInternalDocumentProxy',
@@ -20,9 +19,7 @@ export default Ember.Mixin.create({
   },
 
   _createInternalProxy(type, owner, opts={}) {
-    let internal = this.__createInternalProxy(type, owner, opts);
-    registerDestroy(owner, () => internal.destroy());
-    return internal;
+    return this.__createInternalProxy(type, owner, opts);
   }
 
 });
