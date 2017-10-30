@@ -1,6 +1,23 @@
+import Ember from 'ember';
 const key = '__ember_cli_documents__';
 
-export default (owner, fn) => {
+const {
+  A
+} = Ember;
+
+export const destroyRegistered = (owner, fn) => {
+  if(!owner) {
+    return;
+  }
+  if(!owner.willDestroy) {
+    return;
+  }
+  let array = owner.willDestroy[key];
+  array.removeObject(fn);
+  fn();
+}
+
+export const registerDestroy = (owner, fn) => {
   if(!owner) {
     return;
   }
@@ -9,7 +26,7 @@ export default (owner, fn) => {
   }
   let array = owner.willDestroy[key];
   if(!array) {
-    array = [];
+    array = A();
     let willDestroy = owner.willDestroy;
     owner.willDestroy = function() {
       for(let i = 0; i < array.length; i++) {
@@ -21,4 +38,5 @@ export default (owner, fn) => {
     owner.willDestroy[key] = array;
   }
   array.push(fn);
+  return fn;
 };
