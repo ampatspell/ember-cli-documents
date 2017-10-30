@@ -2,7 +2,6 @@
 
 * rename `addon/document` to `addon/models` and separate base, documents and proxies
 * proxy state. deleted doc should have err.error=not_found
-* move default `-create-state` states to appropriate classes
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * export and reorganize properties
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
