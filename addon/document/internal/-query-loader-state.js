@@ -53,6 +53,11 @@ const stateMixin = Class => class QueryLoaderStateMixin extends Class {
     }, changed);
   }
 
+  onReloadScheduled(changed) {
+    this.onLoadScheduled(changed);
+    this.set({ isLoaded: false }, changed);
+  }
+
 }
 
 const extend = State => class QueryLoaderState extends stateMixin(State) {}
