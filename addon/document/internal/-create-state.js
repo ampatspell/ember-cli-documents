@@ -12,7 +12,7 @@ export default opts => {
   assert(`opts.extend must be function not ${opts.extend}`, typeof opts.extend === 'function');
 
   const storedKeys = A(Object.keys(opts.defaults));
-  const keys = [ ...storedKeys, ...opts.computed ];
+  const keys = [ ...opts.computed, ...storedKeys ];
 
   class BaseState {
 
