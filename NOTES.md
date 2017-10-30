@@ -1,6 +1,5 @@
 # TODO
 
-* `_shouldDeserializeInternalLoad` `parseInt(doc._rev)` compare to existing int so only newer revs are deserialized
 * proxy state. deleted doc should have err.error=not_found
 * move default `-create-state` states to appropriate classes
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)

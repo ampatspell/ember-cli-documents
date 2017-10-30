@@ -173,3 +173,53 @@ test('reload same rev is deserialized', async function(assert) {
 
   assert.equal(doc.get('name'), 'Yellow');
 });
+
+test('push based on rev', async function(assert) {
+  this.db.push({ _id: 'thing', _rev: '163-6708c0ea6856db4df198825fd3ee32cc', version: '163' });
+
+  assert.deepEqual(this.db.existing('thing').get('serialized'), {
+    "id": "thing",
+    "rev": "163-6708c0ea6856db4df198825fd3ee32cc",
+    "version": "163"
+  });
+
+  this.db.push({ _id: 'thing', _rev: '164-dd30b2560a17fd63f4198bd3a3f948b9', version: '164' });
+
+  assert.deepEqual(this.db.existing('thing').get('serialized'), {
+    "id": "thing",
+    "rev": "164-dd30b2560a17fd63f4198bd3a3f948b9",
+    "version": "164"
+  });
+
+  this.db.push({ _id: 'thing', _rev: '163-6708c0ea6856db4df198825fd3ee32cc', version: '163' });
+
+  assert.deepEqual(this.db.existing('thing').get('serialized'), {
+    "id": "thing",
+    "rev": "164-dd30b2560a17fd63f4198bd3a3f948b9",
+    "version": "164"
+  });
+
+  this.db.push({ _id: 'thing', _rev: '162-6708c0ea6856db4df198825fd3ee32cc', version: '162' });
+
+  assert.deepEqual(this.db.existing('thing').get('serialized'), {
+    "id": "thing",
+    "rev": "164-dd30b2560a17fd63f4198bd3a3f948b9",
+    "version": "164"
+  });
+
+  this.db.push({ _id: 'thing', _rev: '', version: 'unknown' });
+
+  assert.deepEqual(this.db.existing('thing').get('serialized'), {
+    "id": "thing",
+    "rev": "",
+    "version": "unknown"
+  });
+
+  this.db.push({ _id: 'thing', _rev: '163-6708c0ea6856db4df198825fd3ee32cc', version: '163' });
+
+  assert.deepEqual(this.db.existing('thing').get('serialized'), {
+    "id": "thing",
+    "rev": "163-6708c0ea6856db4df198825fd3ee32cc",
+    "version": "163"
+  });
+});

@@ -89,16 +89,37 @@ export default Ember.Mixin.create({
     return internal;
   },
 
+  __parseRevToNumber(rev) {
+    if(!rev) {
+      return;
+    }
+    let parsed = parseInt(rev);
+    if(isNaN(parsed)) {
+      return;
+    }
+    return parsed;
+  },
+
   _shouldDeserializeInternalLoad(existing, doc) {
-    let _rev = doc._rev;
-    if(!_rev) {
+    let docRev = doc._rev;
+    if(!docRev) {
       return true;
     }
-    let _existing = existing.getRev();
-    if(!_existing) {
+
+    let existingRev = existing.getRev();
+    if(!existingRev) {
       return true;
     }
-    return _existing !== _rev;
+
+    let docRevNumber = this.__parseRevToNumber(docRev);
+    if(docRevNumber) {
+      let existingRevNumber = this.__parseRevToNumber(existingRev);
+      if(existingRevNumber) {
+        return docRevNumber > existingRevNumber;
+      }
+    }
+
+    return existingRev !== docRev;
   },
 
   _deserializeInternalLoad(internal, doc, type, force) {
