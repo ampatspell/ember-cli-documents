@@ -310,7 +310,10 @@ test('state.isLoadable is true', async function(assert) {
 
 test('state.isLoadable becomes true, load starts on state query', async function(assert) {
   await this.recreate();
-  await this.docs.save({ _id: 'hello' });
+  await all([
+    this.docs.save({ _id: 'hello' }),
+    this.docs.save({ _id: 'another' })
+  ]);
 
   let loader = this.first();
 
@@ -321,6 +324,9 @@ test('state.isLoadable becomes true, load starts on state query', async function
     "isLoaded": false,
     "isLoading": false
   });
+
+  assert.equal(loader.get('isLoading'), false);
+  assert.equal(loader.get('isLoadable'), false);
 
   this.owner.set('id', 'hello');
 
@@ -334,9 +340,26 @@ test('state.isLoadable becomes true, load starts on state query', async function
 
   assert.equal(loader._internal.operations.get('length'), 0);
 
+  assert.equal(loader.get('isLoadable'), true);
   assert.equal(loader.get('isLoading'), true);
 
   assert.equal(loader._internal.operations.get('length'), 1);
 
   await this.settle(loader);
+
+  assert.ok(this.db.existing('hello'));
+
+  this.owner.set('id', null);
+
+  assert.equal(loader.get('isLoadable'), false);
+  assert.equal(loader.get('isLoading'), false);
+
+  this.owner.set('id', 'second');
+
+  assert.equal(loader.get('isLoadable'), true);
+  assert.equal(loader.get('isLoading'), true);
+
+  await this.settle(loader);
+
+  assert.ok(this.db.existing('hello'));
 });
