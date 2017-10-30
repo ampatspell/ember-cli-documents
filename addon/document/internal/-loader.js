@@ -228,7 +228,13 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     const fn = () => this.__scheduleDocumentOperation(merge(query_ || {}, query.query), before, resolve, reject);
     let operation = this.__createOperation({ label, query }, fn);
 
-    this._withState((state, changed) => state.onLoadScheduled(changed), except);
+    this._withState((state, changed) => {
+      if(label === 'reload') {
+        state.onReloadScheduled(changed);
+      } else {
+        state.onLoadScheduled(changed);
+      }
+    }, except);
 
     operation.invoke();
     return operation;
