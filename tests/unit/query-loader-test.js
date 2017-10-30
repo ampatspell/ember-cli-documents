@@ -356,8 +356,10 @@ test('state.isLoadable becomes true, load starts on state query', async function
 
   this.owner.set('id', 'second');
 
-  assert.equal(loader.get('isLoadable'), true);
-  assert.equal(loader.get('isLoading'), true);
+  assert.equal(loader.get('isLoadable'), true, 'isLoadable');
+  assert.equal(loader.get('isLoading'), true, 'isLoading');
+
+  assert.equal(loader._internal.operations.get('length'), 1, 'load operation scheduled');
 
   await this.settle(loader);
 
