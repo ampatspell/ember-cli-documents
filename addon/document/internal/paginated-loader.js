@@ -83,10 +83,7 @@ export default class PaginatedLoaderInternal extends Loader {
   }
 
   _willScheduleReloadOperation() {
-    this._withState((state, changed) => {
-      state.onReload(changed);
-      this.__invalidateQuery(changed);
-    });
+    this._invalidateQuery();
   }
 
   //
