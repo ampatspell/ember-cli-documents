@@ -286,6 +286,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
 
   _scheduleReload(except) {
     this._willScheduleReloadOperation();
+    this._needsReload = false;
 
     let query = this._query(true);
 
