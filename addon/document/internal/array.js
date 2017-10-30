@@ -1,14 +1,13 @@
 import Ember from 'ember';
 import InternalBase, { empty } from './-base';
-import SerializeMixin from './-serialize-mixin';
-import DeserializeMixin from './-deserialize-mixin';
+import SerializeDeserializeMixin from './-serialize-deserialize-mixin';
 import { toModel, toInternal, isInternal } from 'documents/util/internal';
 
 const {
   A
 } = Ember;
 
-export default class InternalArray extends DeserializeMixin(SerializeMixin(InternalBase)) {
+export default class InternalArray extends SerializeDeserializeMixin(InternalBase) {
 
   static get type() {
     return 'array';
