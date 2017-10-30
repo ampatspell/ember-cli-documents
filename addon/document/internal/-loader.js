@@ -114,14 +114,10 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return this._query(true, omit(query || {}, [ 'query' ]));
   }
 
-  __invalidateQuery(changed) {
+  _invalidateQuery() {
     this.__query = INVALIDATED;
     this._needsReload = true;
-    this._invalidateQueryDependentKeys.forEach(key => changed(key));
-  }
-
-  _invalidateQuery() {
-    this.withPropertyChanges(changed => this.__invalidateQuery(changed), true);
+    this.withPropertyChanges(changed => this._invalidateQueryDependentKeys.forEach(key => changed(key)), true);
   }
 
   //
