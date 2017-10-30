@@ -7,13 +7,13 @@ import {
   isInternalArray
 } from 'documents/util/internal';
 
+import { empty } from './-base';
+
 const {
   typeOf
 } = Ember;
 
-import { empty } from './-base';
-
-export default Class => class DeserializeMixin extends Class {
+const createDeserializeMixin = Class => class DeserializeMixin extends Class {
 
   _createInternalObject(parent, type) {
     return this.store._createInternalObject(parent, type);
@@ -109,3 +109,16 @@ export default Class => class DeserializeMixin extends Class {
   }
 
 }
+
+const createSerializeMixin = Class => class SerializeMixin extends Class {
+
+  _serializeValue(value, type) {
+    if(isInternal(value)) {
+      value = value.serialize(type);
+    }
+    return value;
+  }
+
+}
+
+export default Class => createSerializeMixin(createDeserializeMixin(Class));

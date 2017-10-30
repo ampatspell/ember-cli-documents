@@ -1,6 +1,7 @@
 # TODO
 
 * split internal/base into absolute base which is useful for proxies.
+* check out resolve argument for loaders
 * rename `addon/document` to `addon/models` and separate base, documents and proxies
 * proxy state. deleted doc should have err.error=not_found
 * move default `-create-state` states to appropriate classes
