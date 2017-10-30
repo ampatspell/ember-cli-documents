@@ -1,10 +1,10 @@
 # TODO
 
+* provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
+* maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * rename `addon/document` to `addon/models` and separate base, documents and proxies
 * proxy state. deleted doc should have err.error=not_found
-* provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * export and reorganize properties
-* maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * loader is already loaded if identical query was invoked
 * batch identity adds and removes `this._withIdentityMutation(mutation => ...)`
 * ember inspector integration (for proxies?)
