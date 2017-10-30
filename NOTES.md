@@ -1,6 +1,5 @@
 # TODO
 
-* paginated reload dies with You modified "docs.isLoading" twice
 * rename `addon/document` to `addon/models` and separate base, documents and proxies
 * proxy state. deleted doc should have err.error=not_found
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
