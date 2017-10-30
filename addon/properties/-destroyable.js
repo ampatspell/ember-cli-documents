@@ -8,7 +8,7 @@ const {
 export default (...args) => {
   let { create, get } = args.pop();
   return computed(...args, function(key) {
-    let cacheKey = `__ember_cli_documents__cached_${key}`;
+    let cacheKey = `__ember_cli_documents_cached_${key}`;
 
     let { value, destroy } = this[cacheKey] || {};
 
