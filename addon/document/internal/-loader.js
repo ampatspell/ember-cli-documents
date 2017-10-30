@@ -114,14 +114,10 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     return this._query(true, omit(query || {}, [ 'query' ]));
   }
 
-  __invalidateQuery(changed) {
+  _invalidateQuery() {
     this.__query = INVALIDATED;
     this._needsReload = true;
-    this._invalidateQueryDependentKeys.forEach(key => changed(key));
-  }
-
-  _invalidateQuery() {
-    this.withPropertyChanges(changed => this.__invalidateQuery(changed), true);
+    this.withPropertyChanges(changed => this._invalidateQueryDependentKeys.forEach(key => changed(key)), true);
   }
 
   //
@@ -232,7 +228,13 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     const fn = () => this.__scheduleDocumentOperation(merge(query_ || {}, query.query), before, resolve, reject);
     let operation = this.__createOperation({ label, query }, fn);
 
-    this._withState((state, changed) => state.onLoadScheduled(changed), except);
+    this._withState((state, changed) => {
+      if(label === 'reload') {
+        state.onReloadScheduled(changed);
+      } else {
+        state.onLoadScheduled(changed);
+      }
+    }, except);
 
     operation.invoke();
     return operation;
@@ -289,10 +291,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
   }
 
   _scheduleReload(except) {
-    this._willScheduleReloadOperation();
-
     let query = this._query(true);
-
     let isLoaded = this.state.isLoaded;
 
     let operation = this._existingOperation(opts => {
@@ -308,6 +307,11 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     if(operation) {
       return operation;
     }
+
+    this._willScheduleReloadOperation();
+
+    this._needsReload = false;
+    query = this._query(true);
 
     return this._scheduleOperation('reload', query, { force: true }, except);
   }
