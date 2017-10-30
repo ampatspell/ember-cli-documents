@@ -78,3 +78,26 @@ test('load', async function(assert) {
 
   run(() => owner.destroy());
 });
+
+test('manual load', async function(assert) {
+  await this.recreate();
+  await all([
+    this.docs.save({ _id: 'yellow' }),
+    this.docs.save({ _id: 'green' })
+  ]);
+
+  let Owner = Ember.Object.extend({
+    duckIds: A([ 'green', 'yellow' ]),
+    docs: byIds({ database: 'db', ids: prop('duckIds'), autoload: false })
+  });
+
+  let owner = Owner.create({ db: this.db });
+  let proxy = owner.get('docs');
+
+  let result = await proxy.load();
+  assert.ok(result === proxy);
+
+  assert.deepEqual(proxy.mapBy('id'), [ 'green', 'yellow' ]);
+
+  run(() => owner.destroy());
+});

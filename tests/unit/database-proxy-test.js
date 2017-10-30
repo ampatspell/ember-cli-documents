@@ -38,7 +38,8 @@ test('create document proxy without owner', async function(assert) {
     }
   });
 
-  await proxy.load();
+  let result = await proxy.load();
+  assert.ok(result === proxy);
 
   assert.equal(proxy.get('id'), 'hello');
 
