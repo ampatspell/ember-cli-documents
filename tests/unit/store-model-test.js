@@ -2,13 +2,9 @@ import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
-const Duck = Ember.Object.extend({
-});
+const Duck = Ember.Object.extend();
 
-module('store-model', {
-  beforeEach() {
-  }
-});
+module('store-model');
 
 test('model can be created', function(assert) {
   this.register('model:duck', Duck);
