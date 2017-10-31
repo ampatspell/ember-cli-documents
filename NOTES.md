@@ -62,7 +62,7 @@ export default Model.extend({
 
   isLoading: readOnly('docs.isLoading'),
 
-  all: models('blog/post', 'docs', { doc: prop('@') }), // prop('@') => docs[i]
+  all: models('blog/post', 'docs', { doc: prop('@'), blog: prop('blog') }), // prop('@') => docs[i]
 
   drafts:    filterBy('all', 'state', 'draft'),
   published: filterBy('all', 'state', 'published'),
