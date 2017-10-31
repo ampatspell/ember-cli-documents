@@ -3,7 +3,15 @@ $font-family: 'Raleway', sans-serif;
 
 @import "reset";
 @import "body";
-@import "form";
+
+.ui-application {
+
+  a {
+    color: #000;
+  }
+
+  @import "form";
+}
 
 .ui-application {
   padding: 25px;
