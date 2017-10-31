@@ -12,6 +12,7 @@ import StoreShoebox from './store/shoebox';
 import StoreFastboot from './store/fastboot';
 import StoreOperations from './store/operations';
 import StoreIdentity from './store/identity';
+import StoreModels from './store/models';
 
 export default Ember.Object.extend(
   StoreStores,
@@ -26,5 +27,6 @@ export default Ember.Object.extend(
   StoreShoebox,
   StoreFastboot,
   StoreOperations,
-  StoreIdentity
+  StoreIdentity,
+  StoreModels
 );

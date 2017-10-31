@@ -62,6 +62,9 @@ export default identifier => {
         db = db || this.db;
         return tap(db.get('documents'));
       },
+      register(...args) {
+        return this.instance.register(...args);
+      },
       beforeEach() {
         this.application = startApp();
         this.instance = this.application.buildInstance();
