@@ -8,13 +8,15 @@ const {
   Logger: { info }
 } = Ember;
 
-const databaseMapping = {
+const databaseIdentifierMapping = {
   main: 'ember-cli-documents-dummy'
 };
 
-const url = `${COUCHDB_HOST}:6016`;
-const databaseNameForIdentifier = identifier => databaseMapping[identifier] || identifier;
-const fastbootIdentifier = 'dummy-documents';
+const createStore = stores => stores.store({
+  url: `${COUCHDB_HOST}:6016`,
+  fastbootIdentifier: 'dummy-documents',
+  databaseNameForIdentifier: identifier => databaseIdentifierMapping[identifier] || identifier,
+});
 
 export default {
   name: 'dummy:dev',
@@ -22,7 +24,7 @@ export default {
     window.Promise = Promise;
 
     let stores = app.lookup('documents:stores');
-    let store = stores.store({ url, databaseNameForIdentifier, fastbootIdentifier });
+    let store = createStore(stores);
     let state = store.model('state');
 
     app.register('service:stores', stores, { instantiate: false });
