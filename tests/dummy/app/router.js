@@ -11,6 +11,10 @@ Router.map(function() {
     this.route('new');
     this.route('delete');
   });
+  this.route('documents', function() {
+    this.route('document', { path: '/:doc_id' }, function() {
+    });
+  });
   this.route('setup', function() {
   });
 });

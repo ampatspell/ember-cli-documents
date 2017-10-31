@@ -1,5 +1,5 @@
 {{#each documents as |doc|}}
-  <div>
+  <div class="doc" {{action 'select' doc}}>
     {{doc.id}}
     {{#if doc.isNew}}
       [new]

@@ -11,6 +11,13 @@ export default Ember.Component.extend({
   layout,
 
   stores: service(),
+  router: service(),
   documents: reads('stores.identity'),
+
+  actions: {
+    select(doc) {
+      this.get('router').transitionTo('documents.document', doc.get('id'));
+    }
+  }
 
 });

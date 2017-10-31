@@ -80,6 +80,12 @@ $font-family: 'Raleway', sans-serif;
   }
 }
 
+.ui-block.stores-identity {
+  > .doc {
+    cursor: pointer;
+  }
+}
+
 .ui-route.setup-index {
   > .row.run {
     > .button {
