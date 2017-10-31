@@ -1,10 +1,10 @@
 <div class="header">
   <div class="title">ember-cli-documents</div>
-  <div class="links">
-    {{link-to 'index' 'index'}}
-    {{link-to 'experimental' 'experimental'}}
-    {{link-to 'paginated' 'paginated'}}
-  </div>
+  {{#unless isEmpty}}
+    <div class="links">
+      {{link-to 'index' 'index'}}
+    </div>
+  {{/unless}}
 </div>
 <div class="content">
   {{yield}}

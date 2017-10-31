@@ -49,20 +49,40 @@ $font-family: 'Raleway', sans-serif;
   &:last-child {
     padding-bottom: 0;
   }
+  p {
+    padding-bottom: 5px;
+    &.strong {
+      font-weight: 600;
+    }
+    &.small {
+      font-size: 13px;
+    }
+  }
 }
 
-.ui-route.message-index {
-  > .row.input {
-    margin-bottom: 20px;
+.ui-block.session-sign-in {
+  > .error {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  > .form {
     > input {
-      padding-left: 0;
-      padding-right: 0;
-      font-size: 32px;
-      border-bottom: 1px solid #eee;
+      margin-bottom: 5px;
     }
-    > .hint {
-      margin-top: 3px;
-      font-size: 10px;
+  }
+}
+
+.ui-route.setup-index {
+  > .row.run {
+    > .button {
+      cursor: pointer;
+      display: inline-block;
+      background: #333;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 15px;
+      border-radius: 4px;
     }
   }
 }

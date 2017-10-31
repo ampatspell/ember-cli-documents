@@ -7,12 +7,13 @@
 input[type='text'],
 input[type='password'] {
   -webkit-appearance: none;
-  border: none;
   outline: none;
   @include input-font;
   display: inline-block;
   padding: 5px 5px;
   width: 100%;
+  border: 1px solid #eee;
+  border-radius: 4px;
 }
 
 form, .form {
