@@ -1,6 +1,7 @@
 # TODO
 
 * sometimes continuous feed emits `{ last_seq: value }` only
+* `window.Promise = rsvp.Promise;` unittesting `run`, `next`
 * models for database (with prefilled `database` property) and for store (with `store` only)
 * models should also have an option to be created like props with destroy handling
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)

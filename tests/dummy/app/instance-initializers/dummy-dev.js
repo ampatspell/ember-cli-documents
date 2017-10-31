@@ -19,7 +19,9 @@ const fastbootIdentifier = 'dummy-documents';
 export default {
   name: 'dummy:dev',
   initialize(app) {
-    window.Promise = Promise;
+    if(!Ember.testing) {
+      window.Promise = Promise;
+    }
 
     let stores = app.lookup('documents:stores');
     let store = stores.store({ url, databaseNameForIdentifier, fastbootIdentifier });
@@ -30,6 +32,10 @@ export default {
     app.register('service:state', state, { instantiate: false });
 
     [ 'route', 'component' ].forEach(name => app.inject(name, 'state', 'service:state'));
+
+    if(Ember.testing) {
+      return;
+    }
 
     window.log = info;
     window.stores = stores;
