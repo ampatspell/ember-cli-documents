@@ -21,6 +21,9 @@ export default Component.extend({
       }
       this.setProperties({ isBusy: true, isError: false, error: null, result: null });
       try {
+        if(this.get('session.isDirty')) {
+          await this.get('session').save();
+        }
         let result = await this.get('state').setup();
         this.setProperties({ isBusy: false, result });
       } catch(error) {

@@ -1,3 +1,7 @@
 <div class="row">
-  {{ui-block/json error}}
+  {{#if error.toJSON}}
+    {{ui-block/json error}}
+  {{else}}
+    <pre>{{error.stack}}</pre>
+  {{/if}}
 </div>

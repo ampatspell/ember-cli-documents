@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { DocumentsError } from 'documents';
 
 const {
   RSVP: { all }
@@ -7,6 +8,7 @@ const {
 /* global emit */
 const ddocs = {
   main: {
+    version: 1,
     views: {
       'by-type': {
         map(doc) {
@@ -37,6 +39,13 @@ export default Ember.Mixin.create({
     let recreate = await this._recreateDatabase();
     let design = await this._insertDesignDocuments();
     return { recreate, design };
+  },
+
+  async _needsSetup() {
+    let doc = await this.get('database.documents.design').load('mai-n', { optional: true });
+    if(!doc || doc.version !== ddocs.main.version) {
+      throw new DocumentsError({ error: 'state', reason: 'needs_setup' });
+    }
   }
 
 });

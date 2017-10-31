@@ -13,22 +13,18 @@
   </div>
 {{/if}}
 
-{{#if isAuthenticated}}
+<div class="row run">
+  <div class="button" {{action 'setup'}}>{{if isBusy 'Running…' 'Run setup'}}</div>
+</div>
 
-  <div class="row run">
-    <div class="button" {{action 'setup'}}>{{if isBusy 'Running…' 'Run setup'}}</div>
+{{#if isError}}
+  <div class="row">
+    {{ui-block/json error}}
   </div>
+{{/if}}
 
-  {{#if isError}}
-    <div class="row">
-      {{ui-block/json error}}
-    </div>
-  {{/if}}
-
-  {{#if result}}
-    <div class="row">
-      {{ui-block/json result}}
-    </div>
-  {{/if}}
-
+{{#if result}}
+  <div class="row">
+    {{ui-block/json result}}
+  </div>
 {{/if}}

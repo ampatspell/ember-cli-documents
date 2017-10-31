@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
 
-  async beforeModel(transition) {
+  async beforeModel() {
     try {
       await this.get('state').restore();
     } catch(err) {
