@@ -9,8 +9,7 @@ const {
 } = Ember;
 
 const databaseMapping = {
-  main: 'thing',
-  _users: '_users'
+  main: 'ember-cli-documents-dummy'
 };
 
 const url = `${COUCHDB_HOST}:6016`;
@@ -36,5 +35,6 @@ export default {
     window.stores = stores;
     window.store = store;
     window.state = state;
+    window.database = store.get('db.main');
   }
 };
