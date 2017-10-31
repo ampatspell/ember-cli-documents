@@ -1,5 +1,6 @@
 # TODO
 
+* unify `register-destroy` with `-destroyable`. keep instances in `this.willDestroy[key]`
 * models for database (with prefilled `database` property) and for store (with `store` only)
 * models should also have an option to be created like props with destroy handling
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
