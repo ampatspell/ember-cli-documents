@@ -9,7 +9,7 @@ export default Ember.Mixin.create({
 
   identity: computed(function() {
     let _internal = { store: this };
-    return this._modelFactory('store/identity').create({ _internal, content: A() });
+    return this._documentsModelFactory('store/identity').create({ _internal, content: A() });
   }).readOnly(),
 
   willDestroy() {
