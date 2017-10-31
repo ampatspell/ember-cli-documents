@@ -54,6 +54,8 @@ import InternalQueryLoader from 'documents/document/internal/query-loader';
 import PaginatedLoader from 'documents/document/paginated-loader';
 import InternalPaginatedLoader from 'documents/document/internal/paginated-loader';
 
+import InternalModel from 'documents/document/internal/model';
+
 export default {
   name: 'documents:internal',
   initialize(container) {
@@ -115,5 +117,7 @@ export default {
 
     container.register('documents:paginated-loader', PaginatedLoader);
     container.register('documents:internal/paginated-loader', InternalPaginatedLoader);
+
+    container.register('documents:internal/model', InternalModel);
   }
 };

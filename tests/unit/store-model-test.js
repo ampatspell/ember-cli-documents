@@ -1,8 +1,14 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+import Model from 'documents/document/model';
 
-const Duck = Ember.Object.extend();
+const {
+  get,
+  run
+} = Ember;
+
+const Duck = Model.extend();
 
 module('store-model');
 
@@ -43,6 +49,35 @@ test('name must not be blank', function(assert) {
     assert.deepEqual(err.toJSON(), {
       "error": "assertion",
       "reason": "model name must not be blank"
+    });
+  }
+});
+
+test('modelName', function(assert) {
+  this.register('model:duck', Duck);
+  let model = this.store.model('duck');
+  assert.equal(get(model.constructor, 'modelName'), 'duck');
+  assert.equal(get(Duck, 'modelName'), undefined);
+});
+
+test('opts are applied on model create', function(assert) {
+  this.register('model:duck', Duck);
+  let model = this.store.model('duck', { id: 'yellow' });
+  assert.equal(model.get('id'), 'yellow');
+  let internal = model._internal;
+  run(() => model.destroy());
+  model = internal.model(true);
+  assert.equal(model.get('id'), 'yellow');
+});
+
+test('require documents model', function(assert) {
+  this.register('model:duck', Ember.Object.extend());
+  try {
+    this.store.model('duck');
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "assertion",
+      "reason": "model 'duck' must extend documents Model"
     });
   }
 });

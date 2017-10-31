@@ -1,8 +1,8 @@
-import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+import Model from 'documents/document/model';
 
-const Duck = Ember.Object.extend();
+const Duck = Model.extend();
 
 module('database-model');
 
