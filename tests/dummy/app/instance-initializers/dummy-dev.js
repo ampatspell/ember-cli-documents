@@ -19,9 +19,7 @@ const fastbootIdentifier = 'dummy-documents';
 export default {
   name: 'dummy:dev',
   initialize(app) {
-    if(!Ember.testing) {
-      window.Promise = Promise;
-    }
+    window.Promise = Promise;
 
     let stores = app.lookup('documents:stores');
     let store = stores.store({ url, databaseNameForIdentifier, fastbootIdentifier });
