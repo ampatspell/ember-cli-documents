@@ -20,6 +20,56 @@
 
 # Notes
 
+## Models
+
+``` javascript
+// blog/:blog_id
+export default Route.extend({
+  model(params) {
+    let id = params.blog_id;
+    return this.get('db').model('blog', { id });
+  }
+});
+
+// blog/:blog_id/posts
+export default Route.extend({
+  model() {
+    let blog = this.modelFor('blog');
+    return this.get('db').model('blog/posts', { blog });
+  }
+});
+
+// models/blog
+export default Model.extend({
+
+  id: null,
+  doc: byId({ id: prop('id') }),
+
+  isLoading: readOnly('doc.isLoading'),
+
+  title: readOnly('doc.title'),
+
+  posts: model('blog/posts', { blog: prop() }), // prop() => prop('this') => this
+
+});
+
+// models/blog/posts
+export default Model.extend({
+
+  blog: null,
+
+  docs: view({ ddoc: 'blog-post', view: 'by-blog', key: prop('blog.id') }),
+
+  isLoading: readOnly('docs.isLoading'),
+
+  all: models('blog/post', 'docs', { doc: prop('@') }), // prop('@') => docs[i]
+
+  drafts:    filterBy('all', 'state', 'draft'),
+  published: filterBy('all', 'state', 'published'),
+
+});
+```
+
 ## find `{ id }`, `{ ids }`
 
 Basically idea is to support usecases w/o changes listener.
