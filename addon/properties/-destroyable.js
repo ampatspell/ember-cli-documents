@@ -5,6 +5,20 @@ const {
   computed
 } = Ember;
 
+// usage:
+//
+// return destroyable('database', {
+//   create(key) {
+//     return new Thing(key);
+//   },
+//   get(internal) {
+//     return internal.model(true);
+//   },
+//   destroy(internal) {
+//     internal.destroy();
+//   }
+// });
+
 const __ember_cli_documents__ = '__ember_cli_documents__';
 
 const _get = owner => {
