@@ -21,6 +21,9 @@ const proxy = type => opts => {
     },
     get(internal) {
       return internal.model(true);
+    },
+    destroy(internal) {
+      internal.destroy();
     }
   }).meta({ [__documents_proxy_definition__]: opts }).readOnly();
 };
