@@ -25,8 +25,8 @@ const _cache = (owner, create) => {
     owner.willDestroy = function() {
       let object = _get(owner);
       for(let key in object) {
-        let value = object[key];
-        value.destroy();
+        let hash = object[key];
+        hash.destroy(hash.value);
       }
       willDestroy.apply(owner, arguments);
     }
@@ -43,10 +43,10 @@ const _cacheFor = (owner, key) => {
   return cache[key];
 }
 
-const _destroyCached = (owner, key, destroy) => {
+const _destroyCached = (owner, key, value, destroy) => {
   let cache = _cache(owner);
   delete cache[key];
-  destroy();
+  destroy(value);
 }
 
 const _store = (owner, key, value, destroy) => {
@@ -67,24 +67,24 @@ export const cacheFor = (owner, key) => {
 }
 
 export default (...args) => {
-  let { create, get } = args.pop();
+  let opts = args.pop();
   return computed(...args, function(key) {
     let { value, destroy } = _cacheFor(this, key);
 
     if(value) {
-      _destroyCached(this, key, destroy);
+      _destroyCached(this, key, value, destroy);
     }
 
-    value = create.call(this, key);
+    value = opts.create.call(this, key);
 
     if(!value) {
       return;
     }
 
-    _store(this, key, value, () => value.destroy());
+    _store(this, key, value, opts.destroy);
 
-    if(get) {
-      return get.call(this, value, key);
+    if(opts.get) {
+      return opts.get.call(this, value, key);
     }
 
     return value;

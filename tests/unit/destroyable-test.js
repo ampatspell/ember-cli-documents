@@ -30,6 +30,9 @@ module('destroyable', {
           },
           get(internal) {
             return internal;
+          },
+          destroy(internal) {
+            internal.destroy();
           }
         })
       }).create(props);
