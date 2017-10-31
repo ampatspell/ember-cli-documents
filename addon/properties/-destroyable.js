@@ -39,8 +39,8 @@ const _cache = (owner, create) => {
     owner.willDestroy = function() {
       let object = _get(owner);
       for(let key in object) {
-        let hash = object[key];
-        hash.destroy(hash.value);
+        let { value, destroy } = object[key];
+        destroy(value);
       }
       willDestroy.apply(owner, arguments);
     }
