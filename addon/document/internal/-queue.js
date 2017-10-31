@@ -11,9 +11,16 @@ export default class Queue {
     this.operation = null;
   }
 
+  _isIdle() {
+    return !this.operation && this.array.length === 0;
+  }
+
   add(operation) {
+    let idle = this._isIdle();
     this.array.push(operation);
-    this._scheduleNext();
+    if(idle) {
+      this._next();
+    }
     return operation;
   }
 
