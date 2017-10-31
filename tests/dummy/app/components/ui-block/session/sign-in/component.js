@@ -12,6 +12,7 @@ export default Component.extend({
     async enter() {
       try {
         await this.get('session').save();
+        this.attrs.didSignIn && this.attrs.didSignIn();
       } catch(err) {
         if(err.error !== 'unauthorized') {
           throw err;

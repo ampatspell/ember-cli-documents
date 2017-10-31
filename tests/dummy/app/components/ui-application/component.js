@@ -3,7 +3,7 @@ import layout from './template';
 
 const {
   computed,
-  computed: { equal }
+  computed: { equal, readOnly }
 } = Ember;
 
 const type = value => equal('_type', value).readOnly();
@@ -11,6 +11,8 @@ const type = value => equal('_type', value).readOnly();
 export default Ember.Component.extend({
   classNameBindings: [ ':ui-application' ],
   layout,
+
+  session: readOnly('state.session'),
 
   type: null,
 

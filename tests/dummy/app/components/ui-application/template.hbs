@@ -4,6 +4,11 @@
     <div class="links">
       {{link-to 'index' 'index'}}
       {{link-to 'setup' 'setup'}}
+      {{#if session.isAuthenticated}}
+        {{link-to session.name 'session.index'}}
+      {{else}}
+        {{link-to 'sign-in' 'session.new'}}
+      {{/if}}
     </div>
   {{/unless}}
 </div>

@@ -4,4 +4,5 @@
 <div class="form">
   {{input placeholder='name' value=session.name enter=(action 'enter') disabled=session.isSaving}}
   {{input placeholder='password' value=session.password type='password' enter=(action 'enter') disabled=session.isSaving}}
+  <button {{action 'enter'}} disabled={{session.isSaving}}>Sign-in</button>
 </div>
