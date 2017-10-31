@@ -25,4 +25,8 @@ export default class InternalModel extends ModelMixin(Base) {
     return this.store._createModel(this);
   }
 
+  get _modelWillDestroyUnsetsModel() {
+    return false;
+  }
+
 }
