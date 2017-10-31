@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import { assert, isString, notBlank, isClass_ } from 'documents/util/assert'
-import Model from 'documents/document/model';
+import { isString, notBlank, isClass_ } from 'documents/util/assert'
+import Model, { Mixin } from 'documents/document/model';
 
 const {
   merge,
@@ -22,8 +22,12 @@ export default Ember.Mixin.create({
     if(!factory) {
       factory = this._factoryFor(`model:${modelName}`);
       isClass_(`model for name '${modelName}' is not registered`, factory && factory.class);
-      assert(`model '${modelName}' must extend documents Model`, Model.detect(factory.class));
-      factory = factory.class.extend();
+      factory = factory.class;
+      if(Model.detect(factory)) {
+        factory = factory.extend();
+      } else {
+        factory = factory.extend(Mixin);
+      }
       factory.reopenClass({ modelName });
       getOwner(this).register(documentsModelKey, factory);
       factory = this._factoryFor(documentsModelKey);

@@ -5,9 +5,11 @@ import { property } from './-properties';
 const store = property('store');
 const database = property('database');
 
-export default Ember.Object.extend(ModelMixin, {
+export const Mixin = Ember.Mixin.create(ModelMixin, {
 
   store: store(),
   database: database()
 
 });
+
+export default Ember.Object.extend(Mixin);

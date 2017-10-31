@@ -70,14 +70,9 @@ test('opts are applied on model create', function(assert) {
   assert.equal(model.get('id'), 'yellow');
 });
 
-test('require documents model', function(assert) {
+test('mixin documents/model if needed', function(assert) {
   this.register('model:duck', Ember.Object.extend());
-  try {
-    this.store.model('duck');
-  } catch(err) {
-    assert.deepEqual(err.toJSON(), {
-      "error": "assertion",
-      "reason": "model 'duck' must extend documents Model"
-    });
-  }
+  let model = this.store.model('duck');
+  assert.equal(model.get('store'), this.store);
+  assert.equal(get(model.constructor, 'modelName'), 'duck');
 });
