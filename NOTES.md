@@ -23,47 +23,90 @@
 
 ## Models
 
-Route as a boundary for model. `state.blogById(id)` returns model, route _may_ have a mixin which destroys model on `deactivate`.
+``` javascript
+{
+  id: 'author:ampatspell',
+  type: 'author',
+  name: 'ampatspell',
+  email: 'ampatspell@gmail.com'
+}
 
-* route-scoped models vs state-scoped
+{
+  id: 'blog-post:ampatspell:help9e',
+  type: 'blog-post',
+  author_id: 'ampatspell',
+  title: 'Hello',
+  body: 'lorem ipsum'
+}
+```
 
 ``` javascript
-// blog/:blog_id
-export default Route.extend({
-  model(params) {
-    let id = params.blog_id;
-    return this.get('state.blogs').loadBlog(id);
-  }
-});
+const attr = _attr('doc');
+view({ ddoc: 'blog-post', view: 'by-author', key: prop('authorId') })
+attr('string', { key: 'email' }), // defaults to property key
+models('docs', { type: 'blog/post', doc: each() })
+```
 
-// blog/:blog_id/posts/:post_id
+``` javascript
+// route/authors/index.js
 export default Route.extend({
-  model(params) {
-    let id = params.post_id;
-    let blog = this.modelFor('blog');
-    return blog.get('posts').load(id);
+  async model() {
+    // or create a model here, load, discard
+    await this.get('database').find({ ddoc: 'author', view: 'all' });
+    return undefined;
   }
 });
 ```
 
 ``` javascript
-// models/state.js
-export default Model.extend({
+// components/ui-route/authors/index/component.js
+export default Component.extend({
 
-  blogs: model('blogs', { database: prop('database') }),
-
-});
-
-// models/blogs.js
-export default Model.extend({
-
-  docs: view({ ddoc: 'blog', view: 'all' }),
-
-  models: models('blog', 'docs', { doc: prop('@'), blogs: prop('this') }), // each(), prop('this')
-
-  async loadBlog(id) {
-    let blog = await this.get('models').byId(id); // what is loading what here?
-  }
+  authors: view({ ddoc: 'author', view: 'all' }),
 
 });
+```
+
+``` hbs
+{{! components/ui-route/authors/index/template.js }}
+{{#each authors as |author|}}
+  {{ui-block/author/row author=author}}
+{{/each}}
+```
+
+``` javascript
+// models/author.js
+export default Model.extend({
+
+  doc: null, // provided
+
+  // latestPosts: model('doc', { type: 'author/latest-posts', authorId: prop('doc._id') }),
+  latestPosts: sortedView({ ddoc: 'blog-post', view: 'by-author-sorted', key: prop('authorId') }) // { start_key: [ <id>, null ], end_key: [ <id>, {} ]
+
+});
+```
+
+``` javascript
+// components/ui-block/author/row/component.js
+export default Component.extend({
+
+  author: null, // doc
+
+  model: model('author', { type: 'author', doc: prop('author') })
+
+});
+```
+
+``` hbs
+{{! components/ui-block/author/row/template.js }}
+
+{{model.name}}
+
+{{#if model.latestPosts.docs.isLoading}}
+  Loading…
+{{else}}
+  {{#each model.latestPosts.docs as |doc|}}
+    {{ui-block/post/info post=doc}}
+  {{/each}}
+{{/if}}
 ```
