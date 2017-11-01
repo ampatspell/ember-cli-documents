@@ -5,15 +5,12 @@ $font-family: 'Raleway', sans-serif;
 @import "body";
 
 .ui-application {
+  @import "form";
 
   a {
     color: #000;
   }
 
-  @import "form";
-}
-
-.ui-application {
   padding: 25px;
   > .header {
     padding-bottom: 25px;
@@ -34,7 +31,6 @@ $font-family: 'Raleway', sans-serif;
     }
   }
   > .content {
-
   }
 }
 
