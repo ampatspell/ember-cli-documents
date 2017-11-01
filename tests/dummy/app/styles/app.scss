@@ -3,9 +3,10 @@ $font-family: 'Raleway', sans-serif;
 
 @import "reset";
 @import "body";
-@import "form";
 
 .ui-application {
+  @import "form";
+
   padding: 25px;
   > .header {
     padding-bottom: 25px;
@@ -26,7 +27,6 @@ $font-family: 'Raleway', sans-serif;
     }
   }
   > .content {
-
   }
 }
 
