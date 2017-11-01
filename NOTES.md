@@ -21,6 +21,8 @@
 
 ## Models
 
+Route as a boundary for model. `state.blogById(id)` returns model, route _may_ have a mixin which destroys model on `deactivate`.
+
 * route-scoped models vs state-scoped
 
 ``` javascript
