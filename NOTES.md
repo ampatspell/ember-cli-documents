@@ -1,6 +1,8 @@
 # TODO
 
 * sometimes continuous feed emits `{ last_seq: value }` only
+* `prop.prefix('author:', 'name')` for `author:zeeba` or undefined
+* `prop.concat('blog-post:', prop('author'), ':', prop('id'))` for `blog-post:zeeba:oidqw` or undefined
 * models should also have an option to be created like props with destroy handling
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
