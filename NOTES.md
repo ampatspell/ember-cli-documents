@@ -1,5 +1,7 @@
 # TODO
 
+* `prop.prefix('author:', 'name')` for `author:zeeba`
+* `prop.concat('blog-post:', prop('author'), ':', prop('id'))` for `blog-post:zeeba:oidqw`
 * models for database (with prefilled `database` property) and for store (with `store` only)
 * models should also have an option to be created like props with destroy handling
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
