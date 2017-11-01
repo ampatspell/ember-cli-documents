@@ -24,3 +24,44 @@
 ## Models
 
 * route-scoped models vs state-scoped
+
+``` javascript
+// blog/:blog_id
+export default Route.extend({
+  model(params) {
+    let id = params.blog_id;
+    return this.get('state.blogs').loadBlog(id);
+  }
+});
+
+// blog/:blog_id/posts/:post_id
+export default Route.extend({
+  model(params) {
+    let id = params.post_id;
+    let blog = this.modelFor('blog');
+    return blog.get('posts').load(id);
+  }
+});
+```
+
+``` javascript
+// models/state.js
+export default Model.extend({
+
+  blogs: model('blogs', { database: prop('database') }),
+
+});
+
+// models/blogs.js
+export default Model.extend({
+
+  docs: view({ ddoc: 'blog', view: 'all' }),
+
+  models: models('blog', 'docs', { doc: prop('@'), blogs: prop('this') }), // each(), prop('this')
+
+  async loadBlog(id) {
+    let blog = await this.get('models').byId(id); // what is loading what here?
+  }
+
+});
+```
