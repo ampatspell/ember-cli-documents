@@ -2,8 +2,17 @@
   {{state.blog}}
 </div>
 
-<div class="row">
-  {{#each state.blog.blogs as |blog|}}
-    <div>{{blog}}</div>
-  {{/each}}
-</div>
+{{#with state.blog as |blog|}}
+
+  <div class="row">
+    {{#each blog.blogs as |blog|}}
+      <div>{{blog}}</div>
+    {{/each}}
+  </div>
+
+  <div class="row">
+    {{#each blog.authors as |author|}}
+      <div>{{author}}</div>
+    {{/each}}
+  </div>
+{{/with}}

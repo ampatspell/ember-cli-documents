@@ -1,28 +1,38 @@
-import Ember from 'ember';
 import { Model } from 'documents';
 import { byType } from '../-props';
-
-const {
-  RSVP: { all }
-} = Ember;
+import { all, hash } from 'rsvp';
 
 export default Model.extend({
 
   blogs: byType({ type: 'blog' }),
+  authors: byType({ type: 'author' }),
 
-  async _insertBlogs() {
+  async _rebuildDummyData() {
     let db = this.get('database');
+
     await all([
-      { id: 'blog:ducks', type: 'blog', title: 'Ducks Blog' },
-      { id: 'blog:amateurinmotion', type: 'blog', title: 'amateurinmotion' }
+      all(this.get('blogs').map(doc => doc.delete())),
+      all(this.get('authors').map(doc => doc.delete()))
+    ]);
+
+    await all([
+      { id: 'blog:ducks', type: 'blog', title: 'Ducks Blog', owner: 'author:duck' },
+      { id: 'blog:amateurinmotion', type: 'blog', title: 'amateurinmotion', owner: 'author:ampatspell' },
+      { id: 'author:duck', type: 'author', name: 'Duck', email: 'ducky@gmail.com' },
+      { id: 'author:ampatspell', type: 'author', name: 'ampatspell', email: 'ampatspell@gmail.com' }
     ].map(props => db.doc(props).save()));
   },
 
   async load() {
-    let blogs = await this.get('blogs').load();
-    if(blogs.get('length') === 0) {
-      await this._insertBlogs();
+    let { blogs, authors } = await hash({
+      blogs: this.get('blogs').load(),
+      authors: this.get('authors').load()
+    });
+
+    if(blogs.get('length') === 0 || authors.get('length') === 0) {
+      await this._rebuildDummyData();
     }
+
     return this;
   }
 
