@@ -1,6 +1,6 @@
 # TODO
 
-* sometimes continuous feed emits `{ last_seq: value }` only
+* `author: model('docProp', { type: 'modelName', ... additional props ... })`
 * `prop.prefix('author:', 'name')` for `author:zeeba` or undefined
 * `prop.concat('blog-post:', prop('author'), ':', prop('id'))` for `blog-post:zeeba:oidqw` or undefined
 * models should also have an option to be created like props with destroy handling
@@ -51,10 +51,18 @@ models('docs', { type: 'blog/post', doc: each() })
 // route/authors/index.js
 export default Route.extend({
   async model() {
-    // or create a model here, load, discard
-    await this.get('database').find({ ddoc: 'author', view: 'all' });
+    await this.get('state.authors').load();
     return undefined;
   }
+});
+```
+
+``` javascript
+// models/state.js
+export default Model.extend({
+
+  authors: view({ ddoc: 'author', view: 'all' })
+
 });
 ```
 
@@ -62,7 +70,7 @@ export default Route.extend({
 // components/ui-route/authors/index/component.js
 export default Component.extend({
 
-  authors: view({ ddoc: 'author', view: 'all' }),
+  authors: readOnly('state.authors'),
 
 });
 ```
