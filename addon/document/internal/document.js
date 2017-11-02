@@ -2,6 +2,7 @@ import Ember from 'ember';
 import InternalObject from './object';
 import DocumentState from './-document-state';
 import Queue from './-queue';
+import DocumentsError from '../../util/error';
 
 const {
   Logger: { error }
@@ -205,6 +206,12 @@ export default class InternalDocument extends InternalObject {
 
   delete() {
     return this.database._scheduleInternalDelete(this, ...arguments).promise;
+  }
+
+  onError(err, notify) {
+    err = err instanceof Error ? err : new DocumentsError(err);
+    this.withPropertyChanges(changed => this.state.onError(err, changed), notify);
+    return err;
   }
 
 }
