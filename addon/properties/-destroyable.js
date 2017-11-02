@@ -56,7 +56,11 @@ const _cacheFor = (owner, key) => {
   if(!cache) {
     return {};
   }
-  return cache[key];
+  let value = cache[key];
+  if(!value) {
+    value = {};
+  }
+  return value;
 }
 
 const _destroyCached = (owner, key, value, destroy) => {
