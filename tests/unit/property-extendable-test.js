@@ -1,7 +1,12 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import extendable from 'documents/properties/-extendable';
+import createExtendable from 'documents/properties/-create-extendable';
+
+let extendable = createExtendable({
+  arrays: [ 'owner', 'document' ],
+  functions: [ 'query', 'matches', 'loaded' ]
+});
 
 const {
   merge
