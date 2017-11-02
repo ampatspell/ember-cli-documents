@@ -10,8 +10,8 @@ const Duck = Model.extend({
 const docModel = opts => model({
   dependencies: [ opts.doc ],
   type: opts.type,
-  create() {
-    let doc = this.get(opts.doc);
+  create(owner) {
+    let doc = owner.get(opts.doc);
     if(!doc) {
       return;
     }
