@@ -18,12 +18,6 @@ const proxy = type => opts => {
         return;
       }
       return database._createInternalProxy(type, this, omit(opts, [ 'database' ]));
-    },
-    get(internal) {
-      return internal.model(true);
-    },
-    destroy(internal) {
-      internal.destroy();
     }
   }).meta({ [__documents_proxy_definition__]: opts }).readOnly();
 };

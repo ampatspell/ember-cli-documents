@@ -2,7 +2,9 @@ import Ember from 'ember';
 import EmptyObject from 'documents/util/empty-object';
 
 const {
-  computed
+  computed,
+  copy,
+  merge
 } = Ember;
 
 // usage:
@@ -80,8 +82,18 @@ export const cacheFor = (owner, key) => {
   return hash.value;
 }
 
+const defaults = {
+  get(internal) {
+    return internal.model(true);
+  },
+  destroy(internal) {
+    internal.destroy();
+  }
+};
+
 export default (...args) => {
   let opts = args.pop();
+  opts = merge(copy(defaults), opts);
   return computed(...args, function(key) {
     let { value, destroy } = _cacheFor(this, key);
 
