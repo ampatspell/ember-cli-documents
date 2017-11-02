@@ -5,6 +5,8 @@ const type = 'author';
 
 export default Model.extend({
 
+  type,
+
   docs: byType({ type }),
 
   createNew() {

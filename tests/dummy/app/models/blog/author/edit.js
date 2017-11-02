@@ -5,6 +5,8 @@ export default Model.extend({
 
   doc: null,
 
+  // TODO: changeset
+
   id: computed('doc.{id,name,isNew}', function() {
     let { id, name, isNew }  = this.get('doc').getProperties('id', 'name', 'isNew');
     if(!isNew) {

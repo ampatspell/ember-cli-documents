@@ -2,8 +2,6 @@
   {{author}}
 </div>
 
-{{author.doc.error}}
-
 {{#if author.doc.isError}}
   <div class="row">
     {{ui-block/json author.doc.error}}
@@ -18,7 +16,7 @@
     {{input placeholder='Email' value=author.doc.email}}
   </div>
   <div class="row">
-    <button {{action 'save'}} disabled={{author.doc.isSaving}}>Save</button>
+    <button {{action 'save'}} disabled={{author.doc.isSaving}}>{{if author.doc.isNew 'Save' 'Update'}}</button>
   </div>
 </div>
 

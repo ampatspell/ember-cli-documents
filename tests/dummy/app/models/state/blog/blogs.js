@@ -1,8 +1,12 @@
 import Model from './-base';
 import { byType } from '../../-props';
 
+const type = 'blog';
+
 export default Model.extend({
 
-  docs: byType({ type: 'blog' })
+  type,
+
+  docs: byType({ type })
 
 });
