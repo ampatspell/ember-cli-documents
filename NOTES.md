@@ -21,6 +21,32 @@
 
 # Notes
 
+```javascript
+import { model } from 'documents';
+
+let doc = model.extend(opts => {
+  opts = merge({ doc: 'doc' }, opts);
+  return {
+    dependencies: [ opts.doc ],
+    create() {
+      let doc = this.get(opts.doc);
+      if(!doc) {
+        return;
+      }
+      return { doc };
+    }
+  }
+});
+
+export default Model.extend({
+
+  doc: null, // provided
+  model: doc({ type: 'duck' }),
+
+});
+
+```
+
 ## Models
 
 ``` javascript
