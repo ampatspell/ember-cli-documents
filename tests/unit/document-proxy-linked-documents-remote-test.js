@@ -15,12 +15,12 @@ const ddoc = {
           return;
         }
         emit(doc._id);
-        let feathers = doc.feathers;
+        var feathers = doc.feathers;
         if(!feathers) {
           return;
         }
-        for(let i = 0; i < feathers.length; i++) {
-          let id = feathers[i];
+        for(var i = 0; i < feathers.length; i++) {
+          var id = feathers[i];
           emit(doc._id, { _id: id });
         }
       }
