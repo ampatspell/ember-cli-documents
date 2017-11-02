@@ -1,5 +1,6 @@
 # TODO
 
+* test for 2 parallel documentn saves without id
 * `prop.prefix('author:', 'name')` for `author:zeeba` or undefined
 * `prop.concat('blog-post:', prop('author'), ':', prop('id'))` for `blog-post:zeeba:oidqw` or undefined
 * models for database (with prefilled `database` property) and for store (with `store` only)
