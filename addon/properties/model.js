@@ -3,7 +3,6 @@ import destroyable from './-destroyable';
 import { omit } from '../util/object';
 
 const {
-  computed,
   merge
 } = Ember;
 

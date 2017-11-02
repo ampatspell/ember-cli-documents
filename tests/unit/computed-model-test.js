@@ -3,7 +3,6 @@ import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import model from 'documents/properties/model';
 import { Model } from 'documents';
-import { prop } from 'documents/properties';
 
 const Duck = Model.extend({
 });
