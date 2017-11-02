@@ -8,6 +8,10 @@ const rev         = forward('getRev');
 const attachments = forward('getAttachments', 'setAttachments');
 const database    = property('database');
 
+const onError = () => function(err) {
+  return this._internal.onError(err, true);
+}
+
 export default DocumentObject.extend(DocumentStateMixin, SerializedMixin, {
 
   id: id(),
@@ -20,6 +24,8 @@ export default DocumentObject.extend(DocumentStateMixin, SerializedMixin, {
   load:   promise('load'),
   reload: promise('reload'),
   delete: promise('delete'),
+
+  onError: onError(),
 
   toStringExtension() {
     let database = this.get('database.identifier');
