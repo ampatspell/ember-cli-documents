@@ -16,6 +16,10 @@ Router.map(function() {
       this.route('author', { path: '/:author_id'}, function() {
       });
     });
+    this.route('blogs', function() {
+      this.route('blog', { path: '/:blog_id'}, function() {
+      });
+    });
   });
   this.route('documents', function() {
     this.route('document', { path: '/:doc_id' }, function() {

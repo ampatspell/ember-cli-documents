@@ -1,17 +1,24 @@
 <div class="row">
-  {{state.blog}}
+  {{link-to 'authors' 'blog.authors'}}
+  {{link-to 'blogs' 'blog.blogs'}}
 </div>
 
 {{#with state.blog as |blog|}}
 
   <div class="row">
-    {{#each blog.blogs as |blog|}}
+    <div>{{blog}}</div>
+    <div>{{blog.blogs}}</div>
+    <div>{{blog.authors}}</div>
+  </div>
+
+  <div class="row">
+    {{#each blog.blogs.docs as |blog|}}
       <div>{{blog}}</div>
     {{/each}}
   </div>
 
   <div class="row">
-    {{#each blog.authors as |author|}}
+    {{#each blog.authors.docs as |author|}}
       <div>{{author}}</div>
     {{/each}}
   </div>

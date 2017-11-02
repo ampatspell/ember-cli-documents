@@ -1,11 +1,12 @@
 import { Model } from 'documents';
 import { byType } from '../-props';
 import { all, hash } from 'rsvp';
+import { blog } from '../-model';
 
 export default Model.extend({
 
-  blogs: byType({ type: 'blog' }),
-  authors: byType({ type: 'author' }),
+  authors: blog({ type: 'state/blog/authors' }),
+  blogs:   blog({ type: 'state/blog/blogs' }),
 
   async _rebuildDummyData() {
     let db = this.get('database');
@@ -29,7 +30,7 @@ export default Model.extend({
       authors: this.get('authors').load()
     });
 
-    if(blogs.get('length') === 0 || authors.get('length') === 0) {
+    if(blogs.get('isEmpty') || authors.get('isEmpty')) {
       await this._rebuildDummyData();
     }
 

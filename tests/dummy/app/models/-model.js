@@ -5,9 +5,11 @@ const {
   merge
 } = Ember;
 
-export const state = model.extend(() => ({
+const owner = key => model.extend(() => ({
   create(owner) {
-    let state = owner;
-    return merge({ state }, this._super && this._super(...arguments));
+    return merge({ [key]: owner }, this._super && this._super(...arguments));
   }
 }));
+
+export const state = owner('state');
+export const blog = owner('blog');
