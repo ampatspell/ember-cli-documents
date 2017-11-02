@@ -1,5 +1,4 @@
 import { Model } from 'documents';
-import { byType } from '../-props';
 import { all, hash } from 'rsvp';
 import { blog } from '../-model';
 

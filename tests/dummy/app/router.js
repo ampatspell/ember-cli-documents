@@ -13,6 +13,7 @@ Router.map(function() {
   });
   this.route('blog', function() {
     this.route('authors', function() {
+      this.route('new');
       this.route('author', { path: '/:author_id'}, function() {
       });
     });

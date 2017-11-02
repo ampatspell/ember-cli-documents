@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { DocumentsError } from 'documents';
+import { Error } from 'documents';
 
 const {
   RSVP: { all }
@@ -44,7 +44,7 @@ export default Ember.Mixin.create({
   async _needsSetup() {
     let doc = await this.get('database.documents.design').load('main', { optional: true });
     if(!doc || doc.version !== ddocs.main.version) {
-      throw new DocumentsError({ error: 'state', reason: 'needs_setup' });
+      throw new Error({ error: 'state', reason: 'needs_setup' });
     }
   }
 
