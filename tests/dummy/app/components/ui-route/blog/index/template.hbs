@@ -1,3 +1,9 @@
 <div class="row">
   {{state.blog}}
 </div>
+
+<div class="row">
+  {{#each state.blog.blogs as |blog|}}
+    <div>{{blog}}</div>
+  {{/each}}
+</div>
