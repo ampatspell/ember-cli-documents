@@ -1,7 +1,7 @@
 import Model from './document/model';
-import DocumentsError from './util/error';
+import Error from './util/error';
 
 export {
   Model,
-  DocumentsError
+  Error
 }
