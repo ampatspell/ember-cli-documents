@@ -6,7 +6,18 @@ import { Model } from 'documents';
 import { prop } from 'documents/properties';
 
 const Duck = Model.extend({
+});
 
+const docModel = opts => model({
+  dependencies: [ opts.doc ],
+  type: opts.type,
+  create() {
+    let doc = this.get(opts.doc);
+    if(!doc) {
+      return;
+    }
+    return { doc };
+  }
 });
 
 module('computed-model', {
@@ -15,18 +26,9 @@ module('computed-model', {
     this.create = (opts={}) => {
       let Subject = Ember.Object.extend({
         doc: opts.doc,
-        prop: model('doc', {
-          type: 'duck',
-          create() {
-            let doc = this.get('doc');
-            if(!doc) {
-              return;
-            }
-            return { doc };
-          }
-        })
+        prop: docModel({ doc: 'doc', type: 'duck' })
       });
-      return Subject.create({ store: this.store });
+      return Subject.create({ store: this.store, database: this.db });
     };
   }
 });
@@ -42,9 +44,11 @@ test('model is created', async function(assert) {
   assert.ok(Duck.detectInstance(model));
 });
 
-test.todo('model has passed properties', async function(assert) {
+test('model has passed properties', async function(assert) {
   let doc = {};
   let subject = this.create({ doc });
   let model = subject.get('prop');
   assert.equal(model.get('doc'), doc);
+  assert.equal(model.get('store'), this.store);
+  assert.equal(model.get('database'), this.db);
 });

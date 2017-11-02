@@ -7,19 +7,37 @@ const {
   merge
 } = Ember;
 
-const model = (key, opts) => {
-  opts = merge({ store: 'store' }, opts);
-  return destroyable(key, {
+const _get = (owner, key) => key ? owner.get(key) : null;
+
+const getStoreAndDatabase = (owner, opts) => {
+  let store = _get(owner, opts.store);
+  let database = _get(owner, opts.database);
+  if(!store) {
+    if(!database) {
+      return {};
+    }
+    store = database.get('store');
+  }
+  return { store, database };
+}
+
+const mergeModelOpts = (owner, opts) => {
+  let result = opts;
+  result = omit(result, [ 'store', 'database', 'dependencies', 'type', 'create' ]);
+  result = merge(result, opts.create.call(owner, owner));
+  return result;
+}
+
+const model = opts => {
+  opts = merge({ store: 'store', database: 'database', dependencies: [] }, opts);
+  return destroyable(...opts.dependencies, {
     create() {
-      let store = this.get(opts.store);
+      let { store, database } = getStoreAndDatabase(this, opts);
       if(!store) {
         return;
       }
-      let modelName = opts.type;
-      let parent = null;
-      let database = null;
-      let expanded = omit(opts, [ 'store', 'database', 'type' ]);
-      return store._createInternalModel(modelName, parent, database, expanded);
+      let modelOpts = mergeModelOpts(this, opts);
+      return store._createInternalModel(opts.type, this, database, modelOpts);
     }
   });
 };
