@@ -4,6 +4,7 @@
     <div class="links">
       {{link-to 'index' 'index'}}
       {{link-to 'setup' 'setup'}}
+      {{link-to 'blog' 'blog'}}
       {{#if session.isAuthenticated}}
         {{link-to session.name 'session.index'}}
       {{else}}
