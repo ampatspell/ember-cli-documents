@@ -5,7 +5,7 @@ import DocumentsError from '../util/error';
 const {
   merge,
   assign,
-  RSVP: { resolve }
+  RSVP: { resolve, reject }
 } = Ember;
 
 export default Ember.Mixin.create({
@@ -23,13 +23,10 @@ export default Ember.Mixin.create({
     let existing = this._internalDocumentWithId(id);
 
     if(!existing || existing === internal) {
-      return;
+      return true;
     }
 
-    throw new DocumentsError({
-      error: 'conflict',
-      reason: 'Document update conflict'
-    });
+    return false;
   },
 
   __reloadInternalAttachments(internal, json) {
@@ -46,7 +43,12 @@ export default Ember.Mixin.create({
       return resolve(internal);
     }
 
-    this.__validateInternalDocumentUniqueness(internal);
+    if(!this.__validateInternalDocumentUniqueness(internal)) {
+      return reject(internal.onError(new DocumentsError({
+        error: 'conflict',
+        reason: 'Document update conflict'
+      }), true));
+    }
 
     internal.setState('onSaving');
 
