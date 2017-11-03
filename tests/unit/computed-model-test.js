@@ -4,8 +4,9 @@ import { test } from '../helpers/qunit';
 import model from 'documents/properties/model';
 import { Model } from 'documents';
 
-const Duck = Model.extend({
-});
+const Hamster = Ember.Object.extend({});
+
+const Duck = Model.extend({});
 
 const docModel = opts => model({
   dependencies: [ opts.doc ],
@@ -22,10 +23,11 @@ const docModel = opts => model({
 module('computed-model', {
   beforeEach() {
     this.register('model:duck', Duck);
+    this.register('model:hamster', Hamster);
     this.create = (opts={}) => {
       let Subject = Ember.Object.extend({
         doc: opts.doc,
-        prop: docModel({ doc: 'doc', type: 'duck' })
+        prop: docModel({ doc: 'doc', type: opts.type || 'duck' })
       });
       return Subject.create({ store: this.store, database: this.db });
     };
@@ -50,4 +52,17 @@ test('model has passed properties', async function(assert) {
   assert.equal(model.get('doc'), doc);
   assert.equal(model.get('store'), this.store);
   assert.equal(model.get('database'), this.db);
+});
+
+test('requires model type to be model', function(assert) {
+  let subject = this.create({ doc: {}, type: 'hamster' });
+  try {
+    subject.get('prop');
+    assert.ok(false, 'should throw');
+  } catch(err) {
+    assert.deepEqual(err.toJSON(), {
+      "error": "assertion",
+      "reason": "model for name 'hamster' must extend Model"
+    });
+  }
 });

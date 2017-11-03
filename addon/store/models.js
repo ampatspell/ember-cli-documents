@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import { isString, notBlank, isClass_ } from 'documents/util/assert'
 import Model from 'documents/document/model';
+import Models from 'documents/document/models';
+import assert from 'documents/util/assert';
 
 const {
   merge,
@@ -15,7 +17,7 @@ export default Ember.Mixin.create({
     return dasherize(name);
   },
 
-  _modelFactory(modelName) {
+  _modelFactory(modelName, expectedClass, expectedClassName) {
     notBlank('model name', modelName);
     let documentsModelKey = `documents:model/${modelName}`;
     let factory = this._factoryFor(documentsModelKey);
@@ -23,6 +25,7 @@ export default Ember.Mixin.create({
       factory = this._factoryFor(`model:${modelName}`);
       isClass_(`model for name '${modelName}' is not registered`, factory && factory.class);
       factory = factory.class;
+      assert(`model for name '${modelName}' must extend ${expectedClassName}`, expectedClass.detect(factory));
       factory = factory.extend();
       factory.reopenClass({ modelName });
       getOwner(this).register(documentsModelKey, factory);
@@ -33,14 +36,14 @@ export default Ember.Mixin.create({
 
   _createInternalModel(name, parent, opts) {
     let normalizedName = this._normalizeModelName(name);
-    let factory = this._modelFactory(normalizedName);
+    let factory = this._modelFactory(normalizedName, Model, 'Model');
     let InternalModel = this._documentsInternalFactory('model');
     return new InternalModel(this, parent, factory, opts);
   },
 
   _createInternalModels(name, parent, opts) {
     let normalizedName = this._normalizeModelName(name);
-    let factory = this._modelFactory(normalizedName);
+    let factory = this._modelFactory(normalizedName, Models, 'Models');
     let InternalModels = this._documentsInternalFactory('models');
     return new InternalModels(this, parent, factory, opts);
   },

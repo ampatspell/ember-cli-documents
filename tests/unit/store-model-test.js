@@ -69,10 +69,3 @@ test('opts are applied on model create', function(assert) {
   model = internal.model(true);
   assert.equal(model.get('id'), 'yellow');
 });
-
-test('mixin documents/model if needed', function(assert) {
-  this.register('model:duck', Ember.Object.extend());
-  let model = this.store.model('duck');
-  assert.equal(model.get('store'), this.store);
-  assert.equal(get(model.constructor, 'modelName'), 'duck');
-});
