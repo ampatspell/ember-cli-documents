@@ -20,10 +20,13 @@ const getStoreAndDatabase = (owner, opts) => {
   return { store, database };
 }
 
-const mergeModelOpts = (owner, opts) => {
+const mergeModelOpts = (owner, opts, database) => {
   let result = opts;
   result = omit(result, [ 'store', 'database', 'dependencies', 'type', 'create' ]);
   result = merge(result, opts.create(owner));
+  if(database) {
+    result = merge({ database }, result);
+  }
   return result;
 }
 
@@ -35,8 +38,8 @@ export default opts => {
       if(!store) {
         return;
       }
-      let modelOpts = mergeModelOpts(this, opts);
-      return store._createInternalModel(opts.type, this, database, modelOpts);
+      let modelOpts = mergeModelOpts(this, opts, database);
+      return store._createInternalModel(opts.type, this, modelOpts);
     }
   });
 };

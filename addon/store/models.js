@@ -35,11 +35,11 @@ export default Ember.Mixin.create({
     return factory;
   },
 
-  _createInternalModel(name, parent, database, opts) {
+  _createInternalModel(name, parent, opts) {
     let normalizedName = this._normalizeModelName(name);
     let factory = this._modelFactory(normalizedName);
     let InternalModel = this._documentsInternalFactory('model');
-    return new InternalModel(this, parent, database, factory, opts);
+    return new InternalModel(this, parent, factory, opts);
   },
 
   _createModel(_internal) {
@@ -48,7 +48,7 @@ export default Ember.Mixin.create({
   },
 
   model(name, opts) {
-    return this._createInternalModel(name, null, null, opts).model(true);
+    return this._createInternalModel(name, null, opts).model(true);
   }
 
 });
