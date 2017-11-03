@@ -29,4 +29,11 @@ export default class InternalModel extends ModelMixin(Base) {
     return false;
   }
 
+  destroy() {
+    let model = this.model(false);
+    if(model) {
+      model.destroy();
+    }
+  }
+
 }
