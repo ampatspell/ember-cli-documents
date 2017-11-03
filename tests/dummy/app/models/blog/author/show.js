@@ -1,4 +1,5 @@
 import { Model } from 'documents';
+import { info } from 'documents/util/logger';
 
 export default Model.extend({
 
@@ -7,12 +8,12 @@ export default Model.extend({
   // TODO: readOnly attrs check out how would I implement owned blogs
 
   init() {
-    console.log('init', this+'');
+    info('init', this+'');
     return this._super(...arguments);
   },
 
   willDestroy() {
-    console.log('willDestroy', this+'');
+    info('willDestroy', this+'');
     this._super(...arguments);
   }
 
