@@ -1,4 +1,4 @@
-{{#each authors.docs as |doc|}}
+{{#each docs as |doc|}}
   <div class="row" {{action 'show' doc}}>
     {{ui-block/json doc.serialized}}
   </div>

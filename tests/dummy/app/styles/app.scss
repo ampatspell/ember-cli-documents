@@ -12,9 +12,6 @@ $font-family: 'Raleway', sans-serif;
 
 *[data-ember-action] {
   cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .ui-application {

@@ -9,7 +9,9 @@ export default Component.extend({
 
   router: service(),
 
-  authors: readOnly('state.blog.authors'),
+  docs: readOnly('state.blog.authors.docs'),
+  // TODO: models
+  // authors: models({ ... })
 
   actions: {
     show(doc) {
