@@ -10,6 +10,13 @@ $font-family: 'Raleway', sans-serif;
   text-overflow: ellipsis;
 }
 
+*[data-ember-action] {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .ui-application {
   @import "form";
   a {

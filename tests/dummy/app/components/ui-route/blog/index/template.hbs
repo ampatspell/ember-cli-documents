@@ -3,23 +3,8 @@
   {{link-to 'blogs' 'blog.blogs'}}
 </div>
 
-{{#with state.blog as |blog|}}
-
-  <div class="row">
-    <div>{{blog}}</div>
-    <div>{{blog.blogs}}</div>
-    <div>{{blog.authors}}</div>
-  </div>
-
-  <div class="row">
-    {{#each blog.blogs.docs as |blog|}}
-      <div>{{blog}}</div>
-    {{/each}}
-  </div>
-
-  <div class="row">
-    {{#each blog.authors.docs as |author|}}
-      <div>{{author}}</div>
-    {{/each}}
-  </div>
-{{/with}}
+<div class="row">
+  <div {{action 'select' 'blog' blog}}>{{blog}}</div>
+  <div {{action 'select' 'blogs' blog.blogs}}>{{blog.blogs}}</div>
+  <div {{action 'select' 'authors' blog.authors}}>{{blog.authors}}</div>
+</div>
