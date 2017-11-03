@@ -4,7 +4,7 @@ export default Ember.Route.extend({
 
   async model(params) {
     let id = `author:${params.author_id}`;
-    return await this.get('state.blog.authors').modelById('blog/author/show', id);
+    return await this.get('state.blog.authors').docById(id);
   },
 
   serialize(doc) {

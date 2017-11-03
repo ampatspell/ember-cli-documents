@@ -13,3 +13,17 @@ const owner = key => model.extend(() => ({
 
 export const state = owner('state');
 export const blog = owner('blog');
+
+// doc: null,
+// author: doc({ doc: 'doc', type: 'blog/author/show' }),
+export const doc = model.extend(opts => ({
+  dependencies: [ opts.doc ],
+  database: `${opts.doc}.database`,
+  create(owner) {
+    let doc = owner.get(opts.doc);
+    if(!doc) {
+      return;
+    }
+    return { doc };
+  }
+}));
