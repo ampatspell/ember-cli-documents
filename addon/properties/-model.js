@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import destroyable from './-destroyable';
 import { omit } from '../util/object';
+import InternalModel from '../document/internal/model';
 
 const {
   merge
@@ -20,14 +21,19 @@ const getStoreAndDatabase = (owner, opts) => {
   return { store, database };
 }
 
-const mergeModelOpts = (owner, opts, database) => {
+const mergeModelOpts = (owner, opts) => {
   let result = opts;
   result = omit(result, [ 'store', 'database', 'dependencies', 'type', 'create' ]);
   result = merge(result, opts.create(owner));
-  if(database) {
-    result = merge({ database }, result);
-  }
   return result;
+}
+
+const toInternalModel = owner => {
+  let internal = owner._internal;
+  if(internal instanceof InternalModel) {
+    return internal;
+  }
+  return null;
 }
 
 export default opts => {
@@ -39,7 +45,9 @@ export default opts => {
         return;
       }
       let modelOpts = mergeModelOpts(this, opts, database);
-      return store._createInternalModel(opts.type, this, modelOpts);
+      let parent = toInternalModel(this);
+      let target = database || store;
+      return target._createInternalModel(opts.type, parent, modelOpts);
     }
   });
 };

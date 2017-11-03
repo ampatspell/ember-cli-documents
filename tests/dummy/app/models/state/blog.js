@@ -10,9 +10,11 @@ export default Model.extend({
   async _rebuildDummyData() {
     let db = this.get('database');
 
+    const del = key => all(this.get(`${key}.docs`).map(doc => doc.delete()));
+
     await all([
-      all(this.get('blogs').map(doc => doc.delete())),
-      all(this.get('authors').map(doc => doc.delete()))
+      del('blogs'),
+      del('authors')
     ]);
 
     await all([
