@@ -1,7 +1,8 @@
 import { computed } from '@ember/object';
 import { Model } from 'documents';
+import LogMixin from '../../-log-mixin';
 
-export default Model.extend({
+export default Model.extend(LogMixin, {
 
   doc: null,
 
@@ -29,6 +30,14 @@ export default Model.extend({
       }
     }
     await doc.save();
+  },
+
+  willDestroy() {
+    let doc = this.get('doc');
+    if(doc.get('isNew')) {
+      doc.destroy();
+    }
+    this._super(...arguments);
   }
 
 });

@@ -1,20 +1,10 @@
 import { Model } from 'documents';
-import { info } from 'documents/util/logger';
+import LogMixin from '../../-log-mixin';
 
-export default Model.extend({
+export default Model.extend(LogMixin, {
 
   doc: null,
 
   // TODO: readOnly attrs check out how would I implement owned blogs
-
-  init() {
-    info('init', this+'');
-    return this._super(...arguments);
-  },
-
-  willDestroy() {
-    info('willDestroy', this+'');
-    this._super(...arguments);
-  }
 
 });

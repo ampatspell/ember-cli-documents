@@ -1,13 +1,26 @@
 {{#each documents as |doc|}}
   <div class="doc" {{action 'select' doc}}>
-    {{doc.id}}
-    {{#if doc.isNew}}
-      [new]
-    {{else}}
-      / {{doc.rev}}
+    <div class="id">
+      {{#if doc.id}}
+        {{doc.id}}
+      {{else}}
+        &lt;no id&gt;
+      {{/if}}
+    </div>
+    {{#if doc.rev}}
+      <div class="rev">{{doc.rev}}</div>
     {{/if}}
-    {{#if doc.isDirty}}[dirty]{{/if}}
+    <div class="info">
+      {{#if doc.isNew}}
+        <span class="item">new</span>
+      {{else}}
+        <span class="item">saved</span>
+      {{/if}}
+      {{#if doc.isDirty}}
+        <span class="item">dirty</span>
+      {{/if}}
+    </div>
   </div>
 {{else}}
-  <div>No documents loaded</div>
+  <div class="placeholder">No documents loaded</div>
 {{/each}}
