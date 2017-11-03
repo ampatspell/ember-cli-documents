@@ -9,7 +9,7 @@ const {
 
 const _get = (owner, key) => key ? owner.get(key) : null;
 
-const getStoreAndDatabase = (owner, opts) => {
+export const getStoreAndDatabase = (owner, opts) => {
   let store = _get(owner, opts.store);
   let database = _get(owner, opts.database);
   if(!store) {
@@ -21,14 +21,14 @@ const getStoreAndDatabase = (owner, opts) => {
   return { store, database };
 }
 
-const mergeModelOpts = (owner, opts) => {
+export const mergeModelOpts = (owner, opts) => {
   let result = opts;
   result = omit(result, [ 'store', 'database', 'dependencies', 'type', 'create' ]);
   result = merge(result, opts.create(owner));
   return result;
 }
 
-const toInternalModel = owner => {
+export const toInternalModel = owner => {
   let internal = owner._internal;
   if(internal instanceof InternalModel) {
     return internal;
