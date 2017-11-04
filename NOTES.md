@@ -17,3 +17,42 @@
 * figure out how to get saves in one `_bulk_docs` call (also `all_or_nothing: true` would be nice option for `db.save(docs)`)
 * view reduce proxy for load, reload & underlying internal stuff for that in `db.find` or `db.reduce`
 * come up with an API for conflict resolution
+
+# Notes
+
+## Models prop
+
+``` javascript
+export default Component.extend({
+
+  docs: reads('state.blog.authors.docs'),
+
+  authors: models({
+    dependencies: [ 'docs' ],
+    type: 'blog/authors',
+    source: 'docs', // owner property which will be observed
+    create(owner) {
+      // create Models
+      return {
+        // create Model
+        create(doc) {
+
+        }
+      }
+    },
+  })
+
+});
+
+// models/blog/authors.js (or documents:models)
+export default Models.extend({
+
+  content: // [ author/show, ... ]
+
+});
+
+// models/blog/author/show.js
+export default Model.extend({
+
+});
+```
