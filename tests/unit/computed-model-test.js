@@ -9,7 +9,7 @@ const Hamster = Ember.Object.extend({});
 const Duck = Model.extend({});
 
 const docModel = opts => model({
-  dependencies: [ opts.doc ],
+  owner: [ opts.doc ],
   type: opts.type,
   create(owner) {
     let doc = owner.get(opts.doc);

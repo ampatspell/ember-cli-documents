@@ -29,7 +29,7 @@ export default Component.extend({
   docs: reads('state.blog.authors.docs'),
 
   authors: models({
-    dependencies: [ 'docs' ],
+    owner: [ 'docs' ],
     type: 'blog/authors',
     source: 'docs', // owner property which will be observed
     create(owner) {

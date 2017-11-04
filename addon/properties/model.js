@@ -2,7 +2,7 @@ import model from './-model';
 import createExtendable from './-create-extendable';
 
 let extendable = createExtendable({
-  arrays: [ 'dependencies' ],
+  arrays: [ 'owner' ],
   functions: [ 'create' ]
 });
 

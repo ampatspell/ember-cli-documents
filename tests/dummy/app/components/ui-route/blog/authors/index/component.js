@@ -13,7 +13,7 @@ export default Component.extend({
   docs: readOnly('state.blog.authors.docs'),
 
   authors: models({
-    dependencies: [ 'docs' ],
+    owner: [ 'docs' ],
     type: 'blog/authors',
     database: 'docs.database',
     source(owner) {

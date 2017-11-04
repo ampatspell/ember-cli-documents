@@ -24,7 +24,7 @@ module('computed-models', {
         docs: opts.docs,
         message: 'hey there',
         prop: models({
-          dependencies: [ 'docs' ],
+          owner: [ 'docs' ],
           type: opts.type === undefined ? 'ducks' : opts.type,
           source(owner) {
             return owner.get('docs');

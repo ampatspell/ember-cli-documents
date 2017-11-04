@@ -17,7 +17,7 @@ export const blog = owner('blog');
 // doc: null,
 // author: doc({ doc: 'doc', type: 'blog/author/show' }),
 export const doc = model.extend(opts => ({
-  dependencies: [ opts.doc ],
+  owner: [ opts.doc ],
   database: `${opts.doc}.database`,
   create(owner) {
     let doc = owner.get(opts.doc);
