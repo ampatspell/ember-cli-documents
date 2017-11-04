@@ -3,7 +3,7 @@ import createExtendable from './-create-extendable';
 
 let extendable = createExtendable({
   arrays: [ 'dependencies' ],
-  functions: [ 'create' ]
+  functions: [ 'source', 'create' ]
 });
 
 export default extendable(models);

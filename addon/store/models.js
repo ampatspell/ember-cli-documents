@@ -47,21 +47,18 @@ export default Ember.Mixin.create({
     return this._factoryFor('documents:models');
   },
 
-  __createInternalModel(name, factory, parent, opts) {
-    let Internal = this._documentsInternalFactory(name);
-    return new Internal(this, parent, factory, opts);
-  },
-
   //
 
   _createInternalModel(name, parent, opts) {
     let factory = this.__modelFactory(name);
-    return this.__createInternalModel('model', factory, parent, opts);
+    let InternalModel = this._documentsInternalFactory('model');
+    return new InternalModel(this, parent, factory, opts);
   },
 
-  _createInternalModels(name, parent, opts) {
+  _createInternalModels(name, parent, source, opts) {
     let factory = this.__modelsFactory(name);
-    return this.__createInternalModel('models', factory, parent, opts);
+    let InternalModels = this._documentsInternalFactory('models');
+    return new InternalModels(this, parent, source, factory, opts);
   },
 
   //
@@ -82,8 +79,8 @@ export default Ember.Mixin.create({
     return this._createInternalModel(name, null, opts).model(true);
   },
 
-  models(name, opts) {
-    return this._createInternalModels(name, null, opts).model(true);
+  models(name, source, opts) {
+    return this._createInternalModels(name, null, source, opts).model(true);
   },
 
 });
