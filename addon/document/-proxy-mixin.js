@@ -17,9 +17,11 @@ export const loader = name => function(...args) {
   return loader[name].call(loader, ...args).then(() => this);
 };
 
+const database = property('database');
+
 export default Mixin.create(ModelMixin, {
 
-  database: property('database'),
+  database: database(),
 
   filter: model('filter'),
   loader: model('loader'),
