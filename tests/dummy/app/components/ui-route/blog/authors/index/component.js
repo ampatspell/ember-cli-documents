@@ -16,9 +16,7 @@ export default Component.extend({
     dependencies: [ 'docs' ],
     type: 'blog/authors',
     database: 'docs.database',
-    create(owner) {
-      return {
-      };
+    create() {
     }
   }),
 
