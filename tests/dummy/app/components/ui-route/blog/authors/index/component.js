@@ -12,6 +12,8 @@ export default Component.extend({
 
   docs: readOnly('state.blog.authors.docs'),
 
+  // authors: models({ docs: 'docs', type: 'blog/authors', model: { type: 'blog/author/show' } }),
+
   authors: models({
     owner: [ 'docs' ],
     type: 'blog/authors',
@@ -20,7 +22,6 @@ export default Component.extend({
       return owner.get('docs');
     },
     create() {
-      return {};
     }
   }),
 

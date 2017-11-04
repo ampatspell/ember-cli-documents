@@ -31,7 +31,15 @@ module('computed-models', {
           },
           create(owner) {
             let message = owner.get('message');
-            return { message };
+            return {  message };
+          },
+          model: {
+            type: () => 'duck',
+            create(doc) {
+              return {
+                doc
+              };
+            }
           }
         })
       });
@@ -87,15 +95,22 @@ test('it has additional props from create', function(assert) {
   assert.equal(prop.get('message'), 'hey there');
 });
 
-test('it has internal _source', function(assert) {
+test('it has internal _array', function(assert) {
   let docs = [];
   let subject = this.create({ docs });
   let prop = subject.get('prop');
-  assert.ok(prop._internal._source === docs);
+  assert.ok(prop._internal._array === docs);
 });
 
 test.todo('it has content', function(assert) {
-  let subject = this.create({ docs: A() });
+  let docs = A();
+  let one = {};
+
+  let subject = this.create({ docs });
   let prop = subject.get('prop');
-  assert.ok(prop.get('content'));
+
+  assert.equal(prop.get('content.length'), 0);
+
+  docs.pushObject(one);
+  assert.equal(prop.get('content.length'), 1);
 });
