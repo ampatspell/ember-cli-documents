@@ -6,8 +6,7 @@ export default helper((params, hash) => {
     let value = hash[key];
     if(value) {
       window[key] = value;
-      info(`window.${key} = ${value}`);
+      info(`set-global: ${key} = ${value}`);
     }
   }
-  return 'hey';
 });
