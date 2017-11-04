@@ -57,7 +57,7 @@ export default class InternalModels extends Base {
     if(!opts) {
       return;
     }
-    return this.store._createInternalModel(type, this, opts, doc);
+    return this._createInternalModel(type, opts, doc);
   }
 
   _createChildInternalModels(docs) {
@@ -75,7 +75,7 @@ export default class InternalModels extends Base {
     let values = this._values;
     let models = A();
     docs.forEach(doc => {
-      let internal = values.find(internal => internal._rev === doc);
+      let internal = values.find(internal => internal._ref === doc);
       if(internal) {
         models.push(internal);
       }
@@ -94,6 +94,7 @@ export default class InternalModels extends Base {
     let values = this._values;
     let models = this._findChildInternalModels(docs);
     values.removeObjects(models);
+    models.forEach(model => model.destroy());
   }
 
   _addObjects(docs) {

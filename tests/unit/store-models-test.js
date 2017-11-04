@@ -6,7 +6,8 @@ import Models from 'documents/document/models';
 
 const {
   A,
-  get
+  get,
+  run
 } = Ember;
 
 const Duck = Model.extend();
@@ -15,30 +16,42 @@ const YellowDuck = Duck.extend();
 
 const Ducks = Models.extend();
 
-module('store-models');
+module('store-models', {
+  beforeEach() {
+    this.register('model:ducks', Ducks);
+    this.register('model:duck/green', GreenDuck);
+    this.register('model:duck/yellow', YellowDuck);
+    this.ducks = A();
+    this.create = () => this.store.models('ducks', this.ducks, {
+      message: 'hello',
+      type(doc) {
+        let type = get(doc, 'type');
+        if(!type) {
+          return;
+        }
+        return `duck/${type}`;
+      },
+      create(doc) {
+        return { doc };
+      }
+    });
+  }
+});
 
 test('create models with source', function(assert) {
-  this.register('model:ducks', Ducks);
-  this.register('model:duck/green', GreenDuck);
-  this.register('model:duck/yellow', YellowDuck);
-  let ducks = A();
-  let models = this.store.models('ducks', ducks, {
-    message: 'hello',
-    type(doc) {
-      let type = get(doc, 'type');
-      if(!type) {
-        return;
-      }
-      return `duck/${type}`;
-    },
-    create(doc) {
-      return { doc };
-    }
-  });
+  let models = this.create();
+
   assert.equal(models.get('length'), 0);
   assert.equal(models.get('message'), 'hello');
   assert.equal(models.get('type'), undefined);
   assert.equal(models.get('create'), undefined);
+});
+
+test('added docs are wrapped in models', function(assert) {
+  let ducks = this.ducks;
+  let models = this.create();
+
+  assert.equal(models.get('length'), 0);
 
   ducks.pushObject({ id: 'one', type: 'green' });
   assert.equal(models.get('length'), 1);
@@ -50,3 +63,22 @@ test('create models with source', function(assert) {
   assert.ok(YellowDuck.detectInstance(models.objectAt(1)));
   assert.equal(models.objectAt(1).get('doc'), ducks.objectAt(1));
 });
+
+test('remove doc removes model', function(assert) {
+  let ducks = this.ducks;
+  let models = this.create();
+
+  let doc = { id: 'one', type: 'green' };
+
+  ducks.pushObject(doc);
+
+  let model = models.objectAt(0);
+  assert.ok(model);
+
+  run(() => ducks.removeObject(doc));
+
+  assert.equal(models.get('length'), 0);
+  assert.ok(model.isDestroying);
+});
+
+test.skip('model is recreated on doc.type change');

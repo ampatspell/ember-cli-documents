@@ -33,9 +33,9 @@ export default class InternalModelBase extends ModelMixin(Base) {
     return models;
   }
 
-  _createInternalModel(name, opts) {
+  _createInternalModel(name, opts, _ref) {
     let target = this.database || this.store;
-    let internal = target._createInternalModel(name, this, opts);
+    let internal = target._createInternalModel(name, this, opts, _ref);
     this.models(true).push(internal);
     return internal;
   }
