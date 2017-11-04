@@ -9,12 +9,14 @@ const getSource = (owner, opts) => {
 };
 
 export default createModel({
-  create(owner, target, opts, parent, mergeModelOpts) {
+  create(owner, opts, type, build) {
+    if(type === null) {
+      return;
+    }
     let source = getSource(owner, opts);
     if(!source) {
       return;
     }
-
-    return target._createInternalModels(opts.type, parent, source, mergeModelOpts());
+    return build((target, parent, modelOpts) => target._createInternalModels(type, parent, source, modelOpts));
   }
 });

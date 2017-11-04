@@ -27,7 +27,7 @@ module('computed-model', {
     this.create = (opts={}) => {
       let Subject = Ember.Object.extend({
         doc: opts.doc,
-        prop: docModel({ doc: 'doc', type: opts.type || 'duck' })
+        prop: docModel({ doc: 'doc', type: () => opts.type || 'duck' })
       });
       return Subject.create({ store: this.store, database: this.db });
     };

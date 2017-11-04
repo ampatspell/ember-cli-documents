@@ -25,7 +25,7 @@ module('computed-models', {
         message: 'hey there',
         prop: models({
           owner: [ 'docs' ],
-          type: opts.type === undefined ? 'ducks' : opts.type,
+          type: () => opts.hasOwnProperty('type') ? opts.type : 'ducks',
           source(owner) {
             return owner.get('docs');
           },
@@ -60,11 +60,17 @@ test('requires model type to be models', function(assert) {
 });
 
 test('by default models are base class', function(assert) {
-  let subject = this.create({ docs: [], type: null });
+  let subject = this.create({ docs: [], type: undefined });
   let prop = subject.get('prop');
   assert.ok(Models.detectInstance(prop));
   assert.ok((prop+'').includes('@documents:models::'));
   assert.equal(get(prop.constructor, 'modelName'), undefined);
+});
+
+test('by models are not created if type is null', function(assert) {
+  let subject = this.create({ docs: [], type: null });
+  let prop = subject.get('prop');
+  assert.ok(!prop);
 });
 
 test('it is possible to provide custom class', async function(assert) {

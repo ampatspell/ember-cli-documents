@@ -23,7 +23,7 @@ const getStoreAndDatabase = (owner, opts) => {
 
 const mergeModelOpts = (owner, opts) => {
   let result = opts;
-  result = omit(result, [ 'store', 'database', 'owner', 'type', 'create' ]);
+  result = omit(result, [ 'store', 'database', 'owner', 'document', 'type', 'create', 'source' ]);
   if(typeof opts.create === 'function') {
     result = merge(result, opts.create(owner));
   }
@@ -38,8 +38,16 @@ const toInternalModel = owner => {
   return null;
 }
 
+const getType = (owner, opts) => {
+  let type = opts.type;
+  if(typeof type !== 'function') {
+    return;
+  }
+  return type(owner);
+}
+
 export default factory => opts => {
-  opts = merge({ store: 'store', database: 'database', owner: [] }, opts);
+  opts = merge({ store: 'store', database: 'database', owner: [], document: [] }, opts);
   return destroyable(...opts.owner, {
     create() {
       let { store, database } = getStoreAndDatabase(this, opts);
@@ -47,11 +55,15 @@ export default factory => opts => {
         return;
       }
 
-      let parent = toInternalModel(this);
-      let target = database || store;
-      let modelOpts = () => mergeModelOpts(this, opts, database);
+      let builder = fn => {
+        let target = database || store;
+        let parent = toInternalModel(this);
+        let modelOpts = mergeModelOpts(this, opts, database);
+        return fn(target, parent, modelOpts);
+      };
 
-      return factory.create(this, target, opts, parent, modelOpts);
+      let type = getType(this, opts);
+      return factory.create(this, opts, type, builder);
     }
   });
 };
