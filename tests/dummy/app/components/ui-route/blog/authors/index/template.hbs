@@ -3,6 +3,17 @@
     {{ui-block/json doc.serialized}}
   </div>
 {{/each}}
+
+<div class="row">
+  {{set-global authors=authors}}
+</div>
+
+{{#each authors as |author|}}
+  <div class="row">
+    {{author}}
+  </div>
+{{/each}}
+
 <div class="row">
   {{link-to 'create new author' 'blog.authors.new'}}
 </div>
