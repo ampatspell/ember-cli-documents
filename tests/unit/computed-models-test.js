@@ -22,10 +22,16 @@ module('computed-models', {
     this.create = (opts={}) => {
       let Subject = Ember.Object.extend({
         docs: opts.docs,
+        message: 'hey there',
         prop: models({
           dependencies: [ 'docs' ],
           type: opts.type === undefined ? 'ducks' : opts.type,
+          source(owner) {
+            return owner.get('docs');
+          },
           create(owner) {
+            let message = owner.get('message');
+            return { message };
           }
         })
       });
@@ -68,8 +74,22 @@ test('it is possible to provide custom class', async function(assert) {
   assert.equal(get(prop.constructor, 'modelName'), 'ducks');
 });
 
+test('it has additional props from create', function(assert) {
+  let docs = [];
+  let subject = this.create({ docs });
+  let prop = subject.get('prop');
+  assert.equal(prop.get('message'), 'hey there');
+});
+
+test('it has internal _source', function(assert) {
+  let docs = [];
+  let subject = this.create({ docs });
+  let prop = subject.get('prop');
+  assert.ok(prop._internal._source === docs);
+});
+
 test.todo('it has content', function(assert) {
-  let subject = this.create({ docs: [] });
+  let subject = this.create({ docs: A() });
   let prop = subject.get('prop');
   assert.ok(prop.get('content'));
 });
