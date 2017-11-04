@@ -31,7 +31,7 @@ test('create models with source', function(assert) {
       }
       return `duck/${type}`;
     },
-    create(doc, models) {
+    create(doc) {
       return { doc };
     }
   });
@@ -43,8 +43,10 @@ test('create models with source', function(assert) {
   ducks.pushObject({ id: 'one', type: 'green' });
   assert.equal(models.get('length'), 1);
   assert.ok(GreenDuck.detectInstance(models.objectAt(0)));
+  assert.equal(models.objectAt(0).get('doc'), ducks.objectAt(0));
 
   ducks.pushObject({ id: 'two', type: 'yellow' });
   assert.equal(models.get('length'), 2);
   assert.ok(YellowDuck.detectInstance(models.objectAt(1)));
+  assert.equal(models.objectAt(1).get('doc'), ducks.objectAt(1));
 });
