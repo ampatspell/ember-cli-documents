@@ -31,7 +31,13 @@ module('computed-models', {
           },
           create(owner) {
             let message = owner.get('message');
-            return {  message };
+            return {
+              message,
+              type: 'duck',
+              create(doc) {
+                return { doc };
+              }
+            };
           }
         })
       });
@@ -94,7 +100,7 @@ test('it has internal _array', function(assert) {
   assert.ok(prop._internal._array === docs);
 });
 
-test.todo('it has content', function(assert) {
+test('it has content', function(assert) {
   let docs = A();
   let one = {};
 
@@ -105,4 +111,5 @@ test.todo('it has content', function(assert) {
 
   docs.pushObject(one);
   assert.equal(prop.get('content.length'), 1);
+  assert.equal(prop.objectAt(0).get('doc'), one);
 });
