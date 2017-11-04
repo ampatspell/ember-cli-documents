@@ -8,11 +8,12 @@ const {
 
 export default class InternalModelBase extends ModelMixin(Base) {
 
-  constructor(store, parent, factory, opts) {
+  constructor(store, parent, factory, opts, _ref) {
     super(store, parent);
     this.factory = factory;
     this.opts = opts;
     this._models = null;
+    this._ref = _ref;
   }
 
   get database() {

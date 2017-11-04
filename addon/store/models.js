@@ -49,10 +49,10 @@ export default Ember.Mixin.create({
 
   //
 
-  _createInternalModel(name, parent, opts) {
+  _createInternalModel(name, parent, opts, _ref) {
     let factory = this.__modelFactory(name);
     let InternalModel = this._documentsInternalFactory('model');
-    return new InternalModel(this, parent, factory, opts);
+    return new InternalModel(this, parent, factory, opts, _ref);
   },
 
   _createInternalModels(name, parent, source, opts) {
