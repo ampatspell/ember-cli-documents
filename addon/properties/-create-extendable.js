@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { omit } from '../util/object';
-import { isFunction } from '../util/assert';
 
 const {
   A,
@@ -27,6 +26,11 @@ export default opts => {
     let fn = next[key];
     if(!fn) {
       return;
+    }
+
+    if(typeof fn === 'string') {
+      let string = fn;
+      fn = () => string;
     }
 
     opts_.push(fn);
@@ -58,7 +62,6 @@ export default opts => {
     let last = null;
 
     arr.forEach(fn => {
-      isFunction(key, fn);
       let _super = last;
       last = (...args) => fn.call({ _super }, ...args);
     });
