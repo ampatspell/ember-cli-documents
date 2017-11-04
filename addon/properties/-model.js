@@ -1,7 +1,7 @@
 import createModel from './-create-model';
 
 export default createModel({
-  create(target, type, parent, opts) {
-    return target._createInternalModel(type, parent, opts);
+  create(owner, target, opts, parent, modelOpts) {
+    return target._createInternalModel(opts.type, parent, modelOpts);
   }
 });

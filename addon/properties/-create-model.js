@@ -24,7 +24,9 @@ const getStoreAndDatabase = (owner, opts) => {
 const mergeModelOpts = (owner, opts) => {
   let result = opts;
   result = omit(result, [ 'store', 'database', 'dependencies', 'type', 'create' ]);
-  result = merge(result, opts.create(owner));
+  if(typeof opts.create === 'function') {
+    result = merge(result, opts.create(owner));
+  }
   return result;
 }
 
@@ -49,7 +51,7 @@ export default factory => opts => {
       let parent = toInternalModel(this);
       let target = database || store;
 
-      return factory.create(target, opts.type, parent, modelOpts);
+      return factory.create(this, target, opts, parent, modelOpts);
     }
   });
 };
