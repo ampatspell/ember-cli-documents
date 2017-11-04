@@ -1,6 +1,7 @@
 # TODO
 
 * `authors: models(...)` prop
+* models and model with owner observer (?)
 * `prop.prefix('author:', 'name')` for `author:zeeba` or undefined
 * `prop.concat('blog-post:', prop('author'), ':', prop('id'))` for `blog-post:zeeba:oidqw` or undefined
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
