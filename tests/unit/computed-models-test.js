@@ -32,14 +32,6 @@ module('computed-models', {
           create(owner) {
             let message = owner.get('message');
             return {  message };
-          },
-          model: {
-            type: () => 'duck',
-            create(doc) {
-              return {
-                doc
-              };
-            }
           }
         })
       });
