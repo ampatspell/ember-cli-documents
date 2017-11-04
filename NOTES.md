@@ -30,6 +30,7 @@ export default Component.extend({
 
   authors: models({
     owner: [ 'docs' ],
+    document: [ 'author_type' ]
     type: 'blog/authors',
     source: 'docs', // owner property which will be observed
     create(owner) {
@@ -37,7 +38,7 @@ export default Component.extend({
       return {
         // create Model
         create(doc) {
-
+          // called on added doc _and_ on doc.author_type change (previous is destroyed)
         }
       }
     },
