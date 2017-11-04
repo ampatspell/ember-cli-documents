@@ -34,18 +34,34 @@ export default Ember.Mixin.create({
     return factory;
   },
 
-  _createInternalModel(name, parent, opts) {
+  __modelFactory(name) {
     let normalizedName = this._normalizeModelName(name);
-    let factory = this._modelFactory(normalizedName, Model, 'Model');
-    let InternalModel = this._documentsInternalFactory('model');
-    return new InternalModel(this, parent, factory, opts);
+    return this._modelFactory(normalizedName, Model, 'Model');
+  },
+
+  __modelsFactory(name) {
+    if(name) {
+      let normalizedName = this._normalizeModelName(name);
+      return this._modelFactory(normalizedName, Models, 'Models');
+    }
+    return this._factoryFor('documents:models');
+  },
+
+  __createInternalModel(name, factory, parent, opts) {
+    let Internal = this._documentsInternalFactory(name);
+    return new Internal(this, parent, factory, opts);
+  },
+
+  //
+
+  _createInternalModel(name, parent, opts) {
+    let factory = this.__modelFactory(name);
+    return this.__createInternalModel('model', factory, parent, opts);
   },
 
   _createInternalModels(name, parent, opts) {
-    let normalizedName = this._normalizeModelName(name);
-    let factory = this._modelFactory(normalizedName, Models, 'Models');
-    let InternalModels = this._documentsInternalFactory('models');
-    return new InternalModels(this, parent, factory, opts);
+    let factory = this.__modelsFactory(name);
+    return this.__createInternalModel('models', factory, parent, opts);
   },
 
   //
@@ -56,8 +72,8 @@ export default Ember.Mixin.create({
   },
 
   _createModels(_internal) {
-    let { factory, opts } = _internal;
-    return factory.create(merge({ _internal }, opts));
+    let { factory, opts, values: content } = _internal;
+    return factory.create(merge({ _internal, content }, opts));
   },
 
   //
