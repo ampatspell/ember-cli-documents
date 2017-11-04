@@ -47,9 +47,9 @@ export default factory => opts => {
         return;
       }
 
-      let modelOpts = mergeModelOpts(this, opts, database);
       let parent = toInternalModel(this);
       let target = database || store;
+      let modelOpts = () => mergeModelOpts(this, opts, database);
 
       return factory.create(this, target, opts, parent, modelOpts);
     }
