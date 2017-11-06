@@ -22,48 +22,18 @@
 
 # Notes
 
-## Models prop
-
 ``` javascript
-export default Component.extend({
+let model = store.model('duck', { database });
 
-  docs: reads('state.blog.authors.docs'),
-
-  authors: models({
-    owner: [ 'docs' ],
-    document: [ 'author_type' ]
-    type: () => 'blog/authors',
-    source(owner) {
-      // observed `docs`
-      return owner.get('docs');
-    },
-    create(owner) {
-      // create Models
-      return {};
-    },
-    item: {
-      type(doc) {
-        // `document` properties are observed
-        return doc.get('author_type') === 'admin' ? 'author/admin' : 'author/base';
-      },
-      create(doc) {
-        // create Model
-        return { doc };
-      }
-    }
-  })
-
-});
-
-// models/blog/authors.js (or documents:models)
-export default Models.extend({
-
-  content: // [ author/show, ... ]
-
-});
-
-// models/blog/author/show.js
-export default Model.extend({
-
+// type, array, props, model factory
+let models = store.models('ducks', docs, { database }, {
+  document: [ 'type' ],
+  type(doc) {
+    // depends on doc.type
+    return 'duck';
+  },
+  create(doc) {
+    return { doc };
+  }
 });
 ```
