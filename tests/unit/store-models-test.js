@@ -55,12 +55,12 @@ test('added docs are wrapped in models', function(assert) {
 
   assert.equal(models.get('length'), 0);
 
-  ducks.pushObject({ id: 'one', type: 'green' });
+  ducks.pushObject(Ember.Object.create({ id: 'one', type: 'green' }));
   assert.equal(models.get('length'), 1);
   assert.ok(GreenDuck.detectInstance(models.objectAt(0)));
   assert.equal(models.objectAt(0).get('doc'), ducks.objectAt(0));
 
-  ducks.pushObject({ id: 'two', type: 'yellow' });
+  ducks.pushObject(Ember.Object.create({ id: 'two', type: 'yellow' }));
   assert.equal(models.get('length'), 2);
   assert.ok(YellowDuck.detectInstance(models.objectAt(1)));
   assert.equal(models.objectAt(1).get('doc'), ducks.objectAt(1));
@@ -70,7 +70,7 @@ test('remove doc removes model', function(assert) {
   let ducks = this.ducks;
   let models = this.create();
 
-  let doc = { id: 'one', type: 'green' };
+  let doc = Ember.Object.create({ id: 'one', type: 'green' });
 
   ducks.pushObject(doc);
 
@@ -106,4 +106,5 @@ test('model is recreated on doc.type change', function(assert) {
   assert.ok(green.isDestroying);
 });
 
-test.todo('destroy child models');
+test.todo('destroy child models', function() {
+});

@@ -8,16 +8,17 @@ const {
 } = Ember;
 
 const splitOptions = opts => {
-  let { type, create } = opts;
+  let { type, create, document } = opts;
   if(typeof type !== 'function') {
     let value = type;
     type = () => value;
   }
-  let remaining = omit(opts, [ 'type', 'create' ]);
+  let remaining = omit(opts, [ 'type', 'document', 'create' ]);
   return {
     model: {
       type,
-      create
+      create,
+      document
     },
     remaining
   };
@@ -140,7 +141,7 @@ export default class InternalModels extends Base {
     if(docs.length === 0) {
       return;
     }
-    let keys = this.opts.document;
+    let keys = this.item.document;
     if(!keys || keys.length === 0) {
       return;
     }
