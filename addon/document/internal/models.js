@@ -71,11 +71,15 @@ export default class InternalModels extends Base {
     return models;
   }
 
-  _findChildInternalModels(docs) {
+  _findChildInternalModel(doc) {
     let values = this._values;
+    return values.find(internal => internal._ref === doc);
+  }
+
+  _findChildInternalModels(docs) {
     let models = A();
     docs.forEach(doc => {
-      let internal = values.find(internal => internal._ref === doc);
+      let internal = this._findChildInternalModel(doc);
       if(internal) {
         models.push(internal);
       }
@@ -93,6 +97,7 @@ export default class InternalModels extends Base {
   _removeObjects(docs) {
     let values = this._values;
     let models = this._findChildInternalModels(docs);
+    this._stopObservingObjects(docs);
     values.removeObjects(models);
     models.forEach(model => model.destroy());
   }
@@ -100,6 +105,7 @@ export default class InternalModels extends Base {
   _addObjects(docs) {
     let models = this._createChildInternalModels(docs);
     let values = this._values;
+    this._startObservingObjects(docs);
     values.pushObjects(models);
   }
 
@@ -119,7 +125,38 @@ export default class InternalModels extends Base {
 
   _stopObserving() {
     let array = this._array;
+    this._stopObservingObjects(array);
     array.removeEnumerableObserver(this, this._arrayObserverOptions);
+  }
+
+  //
+
+  _objectValueForKeyDidChange(doc) {
+    this._removeObjects([ doc ]);
+    this._addObjects([ doc ]);
+  }
+
+  _withObjectObserving(docs, cb) {
+    if(docs.length === 0) {
+      return;
+    }
+    let keys = this.opts.document;
+    if(!keys || keys.length === 0) {
+      return;
+    }
+    keys.forEach(key => docs.forEach(doc => cb(doc, key)));
+  }
+
+  _startObservingObjects(docs) {
+    this._withObjectObserving(docs, (doc, key) => {
+      doc.addObserver(key, this, this._objectValueForKeyDidChange);
+    });
+  }
+
+  _stopObservingObjects(docs) {
+    this._withObjectObserving(docs, (doc, key) => {
+      doc.removeObserver(key, this, this._objectValueForKeyDidChange);
+    });
   }
 
   //

@@ -24,6 +24,7 @@ module('store-models', {
     this.ducks = A();
     this.create = () => this.store.models('ducks', this.ducks, {
       message: 'hello',
+      document: [ 'type' ],
       type(doc) {
         let type = get(doc, 'type');
         if(!type) {
@@ -45,6 +46,7 @@ test('create models with source', function(assert) {
   assert.equal(models.get('message'), 'hello');
   assert.equal(models.get('type'), undefined);
   assert.equal(models.get('create'), undefined);
+  assert.equal(models.get('document'), undefined);
 });
 
 test('added docs are wrapped in models', function(assert) {
@@ -81,4 +83,26 @@ test('remove doc removes model', function(assert) {
   assert.ok(model.isDestroying);
 });
 
-test.skip('model is recreated on doc.type change');
+test('model is recreated on doc.type change', function(assert) {
+  let ducks = this.ducks;
+  let models = this.create();
+
+  let doc = Ember.Object.create({ id: 'one', type: 'green' });
+
+  ducks.pushObject(doc);
+
+  let green = models.objectAt(0);
+  assert.ok(green);
+  assert.ok(GreenDuck.detectInstance(green));
+
+  run(() => doc.set('type', 'yellow'));
+
+  let yellow = models.objectAt(0);
+  assert.ok(yellow);
+  assert.ok(YellowDuck.detectInstance(yellow));
+
+  assert.ok(green !== yellow);
+
+  assert.ok(green.isDestroying);
+});
+
