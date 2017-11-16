@@ -106,3 +106,4 @@ test('model is recreated on doc.type change', function(assert) {
   assert.ok(green.isDestroying);
 });
 
+test.todo('destroy child models');
