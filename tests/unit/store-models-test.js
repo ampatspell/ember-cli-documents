@@ -106,5 +106,20 @@ test('model is recreated on doc.type change', function(assert) {
   assert.ok(green.isDestroying);
 });
 
-test.todo('destroy child models', function() {
+test('destroy child models', function(assert) {
+  let ducks = this.ducks;
+  ducks.pushObject(Ember.Object.create({ id: 'one', type: 'green' }));
+  let models = this.create();
+
+  ducks.pushObject(Ember.Object.create({ id: 'two', type: 'yellow' }));
+
+  let green = models.objectAt(0);
+  let yellow = models.objectAt(1);
+  assert.ok(green);
+  assert.ok(yellow);
+
+  run(() => models.destroy());
+
+  assert.ok(green.isDestroying);
+  assert.ok(yellow.isDestroying);
 });

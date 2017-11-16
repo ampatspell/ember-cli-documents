@@ -31,7 +31,7 @@ export default class InternalModels extends Base {
     super(store, parent, factory, remaining);
     this._array = A(array);
     this._values = null;
-    this.item = model;
+    this.child = model;
   }
 
   _createModel() {
@@ -49,12 +49,12 @@ export default class InternalModels extends Base {
   }
 
   _createChildInternalModel(doc) {
-    let item = this.item;
-    let type = item.type(doc);
+    let child = this.child;
+    let type = child.type(doc);
     if(!type) {
       return;
     }
-    let opts = item.create(doc, this.model(true));
+    let opts = child.create(doc, this.model(true));
     if(!opts) {
       return;
     }
@@ -141,7 +141,7 @@ export default class InternalModels extends Base {
     if(docs.length === 0) {
       return;
     }
-    let keys = this.item.document;
+    let keys = this.child.document;
     if(!keys || keys.length === 0) {
       return;
     }
