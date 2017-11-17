@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import environment from '../config/environment';
+import { getDefinition } from 'documents/properties';
 
 const { COUCHDB_HOST } = environment;
 
@@ -42,5 +43,6 @@ export default {
     window.store = store;
     window.state = state;
     window.database = store.get('db.main');
+    window.getDefinition = getDefinition;
   }
 };

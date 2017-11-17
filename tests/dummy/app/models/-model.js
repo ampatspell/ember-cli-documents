@@ -1,24 +1,23 @@
-import Ember from 'ember';
-import model from 'documents/properties/model';
+import model from 'documents/properties/-model';
 
-const {
-  merge
-} = Ember;
-
-const owner = key => model.extend(() => ({
+const owner = key => opts => model({
+  _identifier: 'app/models/-model/owner',
+  type: opts.type,
   create(owner) {
-    return merge({ [key]: owner }, this._super && this._super(...arguments));
+    return { [key]: owner };
   }
-}));
+});
 
 export const state = owner('state');
 export const blog = owner('blog');
 
 // doc: null,
 // author: doc({ doc: 'doc', type: 'blog/author/show' }),
-export const doc = model.extend(opts => ({
+export const doc = opts => model({
+  _identifier: 'app/models/-model/doc',
   owner: [ opts.doc ],
   database: `${opts.doc}.database`,
+  type: opts.type,
   create(owner) {
     let doc = owner.get(opts.doc);
     if(!doc) {
@@ -26,4 +25,4 @@ export const doc = model.extend(opts => ({
     }
     return { doc };
   }
-}));
+});
