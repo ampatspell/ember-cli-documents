@@ -1,6 +1,6 @@
 export {
   getDefinition
-} from './proxy';
+} from './-meta';
 
 export {
   first,
