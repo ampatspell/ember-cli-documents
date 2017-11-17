@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import layout from './template';
 import { readOnly } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import models from 'documents/properties/models';
+import { property as authors } from 'dummy/models/blog/authors';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route', ':blog-authors-index' ],
@@ -11,24 +11,7 @@ export default Component.extend({
   router: service(),
 
   docs: readOnly('state.blog.authors.docs'),
-
-  authors: models({
-    owner: [ 'docs' ],
-    type: 'blog/authors',
-    database: 'docs.database',
-    source(owner) {
-      return owner.get('docs');
-    },
-    create(owner) {
-      return {
-        docs: owner.get('docs'),
-        type: 'blog/author/show',
-        create(doc) {
-          return { doc };
-        }
-      };
-    }
-  }),
+  authors: authors({ docs: 'docs', model: 'blog/author/show' }),
 
   actions: {
     show(doc) {
