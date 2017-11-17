@@ -1,8 +1,7 @@
 import Ember from 'ember';
-import { isString, notBlank, isClass_ } from 'documents/util/assert'
+import { assert, isString, notBlank, isClass_ } from 'documents/util/assert'
 import Model from 'documents/document/model';
-import Models from 'documents/document/models';
-import assert from 'documents/util/assert';
+import Models, { generate as modelsGenerate } from 'documents/document/models';
 
 const {
   merge,
@@ -17,20 +16,28 @@ export default Ember.Mixin.create({
     return dasherize(name);
   },
 
-  _modelFactory(modelName, expectedClass, expectedClassName) {
+  __assertModelClass(modelClass, modelName, expectedClassName, expectedClass) {
+    assert(`model for name '${modelName}' must extend ${expectedClassName}`, expectedClass.detect(modelClass));
+  },
+
+  _modelFactory(modelName, expectedClass, expectedClassName, generate) {
     notBlank('model name', modelName);
     let documentsModelKey = `documents:model/${modelName}`;
     let factory = this._factoryFor(documentsModelKey);
     if(!factory) {
       factory = this._factoryFor(`model:${modelName}`);
-      isClass_(`model for name '${modelName}' is not registered`, factory && factory.class);
-      factory = factory.class;
-      assert(`model for name '${modelName}' must extend ${expectedClassName}`, expectedClass.detect(factory));
+      factory = factory && factory.class;
+      if(!factory && generate) {
+        factory = generate();
+      }
+      isClass_(`model for name '${modelName}' is not registered`, factory);
+      this.__assertModelClass(factory, modelName, expectedClassName, expectedClass);
       factory = factory.extend();
       factory.reopenClass({ modelName });
       getOwner(this).register(documentsModelKey, factory);
       factory = this._factoryFor(documentsModelKey);
     }
+    this.__assertModelClass(factory.class, modelName, expectedClassName, expectedClass);
     return factory;
   },
 
@@ -40,11 +47,8 @@ export default Ember.Mixin.create({
   },
 
   __modelsFactory(name) {
-    if(name) {
-      let normalizedName = this._normalizeModelName(name);
-      return this._modelFactory(normalizedName, Models, 'Models');
-    }
-    return this._factoryFor('documents:models');
+    let normalizedName = this._normalizeModelName(name);
+    return this._modelFactory(normalizedName, Models, 'Models', modelsGenerate);
   },
 
   //

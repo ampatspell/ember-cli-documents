@@ -7,7 +7,7 @@ const {
   A
 } = Ember;
 
-const splitOptions = opts => {
+const splitOptions = (opts={}) => {
   let { type, create, document } = opts;
   if(typeof type !== 'function') {
     let value = type;

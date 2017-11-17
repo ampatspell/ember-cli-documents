@@ -66,11 +66,11 @@ test('requires model type to be models', function(assert) {
 });
 
 test('by default models are base class', function(assert) {
-  let subject = this.create({ docs: [], type: undefined });
+  let subject = this.create({ docs: [], type: 'generated-thingie' });
   let prop = subject.get('prop');
   assert.ok(Models.detectInstance(prop));
-  assert.ok((prop+'').includes('@documents:models::'));
-  assert.equal(get(prop.constructor, 'modelName'), undefined);
+  assert.ok((prop+'').includes('@documents:model/generated-thingie::'));
+  assert.equal(get(prop.constructor, 'modelName'), 'generated-thingie');
 });
 
 test('by models are not created if type is null', function(assert) {
