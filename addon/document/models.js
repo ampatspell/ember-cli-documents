@@ -3,7 +3,6 @@ import ModelMixin from './-model-mixin';
 import TransformMixin from './-array-transform-mixin';
 import { property } from './-properties';
 
-const __generated = '__generated';
 const store = property('store');
 
 const Models = Ember.ArrayProxy.extend(ModelMixin, TransformMixin, {
@@ -18,7 +17,7 @@ const GeneratedModels = Models.extend({
   }
 });
 
-GeneratedModels.reopenClass({ [__generated]: true });
+GeneratedModels.reopenClass({ isGenerated: true });
 
 export const generate = () => GeneratedModels.extend();
 
