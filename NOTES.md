@@ -1,10 +1,7 @@
 # TODO
 
-* extendable needs nested fn and array inherit
-* `authors: models(...)` prop
-* models and model with owner observer (?)
-* `prop.prefix('author:', 'name')` for `author:zeeba` or undefined
-* `prop.concat('blog-post:', prop('author'), ':', prop('id'))` for `blog-post:zeeba:oidqw` or undefined
+* remove extendable
+* register currently instantiated models in store, present it with `DataAdapter`
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * rename `addon/document` to `addon/models` and separate base, documents and proxies
