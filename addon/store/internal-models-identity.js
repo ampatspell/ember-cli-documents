@@ -27,6 +27,11 @@ export default Ember.Mixin.create({
 
   _didDestroyInternalModels(internal) {
     this.__unregisterInternalModel(internal);
+  },
+
+  willDestroy() {
+    this._models.all.forEach(model => model.destroy());
+    this._super(...arguments);
   }
 
 });

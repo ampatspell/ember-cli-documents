@@ -29,6 +29,10 @@ class ModelsByClass {
     this._array.addEnumerableObserver(this, this._arrayObserverOptions);
   }
 
+  _stopObserving() {
+    this._array.removeEnumerableObserver(this, this._arrayObserverOptions);
+  }
+
   _arrayWillChange(array, removing) {
     this.values.removeObjects(removing);
   }
@@ -37,9 +41,14 @@ class ModelsByClass {
     this.values.addObjects(this._match(adding));
   }
 
+  destroy() {
+    this._stopObserving();
+  }
+
 }
 
-class ModelsIdentityInternal {
+class StoresModelsIdentityInternal {
+
   constructor(stores) {
     this.stores = stores;
     this._modelsByClass = A();
@@ -59,12 +68,16 @@ class ModelsIdentityInternal {
     return hash.content.values;
   }
 
+  _modelWillDestroy() {
+    this._modelsByClass.forEach(hash => hash.content.destroy());
+  }
+
 }
 
 export default makeIdentityMixin({
   key: 'modelsIdentity',
   factory: 'models-identity',
   createInternal() {
-    return new ModelsIdentityInternal(this);
+    return new StoresModelsIdentityInternal(this);
   }
 });

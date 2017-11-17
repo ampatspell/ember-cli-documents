@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+import Model from 'documents/document/model';
 
 const {
   run
@@ -39,4 +40,23 @@ test('store destroy removes store from stores', function(assert) {
   assert.ok(this.stores._stores.keyed[identifier]);
   run(() => store.destroy());
   assert.ok(!this.stores._stores.keyed[identifier]);
+});
+
+test('stores destory destroys documents identity', function(assert) {
+  let identity = this.stores.get('documentsIdentity');
+  run(() => this.stores.destroy());
+  assert.ok(identity.isDestroyed);
+});
+
+test('stores destory destroys models identity', function(assert) {
+  let Thing = Model.extend();
+  this.register('model:thing', Thing);
+  let url = 'http://127.0.0.1:5984';
+  let store = this.stores.store({ url });
+  let model = store.model('thing');
+  let identity = this.stores.get('modelsIdentity');
+  assert.equal(identity.modelsByClass(Thing).get('length'), 1);
+  run(() => this.stores.destroy());
+  assert.ok(identity.isDestroyed);
+  assert.ok(model.isDestroyed);
 });
