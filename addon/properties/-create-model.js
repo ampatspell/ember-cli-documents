@@ -2,6 +2,7 @@ import Ember from 'ember';
 import destroyable from './-destroyable';
 import { omit } from '../util/object';
 import InternalModel from '../document/internal/model';
+import { withDefinition } from './-meta';
 
 const {
   merge
@@ -40,15 +41,17 @@ const toInternalModel = owner => {
 
 const getType = (owner, opts) => {
   let type = opts.type;
-  if(typeof type !== 'function') {
-    return;
+  if(typeof type === 'string') {
+    return type;
   }
-  return type(owner);
+  if(typeof type === 'function') {
+    return type(owner);
+  }
 }
 
 export default factory => opts => {
   opts = merge({ store: 'store', database: 'database', owner: [], document: [] }, opts);
-  return destroyable(...opts.owner, {
+  return withDefinition(destroyable(...opts.owner, {
     create() {
       let { store, database } = getStoreAndDatabase(this, opts);
       if(!store) {
@@ -65,5 +68,5 @@ export default factory => opts => {
       let type = getType(this, opts);
       return factory.create(this, opts, type, builder);
     }
-  });
+  }), opts).readOnly();
 };
