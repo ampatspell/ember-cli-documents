@@ -71,6 +71,7 @@ test('by default models are base class', function(assert) {
   assert.ok(Models.detectInstance(prop));
   assert.ok((prop+'').includes('@documents:model/generated-thingie::'));
   assert.equal(get(prop.constructor, 'modelName'), 'generated-thingie');
+  assert.equal(get(prop.constructor, 'isGenerated'), true);
 });
 
 test('by models are not created if type is null', function(assert) {
