@@ -1,17 +1,15 @@
 import Ember from 'ember';
-import { prop } from './index';
-import { first } from './proxy';
+import { first, prop } from './index';
 import { isBlank } from '../util/string';
 
 const {
   merge
 } = Ember;
 
-// { id: 'value' }
-export default opts => {
+export default first.extend(opts => {
   opts = merge({ id: prop('id') }, opts);
   opts.id = prop.wrap(opts.id);
-  return first({
+  return {
     owner: [ opts.id.key() ],
     document: [ 'id' ],
     query(owner) {
@@ -28,5 +26,5 @@ export default opts => {
       }
       return doc.get('id') === id;
     }
-  });
-};
+  };
+});
