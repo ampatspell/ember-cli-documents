@@ -69,8 +69,8 @@ export default Ember.Mixin.create({
   },
 
   _createModels(_internal) {
-    let { factory, opts, values: content } = _internal;
-    return factory.create(merge({ _internal, content }, opts));
+    let { factory, opts } = _internal;
+    return factory.create(merge({ _internal }, opts));
   },
 
   //

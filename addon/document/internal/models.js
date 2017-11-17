@@ -38,6 +38,11 @@ export default class InternalModels extends Base {
     return this.store._createModels(this);
   }
 
+  _didCreateModel(model) {
+    super._didCreateModel(model);
+    model.set('content', this.values);
+  }
+
   get values() {
     let values = this._values;
     if(!values) {
