@@ -1,16 +1,10 @@
-{{#each docs as |doc|}}
-  <div class="row" {{action 'show' doc}}>
-    {{ui-block/json doc.serialized}}
-  </div>
-{{/each}}
-
-<div class="row">
-  {{set-global authors=authors}}
-</div>
+{{set-global authors=authors}}
 
 {{#each authors as |author|}}
   <div class="row">
-    {{author}}
+    {{ui-block/json author.doc.serialized}}
+    <div>name: {{author.name}}</div>
+    <div>email: {{author.email}}</div>
   </div>
 {{/each}}
 

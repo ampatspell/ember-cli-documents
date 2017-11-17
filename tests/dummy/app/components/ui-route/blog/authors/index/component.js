@@ -19,8 +19,9 @@ export default Component.extend({
     source(owner) {
       return owner.get('docs');
     },
-    create() {
+    create(owner) {
       return {
+        docs: owner.get('docs'),
         type: 'blog/author/show',
         create(doc) {
           return { doc };
