@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import DatabaseStore from './database/store';
 import DatabaseSecurity from './database/security';
-import DatabaseInternalIdentity from './database/internal-identity';
+import DatabaseInternalDocumentsIdentity from './database/internal-documents-identity';
 import DatabaseInternalFactory from './database/internal-factory';
 import DatabaseInternalProxyFactory from './database/internal-proxy-factory';
 import DatabaseInternalDeserialize from './database/internal-deserialize';
@@ -14,13 +14,13 @@ import DatabaseProxy from './database/proxy';
 import DatabaseChanges from './database/changes';
 import DatabaseShoebox from './database/shoebox';
 import DatabaseOperation from './database/operations';
-import DatabaseIdentity from './database/identity';
+import DatabaseDocumentsIdentity from './database/documents-identity';
 import DatabaseModels from './database/models';
 
 export default Ember.Object.extend(
   DatabaseStore,
   DatabaseSecurity,
-  DatabaseInternalIdentity,
+  DatabaseInternalDocumentsIdentity,
   DatabaseInternalFactory,
   DatabaseInternalProxyFactory,
   DatabaseInternalDeserialize,
@@ -33,6 +33,6 @@ export default Ember.Object.extend(
   DatabaseChanges,
   DatabaseShoebox,
   DatabaseOperation,
-  DatabaseIdentity,
+  DatabaseDocumentsIdentity,
   DatabaseModels
 );

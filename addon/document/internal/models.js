@@ -178,6 +178,7 @@ export default class InternalModels extends Base {
   _didDestroyModel() {
     this._stopObserving();
     super._didDestroyModel();
+    this.store._didDestroyInternalModels(this);
   }
 
 }

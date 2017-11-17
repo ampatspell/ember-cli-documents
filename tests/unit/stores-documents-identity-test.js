@@ -6,16 +6,16 @@ const {
   run
 } = Ember;
 
-module('store-identity');
+module('stores-documents-identity');
 
 test('it exists', function(assert) {
-  let identity = this.store.get('identity');
+  let identity = this.stores.get('documentsIdentity');
   assert.ok(identity);
   assert.ok(identity.get('length') === 0);
 });
 
 test('identity includes new docs', function(assert) {
-  let identity = this.store.get('identity');
+  let identity = this.stores.get('documentsIdentity');
   assert.ok(identity.get('length') === 0);
   let doc = this.db.doc();
   assert.ok(identity.get('length') === 1);
@@ -23,7 +23,7 @@ test('identity includes new docs', function(assert) {
 });
 
 test('identity includes docs from newly created db', function(assert) {
-  let identity = this.store.get('identity');
+  let identity = this.stores.get('documentsIdentity');
   assert.ok(identity.get('length') === 0);
 
   let doc = this.db.doc();
@@ -36,7 +36,7 @@ test('identity includes docs from newly created db', function(assert) {
 });
 
 test('docs are removed from identity', function(assert) {
-  let identity = this.store.get('identity');
+  let identity = this.stores.get('documentsIdentity');
   assert.ok(identity.get('length') === 0);
 
   let doc = this.db.doc();
@@ -48,13 +48,25 @@ test('docs are removed from identity', function(assert) {
 });
 
 test('docs are removed from destroyed db', function(assert) {
-  let identity = this.store.get('identity');
+  let identity = this.stores.get('documentsIdentity');
   assert.ok(identity.get('length') === 0);
 
   let doc = this.db.doc();
   assert.ok(identity.get('lastObject') === doc);
 
   run(() => this.db.destroy());
+
+  assert.ok(identity.get('length') === 0);
+});
+
+test('destroyed store db documents are removed from identity', function(assert) {
+  let identity = this.stores.get('documentsIdentity');
+  assert.ok(identity.get('length') === 0);
+
+  let doc = this.db.doc();
+  assert.ok(identity.get('lastObject') === doc);
+
+  run(() => this.store.destroy());
 
   assert.ok(identity.get('length') === 0);
 });

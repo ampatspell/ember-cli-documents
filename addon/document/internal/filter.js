@@ -32,7 +32,7 @@ export default class FilterInternal extends ObserveOwner(ModelMixin(Base)) {
   }
 
   get documents() {
-    return this.database.get('identity');
+    return this.database.get('documentsIdentity');
   }
 
   __matches() {

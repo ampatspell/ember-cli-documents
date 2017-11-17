@@ -73,7 +73,7 @@ test('destroy stops observing', function(assert) {
 
   wrap('owner', 'removeObserver', this.owner);
   wrap('duck', 'removeObserver', duck);
-  wrap('identity', 'removeEnumerableObserver', this.db.get('identity'));
+  wrap('documentsIdentity', 'removeEnumerableObserver', this.db.get('documentsIdentity'));
 
   this.owner.set('type', 'duck');
   let filter = this.filter();
@@ -88,7 +88,7 @@ test('destroy stops observing', function(assert) {
     },
     {
       "func": "removeEnumerableObserver",
-      "name": "identity"
+      "name": "documentsIdentity"
     },
     {
       "func": "removeObserver",

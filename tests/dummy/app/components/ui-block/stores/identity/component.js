@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import layout from './template';
+import { info } from 'documents/util/logger';
 
 const {
   inject: { service },
@@ -12,11 +13,17 @@ export default Ember.Component.extend({
 
   stores: service(),
   router: service(),
-  documents: reads('stores.identity'),
+
+  documents: reads('stores.documentsIdentity'),
+  models: reads('stores.modelsIdentity'),
 
   actions: {
-    select(doc) {
+    doc(doc) {
       this.get('router').transitionTo('documents.document', doc.get('id'));
+    },
+    model(model) {
+      info(`window.model = ${model}`);
+      window.model = model;
     }
   }
 

@@ -3,7 +3,7 @@ import DocumentsError from './error';
 
 export default createTransform({
   internal() {
-    throw new DocumentsError({ error: 'internal', reason: 'database.identity is immutable' });
+    throw new DocumentsError({ error: 'internal', reason: 'immutable array' });
   },
   public(internal) {
     return internal && internal.model(true);

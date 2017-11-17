@@ -1,13 +1,15 @@
 import Stores from 'documents/stores';
-import StoresIdentity from 'documents/stores/-identity';
+import StoresDocumentsIdentity from 'documents/stores/-documents-identity';
+import StoresModelsIdentity from 'documents/stores/-models-identity';
 
 import Store from 'documents/store';
-import StoreIdentity from 'documents/store/-identity';
+import StoreDocumentsIdentity from 'documents/store/-documents-identity';
+import StoreModelsIdentity from 'documents/store/-models-identity';
 import Databases from 'documents/store/-databases';
 import Session from 'documents/session';
 
 import Database from 'documents/database';
-import DatabaseIdentity from 'documents/database/-identity';
+import DatabaseDocumentsIdentity from 'documents/database/-documents-identity';
 import DatabaseSecurity from 'documents/security';
 import DatabaseSecurityPair from 'documents/security-pair';
 
@@ -101,9 +103,11 @@ export default {
     container.register('documents:internal/changes/database', InternalDatabaseChanges);
     container.register('documents:internal/changes/store', InternalStoreChanges);
 
-    container.register('documents:stores/identity', StoresIdentity);
-    container.register('documents:store/identity', StoreIdentity);
-    container.register('documents:database/identity', DatabaseIdentity);
+    container.register('documents:stores/documents-identity', StoresDocumentsIdentity);
+    container.register('documents:stores/models-identity', StoresModelsIdentity);
+    container.register('documents:store/documents-identity', StoreDocumentsIdentity);
+    container.register('documents:store/models-identity', StoreModelsIdentity);
+    container.register('documents:database/documents-identity', DatabaseDocumentsIdentity);
 
     container.register('documents:proxy/document', DocumentProxy);
     container.register('documents:internal/proxy/document', InternalDocumentProxy);

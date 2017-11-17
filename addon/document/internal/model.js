@@ -6,4 +6,9 @@ export default class InternalModel extends Base {
     return this.store._createModel(this);
   }
 
+  _didDestroyModel() {
+    super._didDestroyModel();
+    this.store._didDestroyInternalModel(this);
+  }
+
 }

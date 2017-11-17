@@ -52,13 +52,17 @@ export default Ember.Mixin.create({
   _createInternalModel(name, parent, opts, _ref) {
     let factory = this.__modelFactory(name);
     let InternalModel = this._documentsInternalFactory('model');
-    return new InternalModel(this, parent, factory, opts, _ref);
+    let internal = new InternalModel(this, parent, factory, opts, _ref);
+    this._registerInternalModel(internal);
+    return internal;
   },
 
   _createInternalModels(name, parent, source, opts) {
     let factory = this.__modelsFactory(name);
     let InternalModels = this._documentsInternalFactory('models');
-    return new InternalModels(this, parent, source, factory, opts);
+    let internal = new InternalModels(this, parent, source, factory, opts);
+    this._registerInternalModel(internal);
+    return internal;
   },
 
   //

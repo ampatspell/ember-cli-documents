@@ -1,7 +1,7 @@
 # TODO
 
 * remove extendable
-* register currently instantiated models in store, present it with `DataAdapter`
+* list `stores.modelsIdentity` in `DataAdapter`
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * rename `addon/document` to `addon/models` and separate base, documents and proxies
