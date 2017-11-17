@@ -6,10 +6,10 @@ const {
   A
 } = Ember;
 
-export default ({ key, factory }) => Ember.Mixin.create({
+export default ({ key, factory, createInternal }) => Ember.Mixin.create({
 
   [key]: computed(function() {
-    let _internal = { stores: this };
+    let _internal = createInternal.call(this);
     return getOwner(this).factoryFor(`documents:stores/${factory}`).create({ _internal, content: A() });
   }).readOnly(),
 
