@@ -1,19 +1,25 @@
 import Ember from 'ember';
-import { find, prop } from 'documents/properties';
+import { prop } from 'documents/properties';
+import { find } from 'documents/properties/proxy';
 
 const {
   merge
 } = Ember;
 
-export const byType = find.extend(opts => {
+export const byType = opts => {
   opts = merge({ type: prop('type') }, opts);
   opts.type = prop.wrap(opts.type);
-  return {
+  return find({
+    _identifier: 'app/models/-props/byType',
     query(owner) {
-      return { ddoc: 'main', view: 'by-type', key: opts.type.value(owner) }
+      return {
+        ddoc: 'main',
+        view: 'by-type',
+        key: opts.type.value(owner)
+      };
     },
     matches(doc, owner) {
       return doc.get('type') === opts.type.value(owner);
     }
-  }
-});
+  });
+};
