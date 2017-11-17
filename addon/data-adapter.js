@@ -3,7 +3,6 @@ import Model from './document/model';
 import Models from './document/models';
 
 const {
-  A,
   inject: { service },
   get
 } = Ember;
@@ -35,7 +34,7 @@ export default Ember.DataAdapter.extend({
     return columns;
   },
 
-  getRecords(modelClass, modelName) {
+  getRecords(modelClass) {
     return this.get('stores.modelsIdentity').modelsByClass(modelClass);
   },
 
