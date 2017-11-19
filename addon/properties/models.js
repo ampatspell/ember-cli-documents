@@ -1,9 +1,22 @@
-import models from './-models';
-import createExtendable from './-create-extendable';
+import createModel from './-create-model';
 
-let extendable = createExtendable({
-  arrays: [ 'owner', 'document' ],
-  functions: [ 'source', 'create', 'type' ]
+const getSource = (owner, opts) => {
+  let source = opts.source;
+  if(!source) {
+    return;
+  }
+  return source(owner);
+};
+
+export default createModel({
+  create(owner, opts, type, build) {
+    if(type === null) {
+      return;
+    }
+    let source = getSource(owner, opts);
+    if(!source) {
+      return;
+    }
+    return build((target, parent, modelOpts) => target._createInternalModels(type, parent, source, modelOpts));
+  }
 });
-
-export default extendable(models);

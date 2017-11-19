@@ -6,7 +6,7 @@ export {
   first,
   find,
   paginated
-} from './extendable';
+} from './proxy';
 
 export {
   prop

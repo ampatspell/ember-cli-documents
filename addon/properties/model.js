@@ -1,9 +1,10 @@
-import model from './-model';
-import createExtendable from './-create-extendable';
+import createModel from './-create-model';
 
-let extendable = createExtendable({
-  arrays: [ 'owner' ],
-  functions: [ 'create', 'type' ]
+export default createModel({
+  create(owner, opts, type, build) {
+    if(!type) {
+      return;
+    }
+    return build((target, parent, modelOpts) => target._createInternalModel(type, parent, modelOpts));
+  }
 });
-
-export default extendable(model);
