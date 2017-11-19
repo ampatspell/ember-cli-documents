@@ -1,8 +1,7 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import models from 'documents/properties/models';
-import { Model, Models } from 'documents';
+import { Model, Models, models } from 'documents';
 
 const {
   A,
