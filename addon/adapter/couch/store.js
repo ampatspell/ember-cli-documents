@@ -1,12 +1,7 @@
-import Ember from 'ember';
+import { getOwner } from '@ember/application';
+import { reads } from '@ember/object/computed';
+import { get, computed } from '@ember/object';
 import Adapter from '../store';
-
-const {
-  getOwner,
-  computed,
-  computed: { reads },
-  get
-} = Ember;
 
 const couch = () => computed('url', function() {
   let couches = getOwner(this).lookup('couch:couches');

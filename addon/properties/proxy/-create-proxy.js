@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
 import { omit } from '../../util/object';
 import destroyable from '../-destroyable';
 import { withDefinition } from '../-meta';
-
-const {
-  merge
-} = Ember;
 
 export default type => opts => {
   opts = merge({ database: 'database' }, opts);

@@ -1,13 +1,9 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import createBlob from 'couch/util/create-blob';
 import Attachments from 'documents/document/attachments/internal/attachments';
 import Attachment from 'documents/document/attachments/internal/attachment';
-
-const {
-  run
-} = Ember;
 
 module('document-attachments');
 

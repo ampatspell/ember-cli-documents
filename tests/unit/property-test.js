@@ -1,17 +1,14 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { getDefinition } from 'documents';
 import { firstById as docById } from '../helpers/properties';
 
-const {
-  run
-} = Ember;
-
 module('property');
 
 test('property destroys proxy', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     id: 'duck',
     doc: docById({ database: 'db', id: 'id' })
   });
@@ -27,7 +24,7 @@ test('property destroys proxy', function(assert) {
 });
 
 test('property has definition meta', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     id: 'duck',
     doc: docById({ database: 'db', id: 'id' })
   });
@@ -41,7 +38,7 @@ test('property has definition meta', function(assert) {
 });
 
 test('property destroys previous proxy on database change', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     id: 'duck',
     doc: docById({ database: 'db', id: 'id' })
   });
@@ -59,7 +56,7 @@ test('property destroys previous proxy on database change', function(assert) {
 });
 
 test('property does not recreate proxy on same database set', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     id: 'duck',
     doc: docById({ database: 'db', id: 'id' })
   });

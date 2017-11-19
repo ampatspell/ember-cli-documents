@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { computed } from '@ember/object';
 
-const {
-  computed
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   session: computed(function() {
     let store = this;

@@ -1,11 +1,8 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { get } from '@ember/object';
+import { A } from '@ember/array';
 
-const {
-  get,
-  A
-} = Ember;
-
-export default hash => Ember.Mixin.create({
+export default hash => Mixin.create({
 
   objectAtContent(idx) {
     let object = A(get(this, 'arrangedContent')).objectAt(idx);

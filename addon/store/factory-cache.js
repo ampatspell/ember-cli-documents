@@ -1,11 +1,8 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { getOwner } from '@ember/application';
 import { object } from '../util/computed';
 
-const {
-  getOwner
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   _factoryCache: object().readOnly(),
 

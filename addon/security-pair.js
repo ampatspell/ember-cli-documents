@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import EmberObject, { observer } from '@ember/object';
 import { array } from './util/computed';
 
-const {
-  observer
-} = Ember;
-
-export default Ember.Object.extend({
+export default EmberObject.extend({
 
   security: null,
   key: null,

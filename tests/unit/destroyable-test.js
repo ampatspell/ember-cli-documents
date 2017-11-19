@@ -1,12 +1,8 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import EmberObject from '@ember/object';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import destroyable, { cacheFor } from 'documents/properties/-destroyable';
-
-const {
-  run,
-  Object: EmberObject
-} = Ember;
 
 class Internal {
   constructor(id) {

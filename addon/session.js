@@ -1,18 +1,15 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { reads } from '@ember/object/computed';
+import { reject } from 'rsvp';
+import { A } from '@ember/array';
 import createStateMixin from './util/basic-state-mixin';
 import { array } from './util/computed';
-
-const {
-  computed: { reads },
-  RSVP: { reject },
-  A
-} = Ember;
 
 const State = createStateMixin({
   onDirty: [ 'name', 'password' ]
 });
 
-export default Ember.Object.extend(State, {
+export default EmberObject.extend(State, {
 
   store: null,
   documents: reads('store.documents.session').readOnly(),

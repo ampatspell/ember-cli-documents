@@ -1,9 +1,6 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { all } from 'rsvp';
 import { Error } from 'documents';
-
-const {
-  RSVP: { all }
-} = Ember;
 
 /* global emit */
 const ddocs = {
@@ -19,7 +16,7 @@ const ddocs = {
   }
 };
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   async _recreateDatabase() {
     return await this.get('database.documents.database').recreate();

@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 import { array } from '../util/computed';
 import { destroyArray } from '../util/destroy';
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   _changes: array(),
 

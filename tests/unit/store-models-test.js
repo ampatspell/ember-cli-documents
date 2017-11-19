@@ -1,14 +1,10 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import EmberObject, { get } from '@ember/object';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import Model from 'documents/document/model';
 import Models from 'documents/document/models';
-
-const {
-  A,
-  get,
-  run
-} = Ember;
 
 const Duck = Model.extend();
 const GreenDuck = Duck.extend();
@@ -55,12 +51,12 @@ test('added docs are wrapped in models', function(assert) {
 
   assert.equal(models.get('length'), 0);
 
-  ducks.pushObject(Ember.Object.create({ id: 'one', type: 'green' }));
+  ducks.pushObject(EmberObject.create({ id: 'one', type: 'green' }));
   assert.equal(models.get('length'), 1);
   assert.ok(GreenDuck.detectInstance(models.objectAt(0)));
   assert.equal(models.objectAt(0).get('doc'), ducks.objectAt(0));
 
-  ducks.pushObject(Ember.Object.create({ id: 'two', type: 'yellow' }));
+  ducks.pushObject(EmberObject.create({ id: 'two', type: 'yellow' }));
   assert.equal(models.get('length'), 2);
   assert.ok(YellowDuck.detectInstance(models.objectAt(1)));
   assert.equal(models.objectAt(1).get('doc'), ducks.objectAt(1));
@@ -70,7 +66,7 @@ test('remove doc removes model', function(assert) {
   let ducks = this.ducks;
   let models = this.create();
 
-  let doc = Ember.Object.create({ id: 'one', type: 'green' });
+  let doc = EmberObject.create({ id: 'one', type: 'green' });
 
   ducks.pushObject(doc);
 
@@ -87,7 +83,7 @@ test('model is recreated on doc.type change', function(assert) {
   let ducks = this.ducks;
   let models = this.create();
 
-  let doc = Ember.Object.create({ id: 'one', type: 'green' });
+  let doc = EmberObject.create({ id: 'one', type: 'green' });
 
   ducks.pushObject(doc);
 
@@ -108,10 +104,10 @@ test('model is recreated on doc.type change', function(assert) {
 
 test('destroy child models', function(assert) {
   let ducks = this.ducks;
-  ducks.pushObject(Ember.Object.create({ id: 'one', type: 'green' }));
+  ducks.pushObject(EmberObject.create({ id: 'one', type: 'green' }));
   let models = this.create();
 
-  ducks.pushObject(Ember.Object.create({ id: 'two', type: 'yellow' }));
+  ducks.pushObject(EmberObject.create({ id: 'two', type: 'yellow' }));
 
   let green = models.objectAt(0);
   let yellow = models.objectAt(1);

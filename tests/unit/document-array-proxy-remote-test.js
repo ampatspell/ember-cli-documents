@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  RSVP: { all }
-} = Ember;
 
 const ddoc = {
   views: {
@@ -19,7 +16,7 @@ const ddoc = {
 
 module('document-array-proxy-remote', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ type: 'duck' });
+    this.owner = EmberObject.create({ type: 'duck' });
     this.opts = {
       owner: [ 'type' ],
       document: [ 'type' ],

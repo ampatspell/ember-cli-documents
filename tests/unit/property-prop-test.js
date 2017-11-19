@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { prop } from 'documents/properties';
@@ -7,7 +7,7 @@ import { firstById } from '../helpers/properties';
 module('property-prop');
 
 test('property with string value', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     doc: firstById({ database: 'db', id: 'yellow' })
   });
 
@@ -29,7 +29,7 @@ test('property with string value', function(assert) {
 });
 
 test('property with prop', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckId: 'yellow',
     doc: firstById({ database: 'db', id: prop('duckId') })
   });

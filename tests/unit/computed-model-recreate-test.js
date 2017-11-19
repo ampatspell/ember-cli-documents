@@ -1,11 +1,8 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { Model, model } from 'documents';
-
-const {
-  run
-} = Ember;
 
 const Post = Model.extend({});
 const TextPost = Post.extend({});
@@ -39,7 +36,7 @@ module('computed-model-type', {
     this.register('model:text-post', TextPost);
     this.register('model:link-post', LinkPost);
     this.create = (opts={}) => {
-      let Subject = Ember.Object.extend({
+      let Subject = EmberObject.extend({
         doc: opts.doc,
         prop: postModel({ doc: 'doc' })
       });
@@ -56,7 +53,7 @@ test('create', function(assert) {
 });
 
 test('create and set doc.type afterwards', function(assert) {
-  let doc = Ember.Object.create();
+  let doc = EmberObject.create();
   let subject = this.create({ doc });
   assert.ok(!subject.get('prop'));
 

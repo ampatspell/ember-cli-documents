@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  RSVP: { all }
-} = Ember;
 
 /* global emit */
 const ddoc = {
@@ -30,7 +27,7 @@ const ddoc = {
 
 module('document-proxy-linked-remote', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ key: 'duck:yellow' });
+    this.owner = EmberObject.create({ key: 'duck:yellow' });
     this.opts = {
       owner: [ 'key' ],
       document: [ 'type' ],

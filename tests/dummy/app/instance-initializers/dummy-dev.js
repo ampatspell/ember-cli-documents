@@ -1,3 +1,4 @@
+import { Promise } from 'rsvp';
 import Ember from 'ember';
 import environment from '../config/environment';
 import { getDefinition } from 'documents/properties';
@@ -5,7 +6,6 @@ import { getDefinition } from 'documents/properties';
 const { COUCHDB_HOST } = environment;
 
 const {
-  RSVP: { Promise },
   Logger: { info }
 } = Ember;
 

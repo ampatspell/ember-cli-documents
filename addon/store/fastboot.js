@@ -1,12 +1,9 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { get } from '@ember/object';
+import { getOwner } from '@ember/application';
+import { allSettled } from 'rsvp';
 
-const {
-  get,
-  getOwner,
-  RSVP: { allSettled }
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __fastbootDefer() {
     return allSettled([

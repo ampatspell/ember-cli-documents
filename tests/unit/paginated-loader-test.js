@@ -1,11 +1,8 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  run,
-  RSVP: { all }
-} = Ember;
 
 const ddoc = {
   views: {
@@ -28,7 +25,7 @@ let _opts = {
 
 module('paginated-loader', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ id: 'zeeba' });
+    this.owner = EmberObject.create({ id: 'zeeba' });
     this.opts = {
       owner: [ 'id' ],
       query(owner, state) {

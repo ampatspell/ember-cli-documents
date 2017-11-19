@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import Base from './-base';
 import ModelMixin from './-model-mixin';
-
-const {
-  A
-} = Ember;
 
 export default class InternalModelBase extends ModelMixin(Base) {
 

@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  RSVP: { all }
-} = Ember;
 
 module('database-find', {
   beforeEach() {

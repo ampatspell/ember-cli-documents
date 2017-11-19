@@ -1,11 +1,10 @@
+import EmberObject, { get } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
+import { capitalize } from '@ember/string';
 import Ember from 'ember';
 
 const {
-  Object: EmberObject,
-  Copyable,
-  get,
-  guidFor,
-  String: { capitalize }
+  Copyable
 } = Ember;
 
 const Base = EmberObject.extend(Copyable, {

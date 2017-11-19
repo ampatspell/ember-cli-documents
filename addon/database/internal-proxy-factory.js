@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 import { isOneOf } from 'documents/util/assert';
 
 const factories = {
@@ -9,7 +9,7 @@ const factories = {
 
 const factoryKeys = Object.keys(factories);
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __createInternalProxy(type, owner, opts) {
     isOneOf('type', type, factoryKeys);

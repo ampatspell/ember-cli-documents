@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { merge } from '@ember/polyfills';
 
-const {
-  merge
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __mergeInternalModelOpts(opts) {
     return merge({ database: this }, opts);

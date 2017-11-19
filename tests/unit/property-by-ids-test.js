@@ -1,15 +1,12 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { A } from '@ember/array';
+import { run } from '@ember/runloop';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { getDefinition, prop } from 'documents/properties';
 import { pick } from 'documents/util/object';
 import { findByIds } from '../helpers/properties';
-
-const {
-  A,
-  run,
-  RSVP: { all }
-} = Ember;
 
 module('property-by-ids', {
   beforeEach() {
@@ -18,7 +15,7 @@ module('property-by-ids', {
 });
 
 test('build', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckIds: [ 'yellow' ],
     doc: findByIds({ database: 'db', ids: prop('duckIds') })
   });
@@ -32,8 +29,8 @@ test('build', function(assert) {
     document: [ 'id' ]
   });
 
-  assert.ok(!opts.matches(Ember.Object.create({ id: 'green' }), owner));
-  assert.ok(opts.matches(Ember.Object.create({ id: 'yellow' }), owner));
+  assert.ok(!opts.matches(EmberObject.create({ id: 'green' }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'yellow' }), owner));
 
   assert.deepEqual(opts.query(owner), {
     all: true,
@@ -48,7 +45,7 @@ test('load', async function(assert) {
     this.docs.save({ _id: 'green' })
   ]);
 
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckIds: A([]),
     docs: findByIds({ database: 'db', ids: prop('duckIds') })
   });
@@ -86,7 +83,7 @@ test('manual load', async function(assert) {
     this.docs.save({ _id: 'green' })
   ]);
 
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckIds: A([ 'green', 'yellow' ]),
     docs: findByIds({ database: 'db', ids: prop('duckIds'), autoload: false })
   });

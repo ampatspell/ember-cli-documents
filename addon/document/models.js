@@ -1,11 +1,11 @@
-import Ember from 'ember';
+import ArrayProxy from '@ember/array/proxy';
 import ModelMixin from './-model-mixin';
 import TransformMixin from './-array-transform-mixin';
 import { property } from './-properties';
 
 const store = property('store');
 
-const Models = Ember.ArrayProxy.extend(ModelMixin, TransformMixin, {
+const Models = ArrayProxy.extend(ModelMixin, TransformMixin, {
 
   store: store()
 

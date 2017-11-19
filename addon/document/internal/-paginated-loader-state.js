@@ -1,5 +1,9 @@
 import createState from './-create-state';
-import { stateMixin, computed as computed_, defaults } from './-query-loader-state';
+import {
+  stateMixin,
+  computed as computed_,
+  defaults
+} from './-query-loader-state';
 
 const computed = [ ...computed_, 'isMore' ];
 

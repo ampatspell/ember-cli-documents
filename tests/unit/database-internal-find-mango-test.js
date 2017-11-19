@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { all } from 'rsvp';
 import { test } from '../helpers/qunit';
 import configurations from '../helpers/configurations';
-
-const {
-  RSVP: { all }
-} = Ember;
 
 configurations({ identifiers: [ 'couchdb-2.1' ] }, module => {
 

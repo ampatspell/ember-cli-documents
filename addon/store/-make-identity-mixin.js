@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { computed } from '@ember/object';
 
-const {
-  computed
-} = Ember;
-
-export default ({ key, factory, content }) => Ember.Mixin.create({
+export default ({ key, factory, content }) => Mixin.create({
 
   [key]: computed(function() {
     let _internal = { store: this };

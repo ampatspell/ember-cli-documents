@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import ArrayProxy from '@ember/array/proxy';
 import TransformMixin from '../util/immutable-array-transform-mixin';
 
-export default Ember.ArrayProxy.extend(TransformMixin);
+export default ArrayProxy.extend(TransformMixin);

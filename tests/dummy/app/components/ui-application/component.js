@@ -1,14 +1,11 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
+import { readOnly, equal } from '@ember/object/computed';
 import layout from './template';
-
-const {
-  computed,
-  computed: { equal, readOnly }
-} = Ember;
 
 const type = value => equal('_type', value).readOnly();
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [ ':ui-application' ],
   layout,
 

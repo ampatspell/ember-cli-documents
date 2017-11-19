@@ -1,14 +1,11 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { get } from '@ember/object';
 import { isString } from '../util/assert';
 import createNestedRegistry from '../util/create-nested-registry';
 
-const {
-  get
-} = Ember;
-
 const DatabasesRegistry = createNestedRegistry({ key: '_databases' });
 
-export default Ember.Mixin.create(DatabasesRegistry, {
+export default Mixin.create(DatabasesRegistry, {
 
   _databases: null,
 

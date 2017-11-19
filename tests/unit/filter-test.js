@@ -1,14 +1,11 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
-const {
-  run
-} = Ember;
-
 module('filter', {
   beforeEach() {
-    this.owner = Ember.Object.create({ type: null });
+    this.owner = EmberObject.create({ type: null });
     this.opts = {
       owner: [ 'type' ],
       document: [ 'type' ],

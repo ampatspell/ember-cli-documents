@@ -1,16 +1,12 @@
-import Ember from 'ember';
+import EmberObject, { computed } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import ModelMixin from './-model-mixin';
-
-const {
-  computed,
-  computed: { reads }
-} = Ember;
 
 const values = () => computed(function() {
   return this._internal.values;
 }).readOnly();
 
-export default Ember.Object.extend(ModelMixin, {
+export default EmberObject.extend(ModelMixin, {
 
   _internal: null,
 

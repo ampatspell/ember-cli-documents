@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import Base from './-model';
 import { omit } from '../../util/object';
 import { toModel, toInternal } from '../../util/internal';
-
-const {
-  A
-} = Ember;
 
 const splitOptions = (opts={}) => {
   let { type, create, document } = opts;

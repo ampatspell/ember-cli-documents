@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  merge
-} = Ember;
 
 module('store-database-name-mapping', {
   beforeEach() {

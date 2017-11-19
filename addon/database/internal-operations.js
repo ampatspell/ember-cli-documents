@@ -1,14 +1,10 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { assign, merge } from '@ember/polyfills';
+import { reject, resolve } from 'rsvp';
 import Operation from './-operation';
 import DocumentsError from '../util/error';
 
-const {
-  merge,
-  assign,
-  RSVP: { resolve, reject }
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __scheduleInternalOperation(label, internal, props, before, resolve, reject, fn) {
     let op = new Operation(label, assign({ internal }, props), fn, before, resolve, reject);

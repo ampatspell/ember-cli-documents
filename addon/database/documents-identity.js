@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { computed } from '@ember/object';
 
-const {
-  computed
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   documentsIdentity: computed(function() {
     let content = this._documents.all;

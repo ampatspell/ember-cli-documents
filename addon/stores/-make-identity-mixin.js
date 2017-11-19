@@ -1,12 +1,9 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { getOwner } from '@ember/application';
+import { computed } from '@ember/object';
+import { A } from '@ember/array';
 
-const {
-  getOwner,
-  computed,
-  A
-} = Ember;
-
-export default ({ key, factory, createInternal }) => Ember.Mixin.create({
+export default ({ key, factory, createInternal }) => Mixin.create({
 
   [key]: computed(function() {
     let _internal = createInternal.call(this);

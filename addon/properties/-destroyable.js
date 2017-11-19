@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
+import { copy } from '@ember/object/internals';
+import { merge } from '@ember/polyfills';
 import EmptyObject from 'documents/util/empty-object';
-
-const {
-  computed,
-  copy,
-  merge
-} = Ember;
 
 // usage:
 //

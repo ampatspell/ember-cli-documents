@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import StoreStores from './store/stores';
 import StoreFactoryCache from './store/factory-cache';
 import StoreSession from './store/session';
@@ -16,7 +16,7 @@ import StoreDocumentsIdentity from './store/documents-identity';
 import StoreModelsIdentity from './store/models-identity';
 import StoreModels from './store/models';
 
-export default Ember.Object.extend(
+export default EmberObject.extend(
   StoreStores,
   StoreFactoryCache,
   StoreSession,

@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { readOnly } from '@ember/object/computed';
 import { Model } from 'documents';
 import LogMixin from '../../-log-mixin';
-
-const {
-  computed: { readOnly }
-} = Ember;
 
 export default Model.extend(LogMixin, {
 

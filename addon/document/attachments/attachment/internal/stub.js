@@ -1,9 +1,5 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import Content from './-base';
-
-const {
-  A
-} = Ember;
 
 export const mapping = {
   contentType: 'content_type',

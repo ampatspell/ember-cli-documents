@@ -1,11 +1,8 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  run,
-  RSVP: { all }
-} = Ember;
 
 const ddoc = {
   views: {
@@ -28,7 +25,7 @@ let _opts = {
 
 module('document-paginated-proxy-remote', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ type: 'duck' });
+    this.owner = EmberObject.create({ type: 'duck' });
     this.opts = {
       query(owner, state) {
         let opts = _opts;

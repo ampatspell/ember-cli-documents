@@ -1,12 +1,9 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { on } from '@ember/object/evented';
+import { A } from '@ember/array';
 import EmptyObject from '../util/empty-object';
 
-const {
-  on,
-  A
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __createDocumentIdentity: on('init', function() {
     this._documents = new EmptyObject();
