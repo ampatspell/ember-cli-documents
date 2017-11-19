@@ -1,14 +1,22 @@
+import { A } from '@ember/array';
 import { merge } from '@ember/polyfills';
 import destroyable from '../-destroyable';
 import { omit } from '../../util/object';
 import InternalModel from '../../document/internal/model';
 import { withDefinition } from '../-meta';
+import { isString, isArray } from '../../util/assert';
 
-const _get = (owner, key) => key ? owner.get(key) : null;
+const _get = (owner, key, name) => {
+  if(key) {
+    isString(`${name} must be string not ${key}`, key);
+    return owner.get(key);
+  }
+  return null;
+};
 
 const getStoreAndDatabase = (owner, opts) => {
-  let store = _get(owner, opts.store);
-  let database = _get(owner, opts.database);
+  let store = _get(owner, opts.store, 'store');
+  let database = _get(owner, opts.database, 'database');
   if(!store) {
     if(!database) {
       return {};
@@ -47,7 +55,9 @@ const getType = (owner, opts) => {
 
 export default factory => opts => {
   opts = merge({ store: 'store', database: 'database', owner: [], document: [] }, opts);
-  return withDefinition(destroyable(...opts.owner, {
+  isArray('owner', opts.owner);
+  let owner = A(opts.owner).compact();
+  return withDefinition(destroyable(...owner, {
     create() {
       let { store, database } = getStoreAndDatabase(this, opts);
       if(!store) {
