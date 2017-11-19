@@ -1,7 +1,6 @@
 # TODO
 
 * have similar `_normalizeOptions` for model and models like internal -proxy has
-* remove extendable
 * list `stores.modelsIdentity` in `DataAdapter`
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
