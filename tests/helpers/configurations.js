@@ -1,9 +1,5 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import createModule, { availableIdentifiers } from './create-module-for-db';
-
-const {
-  A
-} = Ember;
 
 export default (config, body) => {
 

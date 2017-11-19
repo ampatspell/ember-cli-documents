@@ -1,9 +1,5 @@
-import Ember from 'ember';
+import { reject, resolve, defer } from 'rsvp';
 import DocumentsError from '../util/error';
-
-const {
-  RSVP: { defer, resolve, reject }
-} = Ember;
 
 export default class Operation {
 

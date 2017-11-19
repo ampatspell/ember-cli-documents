@@ -1,8 +1,4 @@
-import Ember from 'ember';
-
-const {
-  run: { cancel, next }
-} = Ember;
+import { next, cancel } from '@ember/runloop';
 
 export default class Queue {
 

@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import Base from './-base';
 import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
-
-const {
-  A
-} = Ember;
 
 export default class FilterInternal extends ObserveOwner(ModelMixin(Base)) {
 

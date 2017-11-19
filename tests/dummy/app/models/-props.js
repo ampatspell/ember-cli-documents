@@ -1,9 +1,5 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
 import { find, prop } from 'documents';
-
-const {
-  merge
-} = Ember;
 
 export const byType = opts => {
   opts = merge({ type: prop('type') }, opts);

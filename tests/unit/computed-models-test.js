@@ -1,12 +1,8 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
+import EmberObject, { get } from '@ember/object';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { Model, Models, models } from 'documents';
-
-const {
-  A,
-  get
-} = Ember;
 
 const Ducks = Models.extend({
 });
@@ -19,7 +15,7 @@ module('computed-models', {
     this.register('model:ducks', Ducks);
     this.register('model:duck', Duck);
     this.create = (opts={}) => {
-      let Subject = Ember.Object.extend({
+      let Subject = EmberObject.extend({
         docs: opts.docs,
         message: 'hey there',
         prop: models({

@@ -1,8 +1,5 @@
-import Ember from 'ember';
-
-const {
-  copy
-} = Ember;
+import EmberObject from '@ember/object';
+import { copy } from '@ember/object/internals';
 
 const __documents_definition__ = '__documents_definition__';
 
@@ -12,7 +9,7 @@ export const withDefinition = (property, definition) => {
 }
 
 export const getDefinition = (owner, key) => {
-  if(Ember.Object.detectInstance(owner)) {
+  if(EmberObject.detectInstance(owner)) {
     owner = owner.constructor;
   }
   let meta = owner.metaForProperty(key);

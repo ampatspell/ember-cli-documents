@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { allSettled } from 'rsvp';
 
-const {
-  RSVP: { allSettled }
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   settle() {
     return allSettled(this._databases.all.map(db => db.settle()));

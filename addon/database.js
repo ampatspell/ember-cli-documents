@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import DatabaseStore from './database/store';
 import DatabaseSecurity from './database/security';
 import DatabaseInternalDocumentsIdentity from './database/internal-documents-identity';
@@ -17,7 +17,7 @@ import DatabaseOperation from './database/operations';
 import DatabaseDocumentsIdentity from './database/documents-identity';
 import DatabaseModels from './database/models';
 
-export default Ember.Object.extend(
+export default EmberObject.extend(
   DatabaseStore,
   DatabaseSecurity,
   DatabaseInternalDocumentsIdentity,

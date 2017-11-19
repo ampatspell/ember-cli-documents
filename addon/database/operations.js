@@ -1,15 +1,12 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { on } from '@ember/object/evented';
+import { A } from '@ember/array';
+import { copy } from '@ember/object/internals';
+import { next } from '@ember/runloop';
+import { allSettled, defer } from 'rsvp';
 import Operation from './-operation';
 
-const {
-  on,
-  A,
-  copy,
-  run: { next },
-  RSVP: { defer, allSettled }
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __createOperations: on('init', function() {
     this._operations = new A();

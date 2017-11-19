@@ -1,15 +1,12 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
-const {
-  run,
-  RSVP: { all }
-} = Ember;
-
 module('query-loader', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ id: null });
+    this.owner = EmberObject.create({ id: null });
     this.opts = {
       owner: [ 'id' ],
       query(owner) {

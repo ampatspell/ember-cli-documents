@@ -1,15 +1,11 @@
-import Ember from 'ember';
+import { allSettled, defer, reject, resolve } from 'rsvp';
+import { A } from '@ember/array';
+import { merge } from '@ember/polyfills';
 import Base from './-base';
 import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
 import DocumentsError from 'documents/util/error';
 import { omit } from 'documents/util/object';
-
-const {
-  RSVP: { resolve, reject, defer, allSettled },
-  A,
-  merge
-} = Ember;
 
 class Operation {
 

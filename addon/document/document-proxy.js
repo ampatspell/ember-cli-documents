@@ -1,12 +1,9 @@
-import Ember from 'ember';
+import ObjectProxy from '@ember/object/proxy';
+import { reads } from '@ember/object/computed';
 import ProxyMixin from './-proxy-mixin';
 import { ForwardStateMixin } from './query-loader';
 
-const {
-  computed: { reads }
-} = Ember;
-
-export default Ember.ObjectProxy.extend(ProxyMixin, ForwardStateMixin, {
+export default ObjectProxy.extend(ProxyMixin, ForwardStateMixin, {
 
   content: reads('filter.value').readOnly()
 

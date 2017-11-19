@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import Loader from './-loader';
 import PaginatedLoaderState from './-paginated-loader-state';
-
-const {
-  A
-} = Ember;
 
 export default class PaginatedLoaderInternal extends Loader {
 

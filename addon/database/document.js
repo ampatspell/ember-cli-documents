@@ -1,12 +1,9 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { merge } from '@ember/polyfills';
 import Push from './-push';
 import { isObject_, isString } from '../util/assert';
 
-const {
-  merge
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   doc(values) {
     if(values) {

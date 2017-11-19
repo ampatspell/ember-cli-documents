@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import ArrayProxy from '@ember/array/proxy';
 import TransformMixin from 'documents/util/immutable-array-transform-mixin';
 import createArrayUnify from 'documents/util/create-array-unify-mixin';
 
@@ -10,7 +10,7 @@ const UnifyMixin = createArrayUnify({
   content: 'content'
 });
 
-export default Ember.ArrayProxy.extend(UnifyMixin, TransformMixin, {
+export default ArrayProxy.extend(UnifyMixin, TransformMixin, {
 
   _internal: null
 

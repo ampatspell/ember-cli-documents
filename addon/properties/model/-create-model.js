@@ -1,12 +1,8 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
 import destroyable from '../-destroyable';
 import { omit } from '../../util/object';
 import InternalModel from '../../document/internal/model';
 import { withDefinition } from '../-meta';
-
-const {
-  merge
-} = Ember;
 
 const _get = (owner, key) => key ? owner.get(key) : null;
 

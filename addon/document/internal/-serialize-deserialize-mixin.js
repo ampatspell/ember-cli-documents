@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { typeOf } from '@ember/utils';
 
 import {
   toInternal,
@@ -8,10 +8,6 @@ import {
 } from 'documents/util/internal';
 
 import { empty } from './-base';
-
-const {
-  typeOf
-} = Ember;
 
 const createDeserializeMixin = Class => class DeserializeMixin extends Class {
 

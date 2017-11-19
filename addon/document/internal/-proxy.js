@@ -1,12 +1,8 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
+import { A } from '@ember/array';
 import Base from './-base';
 import ModelMixin from './-model-mixin';
 import { isFunction, isArray } from 'documents/util/assert';
-
-const {
-  merge,
-  A
-} = Ember;
 
 export default class BaseProxyInternal extends ModelMixin(Base) {
 

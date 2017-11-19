@@ -1,9 +1,5 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import makeIdentityMixin from './-make-identity-mixin';
-
-const {
-  A
-} = Ember;
 
 export default makeIdentityMixin({
   key: 'documentsIdentity',

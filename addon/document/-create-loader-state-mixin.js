@@ -1,9 +1,6 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { reads } from '@ember/object/computed';
 import create from './-create-state-mixin';
-
-const {
-  computed: { reads }
-} = Ember;
 
 export const createForwardStateMixin = (target, keys) => {
   const forward = key => reads(`${target}.${key}`).readOnly();
@@ -11,7 +8,7 @@ export const createForwardStateMixin = (target, keys) => {
     state: forward('state')
   };
   keys.forEach(key => props[key] = forward(key));
-  return Ember.Mixin.create(props);
+  return Mixin.create(props);
 };
 
 export const createLoaderStateMixin = keys => create(keys, '_getStateProperty');

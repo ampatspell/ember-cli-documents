@@ -1,10 +1,10 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import ModelMixin from './-model-mixin';
 import { property, call } from './-properties';
 
 const store = property('store');
 
-const Model = Ember.Object.extend(ModelMixin, {
+const Model = EmberObject.extend(ModelMixin, {
 
   store: store(),
   model: call('createModel')

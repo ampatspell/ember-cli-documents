@@ -1,12 +1,9 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { A } from '@ember/array';
+import { assert } from '@ember/debug';
+import { reject } from 'rsvp';
 
-const {
-  A,
-  assert,
-  RSVP: { reject }
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __deserializeInternalOnError(internal, err) {
     internal.withPropertyChanges(changed => {

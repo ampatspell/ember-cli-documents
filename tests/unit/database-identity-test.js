@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  run
-} = Ember;
 
 module('database-identity');
 

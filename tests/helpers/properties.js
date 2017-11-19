@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { assign } from '@ember/polyfills';
+import { typeOf } from '@ember/utils';
 import { prop, find, first } from 'documents';
 import { isBlank } from 'documents/util/string';
-
-const {
-  assign,
-  typeOf
-} = Ember;
 
 export const firstById = opts => {
   opts = assign({ database: 'database', owner: [], document: [], id: prop('id') }, opts);

@@ -1,11 +1,7 @@
-import Ember from 'ember';
-
-const {
-  merge,
-  copy,
-  computed,
-  observer
-} = Ember;
+import Mixin from '@ember/object/mixin';
+import { merge } from '@ember/polyfills';
+import { copy } from '@ember/object/internals';
+import { observer, computed } from '@ember/object';
 
 export default function(opts) {
 
@@ -75,7 +71,7 @@ export default function(opts) {
     hash[`_observe_${key}_deps`] = observer(...value, caller(key));
   }
 
-  return Ember.Mixin.create(merge(hash, {
+  return Mixin.create(merge(hash, {
 
     state: state(),
 

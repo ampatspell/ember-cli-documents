@@ -1,14 +1,11 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
-const {
-  run
-} = Ember;
-
 module('document-proxy', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ id: null });
+    this.owner = EmberObject.create({ id: null });
     this.opts = {
       owner: [ 'id' ],
       document: [ 'id' ],

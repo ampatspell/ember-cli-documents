@@ -1,13 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import { reads } from '@ember/object/computed';
 import layout from './template';
 import { info } from 'documents/util/logger';
 
-const {
-  inject: { service },
-  computed: { reads }
-} = Ember;
-
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [ ':ui-block', ':stores-identity' ],
   layout,
 

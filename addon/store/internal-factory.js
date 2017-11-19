@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 import DocumentsError from '../util/error';
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   _documentsInternalFactory(factoryName) {
     return this._factoryFor(`documents:internal/${factoryName}`).class;

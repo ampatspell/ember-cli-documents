@@ -1,8 +1,4 @@
-import Ember from 'ember';
-
-const {
-  copy
-} = Ember;
+import { copy } from '@ember/object/internals';
 
 const queryToString = (hash={}) => {
   let pairs = [];

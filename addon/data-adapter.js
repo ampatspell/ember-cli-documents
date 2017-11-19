@@ -1,15 +1,12 @@
-import Ember from 'ember';
+import DataAdapter from '@ember/debug/data-adapter';
+import { inject as service } from '@ember/service';
+import { get } from '@ember/object';
 import Model from './document/model';
 import Models from './document/models';
 
-const {
-  inject: { service },
-  get
-} = Ember;
-
 // https://github.com/emberjs/data/blob/master/addon/-private/system/debug/debug-adapter.js
 
-export default Ember.DataAdapter.extend({
+export default DataAdapter.extend({
 
   stores: service(),
 

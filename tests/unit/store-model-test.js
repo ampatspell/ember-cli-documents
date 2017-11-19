@@ -1,12 +1,8 @@
-import Ember from 'ember';
+import { get } from '@ember/object';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import Model from 'documents/document/model';
-
-const {
-  get,
-  run
-} = Ember;
 
 const Duck = Model.extend();
 

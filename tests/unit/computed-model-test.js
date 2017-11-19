@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { Model, model } from 'documents';
 
-const Hamster = Ember.Object.extend({});
+const Hamster = EmberObject.extend({});
 
 const Duck = Model.extend({});
 
@@ -24,7 +24,7 @@ module('computed-model', {
     this.register('model:duck', Duck);
     this.register('model:hamster', Hamster);
     this.create = (opts={}) => {
-      let Subject = Ember.Object.extend({
+      let Subject = EmberObject.extend({
         doc: opts.doc,
         prop: docModel({ doc: 'doc', type: () => opts.type || 'duck' })
       });

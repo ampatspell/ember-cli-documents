@@ -1,8 +1,5 @@
-import Ember from 'ember';
-
-const {
-  typeOf
-} = Ember;
+import { helper } from '@ember/component/helper';
+import { typeOf } from '@ember/utils';
 
 export function join(params, hash) {
   let delimiter = hash.delimiter || '';
@@ -13,4 +10,4 @@ export function join(params, hash) {
   return arr.join(delimiter);
 }
 
-export default Ember.Helper.helper(join);
+export default helper(join);

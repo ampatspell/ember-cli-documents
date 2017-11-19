@@ -1,15 +1,17 @@
-import Ember from 'ember';
-import { assert, isString, notBlank, isClass_ } from 'documents/util/assert'
+import Mixin from '@ember/object/mixin';
+import { merge } from '@ember/polyfills';
+import { dasherize } from '@ember/string';
+import { getOwner } from '@ember/application';
+import {
+  assert,
+  isString,
+  notBlank,
+  isClass_
+} from 'documents/util/assert'
 import Model from 'documents/document/model';
 import Models, { generate as modelsGenerate } from 'documents/document/models';
 
-const {
-  merge,
-  String: { dasherize },
-  getOwner
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   _normalizeModelName(name) {
     isString('model name', name);

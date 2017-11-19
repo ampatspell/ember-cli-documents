@@ -1,14 +1,11 @@
-import Ember from 'ember';
-
-const {
-  get,
-  merge
-} = Ember;
+import Mixin from '@ember/object/mixin';
+import { get } from '@ember/object';
+import { merge } from '@ember/polyfills';
 
 export default opts => {
   opts = merge({ content: 'content' }, opts);
   opts.root = merge({ array: 'arrays', key: null }, opts.root);
-  return Ember.Mixin.create({
+  return Mixin.create({
 
     init() {
       this._super(...arguments);
