@@ -1,6 +1,5 @@
 import Ember from 'ember';
-import { prop } from 'documents/properties';
-import { find } from 'documents/properties/proxy';
+import { find, prop } from 'documents';
 
 const {
   merge

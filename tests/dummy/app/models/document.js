@@ -1,12 +1,33 @@
 import { readOnly } from '@ember/object/computed';
-import { Model } from 'documents';
-import firstById from 'documents/properties/first-by-id';
-import { prop } from 'documents/properties';
+import { Model, first, prop } from 'documents';
+
+const byId = opts => {
+  opts = merge({ id: prop('id') }, opts);
+  opts.id = prop.wrap(opts.id);
+  return first({
+    owner: [ opts.id.key() ],
+    document: [ 'id' ],
+    query(owner) {
+      let id = opts.id.value(owner);
+      if(isBlank(id)) {
+        return;
+      }
+      return { id };
+    },
+    matches(doc, owner) {
+      let id = opts.id.value(owner);
+      if(!id) {
+        return;
+      }
+      return doc.get('id') === id;
+    }
+  });
+};
 
 export default Model.extend({
 
   id: null,
-  doc: firstById({ id: prop('id') }),
+  doc: byId({ id: prop('id') }),
 
   serialized: readOnly('doc.serialized'),
   state: readOnly('doc.content.state'),

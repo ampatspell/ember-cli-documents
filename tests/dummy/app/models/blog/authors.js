@@ -1,6 +1,6 @@
 import { Models } from 'documents';
 import LogMixin from '../-log-mixin';
-import models from 'documents/properties/-models';
+import { models } from 'documents';
 
 export const property = opts => models({
   owner: [ opts.docs ],
