@@ -3,7 +3,7 @@ import { isOneOf } from 'documents/util/assert';
 
 const factories = {
   first:     '_createInternalDocumentProxy',
-  find:     '_createInternalArrayProxy',
+  find:      '_createInternalArrayProxy',
   paginated: '_createInternalPaginatedProxy'
 };
 
