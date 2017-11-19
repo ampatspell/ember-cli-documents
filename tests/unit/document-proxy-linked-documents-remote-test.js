@@ -10,7 +10,7 @@ const {
 const ddoc = {
   views: {
     'by-id-with-feathers': {
-      map(doc) {
+      map: function(doc) {
         if(doc.type !== 'duck') {
           return;
         }
