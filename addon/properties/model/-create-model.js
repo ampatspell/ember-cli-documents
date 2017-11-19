@@ -1,8 +1,8 @@
 import Ember from 'ember';
-import destroyable from './-destroyable';
-import { omit } from '../util/object';
-import InternalModel from '../document/internal/model';
-import { withDefinition } from './-meta';
+import destroyable from '../-destroyable';
+import { omit } from '../../util/object';
+import InternalModel from '../../document/internal/model';
+import { withDefinition } from '../-meta';
 
 const {
   merge

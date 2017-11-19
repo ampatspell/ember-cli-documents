@@ -1,13 +1,13 @@
 import Ember from 'ember';
-import { omit } from 'documents/util/object';
-import destroyable from './-destroyable';
-import { withDefinition } from './-meta';
+import { omit } from '../../util/object';
+import destroyable from '../-destroyable';
+import { withDefinition } from '../-meta';
 
 const {
   merge
 } = Ember;
 
-const proxy = type => opts => {
+export default type => opts => {
   opts = merge({ database: 'database' }, opts);
   return withDefinition(destroyable(opts.database, {
     create() {
@@ -19,7 +19,3 @@ const proxy = type => opts => {
     }
   }), opts).readOnly();
 };
-
-export const first     = proxy('first');
-export const find      = proxy('find');
-export const paginated = proxy('paginated');
