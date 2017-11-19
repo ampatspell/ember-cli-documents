@@ -10,6 +10,9 @@ const getSource = (owner, opts) => {
 
 export default createModel({
   create(owner, opts, type, build) {
+    if(type === null) {
+      return;
+    }
     let source = getSource(owner, opts);
     if(!source) {
       return;
