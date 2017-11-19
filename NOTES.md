@@ -7,7 +7,6 @@
 * rename `addon/document` to `addon/models` and separate base, documents and proxies
 * `InternalModel`, `InternalModels` doesn't need `isDocument`, `serialize`, `deserialize` and stuff like that
 * proxy state. deleted doc should have err.error=not_found
-* export and reorganize properties
 * loader is already loaded if identical query was invoked
 * batch identity adds and removes `this._withIdentityMutation(mutation => ...)`
 * ember inspector integration (for proxies?)
