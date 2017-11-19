@@ -1,3 +1,4 @@
+import { isFunction } from '../../util/assert';
 import createModel from './-create-model';
 
 const getSource = (owner, opts) => {
@@ -5,6 +6,7 @@ const getSource = (owner, opts) => {
   if(!source) {
     return;
   }
+  isFunction('source', source);
   return source(owner);
 };
 

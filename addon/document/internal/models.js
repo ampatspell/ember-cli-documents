@@ -2,6 +2,7 @@ import { A } from '@ember/array';
 import Base from './-model';
 import { omit } from '../../util/object';
 import { toModel, toInternal } from '../../util/internal';
+import { isArray } from '../../util/assert';
 
 const splitOptions = (opts={}) => {
   let { type, create, document } = opts;
@@ -23,6 +24,7 @@ const splitOptions = (opts={}) => {
 export default class InternalModels extends Base {
 
   constructor(store, parent, array, factory, opts) {
+    isArray('source array', array);
     let { model, remaining } = splitOptions(opts);
     super(store, parent, factory, remaining);
     this._array = A(array);
