@@ -89,3 +89,72 @@ export default opts => {
   });
 }
 ```
+
+## Properties
+
+``` javascript
+first_find({
+  database: 'db',
+  autoload: true,
+  owner: [],
+  document: [],
+  query(owner) {
+    return {};
+  },
+  matches(doc, owner) {
+    return true;
+  }
+});
+
+paginated({
+  database: 'db',
+  autoload: true,
+  owner: [],
+  document: [],
+  query(owner, state) {
+    return {};
+  },
+  matches(doc, owner, state) {
+    return true;
+  },
+  loaded(state, docs) {
+    return { state, isMore };
+  }
+});
+
+model({
+  store: 'store',
+  database: 'db',
+  owner: [ ...props ],
+  type(owner) {
+    return 'foo';
+  },
+  create(owner) {
+    return { additional };
+  }
+});
+
+models({
+  store: 'store',
+  database: 'db',
+  owner: [ ...props ],
+  type(owner) { // or string 'foofs'
+    return 'foofs';
+  },
+  source(owner) { // or string 'docs'
+    return owner.get('docs');
+  },
+  create(owner) { // optional
+    return {
+      additional,
+      document: [ ...props ], // recreates model on prop change
+      type(doc) { // no string option for now `_createChildInternalModel`
+        return 'foof';
+      },
+      create(doc, models) {
+        return { doc };
+      },
+    };
+  },
+});
+```

@@ -1,13 +1,14 @@
-import { isFunction } from '../../util/assert';
+import { get } from '@ember/object';
+import assert from '../../util/assert';
 import createModel from './-create-model';
 
 const getSource = (owner, opts) => {
-  let source = opts.source;
-  if(!source) {
-    return;
+  if(typeof opts.source === 'string') {
+    return get(owner, opts.source);
+  } else if (typeof opts.source === 'function') {
+    return opts.source(owner);
   }
-  isFunction('source', source);
-  return source(owner);
+  assert(`source must be string or function`, false);
 };
 
 export default createModel({
