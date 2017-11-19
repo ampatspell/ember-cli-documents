@@ -1,5 +1,11 @@
+import Ember from 'ember';
 import { readOnly } from '@ember/object/computed';
 import { Model, first, prop } from 'documents';
+import { isBlank } from 'documents/util/string';
+
+const {
+  merge,
+} = Ember;
 
 const byId = opts => {
   opts = merge({ id: prop('id') }, opts);
