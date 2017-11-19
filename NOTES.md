@@ -20,18 +20,143 @@
 
 # Notes
 
-``` javascript
-let model = store.model('duck', { database });
+## find-by-id
 
-// type, array, props, model factory
-let models = store.models('ducks', docs, { database }, {
-  document: [ 'type' ],
-  type(doc) {
-    // depends on doc.type
-    return 'duck';
-  },
-  create(doc) {
-    return { doc };
-  }
+``` javascript
+export default first.extend(opts => {
+  opts = merge({ id: prop('id') }, opts);
+  opts.id = prop.wrap(opts.id);
+  return {
+    owner: [ opts.id.key() ],
+    document: [ 'id' ],
+    query(owner) {
+      let id = opts.id.value(owner);
+      if(isBlank(id)) {
+        return;
+      }
+      return { id };
+    },
+    matches(doc, owner) {
+      let id = opts.id.value(owner);
+      if(!id) {
+        return;
+      }
+      return doc.get('id') === id;
+    }
+  };
 });
+```
+
+### find-by-ids
+
+``` javascript
+export default find.extend(opts => {
+  opts = merge({ ids: prop('ids') }, opts);
+  opts.ids = prop.wrap(opts.ids);
+
+  let owner;
+  let key = opts.ids.key();
+  if(key) {
+    owner = [ `${key}.[]` ];
+  }
+
+  const getIds = owner => {
+    let ids = opts.ids.value(owner);
+    if(!ids || ids.length === 0) {
+      return;
+    }
+    return ids;
+  };
+
+  return {
+    owner,
+    document: [ 'id' ],
+    query(owner) {
+      let keys = getIds(owner);
+      if(!keys) {
+        return;
+      }
+      return { all: true, keys };
+    },
+    matches(doc, owner) {
+      let ids = getIds(owner);
+      if(!ids) {
+        return;
+      }
+      let id = doc.get('id');
+      return ids.includes(id);
+    }
+  };
+});
+```
+
+## all-paginated
+
+``` javascript
+export default opts => {
+  opts = merge({ limit: 25, start: null, end: {} }, opts);
+  let { database, ddoc, view, type } = opts;
+
+  let limit = opts.limit + 1;
+  let endkey = opts.end;
+
+  return paginated({
+    database,
+    document: [ 'id', 'type' ],
+    query(owner, state) {
+      let skip;
+      let startkey;
+      let startkey_docid;
+
+      if(state) {
+        startkey_docid = state.id;
+        startkey = state.value;
+        skip = 1;
+      } else {
+        startkey = opts.start;
+      }
+
+      return {
+        ddoc,
+        view,
+        limit,
+        skip,
+        startkey,
+        startkey_docid,
+        endkey
+      };
+    },
+    loaded(state_, array) {
+      let { length, lastObject: last } = array.getProperties('length', 'lastObject');
+
+      let isMore = false;
+      let state = null;
+
+      if(last) {
+        let value;
+        if(state_) {
+          value = array.objectAt(length - 2) || last;
+        } else {
+          value = last;
+        }
+        state = {
+          id:    last.get('id'),
+          value: value.get('id')
+        };
+        isMore = length > opts.limit;
+      }
+
+      return {
+        isMore,
+        state
+      };
+    },
+    matches(doc, owner, state) {
+      if(state) {
+        return doc.get('id') < state.value;
+      }
+      return doc.get('type') === type;
+    }
+  });
+}
 ```
