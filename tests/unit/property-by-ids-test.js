@@ -11,8 +11,6 @@ const {
   RSVP: { all }
 } = Ember;
 
-const byIds = opts => findByIds(opts);
-
 module('property-by-ids', {
   beforeEach() {
     this.settle = proxy => proxy._internal.loader(true).settle();
@@ -22,7 +20,7 @@ module('property-by-ids', {
 test('build', function(assert) {
   let Owner = Ember.Object.extend({
     duckIds: [ 'yellow' ],
-    doc: byIds({ database: 'db', ids: prop('duckIds') })
+    doc: findByIds({ database: 'db', ids: prop('duckIds') })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -52,7 +50,7 @@ test('load', async function(assert) {
 
   let Owner = Ember.Object.extend({
     duckIds: A([]),
-    docs: byIds({ database: 'db', ids: prop('duckIds') })
+    docs: findByIds({ database: 'db', ids: prop('duckIds') })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -90,7 +88,7 @@ test('manual load', async function(assert) {
 
   let Owner = Ember.Object.extend({
     duckIds: A([ 'green', 'yellow' ]),
-    docs: byIds({ database: 'db', ids: prop('duckIds'), autoload: false })
+    docs: findByIds({ database: 'db', ids: prop('duckIds'), autoload: false })
   });
 
   let owner = Owner.create({ db: this.db });
