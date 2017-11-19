@@ -157,6 +157,39 @@ models({
       }
       // -- current --
     };
+  }
+});
+```
+
+``` javascript
+model({
+  store: 'store',
+  database: 'db',
+  owner: [ ...props ],
+  create(owner) {
+    return {
+      type: 'foo',          // required
+      props: { additional } // optional
+    };
+  }
+});
+
+models({
+  store: 'store',
+  database: 'db',
+  owner: [ ...props ],
+  create(owner) {
+    return {
+      type: 'foofs',            // required
+      soure: owner.get('docs'), // required
+      props: { additional },    // optional
+    }
   },
+  model(doc, models) {
+    return {
+      type: 'foofs/foof', // required
+      props: { models }   // optional
+    };
+  }
 });
 ```
