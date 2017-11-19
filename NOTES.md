@@ -1,5 +1,6 @@
 # TODO
 
+* have similar `_normalizeOptions` for model and models like internal -proxy has
 * remove extendable
 * list `stores.modelsIdentity` in `DataAdapter`
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
@@ -19,76 +20,6 @@
 * come up with an API for conflict resolution
 
 # Notes
-
-## find-by-id
-
-``` javascript
-export default first.extend(opts => {
-  opts = merge({ id: prop('id') }, opts);
-  opts.id = prop.wrap(opts.id);
-  return {
-    owner: [ opts.id.key() ],
-    document: [ 'id' ],
-    query(owner) {
-      let id = opts.id.value(owner);
-      if(isBlank(id)) {
-        return;
-      }
-      return { id };
-    },
-    matches(doc, owner) {
-      let id = opts.id.value(owner);
-      if(!id) {
-        return;
-      }
-      return doc.get('id') === id;
-    }
-  };
-});
-```
-
-### find-by-ids
-
-``` javascript
-export default find.extend(opts => {
-  opts = merge({ ids: prop('ids') }, opts);
-  opts.ids = prop.wrap(opts.ids);
-
-  let owner;
-  let key = opts.ids.key();
-  if(key) {
-    owner = [ `${key}.[]` ];
-  }
-
-  const getIds = owner => {
-    let ids = opts.ids.value(owner);
-    if(!ids || ids.length === 0) {
-      return;
-    }
-    return ids;
-  };
-
-  return {
-    owner,
-    document: [ 'id' ],
-    query(owner) {
-      let keys = getIds(owner);
-      if(!keys) {
-        return;
-      }
-      return { all: true, keys };
-    },
-    matches(doc, owner) {
-      let ids = getIds(owner);
-      if(!ids) {
-        return;
-      }
-      let id = doc.get('id');
-      return ids.includes(id);
-    }
-  };
-});
-```
 
 ## all-paginated
 
@@ -159,31 +90,4 @@ export default opts => {
     }
   });
 }
-```
-
-## is-new-mixin
-
-``` javascript
-export default extendable => extendable.extend(opts => {
-  opts = merge({ new: undefined }, opts);
-  opts.new = prop.wrap(opts.new);
-  return {
-    owner: [ opts.new.key() ],
-    document: [ 'isNew' ],
-    matches(doc, owner) {
-      if(this._super && !this._super(doc, owner)) {
-        return;
-      }
-
-      let value = opts.new.value(owner);
-      let type = typeOf(value);
-
-      if(type === 'null' || type === 'undefined') {
-        return true;
-      }
-
-      return doc.get('isNew') === !!value;
-    }
-  };
-});
 ```

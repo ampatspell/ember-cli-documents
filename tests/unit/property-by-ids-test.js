@@ -1,8 +1,9 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import { getDefinition, prop, find } from 'documents/properties';
+import { getDefinition, prop } from 'documents/properties';
 import { pick } from 'documents/util/object';
+import { findByIds } from '../helpers/properties';
 
 const {
   A,
@@ -10,9 +11,7 @@ const {
   RSVP: { all }
 } = Ember;
 
-const byIds = () => {
-  return find({});
-};
+const byIds = opts => findByIds(opts);
 
 module('property-by-ids', {
   beforeEach() {

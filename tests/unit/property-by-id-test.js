@@ -1,14 +1,16 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import { getDefinition, prop, first } from 'documents/properties';
+import { getDefinition, prop } from 'documents/properties';
 import { pick } from 'documents/util/object';
+import { firstById, isNewMixin } from '../helpers/properties';
 
-const byId = () => {
-  return first({});
-};
+const {
+  merge
+} = Ember;
 
-const isNewById = () => {};
+const byId = opts => firstById(merge({ database: 'db' }, opts));
+const isNewById = opts => byId(isNewMixin(opts));
 
 module('property-by-id');
 
@@ -35,7 +37,7 @@ test('plain', function(assert) {
   });
 });
 
-test.skip('isNew mixin', function(assert) {
+test('isNew mixin', function(assert) {
   let Owner = Ember.Object.extend({
     duckId: 'duck',
     isNew: null,

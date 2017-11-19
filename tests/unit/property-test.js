@@ -2,28 +2,12 @@ import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { first, prop, getDefinition } from 'documents';
+import { firstById as docById } from '../helpers/properties';
 
 const {
   run,
   merge
 } = Ember;
-
-const docById = opts => {
-  opts = merge({ database: 'db', id: prop('id') }, opts);
-  opts.id = prop.wrap(opts.id);
-  return first({
-    database: opts.database,
-    owner: [ opts.id.key() ],
-    document: [ 'id' ],
-    query(owner) {
-      let id = opts.id.value(owner);
-      return { id };
-    },
-    matches(doc, owner) {
-      return doc.get('id') === opts.id.value(owner);
-    }
-  });
-};
 
 module('property');
 
