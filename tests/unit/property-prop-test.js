@@ -9,10 +9,11 @@ const {
 
 module('property-prop');
 
-const byId = first.extend(opts => {
-  opts = merge({ id: prop('id') }, opts);
+const byId = opts => {
+  opts = merge({ database: 'db', id: prop('id') }, opts);
   opts.id = prop.wrap(opts.id);
-  return {
+  return first({
+    database: opts.database,
     owner: [ opts.id.key() ],
     document: [ 'id' ],
     query(owner) {
@@ -22,22 +23,12 @@ const byId = first.extend(opts => {
     matches(doc, owner) {
       return doc.get('id') === opts.id.value(owner);
     }
-  }
-});
-
-const withDatabaseMixin = extendable => extendable.extend(opts => {
-  opts = merge({ database: 'database' }, opts);
-  let { database } = opts;
-  return {
-    database
-  };
-});
-
-const byIdWithDatabase = withDatabaseMixin(byId);
+  });
+};
 
 test('property with string value', function(assert) {
   let Owner = Ember.Object.extend({
-    doc: byIdWithDatabase({ database: 'db', id: 'yellow' })
+    doc: byId({ database: 'db', id: 'yellow' })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -60,7 +51,7 @@ test('property with string value', function(assert) {
 test('property with prop', function(assert) {
   let Owner = Ember.Object.extend({
     duckId: 'yellow',
-    doc: byIdWithDatabase({ database: 'db', id: prop('duckId') })
+    doc: byId({ database: 'db', id: prop('duckId') })
   });
 
   let owner = Owner.create({ db: this.db });
