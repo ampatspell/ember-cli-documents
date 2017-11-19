@@ -1,11 +1,11 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import docById from 'documents/properties/first-by-id';
-import { getDefinition } from 'documents/properties';
+import { getDefinition } from 'documents';
+import { firstById as docById } from '../helpers/properties';
 
 const {
-  run,
+  run
 } = Ember;
 
 module('property');

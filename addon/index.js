@@ -1,9 +1,18 @@
-import Model from './document/model';
-import Models from './document/models';
-import Error from './util/error';
+export {
+  default as Error
+} from './util/error';
 
 export {
   Model,
-  Models,
-  Error
-}
+  Models
+} from './document';
+
+export {
+  getDefinition,
+  prop,
+  first,
+  find,
+  paginated,
+  model,
+  models
+} from './properties';

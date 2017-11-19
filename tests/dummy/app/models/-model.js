@@ -1,4 +1,4 @@
-import model from 'documents/properties/-model';
+import { model } from 'documents';
 
 const owner = key => opts => model({
   _identifier: 'app/models/-model/owner',

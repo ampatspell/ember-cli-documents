@@ -5,7 +5,7 @@ import { isFunction, isArray } from 'documents/util/assert';
 
 const {
   merge,
-  copy
+  A
 } = Ember;
 
 export default class BaseProxyInternal extends ModelMixin(Base) {
@@ -27,8 +27,8 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
     isFunction('matches', matches);
     isArray('owner', owner);
     isArray('document', document);
-    owner = copy(owner);
-    document = copy(document);
+    owner = A(owner).compact();
+    document = A(document).compact();
     return { autoload, owner, document, matches, query };
   }
 

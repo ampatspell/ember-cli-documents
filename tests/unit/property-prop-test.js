@@ -1,43 +1,14 @@
 import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import { first, prop } from 'documents/properties';
-
-const {
-  merge
-} = Ember;
+import { prop } from 'documents/properties';
+import { firstById } from '../helpers/properties';
 
 module('property-prop');
 
-const byId = first.extend(opts => {
-  opts = merge({ id: prop('id') }, opts);
-  opts.id = prop.wrap(opts.id);
-  return {
-    owner: [ opts.id.key() ],
-    document: [ 'id' ],
-    query(owner) {
-      let id = opts.id.value(owner);
-      return { id };
-    },
-    matches(doc, owner) {
-      return doc.get('id') === opts.id.value(owner);
-    }
-  }
-});
-
-const withDatabaseMixin = extendable => extendable.extend(opts => {
-  opts = merge({ database: 'database' }, opts);
-  let { database } = opts;
-  return {
-    database
-  };
-});
-
-const byIdWithDatabase = withDatabaseMixin(byId);
-
 test('property with string value', function(assert) {
   let Owner = Ember.Object.extend({
-    doc: byIdWithDatabase({ database: 'db', id: 'yellow' })
+    doc: firstById({ database: 'db', id: 'yellow' })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -60,7 +31,7 @@ test('property with string value', function(assert) {
 test('property with prop', function(assert) {
   let Owner = Ember.Object.extend({
     duckId: 'yellow',
-    doc: byIdWithDatabase({ database: 'db', id: prop('duckId') })
+    doc: firstById({ database: 'db', id: prop('duckId') })
   });
 
   let owner = Owner.create({ db: this.db });

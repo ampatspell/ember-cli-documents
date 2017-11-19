@@ -2,8 +2,8 @@ import Ember from 'ember';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { getDefinition, prop } from 'documents/properties';
-import byIds from 'documents/properties/find-by-ids';
 import { pick } from 'documents/util/object';
+import { findByIds } from '../helpers/properties';
 
 const {
   A,
@@ -20,7 +20,7 @@ module('property-by-ids', {
 test('build', function(assert) {
   let Owner = Ember.Object.extend({
     duckIds: [ 'yellow' ],
-    doc: byIds({ database: 'db', ids: prop('duckIds') })
+    doc: findByIds({ database: 'db', ids: prop('duckIds') })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -50,7 +50,7 @@ test('load', async function(assert) {
 
   let Owner = Ember.Object.extend({
     duckIds: A([]),
-    docs: byIds({ database: 'db', ids: prop('duckIds') })
+    docs: findByIds({ database: 'db', ids: prop('duckIds') })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -88,7 +88,7 @@ test('manual load', async function(assert) {
 
   let Owner = Ember.Object.extend({
     duckIds: A([ 'green', 'yellow' ]),
-    docs: byIds({ database: 'db', ids: prop('duckIds'), autoload: false })
+    docs: findByIds({ database: 'db', ids: prop('duckIds'), autoload: false })
   });
 
   let owner = Owner.create({ db: this.db });
