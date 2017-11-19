@@ -147,13 +147,15 @@ models({
   create(owner) { // optional
     return {
       additional,
+      // --- current --
       document: [ ...props ], // recreates model on prop change
       type(doc) { // no string option for now `_createChildInternalModel`
         return 'foof';
       },
       create(doc, models) {
         return { doc };
-      },
+      }
+      // -- current --
     };
   },
 });
