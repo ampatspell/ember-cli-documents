@@ -5,6 +5,7 @@ import Base from './-base';
 import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
 import DocumentsError from 'documents/util/error';
+import { isObject_ } from 'documents/util/assert';
 import { omit } from 'documents/util/object';
 
 class Operation {
@@ -85,6 +86,7 @@ export default class Loader extends ObserveOwner(ModelMixin(Base)) {
     if(!hash.query) {
       return;
     }
+    isObject_('query function result must be object or falsy', hash.query);
     return hash;
   }
 
