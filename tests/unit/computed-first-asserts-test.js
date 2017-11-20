@@ -1,6 +1,5 @@
 import EmberObject from '@ember/object';
 import { assign } from '@ember/polyfills';
-import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { first } from 'documents';
@@ -12,9 +11,9 @@ module('computed-first-asserts', {
       autoload: true,
       owner: [],
       document: [],
-      query(owner) {
+      query() {
       },
-      matches(doc, owner) {
+      matches() {
         return true;
       }
     };
