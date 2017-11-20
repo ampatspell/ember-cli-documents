@@ -247,7 +247,7 @@ export default EmberObject.extend({
     model(doc, models) {
       return {
         type: 'foofs/foof', // required
-        props: { models }   // optional
+        props: { doc, models }   // optional
       };
     }
   })
