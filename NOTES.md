@@ -90,10 +90,10 @@ export default opts => {
 }
 ```
 
-## Properties
+## Current properties configuration options
 
 ``` javascript
-first_find({
+first_and_find({
   database: 'db',
   autoload: true,
   owner: [],
@@ -161,35 +161,102 @@ models({
 });
 ```
 
-``` javascript
-model({
-  store: 'store',
-  database: 'db',
-  owner: [ ...props ],
-  create(owner) {
-    return {
-      type: 'foo',          // required
-      props: { additional } // optional
-    };
-  }
-});
+## Planned properties configuration
 
-models({
-  store: 'store',
-  database: 'db',
-  owner: [ ...props ],
-  create(owner) {
-    return {
-      type: 'foofs',            // required
-      soure: owner.get('docs'), // required
-      props: { additional },    // optional
+`first` and `find`
+
+``` javascript
+export default EmberObject.extend({
+
+  doc: first({
+    database: 'db',
+    autoload: true,
+    owner: [],
+    document: [],
+    query(owner) {
+      return {};
+    },
+    matches(doc, owner) {
+      return true;
     }
-  },
-  model(doc, models) {
-    return {
-      type: 'foofs/foof', // required
-      props: { models }   // optional
-    };
-  }
+  })
+
 });
 ```
+
+`paginated` (will provide both `key` and `range` implementations). See `all-paginated` example on top.
+
+``` javascript
+export default EmberObject.extend({
+
+  docs: paginated({
+    database: 'db',
+    autoload: true,
+    owner: [],
+    document: [],
+    query(owner, state) {
+      return {};
+    },
+    matches(doc, owner, state) {
+      return true;
+    },
+    loaded(state, docs) {
+      return { state, isMore };
+    }
+  })
+
+});
+```
+
+`model`
+
+``` javascript
+export default EmberObject.extend({
+
+  thing: model({
+    store: 'store',
+    database: 'db',
+    owner: [ ...props ],
+    create(owner) {
+      return {
+        type: 'foo',          // required
+        props: { additional } // optional
+      };
+    }
+  })
+
+});
+```
+
+`models`
+
+``` javascript
+export default EmberObject.extend({
+
+  things: models({
+    store: 'store',
+    database: 'db',
+    owner: [ ...props ],
+    create(owner) {
+      return {
+        type: 'foofs',            // required
+        soure: owner.get('docs'), // required
+        props: { additional },    // optional
+      }
+    },
+    model(doc, models) {
+      return {
+        type: 'foofs/foof', // required
+        props: { models }   // optional
+      };
+    }
+  })
+
+});
+```
+
+Note that all props take just an object, so it is pretty easy to declare reusable properties like it is done in:
+
+* [tests/helpers/properties.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/helpers/properties.js)
+* [dummy/app/models/-props.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/dummy/app/models/-props.js)
+* [dummy/app/models-model.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/dummy/app/models/-model.js)
