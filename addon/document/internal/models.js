@@ -1,30 +1,40 @@
 import { A } from '@ember/array';
 import Base from './-model';
-import { omit } from '../../util/object';
 import { toModel, toInternal } from '../../util/internal';
 import { isArray, isObject, isFunction_ } from '../../util/assert';
+
+const normalizeModel = model => {
+  isObject('model', model);
+  let { observe, create } = model;
+  isArray('model.observe', observe);
+  if(typeof create === 'string') {
+    let value = create;
+    create = () => value;
+  } else {
+    isFunction_('model.create must be string or function', create);
+  }
+  return { observe, create };
+};
+
+const normalizeOptions = opts => {
+  isObject('model', opts);
+  let { model, props } = opts;
+  if(props) {
+    isObject('props', props);
+  }
+  model = normalizeModel(model);
+  return { model, props };
+}
 
 export default class InternalModels extends Base {
 
   constructor(store, parent, array, factory, opts) {
     isArray('source array', array);
-    super(store, parent, factory, omit(opts, [ 'model' ]));
+    let { props, model } = normalizeOptions(opts);
+    super(store, parent, factory, props);
     this._array = A(array);
     this._values = null;
-    this.child = this._normalizeChild(opts.model);
-  }
-
-  _normalizeChild(opts) {
-    isObject('model', opts);
-    let { observe, create } = opts;
-    isArray('model.observe', observe);
-    if(typeof create !== 'string') {
-      isFunction_('model.create must be string or function', opts.create);
-    } else {
-      let value = create;
-      create = () => value;
-    }
-    return { observe, create };
+    this.child = model;
   }
 
   _createModel() {

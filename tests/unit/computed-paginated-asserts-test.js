@@ -124,7 +124,6 @@ test('query result must be object or falsy', async function(assert) {
 test('loaded result must be object', async function(assert) {
   let subject = this.create({ query: () => ({ all: true }), loaded: () => 1 });
   let prop = subject.get('prop');
-
   try {
     await prop.load();
   } catch(err) {

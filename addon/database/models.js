@@ -1,18 +1,16 @@
 import Mixin from '@ember/object/mixin';
-import { merge } from '@ember/polyfills';
 
 export default Mixin.create({
 
-  __mergeInternalModelOpts(opts) {
-    return merge({ database: this }, opts);
+  _createInternalModel(name, parent, opts={}) {
+    opts.database = this;
+    return this.get('store')._createInternalModel(name, parent, opts);
   },
 
-  _createInternalModel(name, parent, opts) {
-    return this.get('store')._createInternalModel(name, parent, this.__mergeInternalModelOpts(opts));
-  },
-
-  _createInternalModels(name, parent, source, opts) {
-    return this.get('store')._createInternalModels(name, parent, source, this.__mergeInternalModelOpts(opts));
+  _createInternalModels(name, parent, source, opts={}) {
+    opts.props = opts.props || {};
+    opts.props.database = this;
+    return this.get('store')._createInternalModels(name, parent, source, opts);
   },
 
   model(name, opts) {

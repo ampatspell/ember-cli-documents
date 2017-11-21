@@ -1,12 +1,5 @@
-import { assign } from '@ember/polyfills';
-import { isArray, isObject } from '../../util/assert';
+import { isArray } from '../../util/assert';
 import createModel from './-create-model';
-
-const mergeProps = (props, opts) => {
-  let model = opts.model;
-  isObject('model', model);
-  return assign({}, props, { model });
-};
 
 export default createModel({
   create(owner, opts, definition, target, parent) {
@@ -22,8 +15,8 @@ export default createModel({
 
     isArray('source in create function result', source);
 
-    props = mergeProps(props, opts);
+    let model = opts.model;
 
-    return target._createInternalModels(type, parent, source, props);
+    return target._createInternalModels(type, parent, source, { model, props });
   }
 });
