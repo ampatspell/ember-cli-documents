@@ -1,5 +1,6 @@
 # TODO
 
+* assert models source item type. `item._internal._ref` thingie
 * simplify internal model and models creation -- have a `{ source: array, props: ... }` hash. see `database/models`
 * list `stores.modelsIdentity` in `DataAdapter`
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
