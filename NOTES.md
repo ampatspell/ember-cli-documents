@@ -1,6 +1,7 @@
 # TODO
 
 * simplify internal model and models creation -- have a `{ source: array, props: ... }` hash. see `database/models`
+* rename `database.proxy` to something nicer and have also `{ type, owner, opts? }`
 * list `stores.modelsIdentity` in `DataAdapter`
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
