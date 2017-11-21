@@ -20,16 +20,19 @@ module('store-models', {
     this.ducks = A();
     this.create = () => this.store.models('ducks', this.ducks, {
       message: 'hello',
-      document: [ 'type' ],
-      type(doc) {
-        let type = get(doc, 'type');
-        if(!type) {
-          return;
+      model: {
+        observe: [ 'type' ],
+        create(doc) {
+          let docType = get(doc, 'type');
+          if(!docType) {
+            return;
+          }
+          let type = `duck/${docType}`;
+          return {
+            type,
+            props: { doc }
+          };
         }
-        return `duck/${type}`;
-      },
-      create(doc) {
-        return { doc };
       }
     });
   }

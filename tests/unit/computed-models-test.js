@@ -20,19 +20,28 @@ module('computed-models', {
         message: 'hey there',
         prop: models({
           owner: [ 'docs' ],
-          type: () => opts.hasOwnProperty('type') ? opts.type : 'ducks',
-          source(owner) {
-            return owner.get('docs');
-          },
           create(owner) {
-            let message = owner.get('message');
+            let {
+              docs: source,
+              message
+            } = owner.getProperties('docs', 'message');
+            let type = opts.hasOwnProperty('type') ? opts.type : 'ducks';
             return {
-              message,
-              type: 'duck',
-              create(doc) {
-                return { doc };
-              }
+              type,
+              source,
+              props: {
+                message
+              },
             };
+          },
+          model: {
+            observe: [],
+            create(doc) {
+              return {
+                type: 'duck',
+                props: { doc }
+              }
+            }
           }
         })
       });

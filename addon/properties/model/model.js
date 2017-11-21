@@ -1,7 +1,8 @@
 import createModel from './-create-model';
 
 export default createModel({
-  create(owner, opts, target, type, parent, props) {
+  create(owner, opts, definition, target, parent) {
+    let { type, props } = definition;
     if(!type) {
       return;
     }

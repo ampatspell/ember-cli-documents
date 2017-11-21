@@ -1,34 +1,29 @@
-import { get } from '@ember/object';
-import { assert, isArray } from '../../util/assert';
+import { assign } from '@ember/polyfills';
+import { isArray, isObject } from '../../util/assert';
 import createModel from './-create-model';
 
-const getSource = (owner, opts) => {
-  if(typeof opts.source === 'string') {
-    return get(owner, opts.source);
-  } else if (typeof opts.source === 'function') {
-    return opts.source(owner);
-  }
-  assert('source must be string or function', false);
-};
-
-const getValidSource = (owner, opts) => {
-  let source = getSource(owner, opts);
-  if(!source) {
-    return;
-  }
-  isArray('source function result', source);
-  return source;
+const mergeProps = (props, opts) => {
+  let model = opts.model;
+  isObject('model', model);
+  return assign({}, props, { model });
 };
 
 export default createModel({
-  create(owner, opts, target, type, parent, props) {
+  create(owner, opts, definition, target, parent) {
+    let { type, props, source } = definition;
+
     if(type === null) {
       return;
     }
-    let source = getValidSource(owner, opts);
+
     if(!source) {
       return;
     }
+
+    isArray('source in create function result', source);
+
+    props = mergeProps(props, opts);
+
     return target._createInternalModels(type, parent, source, props);
   }
 });

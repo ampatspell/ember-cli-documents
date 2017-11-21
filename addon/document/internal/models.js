@@ -2,34 +2,29 @@ import { A } from '@ember/array';
 import Base from './-model';
 import { omit } from '../../util/object';
 import { toModel, toInternal } from '../../util/internal';
-import { isArray } from '../../util/assert';
-
-const splitOptions = (opts={}) => {
-  let { type, create, document } = opts;
-  if(typeof type !== 'function') {
-    let value = type;
-    type = () => value;
-  }
-  let remaining = omit(opts, [ 'type', 'document', 'create' ]);
-  return {
-    model: {
-      type,
-      create,
-      document
-    },
-    remaining
-  };
-}
+import { isArray, isObject, isFunction_ } from '../../util/assert';
 
 export default class InternalModels extends Base {
 
   constructor(store, parent, array, factory, opts) {
     isArray('source array', array);
-    let { model, remaining } = splitOptions(opts);
-    super(store, parent, factory, remaining);
+    super(store, parent, factory, omit(opts, [ 'model' ]));
     this._array = A(array);
     this._values = null;
-    this.child = model;
+    this.child = this._normalizeChild(opts.model);
+  }
+
+  _normalizeChild(opts) {
+    isObject('model', opts);
+    let { observe, create } = opts;
+    isArray('model.observe', observe);
+    if(typeof create !== 'string') {
+      isFunction_('model.create must be string or function', opts.create);
+    } else {
+      let value = create;
+      create = () => value;
+    }
+    return { observe, create };
   }
 
   _createModel() {
@@ -53,15 +48,28 @@ export default class InternalModels extends Base {
 
   _createChildInternalModel(doc) {
     let child = this.child;
-    let type = child.type(doc);
+
+    let definition = child.create(doc, this.model(true));
+
+    if(!definition) {
+      return;
+    }
+
+    if(typeof definition === 'string') {
+      definition = { type: definition };
+    }
+
+    let { type, props } = definition;
+
     if(!type) {
       return;
     }
-    let opts = child.create(doc, this.model(true));
-    if(!opts) {
-      return;
+
+    if(props) {
+      isObject('props in model.create function result', props);
     }
-    return this._createInternalModel(type, opts, doc);
+
+    return this._createInternalModel(type, props, doc);
   }
 
   _createChildInternalModels(docs) {
@@ -144,7 +152,7 @@ export default class InternalModels extends Base {
     if(docs.length === 0) {
       return;
     }
-    let keys = this.child.document;
+    let keys = this.child.observe;
     if(!keys || keys.length === 0) {
       return;
     }

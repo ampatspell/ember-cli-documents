@@ -36,21 +36,31 @@ const toInternalModel = owner => {
 const invokeCreate = (owner, opts) => {
   isFunction('create', opts.create);
   let result = opts.create(owner);
+
+  if(result === null) {
+    return { type: null };
+  }
+
   if(!result) {
     return {};
   }
+
   if(typeof result === 'string') {
     return { type: result };
+  } else {
+    isObject('create function result', result);
   }
-  isObject('create function result', result);
+
   let { type, props } = result;
+
   if(type) {
     isString('type in create function result', type);
   }
   if(props) {
     isObject('props in create function result', props);
   }
-  return { type, props };
+
+  return result;
 }
 
 export default factory => opts => {
@@ -67,9 +77,9 @@ export default factory => opts => {
 
       let target = database || store;
       let parent = toInternalModel(this);
-      let { type, props } = invokeCreate(this, opts);
+      let definition = invokeCreate(this, opts);
 
-      return factory.create(this, opts, target, type, parent, props);
+      return factory.create(this, opts, definition, target, parent);
     }
   }), opts).readOnly();
 };
