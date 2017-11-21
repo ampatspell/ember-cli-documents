@@ -2,9 +2,13 @@ import { model } from 'documents';
 
 const owner = key => opts => model({
   _identifier: 'app/models/-model/owner',
-  type: opts.type,
   create(owner) {
-    return { [key]: owner };
+    return {
+      type: opts.type,
+      props: {
+        [key]: owner
+      }
+    };
   }
 });
 
@@ -23,6 +27,11 @@ export const doc = opts => model({
     if(!doc) {
       return;
     }
-    return { doc };
+    return {
+      type: opts.type,
+      props: {
+        doc
+      }
+    };
   }
 });

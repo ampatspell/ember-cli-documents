@@ -3,20 +3,28 @@ import LogMixin from '../-log-mixin';
 import { models } from 'documents';
 
 export const property = opts => models({
-  owner: [ opts.docs ],
-  type: 'blog/authors',
   database: `${opts.docs}.database`,
-  source(owner) {
-    return owner.get(opts.docs);
-  },
+  owner: [ opts.docs ],
   create(owner) {
+    let source = owner.get(opts.docs);
     return {
-      docs: owner.get(opts.docs),
-      type: opts.model,
-      create(doc) {
-        return { doc };
+      source,
+      type: 'blog/authors',
+      props: {
+        docs: source
       }
     };
+  },
+  model: {
+    observe: [],
+    create(doc) {
+      return {
+        type: opts.model,
+        props: {
+          doc
+        }
+      };
+    }
   }
 });
 

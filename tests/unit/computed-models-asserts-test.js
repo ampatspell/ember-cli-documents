@@ -1,4 +1,5 @@
 import EmberObject from '@ember/object';
+import ArrayProxy from '@ember/array/proxy';
 import { assign } from '@ember/polyfills';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
@@ -272,4 +273,16 @@ test('model.create may return undefined', function(assert) {
   let subject = this.create({ model: assign(this.defaults.model, { create: () => undefined }) });
   let prop = subject.get('prop');
   assert.ok(!prop.get('lastObject'));
+});
+
+test('source may be proxy', function(assert) {
+  let subject = this.create();
+  subject.set('array', ArrayProxy.create({ content: ['a'] }));
+  let prop = subject.get('prop');
+  assert.ok(prop);
+  assert.ok(Foos.detectInstance(prop));
+  assert.ok(prop.get('owner') === subject);
+  assert.equal(prop.get('length'), 1);
+  assert.ok(Foo.detectInstance(prop.get('lastObject')));
+  assert.equal(prop.get('lastObject.doc'), 'a');
 });
