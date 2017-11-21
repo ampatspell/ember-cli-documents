@@ -9,13 +9,14 @@ const Duck = Model.extend({});
 
 const docModel = opts => model({
   owner: [ opts.doc ],
-  type: opts.type,
   create(owner) {
     let doc = owner.get(opts.doc);
-    if(!doc) {
-      return;
-    }
-    return { doc };
+    return {
+      type: opts.type || 'duck',
+      props: {
+        doc
+      }
+    };
   }
 });
 
@@ -26,7 +27,7 @@ module('computed-model', {
     this.create = (opts={}) => {
       let Subject = EmberObject.extend({
         doc: opts.doc,
-        prop: docModel({ doc: 'doc', type: () => opts.type || 'duck' })
+        prop: docModel({ doc: 'doc', type: opts.type })
       });
       return Subject.create({ store: this.store, database: this.db });
     };

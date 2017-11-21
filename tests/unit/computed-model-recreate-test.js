@@ -10,28 +10,26 @@ const LinkPost = Post.extend({});
 
 const postModel = opts => model({
   owner: [ `${opts.doc}.type` ],
-  type(owner) {
-    let type = owner.get(`${opts.doc}.type`);
-    if(!type) {
-      return;
-    }
-    type = type.split(':')[1];
-    let mapping = {
-      text: 'text-post',
-      link: 'link-post'
-    };
-    return mapping[type];
-  },
   create(owner) {
     let doc = owner.get(opts.doc);
     if(!doc) {
       return;
     }
-    return { doc };
+    let docType = owner.get(`${opts.doc}.type`);
+    if(!docType) {
+      return;
+    }
+    docType = docType.split(':')[1];
+    let mapping = {
+      text: 'text-post',
+      link: 'link-post'
+    };
+    let type = mapping[docType];
+    return { type, props: { doc } };
   }
 });
 
-module('computed-model-type', {
+module('computed-model-recreate', {
   beforeEach() {
     this.register('model:text-post', TextPost);
     this.register('model:link-post', LinkPost);

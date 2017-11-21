@@ -1,14 +1,13 @@
 import { A } from '@ember/array';
 import { merge } from '@ember/polyfills';
 import destroyable from '../-destroyable';
-import { omit } from '../../util/object';
 import InternalModel from '../../document/internal/model';
 import { withDefinition } from '../-meta';
-import { isString, isArray } from '../../util/assert';
+import { isString, isArray, isFunction, isObject } from '../../util/assert';
 
 const _get = (owner, key, name) => {
   if(key) {
-    isString(`${name} must be string not ${key}`, key);
+    isString(name, key);
     return owner.get(key);
   }
   return null;
@@ -26,15 +25,6 @@ const getStoreAndDatabase = (owner, opts) => {
   return { store, database };
 }
 
-const mergeModelOpts = (owner, opts) => {
-  let result = opts;
-  result = omit(result, [ 'store', 'database', 'owner', 'document', 'type', 'create', 'source' ]);
-  if(typeof opts.create === 'function') {
-    result = merge(result, opts.create(owner));
-  }
-  return result;
-}
-
 const toInternalModel = owner => {
   let internal = owner._internal;
   if(internal instanceof InternalModel) {
@@ -43,14 +33,24 @@ const toInternalModel = owner => {
   return null;
 }
 
-const getType = (owner, opts) => {
-  let type = opts.type;
-  if(typeof type === 'string') {
-    return type;
+const invokeCreate = (owner, opts) => {
+  isFunction('create', opts.create);
+  let result = opts.create(owner);
+  if(!result) {
+    return {};
   }
-  if(typeof type === 'function') {
-    return type(owner);
+  if(typeof result === 'string') {
+    return { type: result };
   }
+  isObject('create function result', result);
+  let { type, props } = result;
+  if(type) {
+    isString('type in create function result', type);
+  }
+  if(props) {
+    isObject('props in create function result', props);
+  }
+  return { type, props };
 }
 
 export default factory => opts => {
@@ -60,19 +60,16 @@ export default factory => opts => {
   return withDefinition(destroyable(...owner, {
     create() {
       let { store, database } = getStoreAndDatabase(this, opts);
+
       if(!store) {
         return;
       }
 
-      let builder = fn => {
-        let target = database || store;
-        let parent = toInternalModel(this);
-        let modelOpts = mergeModelOpts(this, opts, database);
-        return fn(target, parent, modelOpts);
-      };
+      let target = database || store;
+      let parent = toInternalModel(this);
+      let { type, props } = invokeCreate(this, opts);
 
-      let type = getType(this, opts);
-      return factory.create(this, opts, type, builder);
+      return factory.create(this, opts, target, type, parent, props);
     }
   }), opts).readOnly();
 };

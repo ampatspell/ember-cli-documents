@@ -1,10 +1,10 @@
 import createModel from './-create-model';
 
 export default createModel({
-  create(owner, opts, type, build) {
+  create(owner, opts, target, type, parent, props) {
     if(!type) {
       return;
     }
-    return build((target, parent, modelOpts) => target._createInternalModel(type, parent, modelOpts));
+    return target._createInternalModel(type, parent, props);
   }
 });

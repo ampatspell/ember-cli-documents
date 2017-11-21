@@ -1,5 +1,5 @@
 import { get } from '@ember/object';
-import assert from '../../util/assert';
+import { assert, isArray } from '../../util/assert';
 import createModel from './-create-model';
 
 const getSource = (owner, opts) => {
@@ -8,18 +8,27 @@ const getSource = (owner, opts) => {
   } else if (typeof opts.source === 'function') {
     return opts.source(owner);
   }
-  assert(`source must be string or function`, false);
+  assert('source must be string or function', false);
+};
+
+const getValidSource = (owner, opts) => {
+  let source = getSource(owner, opts);
+  if(!source) {
+    return;
+  }
+  isArray('source function result', source);
+  return source;
 };
 
 export default createModel({
-  create(owner, opts, type, build) {
+  create(owner, opts, target, type, parent, props) {
     if(type === null) {
       return;
     }
-    let source = getSource(owner, opts);
+    let source = getValidSource(owner, opts);
     if(!source) {
       return;
     }
-    return build((target, parent, modelOpts) => target._createInternalModels(type, parent, source, modelOpts));
+    return target._createInternalModels(type, parent, source, props);
   }
 });
