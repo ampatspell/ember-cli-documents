@@ -1,7 +1,7 @@
 import { A } from '@ember/array';
 import Base from './-model';
 import { toModel, toInternal } from '../../util/internal';
-import { isArray, isObject, isFunction_ } from '../../util/assert';
+import { isArray, isArrayOrArrayProxy, isObject, isFunction_ } from '../../util/assert';
 
 const normalizeModel = model => {
   isObject('model', model);
@@ -29,7 +29,7 @@ const normalizeOptions = opts => {
 export default class InternalModels extends Base {
 
   constructor(store, parent, array, factory, opts) {
-    isArray('source array', array);
+    isArrayOrArrayProxy('source array', array);
     let { props, model } = normalizeOptions(opts);
     super(store, parent, factory, props);
     this._array = A(array);

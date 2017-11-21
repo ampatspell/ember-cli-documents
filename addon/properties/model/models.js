@@ -1,4 +1,4 @@
-import { isArray } from '../../util/assert';
+import { isArrayOrArrayProxy } from '../../util/assert';
 import createModel from './-create-model';
 
 export default createModel({
@@ -13,7 +13,7 @@ export default createModel({
       return;
     }
 
-    isArray('source in create function result', source);
+    isArrayOrArrayProxy('source in create function result', source);
 
     let model = opts.model;
 
