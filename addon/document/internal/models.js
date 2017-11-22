@@ -28,10 +28,10 @@ const normalizeOptions = opts => {
 
 export default class InternalModels extends Base {
 
-  constructor(store, parent, array, factory, opts) {
+  constructor(store, parent, database, array, factory, opts) {
     isArrayOrArrayProxy('source array', array);
     let { props, model } = normalizeOptions(opts);
-    super(store, parent, factory, props);
+    super(store, parent, database, factory, props);
     this._array = A(array);
     this._values = null;
     this.child = model;

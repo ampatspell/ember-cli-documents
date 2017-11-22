@@ -55,18 +55,18 @@ export default Mixin.create({
 
   //
 
-  _createInternalModel(name, parent, opts, _ref) {
+  _createInternalModel(name, parent, database, opts, _ref) {
     let factory = this.__modelFactory(name);
     let InternalModel = this._documentsInternalFactory('model');
-    let internal = new InternalModel(this, parent, factory, opts, _ref);
+    let internal = new InternalModel(this, parent, database, factory, opts, _ref);
     this._registerInternalModel(internal);
     return internal;
   },
 
-  _createInternalModels(name, parent, source, opts) {
+  _createInternalModels(name, parent, database, source, opts) {
     let factory = this.__modelsFactory(name);
     let InternalModels = this._documentsInternalFactory('models');
-    let internal = new InternalModels(this, parent, source, factory, opts);
+    let internal = new InternalModels(this, parent, database, source, factory, opts);
     this._registerInternalModel(internal);
     return internal;
   },
@@ -86,11 +86,11 @@ export default Mixin.create({
   //
 
   model(name, opts) {
-    return this._createInternalModel(name, null, opts).model(true);
+    return this._createInternalModel(name, null, null, opts).model(true);
   },
 
   models(name, source, opts) {
-    return this._createInternalModels(name, null, source, opts).model(true);
+    return this._createInternalModels(name, null, null, source, opts).model(true);
   },
 
 });

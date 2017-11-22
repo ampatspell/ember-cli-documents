@@ -4,20 +4,13 @@ import ModelMixin from './-model-mixin';
 
 export default class InternalModelBase extends ModelMixin(Base) {
 
-  constructor(store, parent, factory, opts, _ref) {
+  constructor(store, parent, database, factory, opts, _ref) {
     super(store, parent);
+    this.database = database;
     this.factory = factory;
     this.opts = opts;
     this._models = null;
     this._ref = _ref;
-  }
-
-  get database() {
-    let model = this.model(false);
-    if(!model) {
-      return;
-    }
-    return model.get('database');
   }
 
   models(create) {
@@ -30,8 +23,7 @@ export default class InternalModelBase extends ModelMixin(Base) {
   }
 
   _createInternalModel(name, opts, _ref) {
-    let target = this.database || this.store;
-    let internal = target._createInternalModel(name, this, opts, _ref);
+    let internal = this.store._createInternalModel(name, this, this.database, opts, _ref);
     this.models(true).push(internal);
     return internal;
   }

@@ -14,7 +14,7 @@ module('model', {
 });
 
 test('create child model has parent, inherits database', function(assert) {
-  let state = this.store.model('state', { database: this.db });
+  let state = this.db.model('state');
   assert.ok(state.get('store') === this.store);
   let duck = state.model('duck');
   assert.ok(duck.get('store') === this.store);
@@ -24,14 +24,14 @@ test('create child model has parent, inherits database', function(assert) {
 });
 
 test('destroy parent model destroys childs', function(assert) {
-  let state = this.store.model('state', { database: this.db });
+  let state = this.db.model('state');
   let duck = state.model('duck');
   run(() => state.destroy());
   assert.ok(duck.isDestroying);
 });
 
 test('destroy child remove it from parent', function(assert) {
-  let state = this.store.model('state', { database: this.db });
+  let state = this.db.model('state');
   let duck = state.model('duck');
   assert.ok(state._internal.models()[0] === duck._internal);
   run(() => duck.destroy());

@@ -2,15 +2,12 @@ import Mixin from '@ember/object/mixin';
 
 export default Mixin.create({
 
-  _createInternalModel(name, parent, opts={}, _ref) {
-    opts.database = this;
-    return this.get('store')._createInternalModel(name, parent, opts, _ref);
+  _createInternalModel(name, parent, opts, _ref) {
+    return this.get('store')._createInternalModel(name, parent, this, opts, _ref);
   },
 
-  _createInternalModels(name, parent, source, opts={}) {
-    opts.props = opts.props || {};
-    opts.props.database = this;
-    return this.get('store')._createInternalModels(name, parent, source, opts);
+  _createInternalModels(name, parent, source, opts) {
+    return this.get('store')._createInternalModels(name, parent, this, source, opts);
   },
 
   model(name, opts) {
