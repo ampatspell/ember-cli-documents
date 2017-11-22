@@ -55,6 +55,15 @@ export default Mixin.create({
 
   //
 
+  /*
+    {
+      database: <Database>,
+      type: 'thing',
+      props:  { model props },
+      _parent: <InternalModel>,
+      _ref: <marker>
+    }
+  */
   _createInternalModel(name, parent, database, opts, _ref) {
     let factory = this.__modelFactory(name);
     let InternalModel = this._documentsInternalFactory('model');
@@ -63,6 +72,21 @@ export default Mixin.create({
     return internal;
   },
 
+    /*
+    {
+      database: <Database>
+      type: 'things',
+      source: <Array or ArrayProxy>,
+      props:  { models props },
+      model: {
+        observe: [ ...props ],
+        create(doc, models) {
+          return { type, props };
+        }
+      }
+      _parent: <InternalModel>
+    }
+  */
   _createInternalModels(name, parent, database, source, opts) {
     let factory = this.__modelsFactory(name);
     let InternalModels = this._documentsInternalFactory('models');
