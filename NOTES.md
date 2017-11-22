@@ -193,3 +193,25 @@ Note that all props take just an object, so it is pretty easy to declare reusabl
 * [tests/helpers/properties.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/helpers/properties.js)
 * [dummy/app/models/-props.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/dummy/app/models/-props.js)
 * [dummy/app/models-model.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/dummy/app/models/-model.js)
+
+## Model creation
+
+current
+
+``` javascript
+// database/models.js
+_createInternalModel(name, parent, opts, _ref)
+_createInternalModels(name, parent, source, opts)
+
+// store/models.js
+_createInternalModel(name, parent, opts, _ref)
+_createInternalModels(name, parent, source, opts)
+```
+
+planned
+
+``` javascript
+// database/models.js
+_createInternalModel(opts) // { type, parent, props, _ref }
+_createInternalModels(opts) // { type, parent, source, props, model }
+```
