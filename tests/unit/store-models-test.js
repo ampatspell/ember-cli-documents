@@ -18,7 +18,12 @@ module('store-models', {
     this.register('model:duck/green', GreenDuck);
     this.register('model:duck/yellow', YellowDuck);
     this.ducks = A();
-    this.create = () => this.store.models('ducks', this.ducks, {
+    this.create = () => this.store.models({
+      type: 'ducks',
+      source: this.ducks,
+      props: {
+        message: 'hello'
+      },
       model: {
         observe: [ 'type' ],
         create(doc) {
@@ -32,9 +37,6 @@ module('store-models', {
             props: { doc }
           };
         }
-      },
-      props: {
-        message: 'hello'
       }
     });
   }

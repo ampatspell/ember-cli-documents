@@ -86,7 +86,7 @@ test('store and database is null', function(assert) {
 
 test('database is null', function(assert) {
   let subject = this.create({ database: null });
-  assert.ok(subject.get('prop.database') === undefined);
+  assert.ok(subject.get('prop.database') === null);
   assert.ok(subject.get('prop.store') === this.store);
 });
 
@@ -103,7 +103,7 @@ test('store default', function(assert) {
   delete this.defaults.database;
   let subject = this.create();
   subject.set('database', null);
-  assert.ok(subject.get('prop.database') === undefined);
+  assert.ok(subject.get('prop.database') === null);
   assert.ok(subject.get('prop.store') === this.store);
 });
 

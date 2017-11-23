@@ -4,10 +4,12 @@ import TransformMixin from './-array-transform-mixin';
 import { property } from './-properties';
 
 const store = property('store');
+const database = property('database');
 
 const Models = ArrayProxy.extend(ModelMixin, TransformMixin, {
 
-  store: store()
+  store: store(),
+  database: database(),
 
 });
 

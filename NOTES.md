@@ -187,9 +187,3 @@ export default EmberObject.extend({
 
 });
 ```
-
-Note that all props take just an object, so it is pretty easy to declare reusable properties like it is done in:
-
-* [tests/helpers/properties.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/helpers/properties.js)
-* [dummy/app/models/-props.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/dummy/app/models/-props.js)
-* [dummy/app/models-model.js](https://github.com/ampatspell/ember-cli-documents/blob/feature/models/tests/dummy/app/models/-model.js)

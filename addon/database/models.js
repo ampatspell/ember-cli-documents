@@ -1,24 +1,29 @@
 import Mixin from '@ember/object/mixin';
+import { assign } from '@ember/polyfills';
+import normalizeModelOpts from '../util/normalize-model-opts';
 
 export default Mixin.create({
 
-  _createInternalModel(name, parent, opts={}, _ref) {
-    opts.database = this;
-    return this.get('store')._createInternalModel(name, parent, opts, _ref);
+  __mergeInternalModelOptions(opts) {
+    return assign({ database: this }, opts);
   },
 
-  _createInternalModels(name, parent, source, opts={}) {
-    opts.props = opts.props || {};
-    opts.props.database = this;
-    return this.get('store')._createInternalModels(name, parent, source, opts);
+  __createInternalModel(...args) {
+    let opts = this.__mergeInternalModelOptions(normalizeModelOpts(...args));
+    return this.get('store')._createInternalModel(opts);
   },
 
-  model(name, opts) {
-    return this._createInternalModel(name, null, opts).model(true);
+  __createInternalModels(opts) {
+    opts = this.__mergeInternalModelOptions(opts);
+    return this.get('store')._createInternalModels(opts);
   },
 
-  models(name, source, opts) {
-    return this._createInternalModels(name, null, source, opts).model(true);
+  model() {
+    return this.__createInternalModel(...arguments).model(true);
+  },
+
+  models() {
+    return this.__createInternalModels(...arguments).model(true);
   }
 
 });

@@ -75,11 +75,10 @@ export default factory => opts => {
         return;
       }
 
-      let target = database || store;
       let parent = toInternalModel(this);
       let definition = invokeCreate(this, opts);
 
-      return factory.create(this, opts, definition, target, parent);
+      return factory.create(opts, definition, store, database, parent);
     }
   }), opts).readOnly();
 };

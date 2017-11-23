@@ -58,7 +58,7 @@ test('modelName', function(assert) {
 
 test('opts are applied on model create', function(assert) {
   this.register('model:duck', Duck);
-  let model = this.store.model('duck', { id: 'yellow' });
+  let model = this.store.model({ type: 'duck', props: { id: 'yellow' } });
   assert.equal(model.get('id'), 'yellow');
   let internal = model._internal;
   run(() => model.destroy());

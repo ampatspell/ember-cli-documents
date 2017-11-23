@@ -1,23 +1,18 @@
 import { A } from '@ember/array';
+import { assign } from '@ember/polyfills';
 import Base from './-base';
 import ModelMixin from './-model-mixin';
+import normalizeModelOpts from '../../util/normalize-model-opts';
 
 export default class InternalModelBase extends ModelMixin(Base) {
 
-  constructor(store, parent, factory, opts, _ref) {
+  constructor(store, parent, database, factory, opts, _ref) {
     super(store, parent);
+    this.database = database;
     this.factory = factory;
     this.opts = opts;
     this._models = null;
     this._ref = _ref;
-  }
-
-  get database() {
-    let model = this.model(false);
-    if(!model) {
-      return;
-    }
-    return model.get('database');
   }
 
   models(create) {
@@ -29,15 +24,15 @@ export default class InternalModelBase extends ModelMixin(Base) {
     return models;
   }
 
-  _createInternalModel(name, opts, _ref) {
-    let target = this.database || this.store;
-    let internal = target._createInternalModel(name, this, opts, _ref);
+  _createInternalModel(...args) {
+    let opts = assign({ database: this.database, _parent: this }, normalizeModelOpts(...args));
+    let internal = this.store._createInternalModel(opts);
     this.models(true).push(internal);
     return internal;
   }
 
-  createModel(name, opts) {
-    return this._createInternalModel(name, opts).model(true);
+  createModel() {
+    return this._createInternalModel(...arguments).model(true);
   }
 
   _childModelDidDestroy(internal) {

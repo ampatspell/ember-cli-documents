@@ -26,7 +26,7 @@ export default {
 
     let stores = app.lookup('documents:stores');
     let store = createStore(stores);
-    let state = store.model('state');
+    let state = store.database('main').model('state');
 
     app.register('service:stores', stores, { instantiate: false });
     app.register('service:store', store, { instantiate: false });
