@@ -8,7 +8,6 @@ export default Model.extend(
   StateRestore,
   StateSetup, {
 
-  database: readOnly('store.db.main'),
   session: readOnly('store.session'),
 
   blog: state({ type: 'state/blog' })
