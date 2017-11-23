@@ -1,5 +1,6 @@
 # TODO
 
+* option to set models source as a string: `this.__array = this.model().get(this._array)`
 * assert models source item type. `item._internal._ref` thingie
 * simplify internal model and models creation -- have a `{ source: array, props: ... }` hash. see `database/models`
 * list `stores.modelsIdentity` in `DataAdapter`
@@ -271,6 +272,16 @@ export default Model.extend({
   all: models({ type: 'blog/blog' })
 
 });
+
+// models/blog/author/blogs
+// export default Models.extend({
+//
+//   parent: null,
+//   docs: hasMany({ type: 'blog', id: prop('parent.id'), key: 'owner' })
+//
+// });
+//
+// store.models({ type: 'blog/author/blogs', source: 'docs', ... });
 
 // models/blog/blog
 export default Model.extend({
