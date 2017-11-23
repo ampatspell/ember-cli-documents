@@ -22,7 +22,7 @@ module('internal-models', {
       props:  { ok: true },
       model: {
         observe: [ 'id' ],
-        create(doc, models) {
+        create(doc) {
           return {
             type: 'duck',
             props: { doc }
