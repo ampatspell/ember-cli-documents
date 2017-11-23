@@ -11,6 +11,7 @@ import {
 } from 'documents/util/assert'
 import Model from 'documents/document/model';
 import Models, { generate as modelsGenerate } from 'documents/document/models';
+import normalizeModelOpts from 'documents/util/normalize-model-opts';
 
 export default Mixin.create({
 
@@ -66,6 +67,7 @@ export default Mixin.create({
     }
   */
   _createInternalModel(opts) {
+    opts = normalizeModelOpts(opts);
     isObject('opts', opts);
     let { database, type, props, _parent, _ref } = opts;
     let factory = this.__modelFactory(type);
