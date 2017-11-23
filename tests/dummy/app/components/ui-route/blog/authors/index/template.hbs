@@ -1,8 +1,8 @@
-{{#each authors as |author|}}
+{{#each docs as |doc|}}
+  {{ui-block/blog/author/row doc=doc select=(action 'select' doc)}}
+{{else}}
   <div class="row">
-    {{ui-block/json author.doc.serialized}}
-    <div>name: {{author.name}}</div>
-    <div>email: {{author.email}}</div>
+    No authors yet
   </div>
 {{/each}}
 

@@ -8,7 +8,6 @@ export default Model.extend(LogMixin, {
 
   name: readOnly('doc.name'),
   email: readOnly('doc.email'),
-  serialized: readOnly('doc.serialized'),
 
   toStringExtension() {
     return this.get('doc.id');
