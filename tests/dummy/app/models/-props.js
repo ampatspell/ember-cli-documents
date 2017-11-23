@@ -18,3 +18,29 @@ export const byType = opts => {
     }
   });
 };
+
+// blogs: hasMany({ ddoc: 'blog', id: prop('doc.id'), prop: 'owner' }),
+export const hasMany = opts => {
+  opts.id = prop.wrap(opts.id);
+  return find({
+    _identifier: 'app/models/-props/hasMany',
+    owner: [ opts.id.key() ],
+    document: [ opts.prop ],
+    query(owner) {
+      let { ddoc, prop, id } = opts;
+      let key = id.value(owner);
+      if(!key) {
+        return;
+      }
+      let view = `by-${prop}`;
+      return {
+        ddoc,
+        view,
+        key
+      };
+    },
+    matches(doc, owner) {
+      return doc.get(opts.prop) === opts.id.value(owner);
+    }
+  });
+}

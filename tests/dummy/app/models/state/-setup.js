@@ -13,6 +13,19 @@ const ddocs = {
         }
       }
     }
+  },
+  blog: {
+    version: 1,
+    views: {
+      'by-owner': {
+        map(doc) {
+          if(doc.type !== 'blog') {
+            return;
+          }
+          emit(doc.owner);
+        }
+      }
+    }
   }
 };
 
