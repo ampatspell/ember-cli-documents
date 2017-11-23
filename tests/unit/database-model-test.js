@@ -8,7 +8,7 @@ module('database-model');
 
 test('model can be created', function(assert) {
   this.register('model:duck', Duck);
-  let model = this.db.model('duck');
+  let model = this.db.model({ type: 'duck' });
   assert.ok(model);
   assert.ok(Duck.detectInstance(model));
   assert.ok(model.get('store') === this.store);

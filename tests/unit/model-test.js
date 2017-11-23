@@ -16,6 +16,7 @@ module('model', {
 test('create child model has parent, inherits database', function(assert) {
   let state = this.db.model('state');
   assert.ok(state.get('store') === this.store);
+  assert.ok(state.get('database') === this.db);
   let duck = state.model('duck');
   assert.ok(duck.get('store') === this.store);
   assert.ok(duck.get('database') === this.db);
