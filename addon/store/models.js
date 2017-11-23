@@ -6,6 +6,7 @@ import {
   assert,
   isString,
   notBlank,
+  isObject,
   isClass_
 } from 'documents/util/assert'
 import Model from 'documents/document/model';
@@ -64,10 +65,12 @@ export default Mixin.create({
       _ref: <marker>
     }
   */
-  _createInternalModel(name, parent, database, opts, _ref) {
-    let factory = this.__modelFactory(name);
+  _createInternalModel(opts) {
+    isObject('opts', opts);
+    let { database, type, props, _parent, _ref } = opts;
+    let factory = this.__modelFactory(type);
     let InternalModel = this._documentsInternalFactory('model');
-    let internal = new InternalModel(this, parent, database, factory, opts, _ref);
+    let internal = new InternalModel(this, _parent, database, factory, props, _ref);
     this._registerInternalModel(internal);
     return internal;
   },
@@ -87,10 +90,12 @@ export default Mixin.create({
       _parent: <InternalModel>
     }
   */
-  _createInternalModels(name, parent, database, source, opts) {
-    let factory = this.__modelsFactory(name);
+  _createInternalModels(opts) {
+    isObject('opts', opts);
+    let { database, type, source, props, model, _parent } = opts;
+    let factory = this.__modelsFactory(type);
     let InternalModels = this._documentsInternalFactory('models');
-    let internal = new InternalModels(this, parent, database, source, factory, opts);
+    let internal = new InternalModels(this, _parent, database, source, factory, model, props);
     this._registerInternalModel(internal);
     return internal;
   },
@@ -109,12 +114,12 @@ export default Mixin.create({
 
   //
 
-  model(name, opts) {
-    return this._createInternalModel(name, null, null, opts).model(true);
+  model(opts) {
+    return this._createInternalModel(opts).model(true);
   },
 
-  models(name, source, opts) {
-    return this._createInternalModels(name, null, null, source, opts).model(true);
+  models(opts) {
+    return this._createInternalModels(opts).model(true);
   },
 
 });

@@ -3,7 +3,7 @@ import Base from './-model';
 import { toModel, toInternal } from '../../util/internal';
 import { isArray, isArrayOrArrayProxy, isObject, isFunction_ } from '../../util/assert';
 
-const normalizeModel = model => {
+const normalizedModel = model => {
   isObject('model', model);
   let { observe, create } = model;
   isArray('model.observe', observe);
@@ -16,25 +16,18 @@ const normalizeModel = model => {
   return { observe, create };
 };
 
-const normalizeOptions = opts => {
-  isObject('model', opts);
-  let { model, props } = opts;
-  if(props) {
-    isObject('props', props);
-  }
-  model = normalizeModel(model);
-  return { model, props };
-}
+const normalizedSource = array => {
+  isArrayOrArrayProxy('source array', array);
+  return A(array);
+};
 
 export default class InternalModels extends Base {
 
-  constructor(store, parent, database, array, factory, opts) {
-    isArrayOrArrayProxy('source array', array);
-    let { props, model } = normalizeOptions(opts);
+  constructor(store, parent, database, array, factory, model, props) {
     super(store, parent, database, factory, props);
-    this._array = A(array);
+    this._array = normalizedSource(array)
+    this.child = normalizedModel(model);
     this._values = null;
-    this.child = model;
   }
 
   _createModel() {
@@ -79,7 +72,7 @@ export default class InternalModels extends Base {
       isObject('props in model.create function result', props);
     }
 
-    return this._createInternalModel(type, props, doc);
+    return this._createInternalModel({ type, props, _ref: doc });
   }
 
   _createChildInternalModels(docs) {

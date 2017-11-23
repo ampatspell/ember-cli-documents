@@ -29,3 +29,15 @@ test('create succeeds', function(assert) {
   assert.equal(model.get('store'), this.store);
   assert.equal(model.get('database'), this.db);
 });
+
+test('create with parent', function(assert) {
+  let _parent = {};
+  let internal = this.create({ _parent });
+  assert.ok(internal.parent === _parent);
+});
+
+test('create with ref', function(assert) {
+  let _ref = {};
+  let internal = this.create({ _ref });
+  assert.ok(internal._ref === _ref);
+});
