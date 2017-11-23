@@ -1,6 +1,8 @@
-export default opts => {
-  if(typeof opts === 'string') {
-    return { type: opts };
+// store.model('thing', { ... }) => { type: 'model', props: { ... } }
+export default (...args) => {
+  let [ first, second ] = args;
+  if(typeof first === 'string') {
+    return { type: first, props: second };
   }
-  return opts;
+  return first;
 }

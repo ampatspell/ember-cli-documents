@@ -66,8 +66,8 @@ export default Mixin.create({
       _ref: <marker>
     }
   */
-  _createInternalModel(opts) {
-    opts = normalizeModelOpts(opts);
+  _createInternalModel(...args) {
+    let opts = normalizeModelOpts(...args);
     isObject('opts', opts);
     let { database, type, props, _parent, _ref } = opts;
     let factory = this.__modelFactory(type);
@@ -116,12 +116,12 @@ export default Mixin.create({
 
   //
 
-  model(opts) {
-    return this._createInternalModel(opts).model(true);
+  model() {
+    return this._createInternalModel(...arguments).model(true);
   },
 
-  models(opts) {
-    return this._createInternalModels(opts).model(true);
+  models() {
+    return this._createInternalModels(...arguments).model(true);
   },
 
 });

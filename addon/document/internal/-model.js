@@ -24,16 +24,15 @@ export default class InternalModelBase extends ModelMixin(Base) {
     return models;
   }
 
-  _createInternalModel(opts) {
-    opts = normalizeModelOpts(opts);
-    opts = assign({ database: this.database, _parent: this }, opts);
+  _createInternalModel(...args) {
+    let opts = assign({ database: this.database, _parent: this }, normalizeModelOpts(...args));
     let internal = this.store._createInternalModel(opts);
     this.models(true).push(internal);
     return internal;
   }
 
-  createModel(opts) {
-    return this._createInternalModel(opts).model(true);
+  createModel() {
+    return this._createInternalModel(...arguments).model(true);
   }
 
   _childModelDidDestroy(internal) {
