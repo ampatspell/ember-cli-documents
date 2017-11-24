@@ -1,16 +1,13 @@
+import { run } from '@ember/runloop';
+import { resolve } from 'rsvp';
+import { assert } from '@ember/debug';
 import { module } from 'qunit';
-import Ember from 'ember';
 import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
 import environment from '../../config/environment';
 import tap from './tap-document-requests';
 
 const host = environment.COUCHDB_HOST;
-
-const {
-  RSVP: { resolve },
-  assert
-} = Ember;
 
 const getter = (object, name, fn) => Object.defineProperty(object, name, { get: () => fn() });
 
@@ -62,6 +59,9 @@ export default identifier => {
         db = db || this.db;
         return tap(db.get('documents'));
       },
+      register(...args) {
+        return this.instance.register(...args);
+      },
       beforeEach() {
         this.application = startApp();
         this.instance = this.application.buildInstance();
@@ -76,10 +76,10 @@ export default identifier => {
       afterEach() {
         let afterEach = options.afterEach && options.afterEach.apply(this, arguments);
         return resolve(afterEach).then(() => {
-          Ember.run(() => this.instance.destroy());
+          run(() => this.instance.destroy());
           destroyApp(this.application);
         });
       }
     });
-  }
+  };
 }

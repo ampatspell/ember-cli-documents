@@ -4,12 +4,23 @@ $font-family: 'Raleway', sans-serif;
 @import "reset";
 @import "body";
 
+@mixin ellipsis() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+*[data-ember-action] {
+  cursor: pointer;
+}
+
 .ui-application {
   @import "form";
-
-  padding: 25px;
+  a {
+    color: #000;
+  }
   > .header {
-    padding-bottom: 25px;
+    padding: 25px 25px 0 25px;
     > .title {
       font-weight: 600;
     }
@@ -27,6 +38,14 @@ $font-family: 'Raleway', sans-serif;
     }
   }
   > .content {
+    padding: 25px;
+  }
+  > .identity {
+    margin-top: 50px;
+    background: fade-out(#000, 0.994);
+    border-top: 1px solid fade-out(#000, 0.9);
+    border-bottom: 1px solid fade-out(#000, 0.9);
+    padding: 25px 25px;
   }
 }
 
@@ -49,20 +68,130 @@ $font-family: 'Raleway', sans-serif;
   &:last-child {
     padding-bottom: 0;
   }
+  p {
+    padding-bottom: 5px;
+    &.strong {
+      font-weight: 600;
+    }
+    &.small {
+      font-size: 13px;
+    }
+  }
 }
 
-.ui-route.message-index {
-  > .row.input {
-    margin-bottom: 20px;
-    > input {
-      padding-left: 0;
-      padding-right: 0;
-      font-size: 32px;
-      border-bottom: 1px solid #eee;
+.ui-block.session-sign-in {
+  > .error {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+}
+
+.ui-block.stores-identity {
+  > .docs {
+    > .doc {
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      font-size: 12px;
+      line-height: 12px * 1.5;
+      > .id {
+        flex: 0;
+        padding-right: 5px;
+        font-weight: 500;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+      > .rev {
+        flex: 2;
+        min-width: 0px;
+        @include ellipsis;
+        padding-right: 5px;
+      }
+      > .info {
+        font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        > .item {
+          flex: 1;
+          display: inline-block;
+          margin-right: 5px;
+          &:last-child {
+            margin-right: 0;
+          }
+          &:before {
+            content: '[';
+          }
+          &:after {
+            content: ']';
+          }
+        }
+      }
     }
-    > .hint {
-      margin-top: 3px;
-      font-size: 10px;
+  }
+  > .models {
+    margin-top: 20px;
+    > .model {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 12px * 1.5;
+    }
+  }
+  > .docs,
+  > .models {
+    > .placeholder {
+      color: fade-out(#000, 0.5);
+    }
+  }
+}
+
+.ui-route.setup-index {
+  > .row.run {
+    > .button {
+      cursor: pointer;
+      display: inline-block;
+      background: #333;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 12px 15px;
+      border-radius: 4px;
+    }
+  }
+}
+
+.ui-block.blog-author-row {
+  padding: 5px 0;
+  cursor: pointer;
+  > .name {
+    font-size: 17px;
+    line-height: 17px * 1.3;
+    font-weight: 600;
+  }
+  > .email {
+    font-size: 13px;
+    line-height: 13px * 1.3;
+  }
+  > .blogs {
+    font-size: 13px;
+    line-height: 13px * 1.3;
+    > .caption {
+      color: #555;
+      display: inline-block;
+      &:after {
+        content: ":";
+      }
+    }
+    > .blog {
+      display: inline-block;
+      font-weight: 500;
+      &:before {
+        content: "\"";
+      }
+      &:after {
+        content: "\"";
+      }
     }
   }
 }

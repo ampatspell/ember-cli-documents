@@ -15,6 +15,12 @@ let {
   isFunction,
   isArray_,
   isArray,
+  isArrayProxy_,
+  isArrayProxy,
+  isArrayOrArrayProxy_,
+  isArrayOrArrayProxy,
+  isBoolean_,
+  isBoolean,
   isOneOf
 } = Base(DocumentsError);
 
@@ -32,6 +38,12 @@ export {
   isFunction,
   isArray_,
   isArray,
+  isArrayProxy_,
+  isArrayProxy,
+  isArrayOrArrayProxy_,
+  isArrayOrArrayProxy,
+  isBoolean_,
+  isBoolean,
   isOneOf
 }
 

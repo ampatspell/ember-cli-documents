@@ -1,11 +1,6 @@
-import Ember from 'ember';
-
-const {
-  merge,
-  assign,
-  A,
-  assert
-} = Ember;
+import { assign, merge } from '@ember/polyfills';
+import { A } from '@ember/array';
+import { assert } from '@ember/debug';
 
 export default opts => {
   opts = merge({ defaults: {}, computed: [], extend: null }, opts);

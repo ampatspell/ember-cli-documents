@@ -1,11 +1,19 @@
 <div class="header">
   <div class="title">ember-cli-documents</div>
-  <div class="links">
-    {{link-to 'index' 'index'}}
-    {{link-to 'experimental' 'experimental'}}
-    {{link-to 'paginated' 'paginated'}}
-  </div>
+  {{#unless isEmpty}}
+    <div class="links">
+      {{link-to 'index' 'index'}}
+      {{link-to 'setup' 'setup'}}
+      {{link-to 'blog' 'blog'}}
+      {{#if session.isAuthenticated}}
+        {{link-to session.name 'session.index'}}
+      {{else}}
+        {{link-to 'sign-in' 'session.new'}}
+      {{/if}}
+    </div>
+  {{/unless}}
 </div>
 <div class="content">
   {{yield}}
 </div>
+{{ui-block/stores/identity class='identity'}}

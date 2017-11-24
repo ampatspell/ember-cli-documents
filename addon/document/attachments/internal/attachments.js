@@ -1,3 +1,5 @@
+import { A } from '@ember/array';
+import { typeOf } from '@ember/utils';
 import Ember from 'ember';
 import Base, { empty } from '../../internal/-base';
 import MutateMixin from '../../internal/-mutate-mixin';
@@ -10,8 +12,6 @@ import {
 } from 'documents/util/internal';
 
 const {
-  A,
-  typeOf,
   Logger: { error }
 } = Ember;
 

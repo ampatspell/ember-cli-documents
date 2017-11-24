@@ -1,0 +1,10 @@
+<div class="row">
+  {{link-to 'authors' 'blog.authors'}}
+  {{link-to 'blogs' 'blog.blogs'}}
+</div>
+
+<div class="row">
+  <div {{action 'select' 'blog' blog}}>{{blog}}</div>
+  <div {{action 'select' 'blogs' blog.blogs}}>{{blog.blogs}}</div>
+  <div {{action 'select' 'authors' blog.authors}}>{{blog.authors}}</div>
+</div>

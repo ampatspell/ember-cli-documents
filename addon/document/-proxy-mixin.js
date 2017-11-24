@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { computed } from '@ember/object';
 import { property } from './-properties';
 import ModelMixin from './-model-mixin';
-
-const {
-  Mixin,
-  computed
-} = Ember;
 
 const model = name => computed(function() {
   let internal = this._internal;
@@ -17,9 +13,11 @@ export const loader = name => function(...args) {
   return loader[name].call(loader, ...args).then(() => this);
 };
 
+const database = property('database');
+
 export default Mixin.create(ModelMixin, {
 
-  database: property('database'),
+  database: database(),
 
   filter: model('filter'),
   loader: model('loader'),

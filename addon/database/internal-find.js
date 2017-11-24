@@ -1,13 +1,10 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { A } from '@ember/array';
+import { merge } from '@ember/polyfills';
+import { copy } from '@ember/object/internals';
+import { reject, resolve } from 'rsvp';
 import DocumentsError from '../util/error';
 import Operation from './-operation';
-
-const {
-  A,
-  merge,
-  copy,
-  RSVP: { resolve, reject }
-} = Ember;
 
 const defaultMatch = () => true;
 
@@ -52,7 +49,7 @@ const doc = fn => function(...args) {
   return fn.call(this, ...args).then(json => result('single', this._deserializeDocument(json, 'document')));
 };
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __scheduleDatabaseOperation(label, opts, fn, before, resolve, reject) {
     opts = merge({}, opts);

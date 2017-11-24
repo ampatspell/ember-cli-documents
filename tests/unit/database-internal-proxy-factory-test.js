@@ -1,10 +1,10 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
 module('database-internal-proxy-factory', {
   beforeEach() {
-    this.owner = Ember.Object.create();
+    this.owner = EmberObject.create();
     this.opts = {
       query() {
       },

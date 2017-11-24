@@ -1,10 +1,6 @@
-import Ember from 'ember';
+import { assert } from '@ember/debug';
 import ModelMixin from './-model-mixin';
 import { isInternal } from 'documents/util/internal';
-
-const {
-  assert
-} = Ember;
 
 const types = [ 'document', 'model', 'shoebox' ];
 

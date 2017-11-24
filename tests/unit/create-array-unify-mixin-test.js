@@ -1,14 +1,11 @@
-import Ember from 'ember';
+import ArrayProxy from '@ember/array/proxy';
+import { A } from '@ember/array';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import createArratUnifyMixin from 'documents/util/create-array-unify-mixin';
 
-const {
-  A
-} = Ember;
-
 const Mixin = createArratUnifyMixin({ root: { array: '_root' }, content: '_unifiedContent' });
-const Proxy = Ember.ArrayProxy.extend(Mixin);
+const Proxy = ArrayProxy.extend(Mixin);
 
 let create = root => Proxy.create({ _root: root, _unifiedContent: A() });
 

@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
+import { Promise } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  run,
-  RSVP: { Promise }
-} = Ember;
 
 module('database-operations', {
   async beforeEach() {

@@ -1,0 +1,30 @@
+<div class="row">
+  Before we start, you need to setup CouchDB database for this dummy.
+</div>
+
+{{#if isAuthenticated}}
+  <div class="row">
+    <p class="strong">You are currently signed in as {{state.session.name}}.</p>
+    <p class="small"><a {{action 'delete' target=state.session}} href="#">Sign out</a> to use another account. Note that you will need `_admin` role for setup to work.</p>
+  </div>
+{{else}}
+  <div class="row">
+    {{ui-block/session/sign-in}}
+  </div>
+{{/if}}
+
+<div class="row run">
+  <div class="button" {{action 'setup'}}>{{if isBusy 'Running…' 'Run setup'}}</div>
+</div>
+
+{{#if isError}}
+  <div class="row">
+    {{ui-block/json error}}
+  </div>
+{{/if}}
+
+{{#if result}}
+  <div class="row">
+    {{ui-block/json result}}
+  </div>
+{{/if}}

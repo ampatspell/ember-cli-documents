@@ -1,9 +1,13 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   store: null,
   identifier: null,
+
+  toStringExtension() {
+    return this.get('identifier');
+  },
 
   willDestroy() {
     this.get('store')._databaseWillDestroy(this);

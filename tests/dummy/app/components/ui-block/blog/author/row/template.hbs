@@ -1,0 +1,12 @@
+<div class="name">{{author.name}}</div>
+<div class="email">{{author.email}}</div>
+<div class="blogs">
+  {{#if author.blogs.isLoading}}
+    <div class="placeholder">Loading…</div>
+  {{else}}
+    <div class="caption">Blogs</div>
+    {{#each author.blogs as |blog|}}
+      <div class="blog">{{blog.title}}</div>
+    {{/each}}
+  {{/if}}
+</div>

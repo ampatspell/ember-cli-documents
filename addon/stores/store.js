@@ -1,16 +1,13 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { getOwner } from '@ember/application';
+import { assign } from '@ember/polyfills';
 import { object } from '../util/computed';
 import { omit, pick } from '../util/object';
 import createNestedRegistry from '../util/create-nested-registry';
 
-const {
-  getOwner,
-  assign
-} = Ember;
-
 const StoresRegistry = createNestedRegistry({ key: '_stores' });
 
-export default Ember.Mixin.create(StoresRegistry, {
+export default Mixin.create(StoresRegistry, {
 
   _stores: null,
 

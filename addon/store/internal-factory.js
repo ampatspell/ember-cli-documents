@@ -1,25 +1,25 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 import DocumentsError from '../util/error';
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
-  _internalFactory(factoryName) {
+  _documentsInternalFactory(factoryName) {
     return this._factoryFor(`documents:internal/${factoryName}`).class;
   },
 
   _createInternalDocument(database) {
-    let InternalDocument = this._internalFactory('document');
+    let InternalDocument = this._documentsInternalFactory('document');
     return new InternalDocument(this, database);
   },
 
   _createInternalAttachments(internal) {
-    let InternalAttachments = this._internalFactory('attachments');
+    let InternalAttachments = this._documentsInternalFactory('attachments');
     return new InternalAttachments(this, internal);
   },
 
   _createInternalAttachmentContent(props) {
     const create = (type, ...args) => {
-      let InternalAttachmentContent = this._internalFactory(`attachment/${type}`);
+      let InternalAttachmentContent = this._documentsInternalFactory(`attachment/${type}`);
       return new InternalAttachmentContent(this, ...args);
     };
 
@@ -46,23 +46,23 @@ export default Ember.Mixin.create({
   },
 
   _createInternalAttachment(parent, props) {
-    let InternalAttachment = this._internalFactory('attachment');
+    let InternalAttachment = this._documentsInternalFactory('attachment');
     let content = this._createInternalAttachmentContent(props);
     return new InternalAttachment(this, parent, content);
   },
 
   _createInternalObject(parent) {
-    let InternalObject = this._internalFactory('object');
+    let InternalObject = this._documentsInternalFactory('object');
     return new InternalObject(this, parent);
   },
 
   _createInternalArray(parent) {
-    let InternalArray = this._internalFactory('array');
+    let InternalArray = this._documentsInternalFactory('array');
     return new InternalArray(this, parent);
   },
 
   _internalChangesFactory(type) {
-    return this._internalFactory(`changes/${type}`);
+    return this._documentsInternalFactory(`changes/${type}`);
   },
 
   _createInternalDatabaseChanges(database, opts) {
@@ -76,32 +76,32 @@ export default Ember.Mixin.create({
   },
 
   _createInternalDocumentProxy(database, owner, opts) {
-    let InternalDocumentProxy = this._internalFactory('proxy/document');
+    let InternalDocumentProxy = this._documentsInternalFactory('proxy/document');
     return new InternalDocumentProxy(this, database, owner, opts);
   },
 
   _createInternalArrayProxy(database, owner, opts) {
-    let InternalArrayProxy = this._internalFactory('proxy/array');
+    let InternalArrayProxy = this._documentsInternalFactory('proxy/array');
     return new InternalArrayProxy(this, database, owner, opts);
   },
 
   _createInternalPaginatedProxy(database, owner, opts) {
-    let InternalPaginatedProxy = this._internalFactory('proxy/paginated');
+    let InternalPaginatedProxy = this._documentsInternalFactory('proxy/paginated');
     return new InternalPaginatedProxy(this, database, owner, opts);
   },
 
   _createInternalFilter(database, owner, opts) {
-    let InternalFilter = this._internalFactory('filter');
+    let InternalFilter = this._documentsInternalFactory('filter');
     return new InternalFilter(this, database, owner, opts);
   },
 
   _createInternalQueryLoader(parent, database, owner, opts, type) {
-    let InternalQueryLoader = this._internalFactory('query-loader');
+    let InternalQueryLoader = this._documentsInternalFactory('query-loader');
     return new InternalQueryLoader(this, parent, database, owner, opts, type);
   },
 
   _createInternalPaginatedLoader(parent, database, owner, opts) {
-    let InternalPaginatedLoader = this._internalFactory('paginated-loader');
+    let InternalPaginatedLoader = this._documentsInternalFactory('paginated-loader');
     return new InternalPaginatedLoader(this, parent, database, owner, opts);
   }
 

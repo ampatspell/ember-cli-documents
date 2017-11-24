@@ -1,26 +1,23 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  RSVP: { all }
-} = Ember;
 
 /* global emit */
 const ddoc = {
   views: {
     'by-id-with-feathers': {
-      map(doc) {
+      map: function(doc) {
         if(doc.type !== 'duck') {
           return;
         }
         emit(doc._id);
-        let feathers = doc.feathers;
+        var feathers = doc.feathers;
         if(!feathers) {
           return;
         }
-        for(let i = 0; i < feathers.length; i++) {
-          let id = feathers[i];
+        for(var i = 0; i < feathers.length; i++) {
+          var id = feathers[i];
           emit(doc._id, { _id: id });
         }
       }
@@ -30,7 +27,7 @@ const ddoc = {
 
 module('document-proxy-linked-remote', {
   async beforeEach() {
-    this.owner = Ember.Object.create({ key: 'duck:yellow' });
+    this.owner = EmberObject.create({ key: 'duck:yellow' });
     this.opts = {
       owner: [ 'key' ],
       document: [ 'type' ],

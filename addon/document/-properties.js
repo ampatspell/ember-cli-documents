@@ -1,8 +1,4 @@
-import Ember from 'ember';
-
-const {
-  computed
-} = Ember;
+import { computed } from '@ember/object';
 
 export const forward = (getter, setter) => () => {
   let props = {};
@@ -34,4 +30,9 @@ export const property = name => () => {
 export const promise = name => function() {
   let internal = this._internal;
   return internal[name].call(internal, ...arguments).then(() => this);
+};
+
+export const call = name => function() {
+  let internal = this._internal;
+  return internal[name].call(internal, ...arguments);
 };

@@ -1,27 +1,5 @@
 <div class="row">
-  {{#if session.isAuthenticated}}
-    <div class="form">
-      <div class="row">Hey, {{session.name}} ({{join session.roles delimiter=', '}})</div>
-      <div class="row">
-        <button {{action 'loadUser'}}>_user</button>
-        <button {{action 'delete' target=session}}>Sign-out</button>
-      </div>
-    </div>
-  {{else}}
-    <form>
-      <div class="row">{{input placeholder='name' value=session.name}}</div>
-      <div class="row">{{input type='password' placeholder='password' value=session.password}}</div>
-      <div class="row"><button {{action 'save' target=session}}>Sign-in</button></div>
-    </form>
-  {{/if}}
-</div>
-<div class="row">id={{author.id}}, name={{author.name}} country.name={{author.country.name}}</div>
-<div class="row">
-  {{ui-block/json author.serialized}}
-</div>
-<div class="row">
-  {{ui-block/json author.state}}
-</div>
-<div class="row">
-  {{ui-block/stores/identity}}
+  <p>window.state = {{state}}</p>
+  <p>window.store = {{state.store}}</p>
+  <p>window.database = {{state.store.db.main}}</p>
 </div>

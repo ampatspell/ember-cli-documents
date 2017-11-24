@@ -1,12 +1,8 @@
-import Ember from 'ember';
+import { reject, resolve } from 'rsvp';
+import { getOwner } from '@ember/application';
+import EmberObject, { computed } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import createStateMixin from './util/basic-state-mixin';
-
-const {
-  RSVP: { resolve, reject },
-  getOwner,
-  computed,
-  computed: { reads }
-} = Ember;
 
 const State = createStateMixin();
 
@@ -15,7 +11,7 @@ const pair = key => computed(function() {
   return getOwner(this).factoryFor('documents:database/security/pair').create({ key, security });
 }).readOnly();
 
-export default Ember.Object.extend(State, {
+export default EmberObject.extend(State, {
 
   database: null,
   documents: reads('database.documents.security').readOnly(),

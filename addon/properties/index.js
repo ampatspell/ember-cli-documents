@@ -1,13 +1,18 @@
 export {
   getDefinition
-} from './proxy';
+} from './-meta';
+
+export {
+  prop
+} from './-prop';
 
 export {
   first,
   find,
   paginated
-} from './extendable';
+} from './proxy';
 
 export {
-  prop
-} from './prop';
+  model,
+  models
+} from './model';

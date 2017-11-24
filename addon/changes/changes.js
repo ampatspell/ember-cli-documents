@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import EmberObject, { computed } from '@ember/object';
+import { reads } from '@ember/object/computed';
+import Evented from '@ember/object/evented';
 import ModelMixin from 'documents/document/-model-mixin';
-
-const {
-  computed,
-  computed: { reads },
-  Evented
-} = Ember;
 
 const adapterKeys = [ 'isStarted', 'isSuspended' ];
 const internalStateKeys = [ 'isError', 'error' ];
@@ -39,4 +35,4 @@ internalMethods.forEach(key => {
   }
 });
 
-export default Ember.Object.extend(Evented, ModelMixin, props);
+export default EmberObject.extend(Evented, ModelMixin, props);

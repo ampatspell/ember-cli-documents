@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { assign } from '@ember/polyfills';
+import { computed } from '@ember/object';
 import Content from './-base';
 import { mapping } from './internal/stub';
-
-const {
-  assign,
-  computed
-} = Ember;
 
 const prop = key => computed(function() {
   return this._internal.props[key];

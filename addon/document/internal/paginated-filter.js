@@ -1,9 +1,5 @@
-import Ember from 'ember';
-
-const {
-  A,
-  copy
-} = Ember;
+import { A } from '@ember/array';
+import { copy } from '@ember/object/internals';
 
 export default class PaginatedFilter {
 

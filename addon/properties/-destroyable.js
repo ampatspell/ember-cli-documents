@@ -1,9 +1,7 @@
-import Ember from 'ember';
+import { computed } from '@ember/object';
+import { copy } from '@ember/object/internals';
+import { merge } from '@ember/polyfills';
 import EmptyObject from 'documents/util/empty-object';
-
-const {
-  computed
-} = Ember;
 
 // usage:
 //
@@ -54,7 +52,11 @@ const _cacheFor = (owner, key) => {
   if(!cache) {
     return {};
   }
-  return cache[key];
+  let value = cache[key];
+  if(!value) {
+    value = {};
+  }
+  return value;
 }
 
 const _destroyCached = (owner, key, value, destroy) => {
@@ -80,8 +82,18 @@ export const cacheFor = (owner, key) => {
   return hash.value;
 }
 
+const defaults = {
+  get(internal) {
+    return internal.model(true);
+  },
+  destroy(internal) {
+    internal.destroy();
+  }
+};
+
 export default (...args) => {
   let opts = args.pop();
+  opts = merge(copy(defaults), opts);
   return computed(...args, function(key) {
     let { value, destroy } = _cacheFor(this, key);
 

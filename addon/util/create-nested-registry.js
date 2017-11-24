@@ -1,12 +1,9 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { on } from '@ember/object/evented';
+import { merge } from '@ember/polyfills';
+import { A } from '@ember/array';
+import { copy } from '@ember/object/internals';
 import EmptyObject from './empty-object';
-
-const {
-  on,
-  merge,
-  A,
-  copy
-} = Ember;
 
 class Registry {
   constructor() {
@@ -33,7 +30,7 @@ class Registry {
 
 export default opts => {
   merge({ key: '_nested' }, opts);
-  return Ember.Mixin.create({
+  return Mixin.create({
     _setupNestedRegistry: on('init', function() {
       this[opts.key] = new Registry();
     })

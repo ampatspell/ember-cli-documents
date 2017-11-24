@@ -1,0 +1,11 @@
+{{#each docs as |doc|}}
+  {{ui-block/blog/author/row doc=doc select=(action 'select' doc)}}
+{{else}}
+  <div class="row">
+    No authors yet
+  </div>
+{{/each}}
+
+<div class="row">
+  {{link-to 'create new author' 'blog.authors.new'}}
+</div>

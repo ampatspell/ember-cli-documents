@@ -1,14 +1,11 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 
-const {
-  run
-} = Ember;
-
 module('filter', {
   beforeEach() {
-    this.owner = Ember.Object.create({ type: null });
+    this.owner = EmberObject.create({ type: null });
     this.opts = {
       owner: [ 'type' ],
       document: [ 'type' ],
@@ -73,7 +70,7 @@ test('destroy stops observing', function(assert) {
 
   wrap('owner', 'removeObserver', this.owner);
   wrap('duck', 'removeObserver', duck);
-  wrap('identity', 'removeEnumerableObserver', this.db.get('identity'));
+  wrap('documentsIdentity', 'removeEnumerableObserver', this.db.get('documentsIdentity'));
 
   this.owner.set('type', 'duck');
   let filter = this.filter();
@@ -88,7 +85,7 @@ test('destroy stops observing', function(assert) {
     },
     {
       "func": "removeEnumerableObserver",
-      "name": "identity"
+      "name": "documentsIdentity"
     },
     {
       "func": "removeObserver",

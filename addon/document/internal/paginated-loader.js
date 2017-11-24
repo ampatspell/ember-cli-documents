@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import Loader from './-loader';
 import PaginatedLoaderState from './-paginated-loader-state';
-
-const {
-  A
-} = Ember;
+import { isObject } from 'documents/util/assert';
 
 export default class PaginatedLoaderInternal extends Loader {
 
@@ -73,9 +70,12 @@ export default class PaginatedLoaderInternal extends Loader {
 
     let docs = A(result.map(internal => internal.model(true)));
 
-    let { state, isMore } = this.opts.loaded(query.state, docs);
+    let loaded = this.opts.loaded(query.state, docs);
+    isObject('loaded function result', loaded);
 
-    query.isMore = isMore;
+    let { state, isMore } = loaded;
+
+    query.isMore = !!isMore;
     query.state = state;
 
     this._withState((state, changed) => changed('isMore'));

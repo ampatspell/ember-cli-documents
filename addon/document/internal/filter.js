@@ -1,13 +1,8 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import Base from './-base';
-import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
 
-const {
-  A
-} = Ember;
-
-export default class FilterInternal extends ObserveOwner(ModelMixin(Base)) {
+export default class FilterInternal extends ObserveOwner(Base) {
 
   /*
     opts: {
@@ -32,7 +27,7 @@ export default class FilterInternal extends ObserveOwner(ModelMixin(Base)) {
   }
 
   get documents() {
-    return this.database.get('identity');
+    return this.database.get('documentsIdentity');
   }
 
   __matches() {

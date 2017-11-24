@@ -1,22 +1,20 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { merge } from '@ember/polyfills';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { getDefinition, prop } from 'documents/properties';
-import byId from 'documents/properties/first-by-id';
-import isNewMixin from 'documents/properties/is-new-mixin';
-import createDefaultsMixin from 'documents/properties/create-defaults-mixin';
 import { pick } from 'documents/util/object';
+import { firstById, isNewMixin } from '../helpers/properties';
 
-const databaseMixin = createDefaultsMixin({ database: 'db' });
-const byIdWithDatabase = databaseMixin(byId);
-const isNewById = isNewMixin(byIdWithDatabase);
+const byId = opts => firstById(merge({ database: 'db' }, opts));
+const isNewById = opts => byId(isNewMixin(opts));
 
 module('property-by-id');
 
 test('plain', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckId: 'duck',
-    doc: byIdWithDatabase({ id: prop('duckId') })
+    doc: byId({ id: prop('duckId') })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -28,8 +26,8 @@ test('plain', function(assert) {
     document: [ 'id' ]
   });
 
-  assert.ok(!opts.matches(Ember.Object.create({ id: 'rabbit' }), owner));
-  assert.ok(opts.matches(Ember.Object.create({ id: 'duck' }), owner));
+  assert.ok(!opts.matches(EmberObject.create({ id: 'rabbit' }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'duck' }), owner));
 
   assert.deepEqual(opts.query(owner), {
     id: 'duck'
@@ -37,7 +35,7 @@ test('plain', function(assert) {
 });
 
 test('isNew mixin', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckId: 'duck',
     isNew: null,
     doc: isNewById({ id: prop('duckId'), new: prop('isNew') })
@@ -46,21 +44,21 @@ test('isNew mixin', function(assert) {
   let owner = Owner.create({ db: this.db });
   let opts = getDefinition(owner, 'doc');
 
-  assert.ok(opts.matches(Ember.Object.create({ id: 'duck', isNew: false }), owner));
-  assert.ok(opts.matches(Ember.Object.create({ id: 'duck', isNew: true }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'duck', isNew: false }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'duck', isNew: true }), owner));
 
   owner.set('isNew', undefined);
 
-  assert.ok(opts.matches(Ember.Object.create({ id: 'duck', isNew: false }), owner));
-  assert.ok(opts.matches(Ember.Object.create({ id: 'duck', isNew: true }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'duck', isNew: false }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'duck', isNew: true }), owner));
 
   owner.set('isNew', false);
 
-  assert.ok(opts.matches(Ember.Object.create({ id: 'duck', isNew: false }), owner));
-  assert.ok(!opts.matches(Ember.Object.create({ id: 'duck', isNew: true }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'duck', isNew: false }), owner));
+  assert.ok(!opts.matches(EmberObject.create({ id: 'duck', isNew: true }), owner));
 
   owner.set('isNew', true);
 
-  assert.ok(!opts.matches(Ember.Object.create({ id: 'duck', isNew: false }), owner));
-  assert.ok(opts.matches(Ember.Object.create({ id: 'duck', isNew: true }), owner));
+  assert.ok(!opts.matches(EmberObject.create({ id: 'duck', isNew: false }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'duck', isNew: true }), owner));
 });

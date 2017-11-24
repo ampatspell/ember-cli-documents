@@ -1,39 +1,39 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
-  _modelFactory(factoryName) {
+  _documentsModelFactory(factoryName) {
     return this._factoryFor(`documents:${factoryName}`);
   },
 
   _createDocumentModel(_internal) {
-    return this._modelFactory('document').create({ _internal });
+    return this._documentsModelFactory('document').create({ _internal });
   },
 
   _createAttachmentsModel(_internal) {
-    return this._modelFactory('attachments').create({ _internal });
+    return this._documentsModelFactory('attachments').create({ _internal });
   },
 
   _createAttachmentContentModel(type, _internal) {
-    return this._modelFactory(`attachment/${type}`).create({ _internal });
+    return this._documentsModelFactory(`attachment/${type}`).create({ _internal });
   },
 
   _createAttachmentModel(_internal) {
     let content = _internal.content.model(true);
-    return this._modelFactory('attachment').create({ _internal, content });
+    return this._documentsModelFactory('attachment').create({ _internal, content });
   },
 
   _createObjectModel(_internal) {
-    return this._modelFactory('object').create({ _internal });
+    return this._documentsModelFactory('object').create({ _internal });
   },
 
   _createArrayModel(_internal) {
     let content = _internal.values;
-    return this._modelFactory('array').create({ _internal, content });
+    return this._documentsModelFactory('array').create({ _internal, content });
   },
 
   _changesModelFactory(name) {
-    return this._modelFactory(`changes/${name}`);
+    return this._documentsModelFactory(`changes/${name}`);
   },
 
   _createDatabaseChangesModel(_internal) {
@@ -45,30 +45,30 @@ export default Ember.Mixin.create({
   },
 
   _createDocumentProxy(_internal) {
-    return this._modelFactory('proxy/document').create({ _internal });
+    return this._documentsModelFactory('proxy/document').create({ _internal });
   },
 
   _createArrayProxy(_internal) {
     let content = _internal.values;
-    return this._modelFactory('proxy/array').create({ _internal, content });
+    return this._documentsModelFactory('proxy/array').create({ _internal, content });
   },
 
   _createPaginatedProxy(_internal) {
     let all = _internal.all;
     let content = _internal.values;
-    return this._modelFactory('proxy/paginated').create({ _internal, all, content });
+    return this._documentsModelFactory('proxy/paginated').create({ _internal, all, content });
   },
 
   _createFilter(_internal) {
-    return this._modelFactory('filter').create({ _internal });
+    return this._documentsModelFactory('filter').create({ _internal });
   },
 
   _createQueryLoader(_internal) {
-    return this._modelFactory('query-loader').create({ _internal });
+    return this._documentsModelFactory('query-loader').create({ _internal });
   },
 
   _createPaginatedLoader(_internal) {
-    return this._modelFactory('paginated-loader').create({ _internal });
+    return this._documentsModelFactory('paginated-loader').create({ _internal });
   }
 
 });

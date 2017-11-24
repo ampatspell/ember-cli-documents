@@ -4,15 +4,39 @@
   font-weight: 400;
 }
 
+@mixin input-autofill() {
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:active,
+  &:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 20px white inset !important;
+  }
+}
+
 input[type='text'],
 input[type='password'] {
   -webkit-appearance: none;
-  border: none;
+  outline: none;
+  @include input-font;
+  @include input-autofill;
+  display: inline-block;
+  padding: 8px 10px;
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+button,
+input[type='button'] {
+  -webkit-appearance: none;
   outline: none;
   @include input-font;
   display: inline-block;
-  padding: 5px 5px;
-  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #eee;
+  color: #000;
 }
 
 form, .form {

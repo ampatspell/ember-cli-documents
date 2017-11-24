@@ -1,14 +1,10 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { assign, merge } from '@ember/polyfills';
+import { reject, resolve } from 'rsvp';
 import Operation from './-operation';
 import DocumentsError from '../util/error';
 
-const {
-  merge,
-  assign,
-  RSVP: { resolve }
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __scheduleInternalOperation(label, internal, props, before, resolve, reject, fn) {
     let op = new Operation(label, assign({ internal }, props), fn, before, resolve, reject);
@@ -23,13 +19,10 @@ export default Ember.Mixin.create({
     let existing = this._internalDocumentWithId(id);
 
     if(!existing || existing === internal) {
-      return;
+      return true;
     }
 
-    throw new DocumentsError({
-      error: 'conflict',
-      reason: 'Document update conflict'
-    });
+    return false;
   },
 
   __reloadInternalAttachments(internal, json) {
@@ -46,7 +39,12 @@ export default Ember.Mixin.create({
       return resolve(internal);
     }
 
-    this.__validateInternalDocumentUniqueness(internal);
+    if(!this.__validateInternalDocumentUniqueness(internal)) {
+      return reject(internal.onError(new DocumentsError({
+        error: 'conflict',
+        reason: 'Document update conflict'
+      }), true));
+    }
 
     internal.setState('onSaving');
 

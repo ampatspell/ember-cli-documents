@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { A } from '@ember/array';
 import InternalBase, { empty } from './-base';
 import SerializeDeserializeMixin from './-serialize-deserialize-mixin';
 import { toModel, toInternal, isInternal } from 'documents/util/internal';
-
-const {
-  A
-} = Ember;
 
 export default class InternalArray extends SerializeDeserializeMixin(InternalBase) {
 

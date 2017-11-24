@@ -1,11 +1,7 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
 import ProxyInternal from './-proxy';
 import PaginatedFilter from './paginated-filter';
 import { isFunction } from 'documents/util/assert';
-
-const {
-  merge
-} = Ember;
 
 export default class PaginatedProxyInternal extends ProxyInternal {
 

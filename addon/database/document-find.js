@@ -1,9 +1,6 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { A } from '@ember/array';
 import { toModel } from 'documents/util/internal';
-
-const {
-  A
-} = Ember;
 
 const wrapMatch = opts => {
   if(typeof opts.match === 'function') {
@@ -16,7 +13,7 @@ const wrapMatch = opts => {
   return opts;
 }
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   find(opts) {
     return this._internalDocumentFind(opts).then(({ type, result }) => {

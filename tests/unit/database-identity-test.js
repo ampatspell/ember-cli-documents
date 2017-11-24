@@ -1,21 +1,17 @@
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-
-const {
-  run
-} = Ember;
 
 module('database-identity');
 
 test('it exists', function(assert) {
-  let identity = this.db.get('identity');
+  let identity = this.db.get('documentsIdentity');
   assert.ok(identity);
   assert.ok(identity.get('length') === 0);
 });
 
 test('identity includes new docs', function(assert) {
-  let identity = this.db.get('identity');
+  let identity = this.db.get('documentsIdentity');
   assert.ok(identity.get('length') === 0);
   let doc = this.db.doc();
   assert.ok(identity.get('length') === 1);
@@ -23,7 +19,7 @@ test('identity includes new docs', function(assert) {
 });
 
 test('docs are removed from identity', function(assert) {
-  let identity = this.db.get('identity');
+  let identity = this.db.get('documentsIdentity');
   assert.ok(identity.get('length') === 0);
 
   let doc = this.db.doc();
@@ -35,14 +31,14 @@ test('docs are removed from identity', function(assert) {
 });
 
 test('identity is immutable', function(assert) {
-  let identity = this.db.get('identity');
+  let identity = this.db.get('documentsIdentity');
 
   try {
     identity.pushObject('foo');
   } catch(err) {
     assert.deepEqual(err.toJSON(), {
       "error": "internal",
-      "reason": "database.identity is immutable"
+      "reason": "immutable array"
     });
   }
 
@@ -53,7 +49,7 @@ test('identity is immutable', function(assert) {
   } catch(err) {
     assert.deepEqual(err.toJSON(), {
       "error": "internal",
-      "reason": "database.identity is immutable"
+      "reason": "immutable array"
     });
   }
 });

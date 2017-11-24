@@ -1,8 +1,10 @@
-import Ember from 'ember';
+import Service from '@ember/service';
 import StoresStore from './stores/store';
-import StoresIdentity from './stores/identity';
+import StoresDocumentsIdentity from './stores/documents-identity';
+import StoresModelsIdentity from './stores/models-identity';
 
-export default Ember.Service.extend(
+export default Service.extend(
   StoresStore,
-  StoresIdentity
+  StoresDocumentsIdentity,
+  StoresModelsIdentity
 );

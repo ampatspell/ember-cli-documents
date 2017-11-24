@@ -1,14 +1,9 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
+import { A } from '@ember/array';
 import Base from './-base';
-import ModelMixin from './-model-mixin';
-import { isFunction, isArray } from 'documents/util/assert';
+import { isFunction, isArray, isBoolean } from 'documents/util/assert';
 
-const {
-  merge,
-  copy
-} = Ember;
-
-export default class BaseProxyInternal extends ModelMixin(Base) {
+export default class BaseProxyInternal extends Base {
 
   constructor(store, database, owner, opts) {
     super();
@@ -23,12 +18,13 @@ export default class BaseProxyInternal extends ModelMixin(Base) {
   _normalizeOptions(opts) {
     opts = merge({ autoload: true, owner: [], document: [] }, opts);
     let { autoload, query, matches, owner, document } = opts;
+    isBoolean('autoload', autoload);
     isFunction('query', query);
     isFunction('matches', matches);
     isArray('owner', owner);
     isArray('document', document);
-    owner = copy(owner);
-    document = copy(document);
+    owner = A(owner).compact();
+    document = A(document).compact();
     return { autoload, owner, document, matches, query };
   }
 

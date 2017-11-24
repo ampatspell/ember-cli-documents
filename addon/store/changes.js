@@ -1,7 +1,7 @@
-import Ember from 'ember';
-import Mixin from '../changes/-mixin';
+import Mixin from '@ember/object/mixin';
+import ChangesMixin from '../changes/-mixin';
 
-export default Ember.Mixin.create(Mixin, {
+export default Mixin.create(ChangesMixin, {
 
   __createInternalChanges(opts) {
     return this._createInternalStoreChanges(opts);

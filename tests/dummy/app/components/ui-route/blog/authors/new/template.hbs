@@ -1,0 +1,29 @@
+<div class="row">
+  {{author}}
+</div>
+
+{{#if author.doc.isError}}
+  <div class="row">
+    {{ui-block/json author.doc.error}}
+  </div>
+{{/if}}
+
+<div class="form">
+  <div class="row">
+    {{input placeholder='Name' value=author.doc.name}}
+  </div>
+  <div class="row">
+    {{input placeholder='Email' value=author.doc.email}}
+  </div>
+  <div class="row">
+    <button {{action 'save'}} disabled={{author.doc.isSaving}}>{{if author.doc.isNew 'Save' 'Update'}}</button>
+  </div>
+</div>
+
+<div class="row">
+  {{ui-block/json author.doc.serialized}}
+</div>
+
+<div class="row">
+  {{ui-block/json author.doc.state}}
+</div>

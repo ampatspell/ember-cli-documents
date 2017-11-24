@@ -1,15 +1,12 @@
-import Ember from 'ember';
+import EmberObject from '@ember/object';
+import { A } from '@ember/array';
+import { run } from '@ember/runloop';
+import { all } from 'rsvp';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { getDefinition, prop } from 'documents/properties';
-import byIds from 'documents/properties/find-by-ids';
 import { pick } from 'documents/util/object';
-
-const {
-  A,
-  run,
-  RSVP: { all }
-} = Ember;
+import { findByIds } from '../helpers/properties';
 
 module('property-by-ids', {
   beforeEach() {
@@ -18,9 +15,9 @@ module('property-by-ids', {
 });
 
 test('build', function(assert) {
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckIds: [ 'yellow' ],
-    doc: byIds({ database: 'db', ids: prop('duckIds') })
+    doc: findByIds({ database: 'db', ids: prop('duckIds') })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -32,8 +29,8 @@ test('build', function(assert) {
     document: [ 'id' ]
   });
 
-  assert.ok(!opts.matches(Ember.Object.create({ id: 'green' }), owner));
-  assert.ok(opts.matches(Ember.Object.create({ id: 'yellow' }), owner));
+  assert.ok(!opts.matches(EmberObject.create({ id: 'green' }), owner));
+  assert.ok(opts.matches(EmberObject.create({ id: 'yellow' }), owner));
 
   assert.deepEqual(opts.query(owner), {
     all: true,
@@ -48,9 +45,9 @@ test('load', async function(assert) {
     this.docs.save({ _id: 'green' })
   ]);
 
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckIds: A([]),
-    docs: byIds({ database: 'db', ids: prop('duckIds') })
+    docs: findByIds({ database: 'db', ids: prop('duckIds') })
   });
 
   let owner = Owner.create({ db: this.db });
@@ -86,9 +83,9 @@ test('manual load', async function(assert) {
     this.docs.save({ _id: 'green' })
   ]);
 
-  let Owner = Ember.Object.extend({
+  let Owner = EmberObject.extend({
     duckIds: A([ 'green', 'yellow' ]),
-    docs: byIds({ database: 'db', ids: prop('duckIds'), autoload: false })
+    docs: findByIds({ database: 'db', ids: prop('duckIds'), autoload: false })
   });
 
   let owner = Owner.create({ db: this.db });

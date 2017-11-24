@@ -1,8 +1,4 @@
-import Ember from 'ember';
-
-const {
-  run: { cancel, next }
-} = Ember;
+import { next, cancel } from '@ember/runloop';
 
 export default class Queue {
 
@@ -11,9 +7,16 @@ export default class Queue {
     this.operation = null;
   }
 
+  _isIdle() {
+    return !this.operation && this.array.length === 0;
+  }
+
   add(operation) {
+    let idle = this._isIdle();
     this.array.push(operation);
-    this._scheduleNext();
+    if(idle) {
+      this._next();
+    }
     return operation;
   }
 

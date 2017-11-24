@@ -15,8 +15,8 @@ export default Class => class ModelMixin extends Class {
     let model = this._model;
     if(!model && create) {
       model = this._createModel();
-      this._didCreateModel(model);
       this._model = model;
+      this._didCreateModel(model);
     }
     return model;
   }

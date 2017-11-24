@@ -1,10 +1,7 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
+import { A } from '@ember/array';
 
-const {
-  A
-} = Ember;
-
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   __deserialzieShoeboxDocument(doc) {
     return this._deserializeDocument(doc, 'shoebox');

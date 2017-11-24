@@ -1,9 +1,6 @@
-import Ember from 'ember';
-
-const {
-  computed,
-  assign
-} = Ember;
+import Mixin from '@ember/object/mixin';
+import { computed } from '@ember/object';
+import { assign } from '@ember/polyfills';
 
 export default (keys, fn) => {
 
@@ -27,5 +24,5 @@ export default (keys, fn) => {
     return this._internal.state.get();
   }).readOnly();
 
-  return Ember.Mixin.create(assign({}, getters, { state }));
+  return Mixin.create(assign({}, getters, { state }));
 };
