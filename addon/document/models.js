@@ -1,17 +1,9 @@
 import ArrayProxy from '@ember/array/proxy';
-import ModelMixin from './-model-mixin';
+import BaseModelMixin from './-model-mixin';
 import TransformMixin from './-array-transform-mixin';
-import { property } from './-properties';
+import { ModelMixin, reopenModel } from './model';
 
-const store = property('store');
-const database = property('database');
-
-const Models = ArrayProxy.extend(ModelMixin, TransformMixin, {
-
-  store: store(),
-  database: database(),
-
-});
+const Models = reopenModel(ArrayProxy.extend(BaseModelMixin, ModelMixin, TransformMixin));
 
 const GeneratedModels = Models.extend({
   toStringExtension() {

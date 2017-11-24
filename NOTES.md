@@ -1,9 +1,9 @@
 # TODO
 
+* lookup generated models in data adapter
 * option to set models source as a string: `this.__array = this.model().get(this._array)`
 * assert models source item type. `item._internal._ref` thingie
 * simplify internal model and models creation -- have a `{ source: array, props: ... }` hash. see `database/models`
-* list `stores.modelsIdentity` in `DataAdapter`
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
 * maybe add `isLoaded` function in proxy opts to determine whether load should happen
 * rename `addon/document` to `addon/models` and separate base, documents and proxies

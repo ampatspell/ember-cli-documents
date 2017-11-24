@@ -1,3 +1,4 @@
+import { computed } from '@ember/object';
 import { readOnly } from '@ember/object/computed';
 import { Model } from 'documents';
 import StateRestore from './state/-restore';
@@ -10,6 +11,14 @@ export default Model.extend(
 
   session: readOnly('store.session'),
 
-  blog: state({ type: 'state/blog' })
+  blog: state({ type: 'state/blog' }),
+
+  _sessionInfo: computed('session.{isAuthenticated,name,roles}', function() {
+    return this.get('session').getProperties('isAuthenticated', 'name', 'roles');
+  }),
+
+}).reopenClass({
+
+  debugColumns: [ '_databaseIdentifier', '_sessionInfo' ]
 
 });

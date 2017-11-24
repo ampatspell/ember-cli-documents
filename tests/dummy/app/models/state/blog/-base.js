@@ -1,5 +1,6 @@
 import { Model } from 'documents';
 import { equal } from '@ember/object/computed';
+import { computed } from '@ember/object';
 
 export default Model.extend({
 
@@ -15,6 +16,14 @@ export default Model.extend({
   async docById(id) {
     let type = this.get('type');
     return await this.get('database').first({ id, match: doc => doc.get('type') === type });
-  }
+  },
+
+  _numberOfDocuments: computed('docs.length', function() {
+    return this.get('docs.length');
+  })
+
+}).reopenClass({
+
+  debugColumns: [ 'type', '_numberOfDocuments' ]
 
 });
