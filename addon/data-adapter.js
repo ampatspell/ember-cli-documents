@@ -1,13 +1,19 @@
 import DataAdapter from '@ember/debug/data-adapter';
 import { inject as service } from '@ember/service';
 import { get, set } from '@ember/object';
+import { addObserver, removeObserver } from '@ember/object/observers';
 import { typeOf } from '@ember/utils';
+import { A } from '@ember/array';
+import { capitalize, dasherize } from '@ember/string';
 import Model from './document/model';
 import Models from './document/models';
 
-// https://github.com/emberjs/data/blob/master/addon/-private/system/debug/debug-adapter.js
-
 const __documents_data_adapter_name = '__documents_data_adapter_name';
+
+const keyToColumDescription = key => {
+  key = key.replace(/^(_)*/, '');
+  return capitalize(dasherize(key)).replace(/-/g, ' ');
+};
 
 export default DataAdapter.extend({
 
@@ -41,14 +47,13 @@ export default DataAdapter.extend({
     return true;
   },
 
-  columnsForType(typeClass) {
-    let debug = get(typeClass, '_debug');
-    let columns = debug && debug.columns || [];
-    return columns;
-  },
-
   getRecords(modelClass) {
     return this.get('stores.modelsIdentity').modelsByClass(modelClass);
+  },
+
+  columnsForType(typeClass) {
+    let debug = A(get(typeClass, 'debugColumns') || []);
+    return debug.map(key => ({ name: key, desc: keyToColumDescription(key) }));
   },
 
   getRecordColumnValues(model) {
@@ -58,6 +63,17 @@ export default DataAdapter.extend({
       values[col.name] = model.get(col.name);
     });
     return values;
+  },
+
+  observeRecord(model, recordUpdated) {
+    let release = A();
+    let keys = A(this.columnsForType(model.constructor).map(col => col.name));
+    keys.forEach(key => {
+      let handler = () => recordUpdated(this.wrapRecord(model));
+      addObserver(model, key, handler);
+      release.push(() => removeObserver(model, key, handler));
+    });
+    return () => release.forEach(fn => fn());
   }
 
 });
