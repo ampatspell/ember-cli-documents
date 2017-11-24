@@ -31,6 +31,7 @@ export default Model.extend({
   id: null,
   doc: byId({ id: prop('id') }),
 
+  rev: readOnly('doc.rev'),
   serialized: readOnly('doc.serialized'),
   state: readOnly('doc.content.state'),
 
@@ -38,5 +39,9 @@ export default Model.extend({
     await this.get('doc').load();
     return this;
   }
+
+}).reopenClass({
+
+  debugColumns: [ '_databaseIdentifier', 'id', 'rev', 'state' ]
 
 });
