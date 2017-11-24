@@ -1,6 +1,5 @@
-import Mixin from '@ember/object/mixin';
+import { Model, Error } from 'documents';
 import { all } from 'rsvp';
-import { Error } from 'documents';
 
 /* global emit */
 const ddocs = {
@@ -15,7 +14,6 @@ const ddocs = {
     }
   },
   blog: {
-    version: 1,
     views: {
       'by-owner': {
         map(doc) {
@@ -29,7 +27,7 @@ const ddocs = {
   }
 };
 
-export default Mixin.create({
+export default Model.extend({
 
   async _recreateDatabase() {
     return await this.get('database.documents.database').recreate();
@@ -51,11 +49,12 @@ export default Mixin.create({
     return { recreate, design };
   },
 
-  async _needsSetup() {
+  async validate() {
     let doc = await this.get('database.documents.design').load('main', { optional: true });
     if(!doc || doc.version !== ddocs.main.version) {
-      throw new Error({ error: 'state', reason: 'needs_setup' });
+      return { ok: false, needed: true };
     }
+    return { ok: true };
   }
 
 });

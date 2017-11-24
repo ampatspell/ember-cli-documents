@@ -22,10 +22,6 @@ Router.map(function() {
       });
     });
   });
-  this.route('documents', function() {
-    this.route('document', { path: '/:doc_id' }, function() {
-    });
-  });
   this.route('setup', function() {
   });
 });
