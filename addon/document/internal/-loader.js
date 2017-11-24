@@ -2,7 +2,6 @@ import { allSettled, defer, reject, resolve } from 'rsvp';
 import { A } from '@ember/array';
 import { merge } from '@ember/polyfills';
 import Base from './-base';
-import ModelMixin from './-model-mixin';
 import ObserveOwner from './-observe-owner';
 import DocumentsError from 'documents/util/error';
 import { isObject_ } from 'documents/util/assert';
@@ -30,7 +29,7 @@ class Operation {
 
 const INVALIDATED = {};
 
-export default class Loader extends ObserveOwner(ModelMixin(Base)) {
+export default class Loader extends ObserveOwner(Base) {
 
   constructor(store, parent, database, owner, opts, type) {
     super(store, parent);

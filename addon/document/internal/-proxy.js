@@ -1,10 +1,9 @@
 import { merge } from '@ember/polyfills';
 import { A } from '@ember/array';
 import Base from './-base';
-import ModelMixin from './-model-mixin';
 import { isFunction, isArray, isBoolean } from 'documents/util/assert';
 
-export default class BaseProxyInternal extends ModelMixin(Base) {
+export default class BaseProxyInternal extends Base {
 
   constructor(store, database, owner, opts) {
     super();

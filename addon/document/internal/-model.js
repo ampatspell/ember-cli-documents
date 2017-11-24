@@ -1,10 +1,9 @@
 import { A } from '@ember/array';
 import { assign } from '@ember/polyfills';
 import Base from './-base';
-import ModelMixin from './-model-mixin';
 import normalizeModelOpts from '../../util/normalize-model-opts';
 
-export default class InternalModelBase extends ModelMixin(Base) {
+export default class InternalModelBase extends Base {
 
   constructor(store, parent, database, factory, opts, _ref) {
     super(store, parent);
