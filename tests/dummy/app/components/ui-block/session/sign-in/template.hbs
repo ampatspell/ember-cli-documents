@@ -1,14 +1,14 @@
-{{#if session.isError}}
-  {{ui-block/json session.error class='error'}}
+{{#if changeset.isError}}
+  {{ui-block/json changeset.error class='error'}}
 {{/if}}
 <div class="form">
   <div class="row">
-    {{input placeholder='name' value=session.name enter=(action 'enter') disabled=session.isSaving}}
+    {{input placeholder='name' value=changeset.name enter=(action 'enter') disabled=changeset.isSaving}}
   </div>
   <div class="row">
-    {{input placeholder='password' value=session.password type='password' enter=(action 'enter') disabled=session.isSaving}}
+    {{input placeholder='password' value=changeset.password type='password' enter=(action 'enter') disabled=changeset.isSaving}}
   </div>
   <div class="row">
-    <button {{action 'enter'}} disabled={{session.isSaving}}>Sign-in</button>
+    <button {{action 'enter'}} disabled={{changeset.isSaving}}>Sign-in</button>
   </div>
 </div>

@@ -1,17 +1,17 @@
 import Component from '@ember/component';
-import { readOnly } from '@ember/object/computed';
+import { changeset } from 'dummy/models/session';
 import layout from './template';
 
 export default Component.extend({
   classNameBindings: [ ':ui-block', ':session-sign-in' ],
   layout,
 
-  session: readOnly('state.session'),
+  changeset: changeset(),
 
   actions: {
     async enter() {
       try {
-        await this.get('session').save();
+        await this.get('changeset').commit();
         this.attrs.didSignIn && this.attrs.didSignIn();
       } catch(err) {
         if(err.error !== 'unauthorized') {

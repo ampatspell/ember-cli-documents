@@ -32,7 +32,10 @@ export default {
     app.register('service:store', store, { instantiate: false });
     app.register('service:state', state, { instantiate: false });
 
-    [ 'route', 'component' ].forEach(name => app.inject(name, 'state', 'service:state'));
+    [ 'route', 'component' ].forEach(name => {
+      app.inject(name, 'state', 'service:state');
+      app.inject(name, 'store', 'service:store')
+    });
 
     if(Ember.testing) {
       return;

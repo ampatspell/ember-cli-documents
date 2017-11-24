@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { readOnly } from '@ember/object/computed';
 import layout from './template';
 
 export default Component.extend({
@@ -8,7 +7,6 @@ export default Component.extend({
   layout,
 
   router: service(),
-  session: readOnly('state.session'),
 
   actions: {
     didSignIn() {
