@@ -43,7 +43,7 @@ export default Model.extend({
     return await all(promises);
   },
 
-  async setup() {
+  async perform() {
     let recreate = await this._recreateDatabase();
     let design = await this._insertDesignDocuments();
     return { recreate, design };

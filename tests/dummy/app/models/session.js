@@ -8,6 +8,7 @@ export default Model.extend({
   session: readOnly('store.session'),
 
   isAuthenticated: session('isAuthenticated'),
+  isDirty:         session('isDirty'),
   isSaving:        session('isSaving'),
   isError:         session('isError'),
   name:            session('name'),
