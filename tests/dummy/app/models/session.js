@@ -13,6 +13,7 @@ export default Model.extend({
   isError:         session('isError'),
   name:            session('name'),
   password:        session('password'),
+  roles:           session('roles'),
   error:           session('error'),
 
   async restore() {
@@ -28,4 +29,8 @@ export default Model.extend({
     await this.get('session').delete();
   }
 
-});
+}).reopenClass({
+
+  debugColumns: [ '_storeIdentifier', 'isAuthenticated', 'name', 'roles' ]
+
+})
