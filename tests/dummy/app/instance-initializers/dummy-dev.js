@@ -10,10 +10,8 @@ export default {
     let stores = app.lookup('documents:stores');
     let store = stores.store('remote');
     let database = store.database('main');
-    let state = database.model('state');
+    let state = database.model('state', { store, database });
 
-    app.register('service:stores', stores, { instantiate: false });
-    app.register('service:store', store, { instantiate: false });
     app.register('service:state', state, { instantiate: false });
 
     [ 'route', 'component' ].forEach(name => app.inject(name, 'state', 'service:state'));

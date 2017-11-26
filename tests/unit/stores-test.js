@@ -51,8 +51,7 @@ test('stores destory destroys documents identity', function(assert) {
 test('stores destory destroys models identity', function(assert) {
   let Thing = Model.extend();
   this.register('model:thing', Thing);
-  let store = this.stores.store('default');
-  let model = store.model('thing');
+  let model = this.stores.model('thing');
   let identity = this.stores.get('modelsIdentity');
   assert.equal(identity.modelsByClass(Thing).get('length'), 1);
   run(() => this.stores.destroy());

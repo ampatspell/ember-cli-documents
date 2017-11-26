@@ -3,14 +3,18 @@ import { hash } from 'rsvp';
 import LifecycleMixin from './-lifecycle-mixin';
 
 const state = type => model({
-  create() {
+  create(state) {
     return {
-      type: `state/${type}`
+      type: `state/${type}`,
+      props: state.getProperties('store', 'database')
     };
   }
 });
 
 export default Model.extend(LifecycleMixin, {
+
+  store: null,
+  database: null,
 
   session: state('session'),
   changes: state('changes'),
