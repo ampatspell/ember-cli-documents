@@ -12,7 +12,7 @@ export const ModelMixin = Mixin.create({
   store: store(),
   database: database(),
 
-  _storeIdentifier: readOnly('store._adapter.identifier'),
+  _storeIdentifier: readOnly('store.identifier'),
   _databaseIdentifier: readOnly('database.identifier'),
 
 });

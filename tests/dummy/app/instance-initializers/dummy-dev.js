@@ -1,23 +1,6 @@
-import { Promise } from 'rsvp';
 import Ember from 'ember';
-import environment from '../config/environment';
+import { Promise } from 'rsvp';
 import { getDefinition } from 'documents/properties';
-
-const { COUCHDB_HOST } = environment;
-
-const {
-  Logger: { info }
-} = Ember;
-
-const databaseIdentifierMapping = {
-  main: 'ember-cli-documents-dummy'
-};
-
-const createStore = stores => stores.store({
-  url: `${COUCHDB_HOST}:6016`,
-  fastbootIdentifier: 'dummy-documents',
-  databaseNameForIdentifier: identifier => databaseIdentifierMapping[identifier] || identifier,
-});
 
 export default {
   name: 'dummy:dev',
@@ -25,8 +8,9 @@ export default {
     window.Promise = Promise;
 
     let stores = app.lookup('documents:stores');
-    let store = createStore(stores);
-    let state = store.database('main').model('state');
+    let store = stores.store('remote');
+    let database = store.database('main');
+    let state = database.model('state');
 
     app.register('service:stores', stores, { instantiate: false });
     app.register('service:store', store, { instantiate: false });
@@ -38,11 +22,10 @@ export default {
       return;
     }
 
-    window.log = info;
     window.stores = stores;
     window.store = store;
     window.state = state;
-    window.database = store.get('db.main');
+    window.database = database;
     window.getDefinition = getDefinition;
   }
 };

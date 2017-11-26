@@ -9,7 +9,7 @@ export default EmberObject.extend({
 
   _databaseAdapterFactory() {
     let { adapter, stores } = this.getProperties('adapter', 'stores');
-    return stores.adapterFactory(adapter, 'database');
+    return stores._adapterFactory(adapter, 'database');
   },
 
   createDatabaseAdapter() {

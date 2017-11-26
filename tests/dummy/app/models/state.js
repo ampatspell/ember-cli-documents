@@ -19,6 +19,6 @@ export default Model.extend(
 
 }).reopenClass({
 
-  debugColumns: [ '_databaseIdentifier', '_sessionInfo' ]
+  debugColumns: [ '_storeIdentifier', '_databaseIdentifier', '_sessionInfo' ]
 
 });

@@ -1,21 +1,29 @@
-import { merge } from '@ember/polyfills';
+import { assign } from '@ember/polyfills';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
+import { Stores } from 'documents';
 
 module('store-database-name-mapping', {
   beforeEach() {
-    let databaseNameForIdentifier = identifier => {
-      if(identifier === 'main') {
-        return 'ember-cli-documents';
+    let opts = assign({}, this.config.store, {
+      databaseNameForIdentifier(identifier) {
+        if(identifier === 'main') {
+          return 'ember-cli-documents';
+        }
       }
-    };
-    let config = merge({ databaseNameForIdentifier }, this.config.store);
-    this._store = this.stores.store(config);
+    });
+    this.registerStores(Stores.extend({
+      storeOptionsForIdentifier(identifier) {
+        if(identifier === 'default') {
+          return opts;
+        }
+      }
+    }));
   }
 });
 
 test('lookup by identifier', function(assert) {
-  let db = this._store.database('main');
+  let db = this.store.database('main');
   assert.equal(db.get('identifier'), 'main');
   assert.equal(db.get('name'), 'ember-cli-documents');
   assert.equal(db.get('documents.name'), 'ember-cli-documents');
@@ -23,7 +31,7 @@ test('lookup by identifier', function(assert) {
 
 test('invalid identifier', function(assert) {
   try {
-    this._store.database('foof');
+    this.store.database('foof');
     assert.ok(false, 'should throw');
   } catch(err) {
     assert.deepEqual(err.toJSON(), {
