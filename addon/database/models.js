@@ -1,5 +1,4 @@
 import Mixin from '@ember/object/mixin';
-import { assign } from '@ember/polyfills';
 import normalizeModelOpts from '../util/normalize-model-opts';
 import mergeModelOpts from '../util/merge-model-opts';
 
