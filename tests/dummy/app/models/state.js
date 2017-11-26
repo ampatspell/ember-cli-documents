@@ -1,24 +1,27 @@
-import { computed } from '@ember/object';
-import { readOnly } from '@ember/object/computed';
-import { Model } from 'documents';
-import StateRestore from './state/-restore';
-import StateSetup from './state/-setup';
-import { state } from './-model';
+import { Model, model } from 'documents';
+import { hash } from 'rsvp';
+import LifecycleMixin from './-lifecycle-mixin';
 
-export default Model.extend(
-  StateRestore,
-  StateSetup, {
+const state = type => model({
+  create() {
+    return {
+      type: `state/${type}`
+    };
+  }
+});
 
-  session: readOnly('store.session'),
+export default Model.extend(LifecycleMixin, {
 
-  blog: state({ type: 'state/blog' }),
+  session: state('session'),
+  changes: state('changes'),
+  setup:   state('setup'),
 
-  _sessionInfo: computed('session.{isAuthenticated,name,roles}', function() {
-    return this.get('session').getProperties('isAuthenticated', 'name', 'roles');
-  }),
-
-}).reopenClass({
-
-  debugColumns: [ '_storeIdentifier', '_databaseIdentifier', '_sessionInfo' ]
+  async restore() {
+    return await hash({
+      changes: this.get('changes').start(),
+      session: this.get('session').restore(),
+      setup:   this.get('setup').validate()
+    });
+  }
 
 });
