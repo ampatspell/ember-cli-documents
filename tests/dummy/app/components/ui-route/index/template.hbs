@@ -3,3 +3,23 @@
   <p>window.store = {{state.store}}</p>
   <p>window.database = {{state.store.db.main}}</p>
 </div>
+
+<div class="row">
+  {{#if docs.isLoading}}
+    Loading…
+  {{else}}
+    {{#each docs as |doc|}}
+      <div>{{doc.id}} {{doc.rev}}</div>
+    {{/each}}
+  {{/if}}
+</div>
+
+<div class="row">
+  {{#if docs.isLoading}}
+    Loading…
+  {{else}}
+    {{#each models as |model|}}
+      <div>{{model}}</div>
+    {{/each}}
+  {{/if}}
+</div>

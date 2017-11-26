@@ -1,7 +1,8 @@
 # TODO
 
-* lookup generated models in data adapter
+* models are created w/o store and database
 * option to set models source as a string: `this.__array = this.model().get(this._array)`
+* lookup generated models in data adapter
 * assert models source item type. `item._internal._ref` thingie
 * test for 2 parallel document saves without id
 * load document with `_conflicts:true` and conflict resolution
