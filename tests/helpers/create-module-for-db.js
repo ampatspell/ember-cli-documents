@@ -36,8 +36,10 @@ const defaultConfig = configs['couchdb-1.6'];
 export const availableIdentifiers = Object.keys(configs);
 
 const createStoresFactoryForConfig = config => Stores.extend({
-  storeOptionsForIdentifier() {
-    return config;
+  storeOptionsForIdentifier(identifier) {
+    if(identifier === 'default') {
+      return config;
+    }
   }
 });
 
