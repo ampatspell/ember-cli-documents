@@ -4,7 +4,7 @@ export default Route.extend({
 
   async beforeModel() {
     try {
-      await this.get('state').restore();
+     await this.get('state').restore();
     } catch(err) {
       if(err.reason === 'needs_setup') {
         this.transitionTo('setup');
