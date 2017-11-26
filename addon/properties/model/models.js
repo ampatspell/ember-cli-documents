@@ -2,7 +2,7 @@ import { isArrayOrArrayProxy } from '../../util/assert';
 import createModel from './-create-model';
 
 export default createModel({
-  create(opts, definition, store, database, _parent) {
+  create(stores, opts, definition, _parent) {
     let { type, props, source } = definition;
 
     if(type === null) {
@@ -17,8 +17,7 @@ export default createModel({
 
     let model = opts.model;
 
-    return store._createInternalModels({
-      database,
+    return stores._createInternalModels({
       source,
       type,
       props,
