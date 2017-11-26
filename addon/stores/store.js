@@ -43,7 +43,7 @@ export default Mixin.create(StoresRegistry, {
   _storeOptionsForIdentifier(identifier) {
     let opts = this.storeOptionsForIdentifier(identifier);
     isObject('storeOptionsForIdentifier result', opts);
-    return assign({ adapter: 'couch' }, opts);
+    return assign({ adapter: 'couch', fastboot: true }, opts);
   },
 
   _createStoreForIdentifier(identifier) {
@@ -54,14 +54,14 @@ export default Mixin.create(StoresRegistry, {
     let _adapter = Adapter.create({
       stores: this,
       adapter: opts.adapter,
-      opts: omit(opts, [ 'adapter', 'databaseNameForIdentifier' ])
+      opts: omit(opts, [ 'adapter', 'databaseNameForIdentifier', 'fastboot' ])
     });
 
     let store = this._storeFactory().create({
       stores: this,
       identifier,
       _adapter,
-      _opts: pick(opts, [ 'databaseNameForIdentifier' ])
+      _opts: pick(opts, [ 'databaseNameForIdentifier', 'fastboot' ])
     });
 
     _adapter.setProperties({ store });

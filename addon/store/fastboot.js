@@ -11,7 +11,7 @@ export default Mixin.create({
     ]);
   },
 
-  __enableFastBootWithIdentifier(identifier) {
+  __enableFastBoot() {
     let fastboot = getOwner(this).lookup('service:fastboot');
     if(!fastboot) {
       return;
@@ -22,7 +22,9 @@ export default Mixin.create({
       return;
     }
 
+    let identifier = this.get('identifier');
     let store = this;
+
     if(fastboot.get('isFastBoot')) {
       fastboot.deferRendering(store.__fastbootDefer());
       shoebox.put(identifier, {
@@ -44,9 +46,9 @@ export default Mixin.create({
   },
 
   _didInitialize() {
-    let identifier = get(this._opts, 'fastbootIdentifier');
-    if(identifier) {
-      this.__enableFastBootWithIdentifier(identifier);
+    let enabled = get(this, '_opts.fastboot');
+    if(enabled) {
+      this.__enableFastBoot();
     }
   }
 
