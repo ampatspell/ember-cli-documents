@@ -1,9 +1,10 @@
 import { Model } from 'documents';
 import { readOnly, alias } from '@ember/object/computed';
+import LifecycleMixin from '../-lifecycle-mixin';
 
 const session = name => alias(`session.${name}`);
 
-export default Model.extend({
+export default Model.extend(LifecycleMixin, {
 
   session: readOnly('store.session'),
 

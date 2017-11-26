@@ -1,15 +1,16 @@
 import { Model, model } from 'documents';
 import { hash } from 'rsvp';
+import LifecycleMixin from './-lifecycle-mixin';
 
 const state = type => model({
   create() {
     return {
-      type
+      type: `state/${type}`
     };
   }
 });
 
-export default Model.extend({
+export default Model.extend(LifecycleMixin, {
 
   session: state('session'),
   changes: state('changes'),

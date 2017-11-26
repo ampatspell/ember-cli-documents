@@ -1,4 +1,5 @@
 import { Model } from 'documents';
+import LifecycleMixin from '../-lifecycle-mixin';
 import { all } from 'rsvp';
 
 /* global emit */
@@ -27,7 +28,7 @@ const ddocs = {
   }
 };
 
-export default Model.extend({
+export default Model.extend(LifecycleMixin, {
 
   async _recreateDatabase() {
     return await this.get('database.documents.database').recreate();
