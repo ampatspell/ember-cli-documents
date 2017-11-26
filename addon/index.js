@@ -16,3 +16,7 @@ export {
   model,
   models
 } from './properties';
+
+export {
+  default as Stores
+} from './stores';
