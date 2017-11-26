@@ -1,11 +1,12 @@
 import Mixin from '@ember/object/mixin';
 import { assign } from '@ember/polyfills';
 import normalizeModelOpts from '../util/normalize-model-opts';
+import mergeModelOpts from '../util/merge-model-opts';
 
 export default Mixin.create({
 
   __mergeInternalModelOptions(opts) {
-    return assign({ store: this }, opts);
+    return mergeModelOpts(opts, { store: this });
   },
 
   _createInternalModel(...args) {
