@@ -3,6 +3,7 @@ import Mixin from '@ember/object/mixin';
 export default Mixin.create({
 
   stores: null,
+  identifier: null,
 
   _adapter: null,
   _opts: null,

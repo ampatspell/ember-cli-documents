@@ -6,6 +6,7 @@ import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
 import environment from '../../config/environment';
 import tap from './tap-document-requests';
+import { Stores } from 'documents';
 
 const host = environment.COUCHDB_HOST;
 
@@ -33,6 +34,14 @@ for(let key in configs) {
 const defaultConfig = configs['couchdb-1.6'];
 
 export const availableIdentifiers = Object.keys(configs);
+
+const createStoresFactoryForConfig = config => Stores.extend({
+  storeOptionsForIdentifier(identifier) {
+    if(identifier === 'default') {
+      return config;
+    }
+  }
+});
 
 export default identifier => {
   let config = identifier ? configs[identifier] : defaultConfig;
@@ -65,8 +74,10 @@ export default identifier => {
       beforeEach() {
         this.application = startApp();
         this.instance = this.application.buildInstance();
+        this.registerStores = Stores => this.instance.register('documents:stores', Stores);
+        this.registerStores(createStoresFactoryForConfig(config.store));
         getter(this, 'stores', () => this.instance.lookup('documents:stores'));
-        getter(this, 'store', () => this.stores.store(config.store));
+        getter(this, 'store', identifier => this.stores.store(identifier || 'default'));
         getter(this, 'db', () => this.store.database('ember-cli-documents'));
         getter(this, 'docs', () => this.db.get('documents'));
         getter(this,  'config', () => config);

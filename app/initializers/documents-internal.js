@@ -1,4 +1,4 @@
-import Stores from 'documents/stores';
+import Stores from '../stores';
 import StoresDocumentsIdentity from 'documents/stores/-documents-identity';
 import StoresModelsIdentity from 'documents/stores/-models-identity';
 
