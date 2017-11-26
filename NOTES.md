@@ -22,6 +22,20 @@
 
 # Notes
 
+## stores, store, database lookup
+
+``` javascript
+doc: first({ database: 'remote.main', ... }) // with or without prop(). Database instance or string
+
+model: model({
+  create(owner, stores) {
+    let store = stores.store('remote');
+    let database = store.database('main');
+    return { store, database };
+  }
+});
+```
+
 ## all-paginated
 
 ``` javascript
