@@ -3,6 +3,10 @@ import LifecycleMixin from './-lifecycle-mixin';
 
 export default Model.extend(LifecycleMixin, {
 
-  doc: null
+  doc: null,
+
+  toStringExtension() {
+    return this.get('doc.id');
+  }
 
 });
