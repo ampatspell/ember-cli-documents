@@ -12,6 +12,9 @@ export default class InternalModelBase extends Base {
     this.opts = opts;
     this._models = null;
     this._ref = _ref;
+    if(parent) {
+      parent._registerChildModel(this);
+    }
   }
 
   models(create) {
@@ -23,11 +26,13 @@ export default class InternalModelBase extends Base {
     return models;
   }
 
+  _registerChildModel(internal) {
+    this.models(true).push(internal);
+  }
+
   _createInternalModel(...args) {
     let opts = assign({ database: this.database, _parent: this }, normalizeModelOpts(...args));
-    let internal = this.store._createInternalModel(opts);
-    this.models(true).push(internal);
-    return internal;
+    return this.store._createInternalModel(opts);
   }
 
   createModel() {

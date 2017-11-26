@@ -53,7 +53,12 @@ test('create succeeds', function(assert) {
 });
 
 test('create with parent', function(assert) {
-  let _parent = {};
+  assert.expect(2);
+  let _parent = {
+    _registerChildModel() {
+      assert.ok(true);
+    }
+  };
   let internal = this.create({ _parent });
   assert.ok(internal.parent === _parent);
 });
