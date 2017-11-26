@@ -4,7 +4,7 @@ import { assign } from '@ember/polyfills';
 import { dasherize } from '@ember/string';
 import { object } from '../util/computed';
 import { omit, pick } from '../util/object';
-import { assert, isString, isObject, isFunction } from '../util/assert';
+import { assert, isString, isObject } from '../util/assert';
 import createNestedRegistry from '../util/create-nested-registry';
 
 const StoresRegistry = createNestedRegistry({ key: '_stores' });
@@ -43,7 +43,6 @@ export default Mixin.create(StoresRegistry, {
   _storeOptionsForIdentifier(identifier) {
     let opts = this.storeOptionsForIdentifier(identifier);
     isObject('storeOptionsForIdentifier result', opts);
-    isFunction('databaseNameForIdentifier', opts.databaseNameForIdentifier);
     return assign({ adapter: 'couch' }, opts);
   },
 
