@@ -16,16 +16,16 @@ module('internal-models', {
       EmberObject.create({ id: 'green' })
     ];
     this.defaults = {
-      database: this.db,
       type: 'ponyhof',
       source: this.source,
-      props:  { ok: true },
+      props:  { ok: true, database: this.db },
       model: {
         observe: [ 'id' ],
-        create(doc) {
+        create(doc, models) {
+          let { store, database } = models.getProperties('store', 'database');
           return {
             type: 'duck',
-            props: { doc }
+            props: { doc, store, database }
           }
         }
       },
@@ -50,6 +50,8 @@ test('create succeeds', function(assert) {
   let yellow = model.objectAt(0);
   assert.ok(Duck.detectInstance(yellow));
   assert.equal(yellow.get('doc'), this.source.objectAt(0));
+  assert.equal(yellow.get('store'), this.store);
+  assert.equal(yellow.get('database'), this.db);
 });
 
 test('create with parent', function(assert) {
