@@ -8,9 +8,9 @@ test('store exist', function(assert) {
 });
 
 test('store has default adapter with url', function(assert) {
-  let url = 'http://couch:5984';
-  let store = this.stores.store({ url });
-  assert.equal(store.get('_adapter.url'), url);
+  let store = this.stores.store('default');
+  let url = store.get('_adapter.url');
+  assert.equal(url, this.config.store.url);
 });
 
 test('store has a reference to stores', function(assert) {

@@ -74,7 +74,8 @@ export default identifier => {
       beforeEach() {
         this.application = startApp();
         this.instance = this.application.buildInstance();
-        this.instance.register('documents:stores', createStoresFactoryForConfig(config.store));
+        this.registerStores = Stores => this.instance.register('documents:stores', Stores);
+        this.registerStores(createStoresFactoryForConfig(config.store));
         getter(this, 'stores', () => this.instance.lookup('documents:stores'));
         getter(this, 'store', identifier => this.stores.store(identifier || 'default'));
         getter(this, 'db', () => this.store.database('ember-cli-documents'));
