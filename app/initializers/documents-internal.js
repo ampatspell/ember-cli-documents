@@ -4,7 +4,6 @@ import StoresModelsIdentity from 'documents/stores/-models-identity';
 
 import Store from 'documents/store';
 import StoreDocumentsIdentity from 'documents/store/-documents-identity';
-import StoreModelsIdentity from 'documents/store/-models-identity';
 import Databases from 'documents/store/-databases';
 import Session from 'documents/session';
 
@@ -106,10 +105,10 @@ export default {
     container.register('documents:internal/changes/store', InternalStoreChanges);
 
     container.register('documents:stores/documents-identity', StoresDocumentsIdentity);
-    container.register('documents:stores/models-identity', StoresModelsIdentity);
     container.register('documents:store/documents-identity', StoreDocumentsIdentity);
-    container.register('documents:store/models-identity', StoreModelsIdentity);
     container.register('documents:database/documents-identity', DatabaseDocumentsIdentity);
+
+    container.register('documents:stores/models-identity', StoresModelsIdentity);
 
     container.register('documents:proxy/document', DocumentProxy);
     container.register('documents:internal/proxy/document', InternalDocumentProxy);

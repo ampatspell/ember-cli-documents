@@ -4,7 +4,6 @@ import StoreFactoryCache from './store/factory-cache';
 import StoreSession from './store/session';
 import StoreInternalFactory from './store/internal-factory';
 import StoreModelFactory from './store/model-factory';
-import StoreInternalModelsIdentity from './store/internal-models-identity';
 import StoreDatabases from './store/databases';
 import StoreDB from './store/db';
 import StoreDocuments from './store/documents';
@@ -13,7 +12,6 @@ import StoreShoebox from './store/shoebox';
 import StoreFastboot from './store/fastboot';
 import StoreOperations from './store/operations';
 import StoreDocumentsIdentity from './store/documents-identity';
-import StoreModelsIdentity from './store/models-identity';
 import StoreModels from './store/models';
 
 export default EmberObject.extend(
@@ -21,7 +19,6 @@ export default EmberObject.extend(
   StoreFactoryCache,
   StoreSession,
   StoreInternalFactory,
-  StoreInternalModelsIdentity,
   StoreModelFactory,
   StoreDatabases,
   StoreDB,
@@ -31,6 +28,5 @@ export default EmberObject.extend(
   StoreFastboot,
   StoreOperations,
   StoreDocumentsIdentity,
-  StoreModelsIdentity,
   StoreModels
 );
