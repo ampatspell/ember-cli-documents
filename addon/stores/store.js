@@ -1,8 +1,10 @@
 import Mixin from '@ember/object/mixin';
 import { getOwner } from '@ember/application';
 import { assign } from '@ember/polyfills';
+import { dasherize } from '@ember/string';
 import { object } from '../util/computed';
 import { omit, pick } from '../util/object';
+import { assert, isString, isObject, isFunction } from '../util/assert';
 import createNestedRegistry from '../util/create-nested-registry';
 
 const StoresRegistry = createNestedRegistry({ key: '_stores' });
@@ -11,20 +13,20 @@ export default Mixin.create(StoresRegistry, {
 
   _stores: null,
 
-  _storeFactory: null,
-  _adapterFactories: object(),
+  __storeFactory: null,
+  __adapterFactories: object(),
 
-  storeFactory() {
-    let Factory = this._storeFactory;
+  _storeFactory() {
+    let Factory = this.__storeFactory;
     if(!Factory) {
       Factory = getOwner(this).factoryFor('documents:store');
-      this._storeFactory = Factory;
+      this.__storeFactory = Factory;
     }
     return Factory;
   },
 
-  adapterFactory(name, type) {
-    let factories = this.get('_adapterFactories');
+  _adapterFactory(name, type) {
+    let factories = this.get('__adapterFactories');
     let fullName = `${name}/${type}`;
     let factory = factories[fullName];
     if(!factory) {
@@ -34,45 +36,62 @@ export default Mixin.create(StoresRegistry, {
     return factory;
   },
 
-  createStore(opts) {
-    let stores = this;
-    return this.storeFactory().create(assign({ stores }, opts));
+  storeOptionsForIdentifier() {
+    assert('override store.storeOptionsForIdentifier', false);
   },
 
-  store(opts) {
-    opts = assign({ adapter: 'couch' }, opts);
+  _storeOptionsForIdentifier(identifier) {
+    let opts = this.storeOptionsForIdentifier(identifier);
+    isObject('storeOptionsForIdentifier result', opts);
+    isFunction('databaseNameForIdentifier', opts.databaseNameForIdentifier);
+    return assign({ adapter: 'couch' }, opts);
+  },
 
-    let Adapter = this.adapterFactory(opts.adapter, 'store');
-    let identifier = Adapter.class.identifierFor(opts);
+  _createStoreForIdentifier(identifier) {
+    let opts = this._storeOptionsForIdentifier(identifier);
+
+    let Adapter = this._adapterFactory(opts.adapter, 'store');
+
+    let _adapter = Adapter.create({
+      stores: this,
+      adapter: opts.adapter,
+      opts: omit(opts, [ 'adapter', 'databaseNameForIdentifier' ])
+    });
+
+    let store = this._storeFactory().create({
+      stores: this,
+      identifier,
+      _adapter,
+      _opts: pick(opts, [ 'databaseNameForIdentifier' ])
+    });
+
+    _adapter.setProperties({ store });
 
     let registry = this._stores;
-    let store = registry.get(identifier);
+    registry.set(identifier, store);
 
-    if(!store) {
-      let _adapter = Adapter.create({
-        stores: this,
-        identifier,
-        adapter: opts.adapter,
-        opts: omit(opts, [ 'adapter', 'databaseNameForIdentifier', 'fastbootIdentifier' ])
-      });
-
-      store = this.createStore({
-        stores: this,
-        _adapter,
-        _opts: pick(opts, [ 'databaseNameForIdentifier', 'fastbootIdentifier' ])
-      });
-
-      _adapter.setProperties({ store });
-      registry.set(identifier, store);
-
-      store._didInitialize();
-    }
+    store._didInitialize();
 
     return store;
   },
 
+  _normalizeStoreIdentifier(identifier) {
+    isString('identifier', identifier);
+    return dasherize(identifier.trim());
+  },
+
+  store(identifier) {
+    let normalizedIdentifier = this._normalizeStoreIdentifier(identifier);
+    let registry = this._stores;
+    let store = registry.get(normalizedIdentifier);
+    if(!store) {
+      store = this._createStoreForIdentifier(normalizedIdentifier);
+    }
+    return store;
+  },
+
   _storeWillDestroy(store) {
-    let identifier = store.get('_adapter.identifier');
+    let identifier = store.get('identifier');
     this._stores.remove(identifier);
   },
 
