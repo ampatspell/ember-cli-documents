@@ -45,7 +45,7 @@ module('computed-models', {
           }
         })
       });
-      return Subject.create({ store: this.store, database: this.db });
+      return Subject.create({ store: this.store, database: this.db }, this.ownerInjection);
     };
   }
 });

@@ -9,9 +9,8 @@ module('internal-model', {
   beforeEach() {
     this.register('model:duck', Duck);
     this.defaults = {
-      database: this.db,
       type: 'duck',
-      props:  { ok: true },
+      props:  { ok: true, database: this.db },
       _parent: null,
       _ref: null
     };
