@@ -1,4 +1,4 @@
-import { Model, Error } from 'documents';
+import { Model } from 'documents';
 import { all } from 'rsvp';
 
 /* global emit */
