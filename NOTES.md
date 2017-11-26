@@ -22,6 +22,45 @@
 
 # Notes
 
+## Store identifier, creation refactoring
+
+``` javascript
+// services/stores.js
+export default Stores.extend({
+
+  storeOptionsForIdentifier(identifier) {
+    if(identifier ==== 'remote') {
+      return {
+        // currently used 'fastbootIdentifier' === identifier
+        adapter: 'couch',             // default
+        url: 'http://127.0.0.1:5984', // required
+        databaseNameForIdentifier: identifier => databaseIdentifierMapping[identifier] || identifier // required?
+      }
+    }
+  },
+
+});
+```
+
+``` javascript
+StoresStoreMixin.create({
+
+  storeOptionsForIdentifier(identifier) {
+    throw new Error({ error: 'assertion', reason: 'override storeOptionsForIdentifier' });
+  },
+
+  store(identifier) {
+    // lookup existing or create
+  }
+
+});
+```
+
+``` javascript
+stores.get('remote.main'); // doesn't create stores and databases. lookups existing only
+stores.get('store.main.db.main'); // TODO: can I hack this in?
+```
+
 ## stores, store, database lookup
 
 ``` javascript
