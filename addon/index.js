@@ -14,7 +14,10 @@ export {
   find,
   paginated,
   model,
-  models
+  models,
+  stores,
+  store,
+  database,
 } from './properties';
 
 export {
