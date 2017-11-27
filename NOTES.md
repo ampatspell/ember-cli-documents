@@ -1,6 +1,6 @@
 # TODO
 
-* option to set models source as a string: `this.__array = this.model().get(this._array)`
+* Models with `source` and `model` props in Models instance
 * assert models source item type. `item._internal._ref` thingie
 * test for 2 parallel document saves without id
 * load document with `_conflicts:true` and conflict resolution
@@ -19,6 +19,61 @@
 * come up with an API for conflict resolution
 
 # Notes
+
+## Models with `source` and `model` props
+
+``` javascript
+// models/documents.js
+export default Models.extend({
+
+  database: null,
+
+  source: find({
+    database: 'database',
+    query() {
+      return { all: true }
+    },
+    matches() {
+      return true;
+    }
+  }),
+
+  model: {
+    observe: [],
+    create(doc) {
+      return {
+        type: 'document',
+        props: { doc }
+      };
+    }
+  }
+
+})
+```
+
+``` javascript
+export default Component.extend({
+
+  database: database('remote', 'main'),
+
+  models: models({
+    owner: [ 'database' ],
+    create(owner) {
+      let database = owner.get('database');
+      if(!database) {
+        return;
+      }
+      return {
+        type: 'documents',
+        props: {
+          database
+        }
+      };
+    }
+  }),
+
+})
+```
 
 ## all-paginated
 
