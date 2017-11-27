@@ -5,7 +5,7 @@ import StoreSession from './store/session';
 import StoreInternalFactory from './store/internal-factory';
 import StoreModelFactory from './store/model-factory';
 import StoreDatabases from './store/databases';
-import StoreDB from './store/db';
+import StoreId from './store/id';
 import StoreDocuments from './store/documents';
 import StoreChanges from './store/changes';
 import StoreShoebox from './store/shoebox';
@@ -21,7 +21,7 @@ export default EmberObject.extend(
   StoreInternalFactory,
   StoreModelFactory,
   StoreDatabases,
-  StoreDB,
+  StoreId,
   StoreDocuments,
   StoreChanges,
   StoreShoebox,

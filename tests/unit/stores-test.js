@@ -27,6 +27,12 @@ test('store is created only once', function(assert) {
   assert.ok(one === two);
 });
 
+test('stores.id.identifier', function(assert) {
+  let id = this.stores.get('id.default');
+  let normal = this.stores.store('default');
+  assert.ok(id === normal);
+});
+
 test('stores destory destroys stores', function(assert) {
   let store = this.stores.store('default');
   run(() => this.stores.destroy());

@@ -1,10 +1,11 @@
 import Stores from '../stores';
 import StoresDocumentsIdentity from 'documents/stores/-documents-identity';
 import StoresModelsIdentity from 'documents/stores/-models-identity';
+import StoresId from 'documents/stores/-id';
 
 import Store from 'documents/store';
 import StoreDocumentsIdentity from 'documents/store/-documents-identity';
-import Databases from 'documents/store/-databases';
+import StoreId from 'documents/store/-id';
 import Session from 'documents/session';
 
 import Database from 'documents/database';
@@ -66,9 +67,10 @@ export default {
   name: 'documents:internal',
   initialize(container) {
     container.register('documents:stores', Stores);
+    container.register('documents:stores/id', StoresId);
 
     container.register('documents:store', Store);
-    container.register('documents:databases', Databases);
+    container.register('documents:store/id', StoreId);
     container.register('documents:session', Session);
     container.register('documents:database', Database);
 

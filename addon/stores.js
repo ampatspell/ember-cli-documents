@@ -6,6 +6,7 @@ import StoresFactoryCache from './stores/factory-cache';
 import StoresInternalFactory from './stores/internal-factory';
 import StoresInternalModelsIdentity from './stores/internal-models-identity';
 import StoresModel from './stores/model';
+import StoresId from './stores/id';
 
 export default Service.extend(
   StoresStore,
@@ -14,5 +15,6 @@ export default Service.extend(
   StoresFactoryCache,
   StoresInternalFactory,
   StoresInternalModelsIdentity,
-  StoresModel
+  StoresModel,
+  StoresId
 );
