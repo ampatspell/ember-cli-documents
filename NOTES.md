@@ -23,6 +23,8 @@
 ## Models with `source` and `model` props
 
 * can only be used with non-generated models
+* if non-generated, no source and model, only then move asserts to runtime
+* can provide only source and/or model. not requirement to have both in prop and/or Models
 
 ``` javascript
 // models/documents.js
