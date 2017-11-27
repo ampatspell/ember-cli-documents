@@ -28,9 +28,10 @@ export default DocumentObject.extend(DocumentStateMixin, SerializedMixin, {
   onError: onError(),
 
   toStringExtension() {
+    let store = this.get('database.store.identifier');
     let database = this.get('database.identifier');
     let id = this.get('id') || '';
-    return `${database}/${id}`;
+    return `${store}/${database}/${id}`;
   }
 
 });

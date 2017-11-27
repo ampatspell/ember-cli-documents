@@ -8,6 +8,10 @@ export default Mixin.create({
   _adapter: null,
   _opts: null,
 
+  toStringExtension() {
+    return this.get('identifier');
+  },
+
   willDestroy() {
     this.get('stores')._storeWillDestroy(this);
     this._super();
