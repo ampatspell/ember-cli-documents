@@ -1,8 +1,6 @@
 # TODO
 
-* models are created w/o store and database
 * option to set models source as a string: `this.__array = this.model().get(this._array)`
-* lookup generated models in data adapter
 * assert models source item type. `item._internal._ref` thingie
 * test for 2 parallel document saves without id
 * load document with `_conflicts:true` and conflict resolution
@@ -13,7 +11,6 @@
 * proxy state. deleted doc should have err.error=not_found
 * loader is already loaded if identical query was invoked
 * batch identity adds and removes `this._withIdentityMutation(mutation => ...)`
-* ember inspector integration (for proxies?)
 * array deserialize should diff existing content not just clear existing content
 * have a `json` and `toJSON` instead of `serialized` and `serialize`.
 * `object.copy()` for documents, objects and arrays. makes a detached, deep copy.
@@ -147,8 +144,6 @@ export default EmberObject.extend({
 export default EmberObject.extend({
 
   thing: model({
-    store: 'store',
-    database: 'db',
     owner: [ ...props ],
     create(owner) {
       return {
@@ -167,8 +162,6 @@ export default EmberObject.extend({
 export default EmberObject.extend({
 
   things: models({
-    store: 'store',
-    database: 'db',
     owner: [ ...props ],
     create(owner) {
       return {
@@ -187,110 +180,6 @@ export default EmberObject.extend({
       }
     }
   })
-
-});
-```
-
-## Dummy models
-
-``` javascript
-// models/state
-export default Model.extend({
-
-  session: state('state/session'),
-  blog: state('state/blog'),
-
-});
-
-// mdoels/state/session
-export default Model.extend({
-});
-
-// models/state/blog
-export default Model.extend({
-
-  authors: blog('authors'),
-  blogs: blog('blogs'),
-
-});
-
-// models/blog/blogs
-export default Model.extend({
-
-  docs: byType({ type: 'blog' }),
-
-  models: docs({ type: 'blog/-blogs', model: 'blog/blog' })
-
-});
-
-// models/blog/authors
-export default Model.extend({
-
-  docs: byType({ type: 'author' }),
-
-  models: docs({ type: 'blog/-authors', model: 'blog/author' }),
-
-  async load() {
-    await this.get('docs').load();
-  }
-
-  // or just use db.first()
-
-  async byId(id) {
-    await this.load();
-    return this.get('models').findBy('id', id);
-  }
-
-  async byPermalink(permalink) {
-    let id = `author:${permalink}`;
-    let author = await this.byId(id);
-    assert(`author '${permalink}' not found`, author);
-    return author;
-  }
-
-});
-
-// models/blog/author
-export default Model.extend({
-
-  doc: null,
-
-  id: readOnly('doc.id'),
-  permalink: withoutPrefix({ prefix: 'author', value: prop('id') }),
-
-  // relationship model / models
-  // if Models would support source declared in Models instance itself, `author/blogs` could be Models
-  // do I need to support Model/Models factory? `export default opts => Model.extend(...`?
-  blogs: model({ type: 'blog/author/blogs' })
-
-});
-
-// models/blog/author/blogs
-export default Model.extend({
-
-  parent: null, // model/blog/author
-  docs: hasMany({ type: 'blog', id: prop('parent.id'), key: 'owner' }),
-
-  all: models({ type: 'blog/blog' })
-
-});
-
-// models/blog/author/blogs
-// export default Models.extend({
-//
-//   parent: null,
-//   docs: hasMany({ type: 'blog', id: prop('parent.id'), key: 'owner' })
-//
-// });
-//
-// store.models({ type: 'blog/author/blogs', source: 'docs', ... });
-
-// models/blog/blog
-export default Model.extend({
-
-  doc: null,
-
-  id: readOnly('doc.id'),
 
 });
 ```
