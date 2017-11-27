@@ -1,3 +1,4 @@
+import { getOwner } from '@ember/application';
 import { run } from '@ember/runloop';
 import { resolve } from 'rsvp';
 import { assert } from '@ember/debug';
@@ -81,6 +82,7 @@ export default identifier => {
         getter(this, 'db', () => this.store.database('ember-cli-documents'));
         getter(this, 'docs', () => this.db.get('documents'));
         getter(this,  'config', () => config);
+        getter(this, 'ownerInjection', () => getOwner(this.stores).ownerInjection());
         let beforeEach = options.beforeEach && options.beforeEach.apply(this, arguments);
         return resolve(beforeEach);
       },

@@ -31,7 +31,5 @@ export default Model.extend(LifecycleMixin, {
   }
 
 }).reopenClass({
-
   debugColumns: [ '_storeIdentifier', 'isAuthenticated', 'name', 'roles' ]
-
 })

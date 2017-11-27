@@ -11,10 +11,13 @@ const docModel = opts => model({
   owner: [ opts.doc ],
   create(owner) {
     let doc = owner.get(opts.doc);
+    let { store, database } = owner.getProperties('store', 'database');
     return {
       type: opts.type || 'duck',
       props: {
-        doc
+        doc,
+        store,
+        database
       }
     };
   }
@@ -29,7 +32,7 @@ module('computed-model', {
         doc: opts.doc,
         prop: docModel({ doc: 'doc', type: opts.type })
       });
-      return Subject.create({ store: this.store, database: this.db });
+      return Subject.create({ store: this.store, database: this.db }, this.ownerInjection);
     };
   }
 });

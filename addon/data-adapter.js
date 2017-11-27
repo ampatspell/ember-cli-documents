@@ -1,6 +1,6 @@
 import DataAdapter from '@ember/debug/data-adapter';
-import { inject as service } from '@ember/service';
-import { get, set } from '@ember/object';
+import { getOwner } from '@ember/application';
+import { get, set, computed } from '@ember/object';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { typeOf } from '@ember/utils';
 import { A } from '@ember/array';
@@ -17,7 +17,9 @@ const keyToColumDescription = key => {
 
 export default DataAdapter.extend({
 
-  stores: service(),
+  stores: computed(function() {
+    return getOwner(this).lookup('documents:stores');
+  }),
 
   _nameToClass(name) {
     let result = this._super(...arguments);

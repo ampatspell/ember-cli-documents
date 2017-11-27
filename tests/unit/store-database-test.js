@@ -18,6 +18,12 @@ test('create database always returns the same db for identifier', function(asser
   assert.ok(two === three);
 });
 
+test('id.identifier', function(assert) {
+  let one = this.store.database('foofBar');
+  let two = this.store.get('id.foofBar');
+  assert.ok(one === two);
+});
+
 test('create database returns another db for another identifier', function(assert) {
   let one = this.store.database('duck');
   let two = this.store.database('hamster');

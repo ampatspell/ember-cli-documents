@@ -16,3 +16,9 @@ export {
   model,
   models
 } from './model';
+
+export {
+  stores,
+  store,
+  database
+} from './store';

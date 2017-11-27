@@ -1,6 +1,5 @@
 import Component from '@ember/component';
 import layout from './template';
-import { readOnly } from '@ember/object/computed';
 import { find, models } from 'documents';
 
 export default Component.extend({

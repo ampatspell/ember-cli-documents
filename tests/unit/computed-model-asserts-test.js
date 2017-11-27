@@ -10,8 +10,6 @@ module('computed-model-asserts', {
   beforeEach() {
     this.register('model:foo', Foo);
     this.defaults = {
-      store: 'store',
-      database: 'db',
       owner: [],
       create(owner) {
         return {
@@ -24,7 +22,7 @@ module('computed-model-asserts', {
       let Subject = EmberObject.extend({
         prop: model(assign({}, this.defaults, opts))
       });
-      return Subject.create({ store: this.store, database: this.db });
+      return Subject.create({ store: this.store, database: this.db }, this.ownerInjection);
     };
   }
 });
@@ -35,58 +33,6 @@ test('create with defaults succeeds', function(assert) {
   assert.ok(prop);
   assert.ok(Foo.detectInstance(prop));
   assert.ok(prop.get('owner') === subject);
-});
-
-test('store must be string', function(assert) {
-  let subject = this.create({ store: {} });
-  try {
-    subject.get('prop');
-  } catch(err) {
-    assert.deepEqual(err.toJSON(), {
-      "error": "assertion",
-      "reason": "store must be string"
-    });
-  }
-});
-
-test('database must be string', function(assert) {
-  let subject = this.create({ database: {} });
-  try {
-    subject.get('prop');
-  } catch(err) {
-    assert.deepEqual(err.toJSON(), {
-      "error": "assertion",
-      "reason": "database must be string"
-    });
-  }
-});
-
-test('store and database is null', function(assert) {
-  let subject = this.create({ store: null, database: null });
-  assert.ok(!subject.get('prop'));
-});
-
-test('database is null', function(assert) {
-  let subject = this.create({ database: null });
-  assert.ok(subject.get('prop.database') === null);
-  assert.ok(subject.get('prop.store') === this.store);
-});
-
-test('database default', function(assert) {
-  delete this.defaults.store;
-  delete this.defaults.database;
-  let subject = this.create();
-  assert.ok(subject.get('prop.database') === this.db);
-  assert.ok(subject.get('prop.store') === this.store);
-});
-
-test('store default', function(assert) {
-  delete this.defaults.store;
-  delete this.defaults.database;
-  let subject = this.create();
-  subject.set('database', null);
-  assert.ok(subject.get('prop.database') === null);
-  assert.ok(subject.get('prop.store') === this.store);
 });
 
 test('owner must be array', function(assert) {

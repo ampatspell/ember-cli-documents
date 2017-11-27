@@ -73,6 +73,9 @@ class StoresModelsIdentityInternal {
 export default makeIdentityMixin({
   key: 'modelsIdentity',
   factory: 'models-identity',
+  content() {
+    return this._models.all;
+  },
   createInternal() {
     return new StoresModelsIdentityInternal(this);
   }
