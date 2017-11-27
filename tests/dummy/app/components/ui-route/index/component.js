@@ -17,7 +17,6 @@ export default Component.extend({
   }),
 
   models: models({
-    database: 'state.database',
     owner: [ 'docs' ],
     create(owner) {
       let source = owner.get('docs');
