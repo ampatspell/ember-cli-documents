@@ -24,7 +24,7 @@ export const ModelMixin = Mixin.create({
 });
 
 export const reopenModel = Model => Model.reopenClass({
-  debugColumns: [ '_debug', '_storeIdentifier' ]
+  debugColumns: [ '_debug' ]
 });
 
 export default reopenModel(EmberObject.extend(BaseModelMixin, ModelMixin, {
