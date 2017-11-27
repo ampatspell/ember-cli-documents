@@ -22,6 +22,8 @@
 
 ## Models with `source` and `model` props
 
+* can only be used with non-generated models
+
 ``` javascript
 // models/documents.js
 export default Models.extend({
