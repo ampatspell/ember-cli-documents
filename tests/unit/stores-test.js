@@ -27,6 +27,12 @@ test('store is created only once', function(assert) {
   assert.ok(one === two);
 });
 
+test('stores.id.identifier', function(assert) {
+  let id = this.stores.get('id.default');
+  let normal = this.stores.store('default');
+  assert.ok(id === normal);
+});
+
 test('stores destory destroys stores', function(assert) {
   let store = this.stores.store('default');
   run(() => this.stores.destroy());
@@ -51,8 +57,7 @@ test('stores destory destroys documents identity', function(assert) {
 test('stores destory destroys models identity', function(assert) {
   let Thing = Model.extend();
   this.register('model:thing', Thing);
-  let store = this.stores.store('default');
-  let model = store.model('thing');
+  let model = this.stores.model('thing');
   let identity = this.stores.get('modelsIdentity');
   assert.equal(identity.modelsByClass(Thing).get('length'), 1);
   run(() => this.stores.destroy());

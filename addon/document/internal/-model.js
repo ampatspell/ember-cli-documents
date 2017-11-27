@@ -5,9 +5,9 @@ import normalizeModelOpts from '../../util/normalize-model-opts';
 
 export default class InternalModelBase extends Base {
 
-  constructor(store, parent, database, factory, opts, _ref) {
-    super(store, parent);
-    this.database = database;
+  constructor(stores, parent, factory, opts, _ref) {
+    super(null, parent);
+    this.stores = stores;
     this.factory = factory;
     this.opts = opts;
     this._models = null;
@@ -31,8 +31,8 @@ export default class InternalModelBase extends Base {
   }
 
   _createInternalModel(...args) {
-    let opts = assign({ database: this.database, _parent: this }, normalizeModelOpts(...args));
-    return this.store._createInternalModel(opts);
+    let opts = assign({ _parent: this }, normalizeModelOpts(...args));
+    return this.stores._createInternalModel(opts);
   }
 
   createModel() {

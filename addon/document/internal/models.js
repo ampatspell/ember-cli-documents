@@ -23,15 +23,15 @@ const normalizedSource = array => {
 
 export default class InternalModels extends Base {
 
-  constructor(store, parent, database, array, factory, model, props) {
-    super(store, parent, database, factory, props);
+  constructor(stores, parent, array, factory, model, props) {
+    super(stores, parent, factory, props);
     this._array = normalizedSource(array)
     this.child = normalizedModel(model);
     this._values = null;
   }
 
   _createModel() {
-    return this.store._createModels(this);
+    return this.stores._createModels(this);
   }
 
   _didCreateModel(model) {
@@ -187,7 +187,7 @@ export default class InternalModels extends Base {
   _didDestroyModel() {
     this._stopObserving();
     super._didDestroyModel();
-    this.store._didDestroyInternalModels(this);
+    this.stores._didDestroyInternalModels(this);
   }
 
 }

@@ -1,13 +1,12 @@
 import createModel from './-create-model';
 
 export default createModel({
-  create(opts, definition, store, database, _parent) {
+  create(stores, opts, definition, _parent) {
     let { type, props } = definition;
     if(!type) {
       return;
     }
-    return store._createInternalModel({
-      database,
+    return stores._createInternalModel({
       type,
       props,
       _parent

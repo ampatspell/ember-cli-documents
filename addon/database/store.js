@@ -6,7 +6,9 @@ export default Mixin.create({
   identifier: null,
 
   toStringExtension() {
-    return this.get('identifier');
+    let store = this.get('store.identifier')
+    let database = this.get('identifier');
+    return `${store}/${database}`;
   },
 
   willDestroy() {

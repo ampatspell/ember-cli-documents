@@ -3,9 +3,9 @@ import { computed } from '@ember/object';
 
 export default Mixin.create({
 
-  db: computed(function() {
+  id: computed(function() {
     let _lookup = identifier => this.database(identifier);
-    return this._documentsModelFactory('databases').create({ _lookup });
+    return this._documentsModelFactory('store/id').create({ _lookup });
   }).readOnly()
 
 });

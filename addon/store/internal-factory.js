@@ -3,8 +3,8 @@ import DocumentsError from '../util/error';
 
 export default Mixin.create({
 
-  _documentsInternalFactory(factoryName) {
-    return this._factoryFor(`documents:internal/${factoryName}`).class;
+  _documentsInternalFactory() {
+    return this.get('stores')._documentsInternalFactory(...arguments);
   },
 
   _createInternalDocument(database) {

@@ -1,29 +1,10 @@
 import { A } from '@ember/array';
 import { merge } from '@ember/polyfills';
+import { getOwner } from '@ember/application';
 import destroyable from '../-destroyable';
 import InternalModel from '../../document/internal/model';
 import { withDefinition } from '../-meta';
-import { isString, isArray, isFunction, isObject } from '../../util/assert';
-
-const _get = (owner, key, name) => {
-  if(key) {
-    isString(name, key);
-    return owner.get(key);
-  }
-  return null;
-};
-
-const getStoreAndDatabase = (owner, opts) => {
-  let store = _get(owner, opts.store, 'store');
-  let database = _get(owner, opts.database, 'database');
-  if(!store) {
-    if(!database) {
-      return {};
-    }
-    store = database.get('store');
-  }
-  return { store, database };
-}
+import { assert, isString, isArray, isFunction, isObject } from '../../util/assert';
 
 const toInternalModel = owner => {
   let internal = owner._internal;
@@ -69,16 +50,15 @@ export default factory => opts => {
   let owner = A(opts.owner).compact();
   return withDefinition(destroyable(...owner, {
     create() {
-      let { store, database } = getStoreAndDatabase(this, opts);
+      let owner = getOwner(this);
+      assert(`owner injection is required for ${this}`, !!owner);
 
-      if(!store) {
-        return;
-      }
+      let stores = owner.lookup('documents:stores');
 
       let parent = toInternalModel(this);
       let definition = invokeCreate(this, opts);
 
-      return factory.create(opts, definition, store, database, parent);
+      return factory.create(stores, opts, definition, parent);
     }
   }), opts).readOnly();
 };

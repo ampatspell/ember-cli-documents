@@ -3,12 +3,12 @@ import Base from './-model';
 export default class InternalModel extends Base {
 
   _createModel() {
-    return this.store._createModel(this);
+    return this.stores._createModel(this);
   }
 
   _didDestroyModel() {
     super._didDestroyModel();
-    this.store._didDestroyInternalModel(this);
+    this.stores._didDestroyInternalModel(this);
   }
 
 }

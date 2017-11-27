@@ -1,20 +1,25 @@
-import { Model, model } from 'documents';
+import { Model, stores, store, database, model } from 'documents';
 import { hash } from 'rsvp';
 import LifecycleMixin from './-lifecycle-mixin';
 
 const state = type => model({
-  create() {
+  create(state) {
     return {
-      type: `state/${type}`
+      type: `state/${type}`,
+      props: state.getProperties('store', 'database')
     };
   }
 });
 
 export default Model.extend(LifecycleMixin, {
 
-  session: state('session'),
-  changes: state('changes'),
-  setup:   state('setup'),
+  stores:   stores(),
+  store:    store('remote'),
+  database: database('remote', 'main'),
+
+  session:  state('session'),
+  changes:  state('changes'),
+  setup:    state('setup'),
 
   async restore() {
     return await hash({

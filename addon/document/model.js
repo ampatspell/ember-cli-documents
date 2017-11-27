@@ -1,24 +1,30 @@
-import EmberObject from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import Mixin from '@ember/object/mixin';
-import { readOnly } from '@ember/object/computed';
 import BaseModelMixin from './-model-mixin';
-import { property, call } from './-properties';
-
-const store = property('store');
-const database = property('database');
+import { call } from './-properties';
 
 export const ModelMixin = Mixin.create({
 
-  store: store(),
-  database: database(),
+  _storeIdentifier: reads('store.identifier'),
+  _databaseIdentifier: reads('database.identifier'),
 
-  _storeIdentifier: readOnly('store.identifier'),
-  _databaseIdentifier: readOnly('database.identifier'),
+  _debug: computed('_storeIdentifier', '_databaseIdentifier', function() {
+    let {
+      _storeIdentifier: store,
+      _databaseIdentifier: database
+    } = this.getProperties('_storeIdentifier', '_databaseIdentifier');
+
+    return {
+      store,
+      database
+    };
+  }),
 
 });
 
 export const reopenModel = Model => Model.reopenClass({
-  debugColumns: [ '_storeIdentifier', '_databaseIdentifier' ]
+  debugColumns: [ '_debug' ]
 });
 
 export default reopenModel(EmberObject.extend(BaseModelMixin, ModelMixin, {

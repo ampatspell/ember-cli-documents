@@ -13,14 +13,25 @@ module('model', {
   }
 });
 
-test('create child model has parent, inherits database', function(assert) {
+test('create child model has parent, doesnt inherit database or store', function(assert) {
   let state = this.db.model('state');
   assert.ok(state.get('store') === this.store);
   assert.ok(state.get('database') === this.db);
   let duck = state.model('duck');
-  assert.ok(duck.get('store') === this.store);
-  assert.ok(duck.get('database') === this.db);
   assert.ok(duck);
+  assert.ok(!duck.get('store'));
+  assert.ok(!duck.get('database'));
+  assert.ok(duck._internal.parent === state._internal);
+});
+
+test('create child model with props', function(assert) {
+  let state = this.db.model('state');
+  assert.ok(state.get('store') === this.store);
+  assert.ok(state.get('database') === this.db);
+  let duck = state.model('duck', { store: this.store, database: this.db });
+  assert.ok(duck);
+  assert.ok(duck.get('store') == this.store);
+  assert.ok(duck.get('database') === this.db);
   assert.ok(duck._internal.parent === state._internal);
 });
 
