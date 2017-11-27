@@ -1,4 +1,4 @@
-import { Model, model } from 'documents';
+import { Model, stores, store, database, model } from 'documents';
 import { hash } from 'rsvp';
 import LifecycleMixin from './-lifecycle-mixin';
 
@@ -13,12 +13,13 @@ const state = type => model({
 
 export default Model.extend(LifecycleMixin, {
 
-  store: null,
-  database: null,
+  stores:   stores(),
+  store:    store('remote'),
+  database: database('remote', 'main'),
 
-  session: state('session'),
-  changes: state('changes'),
-  setup:   state('setup'),
+  session:  state('session'),
+  changes:  state('changes'),
+  setup:    state('setup'),
 
   async restore() {
     return await hash({

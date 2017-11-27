@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { Promise } from 'rsvp';
-import { getDefinition } from 'documents/properties';
 
 export default {
   name: 'dummy:dev',
@@ -8,9 +7,7 @@ export default {
     window.Promise = Promise;
 
     let stores = app.lookup('documents:stores');
-    let store = stores.store('remote');
-    let database = store.database('main');
-    let state = database.model('state', { store, database });
+    let state = stores.model('state');
 
     app.register('service:state', state, { instantiate: false });
 
@@ -20,10 +17,9 @@ export default {
       return;
     }
 
-    window.stores = stores;
-    window.store = store;
-    window.state = state;
-    window.database = database;
-    window.getDefinition = getDefinition;
+    let props = state.getProperties('stores', 'store', 'database');
+    for(let key in props) {
+      window[key] = props[key];
+    }
   }
 };
