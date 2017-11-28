@@ -35,10 +35,6 @@ export default class InternalModelBase extends Base {
     return this.stores._createInternalModel(opts);
   }
 
-  createModel() {
-    return this._createInternalModel(...arguments).model(true);
-  }
-
   _childModelDidDestroy(internal) {
     this.models().removeObject(internal);
   }
