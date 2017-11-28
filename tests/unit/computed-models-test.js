@@ -98,11 +98,11 @@ test('it has additional props from create', function(assert) {
   assert.equal(prop.get('message'), 'hey there');
 });
 
-test('it has internal _array', function(assert) {
+test('it has internal _source', function(assert) {
   let docs = [];
   let subject = this.create({ docs });
   let prop = subject.get('prop');
-  assert.ok(prop._internal._array === docs);
+  assert.ok(prop._internal._source === docs);
 });
 
 test('it has content', function(assert) {
