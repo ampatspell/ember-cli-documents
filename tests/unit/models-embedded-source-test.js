@@ -1,6 +1,5 @@
 import { A } from '@ember/array';
-import { run } from '@ember/runloop';
-import EmberObject, { get, computed } from '@ember/object';
+import EmberObject, { computed } from '@ember/object';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
 import { Model, Models } from 'documents';
