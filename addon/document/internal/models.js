@@ -31,6 +31,8 @@ export default class InternalModels extends Base {
   }
 
   _prepare(models) {
+    // TODO: clean up init ordering
+    // this.values should be possible to call w/o this.model(true) before
     let source = this.__source;
     if(!source) {
       source = models.get('source');
