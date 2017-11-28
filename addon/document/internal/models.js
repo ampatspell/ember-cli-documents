@@ -25,9 +25,23 @@ export default class InternalModels extends Base {
 
   constructor(stores, parent, array, factory, model, props) {
     super(stores, parent, factory, props);
-    this._array = normalizedSource(array)
-    this.child = normalizedModel(model);
+    this.__source = array;
+    this.__child = model;
     this._values = null;
+  }
+
+  _prepare(models) {
+    let source = this.__source;
+    if(!source) {
+      source = models.get('source');
+    }
+    this._source = normalizedSource(source);
+
+    let model = this.__child;
+    if(!model) {
+      model = models.get('model');
+    }
+    this._child = normalizedModel(model);
   }
 
   _createModel() {
@@ -36,6 +50,7 @@ export default class InternalModels extends Base {
 
   _didCreateModel(model) {
     super._didCreateModel(model);
+    this._prepare(model);
     model.set('content', this.values);
   }
 
@@ -50,7 +65,7 @@ export default class InternalModels extends Base {
   }
 
   _createChildInternalModel(doc) {
-    let child = this.child;
+    let child = this._child;
 
     let definition = child.create(doc, this.model(true));
 
@@ -102,10 +117,10 @@ export default class InternalModels extends Base {
     return models;
   }
 
-  get _arrayObserverOptions() {
+  get _sourceObserverOptions() {
     return {
-      willChange: this._arrayWillChange,
-      didChange: this._arrayDidChange
+      willChange: this._sourceWillChange,
+      didChange: this._sourceDidChange
     };
   }
 
@@ -124,24 +139,27 @@ export default class InternalModels extends Base {
     values.pushObjects(models);
   }
 
-  _arrayWillChange(array, removing) {
+  _sourceWillChange(array, removing) {
     this._removeObjects(removing);
   }
 
-  _arrayDidChange(array, removeCount, adding) {
+  _sourceDidChange(array, removeCount, adding) {
     this._addObjects(adding);
   }
 
   _startObserving() {
-    let array = this._array;
-    array.addEnumerableObserver(this, this._arrayObserverOptions);
-    this._addObjects(array);
+    let source = this._source;
+    source.addEnumerableObserver(this, this._sourceObserverOptions);
+    this._addObjects(source);
   }
 
   _stopObserving() {
-    let array = this._array;
-    this._stopObservingObjects(array);
-    array.removeEnumerableObserver(this, this._arrayObserverOptions);
+    let source = this._source;
+    if(!source) {
+      return;
+    }
+    this._stopObservingObjects(source);
+    source.removeEnumerableObserver(this, this._sourceObserverOptions);
   }
 
   //
@@ -155,7 +173,11 @@ export default class InternalModels extends Base {
     if(docs.length === 0) {
       return;
     }
-    let keys = this.child.observe;
+    let child = this._child;
+    if(!child) {
+      return;
+    }
+    let keys = child.observe;
     if(!keys || keys.length === 0) {
       return;
     }
