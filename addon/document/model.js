@@ -2,7 +2,6 @@ import EmberObject, { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import Mixin from '@ember/object/mixin';
 import BaseModelMixin from './-model-mixin';
-import { call } from './-properties';
 
 export const ModelMixin = Mixin.create({
 
@@ -27,8 +26,4 @@ export const reopenModel = Model => Model.reopenClass({
   debugColumns: [ '_debug' ]
 });
 
-export default reopenModel(EmberObject.extend(BaseModelMixin, ModelMixin, {
-
-  model: call('createModel')
-
-}));
+export default reopenModel(EmberObject.extend(BaseModelMixin, ModelMixin));
