@@ -1,0 +1,24 @@
+@mixin ui-block-author--content() {
+  > .name {
+    font-size: 17px;
+    line-height: 17px * 1.3;
+    font-weight: 600;
+  }
+  > .email {
+    font-size: 13px;
+    line-height: 13px * 1.3;
+  }
+}
+
+@mixin ui-block-author-row() {
+  padding: 0 0 5px 0;
+  cursor: pointer;
+  @include ui-block-author--content();
+}
+
+@mixin ui-block-author-details() {
+  @include ui-block-author--content();
+}
+
+.ui-block.author-row     { @include ui-block-author-row(); }
+.ui-block.author-details { @include ui-block-author-details(); }

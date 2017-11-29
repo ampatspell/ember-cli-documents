@@ -161,16 +161,4 @@ $font-family: 'Raleway', sans-serif;
   }
 }
 
-.ui-block.author-row {
-  padding: 5px 0;
-  cursor: pointer;
-  > .name {
-    font-size: 17px;
-    line-height: 17px * 1.3;
-    font-weight: 600;
-  }
-  > .email {
-    font-size: 13px;
-    line-height: 13px * 1.3;
-  }
-}
+@import "blog";
