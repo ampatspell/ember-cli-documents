@@ -10,18 +10,29 @@ export const documents = () => models({
   }
 });
 
+const source = ({ loadable }) => find({
+  owner: [ loadable ],
+  query(owner) {
+    if(!owner.get(loadable)) {
+      return;
+    }
+    return { all: true }
+  },
+  matches(doc, owner) {
+    if(!owner.get(loadable)) {
+      return false;
+    }
+    return true;
+  }
+});
+
 export default Models.extend(LifecycleMixin, {
 
   database: database('remote', 'main'),
 
-  source: find({
-    query() {
-      return { all: true }
-    },
-    matches() {
-      return true;
-    }
-  }),
+  loadable: false,
+
+  source: source({ loadable: 'loadable' }),
 
   isLoading: readOnly('source.isLoading'),
 
@@ -32,6 +43,12 @@ export default Models.extend(LifecycleMixin, {
         type: 'document',
         props: { documents, doc }
       };
+    }
+  },
+
+  actions: {
+    enable() {
+      this.set('loadable', true);
     }
   }
 

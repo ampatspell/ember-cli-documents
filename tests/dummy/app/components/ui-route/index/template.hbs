@@ -4,12 +4,16 @@
   <p>window.database = {{state.database}}</p>
 </div>
 
-<div class="row">
-  {{#if documents.isLoading}}
-    Loading…
-  {{else}}
-    {{#each documents as |model|}}
-      <div>{{model}}</div>
-    {{/each}}
-  {{/if}}
-</div>
+{{#if documents.loadable}}
+  <div class="row">
+    {{#if documents.isLoading}}
+      Loading…
+    {{else}}
+      {{#each documents as |model|}}
+        <div>{{model}}</div>
+      {{/each}}
+    {{/if}}
+  </div>
+{{else}}
+  <div class="row" onclick={{action 'enable' target=documents}}>Load all documents</div>
+{{/if}}
