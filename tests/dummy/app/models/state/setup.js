@@ -29,10 +29,13 @@ const ddocs = {
 };
 
 const docs = [
-  { _id: 'author:ampatspell', type: 'author', name: 'ampatspell', email: 'ampatspell@gmail.com' },
-  { _id: 'author:zeeba',      type: 'author', name: 'zeeba', email: 'zeeba@gmail.com' },
-  { _id: 'author:larry',      type: 'author', name: 'larry', email: 'larry@gmail.com' },
-  { _id: 'author:duck',       type: 'author', name: 'duck', email: 'duck@gmail.com' }
+  { _id: 'author:ampatspell',    type: 'author', name: 'ampatspell', email: 'ampatspell@gmail.com' },
+  { _id: 'author:zeeba',         type: 'author', name: 'zeeba', email: 'zeeba@gmail.com' },
+  { _id: 'author:larry',         type: 'author', name: 'larry', email: 'larry@gmail.com' },
+  { _id: 'author:duck',          type: 'author', name: 'duck', email: 'duck@gmail.com' },
+
+  { _id: 'blog:amateurinmotion', type: 'blog',   name: 'amateurinmotion', owner: 'author:ampatspell' },
+  { _id: 'blog:yellow-ducks',    type: 'blog',   name: 'Yellow Ducks', owner: 'author:duck' },
 ];
 
 export default Model.extend(LifecycleMixin, {
