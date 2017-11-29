@@ -30,6 +30,24 @@ export default Models.extend({
 
   async load() {
     await this.get('source').load();
+  },
+
+  findById(id) {
+    return this.findBy('id', id);
+  },
+
+  async _loadById(id) {
+    let type = this.get('type');
+    await this.get('database').find({ id: `${type}:${id}` });
+    return this.findById(id);
+  },
+
+  async loadById(id) {
+    let model = this.findById(id);
+    if(!model) {
+      model = this._loadById(id);
+    }
+    return model;
   }
 
 });
