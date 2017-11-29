@@ -1,11 +1,11 @@
 import { readOnly } from '@ember/object/computed';
 import { Models, find, models, database } from 'documents';
-import LifecycleMixin from './-lifecycle-mixin';
+import LifecycleMixin from '../-lifecycle-mixin';
 
 export const documents = () => models({
   create() {
     return {
-      type: 'documents'
+      type: 'documents/documents'
     };
   }
 });
@@ -40,7 +40,7 @@ export default Models.extend(LifecycleMixin, {
     observe: [],
     create(doc, documents) {
       return {
-        type: 'document',
+        type: 'documents/document',
         props: { documents, doc }
       };
     }

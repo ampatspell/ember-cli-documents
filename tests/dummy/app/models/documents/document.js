@@ -1,6 +1,6 @@
 import { readOnly } from '@ember/object/computed';
 import { Model } from 'documents';
-import LifecycleMixin from './-lifecycle-mixin';
+import LifecycleMixin from '../-lifecycle-mixin';
 
 export default Model.extend(LifecycleMixin, {
 
