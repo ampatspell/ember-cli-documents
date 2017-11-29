@@ -7,6 +7,8 @@ Might as well go into separate addon.
 * can use computed properties to create models manually
 * can use computed properties to find and filter models
 
+* can have multiple model stores. each has it's own `documents` so that it is possible to have per-database model stores (or per DS peekAll types)
+
 ``` javascript
 export default ModelsStore.extend({
 
@@ -51,4 +53,10 @@ export default Models.extend({
   })
 
 });
+```
+
+``` javascript
+let doc = db.doc({ type: 'author' });
+let model = models.existing(doc); // model._ref === doc
+// model.get('doc') === doc
 ```
