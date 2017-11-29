@@ -29,7 +29,7 @@ const Ducks = Models.extend({
 
 const Duck = Model.extend();
 
-module('computed-models-asserts', {
+module('computed-models-embedded-source', {
   beforeEach() {
     this.register('model:ducks', Ducks);
     this.register('model:duck', Duck);
