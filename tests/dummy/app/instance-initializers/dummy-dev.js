@@ -13,6 +13,8 @@ export default {
 
     [ 'route', 'component' ].forEach(name => app.inject(name, 'state', 'service:state'));
 
+    app.inject('component', 'router', 'router:main');
+
     if(Ember.testing) {
       return;
     }

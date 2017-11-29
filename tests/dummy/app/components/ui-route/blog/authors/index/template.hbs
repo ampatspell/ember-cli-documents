@@ -1,7 +1,5 @@
 {{#each authors as |author|}}
-  <div class="row">
-    {{author}}
-  </div>
+  {{ui-block/author/row author=author select=(action 'select' author)}}
 {{else}}
   <div class="row">No authors</div>
 {{/each}}
