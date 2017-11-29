@@ -3,7 +3,10 @@ import Base from './-model';
 import { toModel, toInternal } from '../../util/internal';
 import { isArray, isArrayOrArrayProxy, isObject, isFunction_ } from '../../util/assert';
 
-const normalizedModel = model => {
+const prepareModel = (model, models) => {
+  if(!model) {
+    model = models.get('model');
+  }
   isObject('model', model);
   let { observe, create } = model;
   isArray('model.observe', observe);
@@ -16,7 +19,10 @@ const normalizedModel = model => {
   return { observe, create };
 };
 
-const normalizedSource = array => {
+const prepareSource = (array, models) => {
+  if(!array) {
+    array = models.get('source');
+  }
   isArrayOrArrayProxy('source array', array);
   return A(array);
 };
@@ -25,45 +31,22 @@ export default class InternalModels extends Base {
 
   constructor(stores, parent, array, factory, model, props) {
     super(stores, parent, factory, props);
-    this.__source = array;
-    this.__child = model;
+    this._opts = { array, model };
     this._values = null;
-  }
-
-  _prepare(models) {
-    // TODO: clean up init ordering
-    // this.values should be possible to call w/o this.model(true) before
-    let source = this.__source;
-    if(!source) {
-      source = models.get('source');
-    }
-    this._source = normalizedSource(source);
-
-    let model = this.__child;
-    if(!model) {
-      model = models.get('model');
-    }
-    this._child = normalizedModel(model);
   }
 
   _createModel() {
     return this.stores._createModels(this);
   }
 
-  _didCreateModel(model) {
-    super._didCreateModel(model);
-    this._prepare(model);
-    model.set('content', this.values);
-  }
-
-  get values() {
-    let values = this._values;
-    if(!values) {
-      values = A();
-      this._values = values;
-      this._startObserving();
-    }
-    return values;
+  _didCreateModel(models) {
+    super._didCreateModel(models);
+    let { array, model } = this._opts;
+    this._source = prepareSource(array, models);
+    this._child = prepareModel(model, models);
+    this._values = A();
+    this._startObserving();
+    models.set('content', this._values);
   }
 
   _createChildInternalModel(doc) {

@@ -67,6 +67,6 @@ test('create with parent', function(assert) {
 
 test('models has ref', function(assert) {
   let internal = this.create();
-  internal.model(true);
-  assert.ok(internal.values[0]._ref === this.source[0]);
+  let models = internal.model(true);
+  assert.ok(models.objectAt(0)._internal._ref === this.source[0]);
 });
