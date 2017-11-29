@@ -1,4 +1,3 @@
-import { isArrayOrArrayProxy } from '../../util/assert';
 import createModel from './-create-model';
 
 export default createModel({
@@ -8,12 +7,6 @@ export default createModel({
     if(type === null) {
       return;
     }
-
-    if(!source) {
-      return;
-    }
-
-    isArrayOrArrayProxy('source in create function result', source);
 
     let model = opts.model;
 
