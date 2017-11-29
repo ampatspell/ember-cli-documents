@@ -61,6 +61,7 @@ test('create succeeds, source is observed', function(assert) {
   assert.deepEqual(models.mapBy('doc.id'), [ 'one', 'two' ]);
 });
 
+// TODO: models are observing just an array, there is no intermediate `models.source` observer.
 // test('source recreate', function(assert) {
 //   this.db.doc({ id: 'main:one' });
 //   let subject = this.create();
