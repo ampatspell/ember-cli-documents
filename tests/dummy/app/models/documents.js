@@ -1,3 +1,4 @@
+import { readOnly } from '@ember/object/computed';
 import { Models, find, models, database } from 'documents';
 import LifecycleMixin from './-lifecycle-mixin';
 
@@ -21,6 +22,8 @@ export default Models.extend(LifecycleMixin, {
       return true;
     }
   }),
+
+  isLoading: readOnly('source.isLoading'),
 
   model: {
     observe: [],
