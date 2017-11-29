@@ -2,14 +2,16 @@ import { Model, stores, store, database, model } from 'documents';
 import { hash } from 'rsvp';
 import LifecycleMixin from './-lifecycle-mixin';
 
-const state = type => model({
+const type = type => model({
   create(state) {
     return {
-      type: `state/${type}`,
+      type: type,
       props: state.getProperties('store', 'database')
     };
   }
 });
+
+const state = value => type(`state/${value}`);
 
 export default Model.extend(LifecycleMixin, {
 
@@ -20,6 +22,8 @@ export default Model.extend(LifecycleMixin, {
   session:  state('session'),
   changes:  state('changes'),
   setup:    state('setup'),
+
+  blog:     type('blog/state'),
 
   async restore() {
     return await hash({
