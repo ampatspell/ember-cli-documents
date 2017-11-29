@@ -8,6 +8,8 @@ export default Model.extend({
 
   doc: null,
 
+  database: doc('database'),
+
   id: computed('doc.{id,type}', function() {
     let { id, type } = this.get('doc').getProperties('id', 'type');
     if(!id || !type) {
