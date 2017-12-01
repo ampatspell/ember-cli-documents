@@ -60,3 +60,42 @@ let doc = db.doc({ type: 'author' });
 let model = models.existing(doc); // model._ref === doc
 // model.get('doc') === doc
 ```
+
+
+## State as a singleton
+
+``` javascript
+// state.js
+export default State.extend({
+
+  stores: stores(),
+
+  init() {
+    this._super(...arguments);
+    this.registerSource('documents', stores.get('documentsIdentity'), [ 'id', 'type' ]);
+  },
+
+  added(source, doc) {
+    if(source !== 'documents') {
+      return;
+    }
+    let type = doc.get('type');
+    if(!type) {
+      return;
+    }
+    // blog, blog-post, ...
+    this.createModel(type);
+  },
+
+  removed(doc) {
+
+  }
+
+});
+```
+
+``` javascript
+let stores = app.lookup('documents:stores');
+let state = app.lookup('documents:state');
+state.registerMapper('documents');
+```
