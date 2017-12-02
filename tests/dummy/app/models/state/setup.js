@@ -25,6 +25,21 @@ const ddocs = {
         }
       }
     }
+  },
+  author: {
+    views: {
+      'by-id-with-owned-blogs': {
+        map(doc) {
+          if(doc.type === 'author') {
+            emit(doc._id);
+          } else if(doc.type === 'blog') {
+            if(doc.owner) {
+              emit(doc.owner, { _id: doc._id });
+            }
+          }
+        }
+      }
+    }
   }
 };
 
