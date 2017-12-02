@@ -1,5 +1,11 @@
 ## Models with identity
 
+* identifier
+* alias
+* attr (transform)
+* belongsTo filtered, loaded
+* hasMany filtered, loaded
+
 ``` javascript
 // models/blog/blog.js
 export default Model.extend({
