@@ -9,11 +9,22 @@ export default Model.extend({
   owner: relationship('blog/blog-author'),
 
   // { ddoc: 'blog', view: 'by-id-with-owner', key: this.get('id') }
-  loadWithOwner: loader(),
+  loadWithOwner: loader({
+    owner: [ 'id' ],
+    query(owner) {
+      let key = owner.get('id');
+      return { ddoc: 'blog', view: 'by-id-with-owner', key };
+    }
+  }),
+
+  isLoading: readOnly('loadWithOwner.isLoading'),
+
+  loadSomethingElse: loader(...),
+  isBothLoading: and('loadWithOwner.isLoading', 'loadSomethingElse.isLoading'),
 
 });
 
-// {{#if blog.loadWithOwner.isLoading}}
+// {{#if blog.isLoading}}
 //   Loading…
 // {{else}}
 //   {{blog.name}}, {{blog.owner.name}}
