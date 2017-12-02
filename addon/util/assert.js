@@ -1,5 +1,5 @@
 import DocumentsError  from './error';
-import Base from 'couch/util/assert-base';
+import Base from './assert-base';
 
 let {
   assert,
