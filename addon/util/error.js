@@ -1,7 +1,7 @@
 import {
   BaseError,
   BaseErrors
-} from 'couch/util/error-base';
+} from './error-base';
 
 export default class DocumentsError extends BaseError {}
 
