@@ -1,0 +1,5 @@
+{{#each authors as |author|}}
+  {{ui-block/author/row author=author select=(action 'select' author)}}
+{{else}}
+  <div class="row">No authors</div>
+{{/each}}
