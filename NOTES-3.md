@@ -6,6 +6,15 @@
 * belongsTo filtered, loaded
 * hasMany filtered, loaded
 
+* loader
+* first -- 1 model filter
+* find -- array filter
+* Model
+* Array Proxy (relationship)
+* Model Proxy (relationship)
+
+* model lookup on different stores
+
 ``` javascript
 // models/blog/blog.js
 export default Model.extend({
