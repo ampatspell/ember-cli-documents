@@ -1,3 +1,4 @@
+import { A } from '@ember/array';
 import Mixin from '@ember/object/mixin';
 import { get } from '@ember/object';
 import { merge } from '@ember/polyfills';
@@ -9,7 +10,12 @@ export default opts => {
 
     init() {
       this._super(...arguments);
+      this.set(opts.content, A());
       this._addRootObserver();
+    },
+
+    _lookupContent() {
+      return get(this, opts.content);
     },
 
     _rootObserverOptions() {
@@ -24,10 +30,6 @@ export default opts => {
         willChange: this._nestedArrayWillChange,
         didChange:  this._nestedArrayDidChange
       };
-    },
-
-    _lookupContent() {
-      return get(this, opts.content || 'content');
     },
 
     _nestedArrayWillChange(array, removing) {
