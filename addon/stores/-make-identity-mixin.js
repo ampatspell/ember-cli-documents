@@ -6,7 +6,7 @@ export default ({ key, factory, content, createInternal }) => Mixin.create({
 
   [key]: computed(function() {
     let _internal = createInternal.call(this);
-    return getOwner(this).factoryFor(`documents:stores/${factory}`).create({ _internal, content: content.call(this) });
+    return getOwner(this).factoryFor(`documents:stores/${factory}`).create({ _internal, content: content && content.call(this) });
   }).readOnly(),
 
   willDestroy() {

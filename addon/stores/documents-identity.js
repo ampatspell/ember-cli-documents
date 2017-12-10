@@ -1,4 +1,3 @@
-import { A } from '@ember/array';
 import makeIdentityMixin from './-make-identity-mixin';
 
 class StoresDocumentsIdentityInternal {
@@ -15,9 +14,6 @@ class StoresDocumentsIdentityInternal {
 export default makeIdentityMixin({
   key: 'documentsIdentity',
   factory: 'documents-identity',
-  content() {
-    return A();
-  },
   createInternal() {
     return new StoresDocumentsIdentityInternal(this);
   }

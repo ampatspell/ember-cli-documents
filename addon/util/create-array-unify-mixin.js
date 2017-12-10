@@ -8,14 +8,25 @@ export default opts => {
   opts.root = merge({ array: 'arrays', key: null }, opts.root);
   return Mixin.create({
 
+    __contentKey: '__content',
+
     init() {
+      this._prepare();
       this._super(...arguments);
-      this.set(opts.content, A());
+    },
+
+    _prepare() {
+      this.__content = A();
+
       this._addRootObserver();
+
+      this.__contentKey = opts.content;
+      this.set(opts.content, this.__content);
+      delete this.__content;
     },
 
     _lookupContent() {
-      return get(this, opts.content);
+      return get(this, this.__contentKey);
     },
 
     _rootObserverOptions() {
