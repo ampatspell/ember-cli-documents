@@ -1,4 +1,4 @@
-import { Models, models, find, prop } from 'documents';
+import { Models, models, prop } from 'documents';
 import { findByType } from '../-props';
 
 export const collection = ({ type }) => models({
