@@ -61,8 +61,6 @@ import InternalModels from 'documents/document/internal/models';
 
 import Models from 'documents/document/models';
 
-import DataAdapter from 'documents/data-adapter';
-
 export default {
   name: 'documents:internal',
   initialize(container) {
@@ -132,7 +130,5 @@ export default {
     container.register('documents:internal/models', InternalModels);
 
     container.register('documents:models', Models);
-
-    container.register('data-adapter:main', DataAdapter);
   }
 };
