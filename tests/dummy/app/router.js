@@ -7,20 +7,10 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('document', { path: '/document/:store_identifier/:database_identifier/:document_id' });
   this.route('session', function() {
     this.route('new');
     this.route('delete');
-  });
-  this.route('blog', function() {
-    this.route('authors', function() {
-      this.route('new');
-      this.route('author', { path: '/:author_id'}, function() {
-      });
-    });
-    this.route('blogs', function() {
-      this.route('blog', { path: '/:blog_id'}, function() {
-      });
-    });
   });
   this.route('setup', function() {
   });

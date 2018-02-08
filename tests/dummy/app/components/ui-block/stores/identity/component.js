@@ -20,7 +20,7 @@ export default Component.extend({
 
   actions: {
     doc(doc) {
-      this.get('router').transitionTo('documents.document', doc.get('id'));
+      this.get('router').transitionTo('document', doc);
     },
     model(model) {
       info(`window.model = ${model}`);
