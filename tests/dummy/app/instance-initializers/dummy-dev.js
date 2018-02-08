@@ -7,9 +7,8 @@ export default {
     window.Promise = Promise;
 
     let stores = app.lookup('documents:stores');
-    let state = stores.model('state');
-
-    app.register('service:state', state, { instantiate: false });
+    // let state = stores.model('state');
+    app.register('service:state', null, { instantiate: false });
 
     [ 'route', 'component' ].forEach(name => app.inject(name, 'state', 'service:state'));
 
@@ -19,9 +18,11 @@ export default {
       return;
     }
 
-    let props = state.getProperties('stores', 'store', 'database');
-    for(let key in props) {
-      window[key] = props[key];
-    }
+    window.stores = stores;
+
+    // let props = state.getProperties('stores', 'store', 'database');
+    // for(let key in props) {
+    //   window[key] = props[key];
+    // }
   }
 };

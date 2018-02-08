@@ -1,7 +1,7 @@
 import { run } from '@ember/runloop';
 import module from '../helpers/module-for-db';
 import { test } from '../helpers/qunit';
-import { Stores, Model } from 'documents';
+import { Stores } from 'documents';
 
 module('stores');
 
@@ -52,17 +52,6 @@ test('stores destory destroys documents identity', function(assert) {
   let identity = this.stores.get('documentsIdentity');
   run(() => this.stores.destroy());
   assert.ok(identity.isDestroyed);
-});
-
-test('stores destory destroys models identity', function(assert) {
-  let Thing = Model.extend();
-  this.register('model:thing', Thing);
-  let model = this.stores.model('thing');
-  let identity = this.stores.get('modelsIdentity');
-  assert.equal(identity.modelsByClass(Thing).get('length'), 1);
-  run(() => this.stores.destroy());
-  assert.ok(identity.isDestroyed);
-  assert.ok(model.isDestroyed);
 });
 
 test('stores throws if no options are returned', function(assert) {
