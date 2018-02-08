@@ -3,18 +3,7 @@ export {
 } from './util/error';
 
 export {
-  Model,
-  Models
-} from './document';
-
-export {
   getDefinition,
-  prop,
-  first,
-  find,
-  paginated,
-  model,
-  models,
   stores,
   store,
   database,
