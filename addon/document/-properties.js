@@ -31,8 +31,3 @@ export const promise = name => function() {
   let internal = this._internal;
   return internal[name].call(internal, ...arguments).then(() => this);
 };
-
-export const call = name => function() {
-  let internal = this._internal;
-  return internal[name].call(internal, ...arguments);
-};

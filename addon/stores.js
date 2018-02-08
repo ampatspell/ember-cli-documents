@@ -3,7 +3,6 @@ import StoresStore from './stores/store';
 import StoresDocumentsIdentity from './stores/documents-identity';
 import StoresFactoryCache from './stores/factory-cache';
 import StoresInternalFactory from './stores/internal-factory';
-import StoresModel from './stores/model';
 import StoresId from './stores/id';
 
 export default EmberObject.extend(
@@ -11,6 +10,5 @@ export default EmberObject.extend(
   StoresDocumentsIdentity,
   StoresFactoryCache,
   StoresInternalFactory,
-  StoresModel,
   StoresId
 );
