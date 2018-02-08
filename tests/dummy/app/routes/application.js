@@ -1,13 +1,12 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default Route.extend({
 
-  // async beforeModel() {
-  //   let state = this.get('state');
-  //   let results = await state.restore();
-  //   if(results.setup.needed) {
-  //     this.transitionTo('setup');
-  //   }
-  // }
+  state: service(),
+
+  async beforeModel() {
+    await this.get('state').restore();
+  }
 
 });

@@ -19,10 +19,5 @@ export default {
     window.stores = stores;
     window.store = store;
     window.database = database;
-
-    // let props = state.getProperties('stores', 'store', 'database');
-    // for(let key in props) {
-    //   window[key] = props[key];
-    // }
   }
 };

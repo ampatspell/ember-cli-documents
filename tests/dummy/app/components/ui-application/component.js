@@ -1,7 +1,8 @@
 import Component from '@ember/component';
+import layout from './template';
 import { computed } from '@ember/object';
 import { readOnly, equal } from '@ember/object/computed';
-import layout from './template';
+import { store } from 'documents';
 
 const type = value => equal('_type', value).readOnly();
 
@@ -9,7 +10,8 @@ export default Component.extend({
   classNameBindings: [ ':ui-application' ],
   layout,
 
-  session: readOnly('state.session'),
+  store: store('remote'),
+  session: readOnly('store.session'),
 
   type: null,
 

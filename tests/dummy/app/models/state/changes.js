@@ -1,7 +1,9 @@
-import { Model } from 'documents';
-import LifecycleMixin from '../-lifecycle-mixin';
+import EmberObject from '@ember/object';
+import { database } from 'documents';
 
-export default Model.extend(LifecycleMixin, {
+export default EmberObject.extend({
+
+  database: database('remote', 'main'),
 
   feed: null,
 

@@ -1,12 +1,17 @@
 import Component from '@ember/component';
 import { readOnly } from '@ember/object/computed';
+import { store } from 'documents';
+import { inject as service } from '@ember/service';
 import layout from './template';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route', ':setup-index' ],
   layout,
 
-  session: readOnly('state.session'),
+  state: service(),
+  database: store('remote'),
+
+  session: readOnly('store.session'),
   setup: readOnly('state.setup'),
   isAuthenticated: readOnly('session.isAuthenticated'),
 

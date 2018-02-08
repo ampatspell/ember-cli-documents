@@ -1,6 +1,6 @@
-import { Model } from 'documents';
-import LifecycleMixin from '../-lifecycle-mixin';
+import EmberObject from '@ember/object';
 import { all, hash } from 'rsvp';
+import { database } from 'documents';
 
 /* global emit */
 const ddocs = {
@@ -53,7 +53,9 @@ const docs = [
   { _id: 'blog:yellow-ducks',    type: 'blog',   name: 'Yellow Ducks', owner: 'author:duck' },
 ];
 
-export default Model.extend(LifecycleMixin, {
+export default EmberObject.extend({
+
+  database: database('remote', 'main'),
 
   async _recreateDatabase() {
     return await this.get('database.documents.database').recreate();
