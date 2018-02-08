@@ -1,38 +1,26 @@
-<div class="docs">
-  {{#each documents as |doc|}}
-    <div class="doc" {{action 'doc' doc}}>
-      <div class="id">
-        {{#if doc.id}}
-          {{doc.id}}
-        {{else}}
-          &lt;no id&gt;
-        {{/if}}
-      </div>
-      {{#if doc.rev}}
-        <div class="rev">{{doc.rev}}</div>
+{{#each documents as |doc|}}
+  <div class="doc" {{action 'doc' doc}}>
+    <div class="id">
+      {{#if doc.id}}
+        {{doc.id}}
+      {{else}}
+        &lt;no id&gt;
       {{/if}}
-      <div class="info">
-        {{#if doc.isNew}}
-          <span class="item">new</span>
-        {{else}}
-          <span class="item">saved</span>
-        {{/if}}
-        {{#if doc.isDirty}}
-          <span class="item">dirty</span>
-        {{/if}}
-      </div>
     </div>
-  {{else}}
-    <div class="placeholder">No documents loaded</div>
-  {{/each}}
-</div>
-
-<div class="models">
-{{#each models as |model|}}
-  <div class="model" {{action 'model' model}}>
-    {{model}}
+    {{#if doc.rev}}
+      <div class="rev">{{doc.rev}}</div>
+    {{/if}}
+    <div class="info">
+      {{#if doc.isNew}}
+        <span class="item">new</span>
+      {{else}}
+        <span class="item">saved</span>
+      {{/if}}
+      {{#if doc.isDirty}}
+        <span class="item">dirty</span>
+      {{/if}}
+    </div>
   </div>
 {{else}}
-  <div class="placeholder">No models created</div>
+  <div class="placeholder">No documents loaded</div>
 {{/each}}
-</div>

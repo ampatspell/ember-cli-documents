@@ -17,7 +17,6 @@ export default Component.extend({
   router: service(),
 
   documents: reads('stores.documentsIdentity'),
-  models: reads('stores.modelsIdentity'),
 
   actions: {
     doc(doc) {
