@@ -1,17 +1,4 @@
 ## Module Report
-### Unknown Global
-
-**Global**: `Ember.libraries`
-
-**Location**: `app/initializers/documents-version.js` at line 18
-
-```js
-      return;
-    }
-    Ember.libraries.register(name, version);
-    registered = true;
-  }
-```
 
 ### Unknown Global
 
