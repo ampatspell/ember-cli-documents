@@ -1,15 +1,10 @@
 # TODO
 
-* Models with `source` and `model` props in Models instance
-* assert models source item type. `item._internal._ref` thingie
+* rename documentIdentity back to identity
+* simplify operation api
 * test for 2 parallel document saves without id
 * load document with `_conflicts:true` and conflict resolution
 * provide currently matched documents to query (`find-by-ids` loader doesn't need to reload existing docs)
-* maybe add `isLoaded` function in proxy opts to determine whether load should happen
-* rename `addon/document` to `addon/models` and separate base, documents and proxies
-* `InternalModel`, `InternalModels` doesn't need `isDocument`, `serialize`, `deserialize` and stuff like that
-* proxy state. deleted doc should have err.error=not_found
-* loader is already loaded if identical query was invoked
 * batch identity adds and removes `this._withIdentityMutation(mutation => ...)`
 * array deserialize should diff existing content not just clear existing content
 * have a `json` and `toJSON` instead of `serialized` and `serialize`.
@@ -19,65 +14,6 @@
 * come up with an API for conflict resolution
 
 # Notes
-
-## Models with `source` and `model` props
-
-* can only be used with non-generated models
-* if non-generated, no source and model, only then move asserts to runtime
-* can provide only source and/or model. not requirement to have both in prop and/or Models
-
-``` javascript
-// models/documents.js
-export default Models.extend({
-
-  database: null,
-
-  source: find({
-    database: 'database',
-    query() {
-      return { all: true }
-    },
-    matches() {
-      return true;
-    }
-  }),
-
-  model: {
-    observe: [],
-    create(doc) {
-      return {
-        type: 'document',
-        props: { doc }
-      };
-    }
-  }
-
-})
-```
-
-``` javascript
-export default Component.extend({
-
-  database: database('remote', 'main'),
-
-  models: models({
-    owner: [ 'database' ],
-    create(owner) {
-      let database = owner.get('database');
-      if(!database) {
-        return;
-      }
-      return {
-        type: 'documents',
-        props: {
-          database
-        }
-      };
-    }
-  }),
-
-})
-```
 
 ## all-paginated
 
@@ -148,97 +84,4 @@ export default opts => {
     }
   });
 }
-```
-
-## Configs
-
-`first` and `find`
-
-``` javascript
-export default EmberObject.extend({
-
-  doc: first({
-    database: 'db',
-    autoload: true,
-    owner: [],
-    document: [],
-    query(owner) {
-      return {};
-    },
-    matches(doc, owner) {
-      return true;
-    }
-  })
-
-});
-```
-
-`paginated` (will provide both `key` and `range` implementations). See `all-paginated` example on top.
-
-``` javascript
-export default EmberObject.extend({
-
-  docs: paginated({
-    database: 'db',
-    autoload: true,
-    owner: [],
-    document: [],
-    query(owner, state) {
-      return {};
-    },
-    matches(doc, owner, state) {
-      return true;
-    },
-    loaded(state, docs) {
-      return { state, isMore };
-    }
-  })
-
-});
-```
-
-`model`
-
-``` javascript
-export default EmberObject.extend({
-
-  thing: model({
-    owner: [ ...props ],
-    create(owner) {
-      return {
-        type: 'foo',          // required
-        props: { additional } // optional
-      };
-    }
-  })
-
-});
-```
-
-`models`
-
-``` javascript
-export default EmberObject.extend({
-
-  things: models({
-    owner: [ ...props ],
-    create(owner) {
-      return {
-        type: 'foofs',            // required
-        soure: owner.get('docs'), // required
-        props: { additional },    // optional
-      }
-    },
-    model: {
-      observe: [ ...props ],
-      create(doc, models) {
-        return {
-          type: 'foofs/foof', // required
-          props: { doc, models }   // optional
-        };
-      }
-    }
-  })
-
-});
 ```
