@@ -65,30 +65,6 @@ export default Mixin.create({
 
   _createInternalAttachment(props) {
     return this.get('store')._createInternalAttachment(null, props);
-  },
-
-  _createInternalDocumentProxy(owner, opts) {
-    return this.get('store')._createInternalDocumentProxy(this, owner, opts);
-  },
-
-  _createInternalArrayProxy(owner, opts) {
-    return this.get('store')._createInternalArrayProxy(this, owner, opts);
-  },
-
-  _createInternalPaginatedProxy(owner, opts) {
-    return this.get('store')._createInternalPaginatedProxy(this, owner, opts);
-  },
-
-  _createInternalFilter(owner, opts) {
-    return this.get('store')._createInternalFilter(this, owner, opts);
-  },
-
-  _createInternalQueryLoader(parent, owner, opts, type) {
-    return this.get('store')._createInternalQueryLoader(parent, this, owner, opts, type);
-  },
-
-  _createInternalPaginatedLoader(parent, owner, opts) {
-    return this.get('store')._createInternalPaginatedLoader(parent, this, owner, opts);
   }
 
 });
