@@ -1,19 +1,15 @@
 import { A } from '@ember/array';
 import { typeOf } from '@ember/utils';
-import Ember from 'ember';
 import Base, { empty } from '../../internal/-base';
 import MutateMixin from '../../internal/-mutate-mixin';
 import EmptyObject from 'documents/util/empty-object';
+import { error } from '../../../util/logger';
 
 import {
   toInternal,
   isInternal,
   isInternalAttachment
 } from 'documents/util/internal';
-
-const {
-  Logger: { error }
-} = Ember;
 
 export default class Attachments extends MutateMixin(Base) {
 

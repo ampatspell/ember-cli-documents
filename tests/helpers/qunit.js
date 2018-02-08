@@ -1,15 +1,11 @@
-import Ember from 'ember';
 import extendAssert from './extend-assert';
+import { error } from 'documents/util/logger';
 import {
   test as test_,
   only as only_,
   todo as todo_,
   skip
 } from 'ember-qunit';
-
-const {
-  Logger: { error }
-} = Ember;
 
 const wrap = q => function(name, fn) {
   return q(name, async function(assert) {

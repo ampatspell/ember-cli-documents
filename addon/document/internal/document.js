@@ -1,12 +1,8 @@
-import Ember from 'ember';
 import InternalObject from './object';
 import DocumentState from './-document-state';
 import Queue from './-queue';
 import DocumentsError from '../../util/error';
-
-const {
-  Logger: { error }
-} = Ember;
+import { error } from '../../util/logger';
 
 const prefixedKeys = [ 'id', 'rev', 'attachments' ];
 const isKeyUnderscored = key => key && key.indexOf('_') === 0;
