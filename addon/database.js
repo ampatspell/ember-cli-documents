@@ -9,7 +9,6 @@ import DatabaseInternalFind from './database/internal-find';
 import DatabaseDocument from './database/document';
 import DatabaseDocuments from './database/documents';
 import DatabaseDocumentFind from './database/document-find';
-import DatabaseProxy from './database/proxy';
 import DatabaseChanges from './database/changes';
 import DatabaseShoebox from './database/shoebox';
 import DatabaseOperation from './database/operations';
@@ -23,7 +22,6 @@ export default EmberObject.extend(
   DatabaseInternalDeserialize,
   DatabaseInternalOperations,
   DatabaseInternalFind,
-  DatabaseProxy,
   DatabaseDocument,
   DatabaseDocuments,
   DatabaseDocumentFind,
