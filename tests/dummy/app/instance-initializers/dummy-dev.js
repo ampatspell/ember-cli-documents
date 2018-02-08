@@ -6,19 +6,19 @@ export default {
   initialize(app) {
     window.Promise = Promise;
 
-    let stores = app.lookup('documents:stores');
-    // let state = stores.model('state');
-    app.register('service:state', null, { instantiate: false });
-
-    [ 'route', 'component' ].forEach(name => app.inject(name, 'state', 'service:state'));
-
     app.inject('component', 'router', 'router:main');
 
     if(Ember.testing) {
       return;
     }
 
+    let stores = app.lookup('documents:stores');
+    let store = stores.store('remote');
+    let database = store.database('main');
+
     window.stores = stores;
+    window.store = store;
+    window.database = database;
 
     // let props = state.getProperties('stores', 'store', 'database');
     // for(let key in props) {

@@ -1,11 +1,13 @@
 import Component from '@ember/component';
 import layout from './template';
-// import { documents } from 'dummy/models/documents';
+import { stores, store, database } from 'documents';
 
 export default Component.extend({
   classNameBindings: [ ':ui-route', ':index' ],
   layout,
 
-  // documents: documents()
+  stores:   stores(),
+  store:    store('remote'),
+  database: database('remote', 'main')
 
 });
